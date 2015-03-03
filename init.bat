@@ -1,0 +1,1 @@
+git clone --depth 1 http://172.20.15.72:8010/scm/git/odoo-v8-osm.git ../odoo-v8-osm
