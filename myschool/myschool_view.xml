@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <menuitem id="menu_myschool_main" name="MySchool"/>
+
+        <menuitem id="menu_standard_all" name="Standard" parent="menu_myschool_main"/>
+        <menuitem id="menu_subject_all" name="Subject" parent="menu_myschool_main"/>
+        <menuitem id="menu_course_all" name="Course" parent="menu_myschool_main"/>
+
+        <record model="ir.actions.act_window" id="action_standard">
+            <field name="name">op.standard</field>
+            <field name="res_model">op.standard</field>
+            <field name="view_type">form</field>
+            <field name="view_model">form,tree</field>
+            <field name="view_id" ref="view_standard_form"/>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_subject">
+            <field name="name">op.subject</field>
+            <field name="res_model">op.subject</field>
+            <field name="view_type">form</field>
+            <field name="view mode">tree,form</field>
+            <field name="view id" ref="view_subject_tree"/>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_course">
+            <field name="name">op.course</field>
+            <field name="res_model">op.course</field>
+            <field name="view_type">form</field>
+            <field name="view_model">tree,form</field>
+            <field name="view_id" ref="view_course_form"/>
+        </record>
+
+        <menuitem id="menu_standard" name="Standard" parent="menu_standard_all" action="action_standard"/>
+        <menuitem id="menu_subject" name="Subject" parent="menu_subject_all" action="action_subject"/>
+        <menuitem id="menu_course" name="Course" parent="menu_course_all" action="action_course"/>
+    </data>
+</openerp>
