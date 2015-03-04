@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <record id="view_batch_form" model="ir.ui.view">
+            <field name="name">op.batch.form</field>
+            <field name="model">op.batch</field>
+            <field name="arch" type="xml">
+                <form string="Batch" version="7.0">
+                    <sheet>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="course_id"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="state"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_batch_tree" model="ir.ui.view">
+            <field name="name">op.batch.tree</field>
+            <field name="model">op.batch</field>
+            <field name="arch" type="xml">
+                <tree string="Batch" version="7.0">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="course_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </tree>
+            </field>
+        </record>
+
+    </data>
+</openerp>
