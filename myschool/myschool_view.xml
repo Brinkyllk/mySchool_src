@@ -8,15 +8,15 @@
         <menuitem id="menu_course_all" name="Course" parent="menu_myschool_main"/>
 
         <record model="ir.actions.act_window" id="action_standard">
-            <field name="name">op.standard</field>
+            <field name="name">Standard</field>
             <field name="res_model">op.standard</field>
             <field name="view_type">form</field>
             <field name="view_model">form,tree</field>
-            <field name="view_id" ref="view_standard_form"/>
+            <field name="view_id" ref="view_standard_tree"/>
         </record>
 
         <record model="ir.actions.act_window" id="action_subject">
-            <field name="name">op.subject</field>
+            <field name="name">Subject</field>
             <field name="res_model">op.subject</field>
             <field name="view_type">form</field>
             <field name="view mode">tree,form</field>
@@ -24,7 +24,7 @@
         </record>
 
         <record model="ir.actions.act_window" id="action_course">
-            <field name="name">op.course</field>
+            <field name="name">Course</field>
             <field name="res_model">op.course</field>
             <field name="view_type">form</field>
             <field name="view_model">tree,form</field>
