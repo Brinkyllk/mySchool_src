@@ -19,6 +19,7 @@
         'op_subject/op_subject_view.xml',
         'op_course/op_course_view.xml',
         'op_batch/op_batch_view.xml',
+        'op_student/op_student_view.xml',
         'myschool_view.xml'
 
     ],

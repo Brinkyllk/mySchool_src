@@ -2,6 +2,17 @@
 <openerp>
     <data>
 
+        <record id="view_standard_tree" model="ir.ui.view">
+            <field name="name">op.standard.tree</field>
+            <field name="model">op.standard</field>
+            <field name="arch" type="xml">
+                <tree string="Standard">
+                    <field name="code"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
         <record id="view_standard_form" model="ir.ui.view">
             <field name="name">op.standard.form</field>
             <field name="model">op.standard</field>
@@ -14,17 +25,6 @@
                         </group>
                     </sheet>
                 </form>
-            </field>
-        </record>
-
-        <record id="view_standard_tree" model="ir.ui.view">
-            <field name="name">op.standard.tree</field>
-            <field name="model">op.standard</field>
-            <field name="arch" type="xml">
-                <tree string="Time Schedule">
-                    <field name="code"/>
-                    <field name="name"/>
-                </tree>
             </field>
         </record>
 

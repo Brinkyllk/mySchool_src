@@ -3,16 +3,13 @@
     <data>
         <menuitem id="menu_myschool_main" name="MySchool"/>
 
-        <!--<menuitem id="menu_standard_all" name="Standard" parent="menu_myschool_main"/>-->
-        <!--<menuitem id="menu_subject_all" name="Subject" parent="menu_myschool_main"/>-->
-        <!--<menuitem id="menu_course_all" name="Course" parent="menu_myschool_main"/>-->
         <menuitem id="menu_myschool_all" name="MySchool" parent="menu_myschool_main"/>
 
         <record model="ir.actions.act_window" id="action_standard">
             <field name="name">Standard</field>
             <field name="res_model">op.standard</field>
             <field name="view_type">form</field>
-            <field name="view_model">form,tree</field>
+            <field name="view_model">tree,form</field>
             <field name="view_id" ref="view_standard_tree"/>
         </record>
 
@@ -32,6 +29,14 @@
             <field name="view_id" ref="view_course_tree"/>
         </record>
 
+        <record model="ir.actions.act_window" id="action_student">
+            <field name="name">Student</field>
+            <field name="res_model">op.student</field>
+            <field name="view_type">form</field>
+            <field name="view_model">tree,form</field>
+            <field name="view_id" ref="view_student_tree"/>
+        </record>
+
         <record model="ir.actions.act_window" id="action_batch">
             <field name="name">Batch</field>
             <field name="res_model">op.batch</field>
@@ -44,5 +49,6 @@
         <menuitem id="menu_subject" name="Subject" parent="menu_myschool_all" action="action_subject"/>
         <menuitem id="menu_course" name="Course" parent="menu_myschool_all" action="action_course"/>
         <menuitem id="menu_batch" name="Batch" parent="menu_myschool_all" action="action_batch"/>
+        <menuitem id="menu_student" name="Student" parent="menu_myschool_all" action="action_student"/>
     </data>
 </openerp>
