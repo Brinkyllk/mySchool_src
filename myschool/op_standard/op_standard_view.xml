@@ -28,5 +28,30 @@
             </field>
         </record>
 
+        <record id="view_op_standard_search" model="ir.ui.view">
+			<field name="name">op.standard.search</field>
+			<field name="model">op.standard</field>
+			<field name="priority" eval="8" />
+			<field name="arch" type="xml">
+				<search string="Standard">
+					<field name="name" />
+					<field name="code" />
+				</search>
+			</field>
+		</record>
+
+        <record model="ir.actions.act_window" id="act_open_op_standard_view">
+			<field name="name">Standard</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">op.standard</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="search_view_id" ref="view_op_standard_search" />
+			<field name="domain">[]</field>
+			<field name="context">{}</field>
+		</record>
+
+
+
     </data>
 </openerp>

@@ -38,5 +38,35 @@
             </field>
         </record>
 
+        <record id="view_op_course_search" model="ir.ui.view">
+			<field name="name">op.course.search</field>
+			<field name="model">op.course</field>
+			<field name="priority" eval="8" />
+			<field name="arch" type="xml">
+				<search string="Course">
+					<field name="name" />
+					<field name="code" />
+					<field name="level" />
+                    <field name="subject_ids"/>
+					<newline />
+					<group expand="0" string="Group By...">
+						<filter string="Course Level" domain="[]" context="{'group_by':'level'}" />
+
+					</group>
+				</search>
+			</field>
+		</record>
+
+        <record model="ir.actions.act_window" id="act_open_op_course_view">
+			<field name="name">Course</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">op.course</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="search_view_id" ref="view_op_course_search" />
+			<field name="domain">[]</field>
+			<field name="context">{}</field>
+		</record>
+
     </data>
 </openerp>
