@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record id="view_lecturer_form" model="ir.ui.view">
+            <field name="name">op.lecturer.form</field>
+            <field name="model">op.lecturer</field>
+            <field name="arch" type="xml">
+                <form string="Lecturer" version="7.0">
+                    <sheet>
+                        <!--<label for="name" class="oe_edit_only"/>-->
+                        <group>
+                            <field name="name"/>
+                            <field name="birth_date"/>
+                            <field name="category"/>
+                            <field name="gender"/>
+                            <field name="language"/>
+                            <field name="bank_acc_num"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_lecturer_tree" model="ir.ui.view">
+            <field name="name">op.lecturer.tree</field>
+            <field name="model">op.lecturer</field>
+            <field name="arch" type="xml">
+                <tree string="Lecturer" version="7.0">
+                    <field name="name"/>
+                    <field name="birth_date"/>
+                    <field name="category"/>
+                    <field name="gender"/>
+                    <field name="language"/>
+                    <field name="bank_acc_num"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_op_lecturer_search" model="ir.ui.view">
+			<field name="name">op.lecturer.search</field>
+			<field name="model">op.lecturer</field>
+			<field name="priority" eval="8" />
+			<field name="arch" type="xml">
+				<search string="Lecturer">
+					<field name="name"/>
+                    <field name="birth_date"/>
+                    <field name="category"/>
+                    <field name="gender"/>
+                    <field name="language"/>
+                    <field name="bank_acc_num"/>
+					<newline />
+				</search>
+			</field>
+		</record>
+
+        <record model="ir.actions.act_window" id="act_open_op_lecturer_view">
+			<field name="name">Lecturer</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">op.lecturer</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="search_view_id" ref="view_op_lecturer_search" />
+			<field name="domain">[]</field>
+			<field name="context">{}</field>
+		</record>
+
+    </data>
+</openerp>
