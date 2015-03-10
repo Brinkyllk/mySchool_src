@@ -13,11 +13,24 @@
                             <field name="name"/>
                             <field name="code"/>
                             <field name="level"/>
-                            <!--<field name="batch_id"/>-->
                         </group>
                         <notebook>
                             <page string="Subjects">
-                                <field name="subject_ids"/>
+                                <separator colspan="4" string="Subjects"/>
+                                    <field name="subject_ids"/>
+                                <!--<field name= "level" string= "Share it... :" widget= "test" />-->
+                            </page>
+                            <page string="Product">
+                                <separator colspan="4" string="Product Details"/>
+                                <group>
+                                    <field name="product"/>
+                                    <field name="list_price"/>
+                                    <field name="state"/>
+                                </group>
+                                <group>
+                                    <!--<field name="category_id"/>-->
+                                    <field name="active"/>
+                                </group>
                             </page>
                         </notebook>
                     </sheet>
