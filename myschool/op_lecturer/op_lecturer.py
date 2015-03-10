@@ -12,7 +12,7 @@ class op_lecturer(osv.Model):
         'gender': fields.selection([('m','Male'),('f','Female'),('o','Other')], string='Gender', required=True),
         'language': fields.selection([('sinhala', 'Sinhala'), ('english', 'English'), ('tamil', 'Tamil')]),
         'bank_acc_num': fields.char(size=64, string='Bank Acc Number'),
-        'photo': fields.binary(string='Photo'),
+        # 'photo': fields.binary(string='Photo'),
         # 'lecturer_subject_ids': fields.many2many('op.subject', 'lecturer_subject_rel', 'op_lecturer_id', 'op_subject_id', string='Subjects'),
 
 
