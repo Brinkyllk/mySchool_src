@@ -14,13 +14,14 @@
     """,
     'author': 'OpenArc System Management Pvt. Ltd.',
     'website': 'http://www.openarc.lk',
-    'depends': ['product', 'web'],
+    'depends': ['product', 'web', 'base'],
     'data': [
         'op_standard/op_standard_view.xml',
         'op_subject/op_subject_view.xml',
         'op_course/op_course_view.xml',
         'op_batch/op_batch_view.xml',
         'op_student/op_student_view.xml',
+        'op_student/op_student_sequence.xml',
         'myschool_view.xml'
 
     ],
