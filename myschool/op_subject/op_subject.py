@@ -1,5 +1,6 @@
 from openerp.osv import osv, fields
 
+
 class op_subject(osv.Model):
     _name = 'op.subject'
     _columns = {
