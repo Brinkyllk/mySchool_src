@@ -7,15 +7,52 @@
             <field name="arch" type="xml">
                 <form string="Lecturer" version="7.0">
                     <sheet>
-                        <!--<label for="name" class="oe_edit_only"/>-->
-                        <group>
-                            <field name="name"/>
-                            <field name="birth_date"/>
-                            <field name="category"/>
-                            <field name="gender"/>
-                            <field name="language"/>
-                            <field name="bank_acc_num"/>
-                        </group>
+                        <field name="image" widget="image" class="oe_left oe_avatar"/>
+                        <div class="oe_name">
+                            <h2>
+                                <field name="title" placeholder="Title" style="width: 30%%"/>
+                            </h2>
+                            <h2>
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <field name="name" placeholder="Name"
+                                                   style="padding-right:10px; width: 400px;"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </h2>
+                        </div>
+
+                        <separator colspan="4" string="Basic Information" />
+                        <group colspan="4" col="8">
+							<group col="8" colspan="4">
+								<group col="4" colspan="4">
+
+                                    <field name="category"/>
+                                    <field name="phone" />
+							        <field name="mobile" />
+							        <field name="email" />
+								</group>
+							</group>
+						</group>
+
+                        <notebook colspan="4">
+							<page string="Personal Information">
+								<group col="4">
+									<field name="birth_date"/>
+									<field name="language"/>
+                                    <field name="bank_acc_num"/>
+                                    <field name="gender"/>
+								</group>
+							</page>
+
+							<page string="Subjects Detail">
+								<field name="lecturer_subject_ids" colspan="4" nolabel="1" />
+							</page>
+
+						</notebook>
+
                     </sheet>
                 </form>
             </field>
@@ -29,12 +66,12 @@
                     <field name="name"/>
                     <field name="birth_date"/>
                     <field name="category"/>
-                    <field name="gender"/>
                     <field name="language"/>
                     <field name="bank_acc_num"/>
                 </tree>
             </field>
         </record>
+
 
         <record id="view_op_lecturer_search" model="ir.ui.view">
 			<field name="name">op.lecturer.search</field>
@@ -48,7 +85,13 @@
                     <field name="gender"/>
                     <field name="language"/>
                     <field name="bank_acc_num"/>
-					<newline />
+                    <field name="lecturer_subject_ids"/>
+                    <newline />
+					<group expand="0" string="Group By...">
+						<filter string="Category" domain="[]" context="{'group_by':'category'}" />
+                        <filter string="Language" domain="[]" context="{'group_by':'language'}" />
+
+					</group>
 				</search>
 			</field>
 		</record>
@@ -63,6 +106,7 @@
 			<field name="domain">[]</field>
 			<field name="context">{}</field>
 		</record>
+
 
     </data>
 </openerp>
