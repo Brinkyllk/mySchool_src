@@ -93,6 +93,10 @@
                                 <separator colspan="4" string="Batches"/>
                                     <field name="batch_ids"/>
                             </page>
+                            <page string="Subject">
+                                <separator colspan="4" string="Subject(s)"/>
+                                    <field name="subject_ids"/>
+                            </page>
                         </notebook>
                     </sheet>
                 </form>
