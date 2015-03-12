@@ -31,7 +31,8 @@ class op_student(osv.Model):
 
         #------ Course details ------
         # 'standard_id': fields.many2one('op.standard', string='Standard', readonly=True),
-        # 'course_id': fields.many2one('op.course', string='Course', readonly=True),
+        # 'course_id': fields.many2many('op.course', 'op_student_course_rel', 'student_id', 'course_id', string='Course(s)'),
+        'batch_ids': fields.many2many('op.batch', 'op_student_batch_rel', 'student_id', 'batch_id', string='Batch(es)'),
         # 'course_ids': fields.one2many('op.student.course.mapping', 'student_id', string='Registered Courses'),
     }
 

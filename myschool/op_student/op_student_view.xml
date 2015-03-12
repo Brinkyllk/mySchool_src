@@ -89,7 +89,10 @@
                                     <field name="contact_no"/>
                                 </group>
                             </page>
-
+                            <page string="Batches">
+                                <separator colspan="4" string="Batches"/>
+                                    <field name="batch_ids"/>
+                            </page>
                         </notebook>
                     </sheet>
                 </form>

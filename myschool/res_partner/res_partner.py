@@ -23,7 +23,6 @@ from openerp.osv import osv, fields
 
 class res_partner(osv.Model):
     _inherit = 'res.partner'
-
     _columns = {
         'name': fields.char('Name', size=250, required=True, select=True),
         #'library_card_ids': fields.one2many('op.library.card', 'partner_id', 'Library Card', ),

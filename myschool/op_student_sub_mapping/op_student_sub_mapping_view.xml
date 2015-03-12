@@ -28,8 +28,6 @@
                             <field name="subject_id" />
                         </group>
                     </sheet>
-                    <!--<field name="default_course" on_change="onchange_df_course_id()"/>-->
-                    <!--<button type="object" name="make_default" string="Default" attrs="{'readonly':[('default_course','=',True)]}" icon="gtk-about" />-->
                 </form>
             </field>
         </record>
