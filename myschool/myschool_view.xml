@@ -56,11 +56,27 @@
             <field name="view_id" ref="view_lecturer_tree"/>
         </record>
 
+        <record model="ir.actions.act_window" id="action_student_sub_mapping">
+            <field name="name">Student Subject Mapping</field>
+            <field name="res_model">op.student.sub.mapping</field>
+            <field name="view_type">form</field>
+            <field name="view_model">tree,form</field>
+            <field name="view_id" ref="view_op_student_sub_mapping_tree"/>
+        </record>
+
+        <!--<record model="ir.actions.act_window.view" id="act_open_op_student_sub_mapping_view_tree">-->
+            <!--<field name="act_window_id" ref="act_open_op_student_sub_mapping_view" />-->
+            <!--<field name="sequence" eval="10" />-->
+            <!--<field name="view_mode">tree</field>-->
+            <!--<field name="view_id" ref="view_op_student_course_mapping_tree" />-->
+        <!--</record>-->
+
         <menuitem id="menu_standard" name="Standard" parent="menu_myschool_all" action="action_standard"/>
         <menuitem id="menu_subject" name="Subject" parent="menu_myschool_all" action="action_subject"/>
         <menuitem id="menu_course" name="Course" parent="menu_myschool_all" action="action_course"/>
         <menuitem id="menu_batch" name="Batch" parent="menu_myschool_all" action="action_batch"/>
         <menuitem id="menu_lecturer" name="Lecturer" parent="menu_myschool_all" action="action_lecturer"/>
         <menuitem id="menu_student" name="Student" parent="menu_myschool_all" action="action_student"/>
+        <menuitem id="menu_student" name="Student Subject Mapping" parent="menu_myschool_all" action="action_student_sub_mapping"/>
     </data>
 </openerp>

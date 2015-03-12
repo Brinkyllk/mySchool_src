@@ -23,6 +23,7 @@
         'op_lecturer/op_lecturer_view.xml',
         'op_student/op_student_view.xml',
         'op_student/op_student_sequence.xml',
+        'op_student_sub_mapping/op_student_sub_mapping_view.xml',
         'myschool_view.xml'
 
     ],

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="view_op_student_sub_mapping_tree" model="ir.ui.view">
+            <field name="name">op.student.sub.mapping.tree</field>
+            <field name="model">op.student.sub.mapping</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <tree string="Student Subject Mapping">
+                    <field name="student_id" />
+                    <field name="subject_id" />
+                    <!--<field name="default_course" on_change="onchange_df_course_id()"/>-->
+                    <!--<button type="object" name="make_default" string="Default" attrs="{'readonly':[('default_course','=',True)]}" icon="gtk-about" />-->
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_op_student_sub_mapping_form" model="ir.ui.view">
+            <field name="name">op.student.sub.mapping.form</field>
+            <field name="model">op.student.sub.mapping</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <form string="Student Subject Mapping" version="7.0">
+                    <sheet>
+                        <group>
+                            <field name="student_id" />
+                            <field name="subject_id" />
+                        </group>
+                    </sheet>
+                    <!--<field name="default_course" on_change="onchange_df_course_id()"/>-->
+                    <!--<button type="object" name="make_default" string="Default" attrs="{'readonly':[('default_course','=',True)]}" icon="gtk-about" />-->
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_open_op_student_sub_mapping_view">
+            <field name="name">Student Subject Mapping</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">op.student.sub.mapping</field>
+            <field name="view_type">tree</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+
+    </data>
+</openerp>
