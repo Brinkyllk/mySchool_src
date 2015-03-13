@@ -44,6 +44,7 @@
 									<field name="language"/>
                                     <field name="bank_acc_num"/>
                                     <field name="gender"/>
+                                    <!--<field name="partner"/>-->
 								</group>
 							</page>
 
@@ -67,7 +68,7 @@
                     <field name="birth_date"/>
                     <field name="category"/>
                     <field name="language"/>
-                    <field name="bank_acc_num"/>
+                    <field name="lecturer_subject_ids"/>
                 </tree>
             </field>
         </record>

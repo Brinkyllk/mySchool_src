@@ -12,7 +12,15 @@ class op_lecturer(osv.Model):
         'language': fields.selection([('sinhala', 'Sinhala'), ('english', 'English'), ('tamil', 'Tamil')], string='Language'),
         'bank_acc_num': fields.char(size=64, string='Bank Acc Number'),
         'lecturer_subject_ids': fields.many2many('op.subject', 'lecturer_subject_rel', 'op_lecturer_id', 'op_subject_id', string='Subjects'),
+        # 'partner': fields.related('partner_id', 'name', string='Related Supplier', type='char', readonly=True),
 
 
     }
+
+    def create(self, cr, uid, vals, context=None):
+        vals.update({'supplier': True, 'customer': False})
+        return super(op_lecturer,self).create(cr, uid, vals, context=context)
+
+
+
 
