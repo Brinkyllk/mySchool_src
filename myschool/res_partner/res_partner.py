@@ -44,7 +44,7 @@ class res_partner(osv.Model):
         stud = self.browse(cr, uid, ids, context=context)[0]
 
         if ('name' in vals) & (stud.is_student is True):
-            raise "Conneo Edit"
+            raise "Cannot Edit"
         else:
             return super(res_partner, self).write(cr, uid, ids, vals, context=context)
 
