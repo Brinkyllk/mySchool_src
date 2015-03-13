@@ -14,7 +14,7 @@
     """,
     'author': 'OpenArc System Management Pvt. Ltd.',
     'website': 'http://www.openarc.lk',
-    'depends': ['product', 'web'],
+    'depends': ['product', 'web', 'base'],
     'data': [
         'op_standard/op_standard_view.xml',
         'op_subject/op_subject_view.xml',
@@ -23,11 +23,10 @@
         'op_lecturer/op_lecturer_view.xml',
         'op_student/op_student_view.xml',
         'op_student/op_student_sequence.xml',
+        'op_student_sub_mapping/op_student_sub_mapping_view.xml',
         'myschool_view.xml'
 
     ],
-    'js': ['static/src/js/resource.js'],
-    'qweb': ['static/src/xml/resource.xml'],
 
     'installable': True,
     'auto_install': False,
