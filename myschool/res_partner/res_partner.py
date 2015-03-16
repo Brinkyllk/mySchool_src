@@ -44,7 +44,7 @@ class res_partner(osv.Model):
         stud = self.browse(cr, uid, ids, context=context)[0]
 
         if ('name' in vals) & (stud.is_student is True):
-            raise "Cannot Edit"
+            raise osv.except_osv(('Error'), ('Cannot Edit the Student'))
         else:
             return super(res_partner, self).write(cr, uid, ids, vals, context=context)
 
