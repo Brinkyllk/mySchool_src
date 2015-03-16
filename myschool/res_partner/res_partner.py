@@ -47,5 +47,3 @@ class res_partner(osv.Model):
             raise osv.except_osv(('Error'), ('Cannot Edit the Student'))
         else:
             return super(res_partner, self).write(cr, uid, ids, vals, context=context)
-
-    # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
