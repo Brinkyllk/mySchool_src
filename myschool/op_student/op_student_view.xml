@@ -93,8 +93,10 @@
                         </div>
 
                         <separator colspan="4" string="Basic Information"/>
-                        <group col="6" colspan="4">
-                            <field name="gender"/>
+                        <group col="4" colspan="4">
+                            <field name="partner"/>
+                            <field name="id_number"/>
+                            <field name="email"/>
                             <field name="stu_reg_number"/>
                             <button name="genid" type="object" string="Get Number"/>
                                     <!--groups="myschool.group_op_back_office_admin,myschool.group_op_back_office"-->
@@ -102,14 +104,12 @@
                         </group>
                         <notebook colspan="4">
                             <page string="Details">
-                                <separator colspan="4" string="Personal Detail"/>
+                                <separator colspan="4" string="Personal Information"/>
                                 <group col="4" colspan="4">
-                                    <field name="id_number"/>
-                                    <field name="email"/>
+                                    <field name="gender"/>
                                     <field name="phone"/>
-                                    <field name="partner"/>
                                 </group>
-                                <separator colspan="4" string="Address Detail"/>
+                                <separator colspan="4" string="Address Details"/>
                                 <group>
                                     <label for="type"/>
                                     <div name="div_type">
@@ -132,19 +132,26 @@
                             </page>
 
                             <page string="Parent">
-                                <separator string="Parent" colspan="4"/>
+                                <separator string="Parent Details" colspan="4"/>
                                 <group>
                                     <field name="parent_name"/>
                                     <field name="contact_no"/>
                                 </group>
                             </page>
                             <page string="Batches">
-                                <separator colspan="4" string="Batches"/>
+                                <separator colspan="4" string="Course Details"/>
+                                <group col="4" colspan="4">
+                                    <field name="def_batch"/>
+                                    <field name="def_course"/>
+                                </group>
+                                <tree editable="True">
                                     <field name="batch_ids"/>
+                                </tree>
+                                <!--<field name="batch_ids"/>-->
                             </page>
-                            <page string="Subject">
-                                <separator colspan="4" string="Subject(s)"/>
-                                    <field name="subject_ids"/>
+                            <page string="Subjects">
+                                <separator colspan="4" string="Subjects"/>
+                                    <button name="genid" type="object" string="View Subject Results"/>
                             </page>
                         </notebook>
                     </sheet>
@@ -197,6 +204,7 @@
 			<field name="view_mode">kanban</field>
 			<field name="view_id" ref="kanban_view_student" />
 		</record>
+
 
 
     </data>
