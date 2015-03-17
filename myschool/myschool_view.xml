@@ -32,13 +32,24 @@
             <field name="view_id" ref="view_course_tree"/>
         </record>
 
-        <record model="ir.actions.act_window" id="action_student">
-            <field name="name">Student</field>
-            <field name="res_model">op.student</field>
-            <field name="view_type">form</field>
-            <field name="view_model">kanban,tree,form,</field>
-            <field name="view_id" ref="view_student_kanban"/>
-        </record>
+        <!--<record model="ir.actions.act_window" id="action_student">-->
+            <!--<field name="name">Student</field>-->
+            <!--<field name="res_model">op.student</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="view_model">tree,form</field>-->
+            <!--<field name="view_id" ref="view_student_tree"/>-->
+        <!--</record>-->
+
+        <record model="ir.actions.act_window" id="act_open_op_student_view">
+			<field name="name">Student</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">op.student</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">kanban,tree,form</field>
+
+		</record>
+
+
 
         <record model="ir.actions.act_window" id="action_batch">
             <field name="name">Batch</field>
@@ -48,32 +59,21 @@
             <field name="view_id" ref="view_batch_tree"/>
         </record>
 
-        <record model="ir.actions.act_window" id="action_lecturer">
-            <field name="name">Lecturer</field>
-            <field name="res_model">op.lecturer</field>
-            <field name="view_type">form</field>
-            <field name="view_model">tree,form</field>
-            <field name="view_id" ref="view_lecturer_tree"/>
-        </record>
+        <!--<record model="ir.actions.act_window" id="action_lecturer">-->
+            <!--<field name="name">Lecturer</field>-->
+            <!--<field name="res_model">op.lecturer</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="view_model">tree,form</field>-->
+            <!--<field name="view_id" ref="view_lecturer_tree"/>-->
+        <!--</record>-->
 
-        <record model="ir.actions.act_window.view" id="act_open_student_view_form">
-            <field name="act_window_id" ref="action_student"/>
-            <field name="sequence" eval="3"/>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="view_student_form"/>
-        </record>
-        <record model="ir.actions.act_window.view" id="act_open_student_view_tree">
-            <field name="act_window_id" ref="action_student"/>
-            <field name="sequence" eval="2"/>
-            <field name="view_mode">tree</field>
-            <field name="view_id" ref="view_student_tree"/>
-        </record>
-        <record model="ir.actions.act_window.view" id="act_open_student_view_kanban">
-            <field name="act_window_id" ref="action_student"/>
-            <field name="sequence" eval="1"/>
-            <field name="view_mode">kanban</field>
-            <field name="view_id" ref="view_student_kanban"/>
-        </record>
+        <record model="ir.actions.act_window" id="act_open_op_lecturer_view">
+			<field name="name">Lecturer</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">op.lecturer</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">kanban,tree,form</field>
+		</record>
 
         <!--<record model="ir.actions.act_window" id="action_student_sub_mapping">-->
             <!--<field name="name">Student Subject Mapping</field>-->
@@ -87,8 +87,10 @@
         <menuitem id="menu_subject" name="Subject" parent="menu_myschool_all" action="action_subject"/>
         <menuitem id="menu_course" name="Course" parent="menu_myschool_all" action="action_course"/>
         <menuitem id="menu_batch" name="Batch" parent="menu_myschool_all" action="action_batch"/>
-        <menuitem id="menu_lecturer" name="Lecturer" parent="menu_myschool_all" action="action_lecturer"/>
-        <menuitem id="menu_student" name="Student" parent="menu_myschool_all" action="action_student"/>
-        <!--<menuitem id="menu_student_sub_mapping" name="Student Subject Mapping" parent="menu_myschool_all" action="action_student_sub_mapping"/>-->
+        <!--<menuitem id="menu_lecturer" name="Lecturer" parent="menu_myschool_all" action="action_lecturer"/>-->
+        <menuitem id="menu_lecturer" name="Lecturer" parent="menu_myschool_all" action="act_open_op_lecturer_view"/>
+        <!--<menuitem id="menu_student" name="Student" parent="menu_myschool_all" action="action_student"/>-->
+        <menuitem id="menu_student" name="Student" parent="menu_myschool_all" action="act_open_op_student_view"/>
+        <menuitem id="menu_student_sub_mapping" name="Student Subject Mapping" parent="menu_myschool_all" action="action_student_sub_mapping"/>
     </data>
 </openerp>
