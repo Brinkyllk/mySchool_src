@@ -1,6 +1,50 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
+
+        <record model="ir.ui.view" id="kanban_view_lecturer">
+			<field name="name">Lecturer Kanban</field>
+			<field name="model">op.lecturer</field>
+			<field name="arch" type="xml">
+				<kanban>
+					<templates>
+						<t t-name="kanban-box">
+							<div class="oe_kanban_vignette oe_semantic_html_override">
+								<div class="oe_kanban_image">
+									<a type="open">
+										<img t-att-src="kanban_image('op.lecturer', 'image', record.id.value)"
+											class="oe_kanban_image" />
+									</a>
+								</div>
+								<div class="oe_kanban_details">
+									<h4>
+										<a type="open">
+											<field name="name" />
+										</a>
+									</h4>
+									<ul>
+										<li t-if="record.mobile.raw_value">
+											<!--Mobile:-->
+											<field name="mobile" />
+										</li>
+                                        <!--<li t-if="record.category.raw_value">-->
+											<!--&lt;!&ndash;Category:&ndash;&gt;-->
+											<!--<field name="category" />-->
+										<!--</li>-->
+									</ul>
+								</div>
+							</div>
+                            <script> $('.oe_employee_picture').load(function() {
+								if($(this).width() > $(this).height()) {
+								$(this).addClass('oe_employee_picture_wide') } });
+							</script>
+						</t>
+					</templates>
+				</kanban>
+			</field>
+		</record>
+
+
         <record id="view_lecturer_form" model="ir.ui.view">
             <field name="name">op.lecturer.form</field>
             <field name="model">op.lecturer</field>
@@ -30,8 +74,8 @@
 								<group col="4" colspan="4">
 
                                     <field name="category"/>
-                                    <field name="phone" />
-							        <field name="mobile" />
+                                    <field name="mobile" />
+							        <!--<field name="mobile_no" />-->
 							        <field name="email" />
 								</group>
 							</group>
@@ -44,8 +88,66 @@
 									<field name="language"/>
                                     <field name="bank_acc_num"/>
                                     <field name="gender"/>
+                                    <field name="phone" />
                                     <!--<field name="partner"/>-->
 								</group>
+
+                                <separator colspan="4" string="Address Detail"/>
+                                <group>
+                                    <label for="street" string="Address"/>
+                                    <div name="div_address">
+                                        <field name="street" placeholder="Street..."/>
+                                        <field name="street2" placeholder="Street2"/>
+                                        <div class="address_format">
+                                            <field name="city" placeholder="City" style="width: 40%%"/>
+                                            <field name="state_id" class="oe_no_button"
+                                                   placeholder="State" style="width: 37%%" options='{"no_open": True}'/>
+                                            <field name="zip" placeholder="ZIP" style="width: 20%%"/>
+                                        </div>
+                                        <field name="country_id" placeholder="Country" class="oe_no_button"
+                                               options='{"no_open": True}'/>
+                                    </div>
+                                </group>
+
+                                <!--<field colspan="4" name="child_ids" nolabel="1" select="1"-->
+									<!--height="260">-->
+									<!--<form string="Partner Contacts">-->
+										<!--<group colspan="4" col="6">-->
+											<!--<field name="name" string="Contact Name" />-->
+											<!--<field domain="[('domain', '=', 'contact')]" name="title"-->
+												<!--size="0" />-->
+											<!--<field name="function" />-->
+										<!--</group>-->
+										<!--<newline />-->
+										<!--<group colspan="2" col="2">-->
+											<!--<separator string="Postal Address" colspan="4" col="4" />-->
+											<!--<newline/>-->
+											<!--<field name="type" string="Type" colspan="2" />-->
+											<!--<field name="street"  />-->
+											<!--<field name="street2"  />-->
+											<!--<field name="zip" />-->
+											<!--<field name="city" />-->
+											<!--<field name="state_id" />-->
+											<!--<field name="country_id" completion="1" />-->
+										<!--</group>-->
+										<!--<group colspan="2" col="2">-->
+											<!--<separator string="Communication" colspan="2" col="2" />-->
+											<!--<newline/>-->
+											<!--<field name="phone" />-->
+											<!--<field name="mobile" />-->
+											<!--<field name="fax" />-->
+											<!--<field name="email" widget="email" />-->
+										<!--</group>-->
+									<!--</form>-->
+									<!--<tree string="Partner Contacts">-->
+										<!--<field name="name" />-->
+										<!--<field name="zip" />-->
+										<!--<field name="city" />-->
+										<!--<field name="country_id" />-->
+										<!--<field name="phone" />-->
+										<!--<field name="email" />-->
+									<!--</tree>-->
+								<!--</field>-->
 							</page>
 
 							<page string="Subjects Detail">
@@ -102,10 +204,29 @@
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">op.lecturer</field>
 			<field name="view_type">form</field>
-			<field name="view_mode">tree,form</field>
+			<field name="view_mode">kanban,tree,form</field>
 			<field name="search_view_id" ref="view_op_lecturer_search" />
 			<field name="domain">[]</field>
 			<field name="context">{}</field>
+		</record>
+
+		<record model="ir.actions.act_window.view" id="act_open_op_lecturer_view_form">
+			<field name="act_window_id" ref="act_open_op_lecturer_view" />
+			<field name="sequence" eval="20" />
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="view_lecturer_form" />
+		</record>
+		<record model="ir.actions.act_window.view" id="act_open_op_lecturer_view_tree">
+			<field name="act_window_id" ref="act_open_op_lecturer_view" />
+			<field name="sequence" eval="10" />
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="view_lecturer_tree" />
+		</record>
+		<record model="ir.actions.act_window.view" id="act_open_op_lecturer_view_kanban">
+			<field name="act_window_id" ref="act_open_op_lecturer_view" />
+			<field name="sequence" eval="5" />
+			<field name="view_mode">kanban</field>
+			<field name="view_id" ref="kanban_view_lecturer" />
 		</record>
 
 
