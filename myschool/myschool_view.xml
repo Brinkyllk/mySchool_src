@@ -46,7 +46,6 @@
 			<field name="res_model">op.student</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">kanban,tree,form</field>
-
 		</record>
 
 
@@ -85,6 +84,42 @@
             <field name="view_id" ref="view_op_student_sub_mapping_tree"/>
         </record>
 
+        <!--period action-->
+        <record model="ir.actions.act_window" id="act_open_op_period_view">
+			<field name="name">Period</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">op.period</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+        <!--classroom action-->
+        <record model="ir.actions.act_window" id="act_open_op_classroom_view">
+			<field name="name">Class Room</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">op.classroom</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+        <!--time table action-->
+        <record model="ir.actions.act_window" id="act_open_op_timetable_view">
+			<field name="name">Time Table</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">op.timetable</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">kanban,calendar,tree,form</field>
+		</record>
+
+        <!--Genarate time table action-->
+        <record model="ir.actions.act_window" id="act_open_generate_time_table_view">
+			<field name="name">Generate Time Table</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">generate.time.table</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+		</record>
+
         <!--<record model="ir.actions.act_window.view" id="act_open_op_student_sub_mapping_view_tree">-->
             <!--<field name="act_window_id" ref="act_open_op_student_sub_mapping_view" />-->
             <!--<field name="sequence" eval="10" />-->
@@ -96,10 +131,12 @@
         <menuitem id="menu_subject" name="Subject" parent="menu_myschool_all" action="action_subject"/>
         <menuitem id="menu_course" name="Course" parent="menu_myschool_all" action="action_course"/>
         <menuitem id="menu_batch" name="Batch" parent="menu_myschool_all" action="action_batch"/>
-        <!--<menuitem id="menu_lecturer" name="Lecturer" parent="menu_myschool_all" action="action_lecturer"/>-->
         <menuitem id="menu_lecturer" name="Lecturer" parent="menu_myschool_all" action="act_open_op_lecturer_view"/>
-        <!--<menuitem id="menu_student" name="Student" parent="menu_myschool_all" action="action_student"/>-->
         <menuitem id="menu_student" name="Student" parent="menu_myschool_all" action="act_open_op_student_view"/>
         <menuitem id="menu_student_sub_mapping" name="Student Subject Mapping" parent="menu_myschool_all" action="action_student_sub_mapping"/>
+        <menuitem id="menu_period" name="Period" parent="menu_myschool_all" action="act_open_op_period_view"/>
+        <menuitem id="menu_classroom" name="Class Room" parent="menu_myschool_all" action="act_open_op_classroom_view"/>
+        <menuitem id="menu_timetable" name="Time Table" parent="menu_myschool_all" action="act_open_op_timetable_view"/>
+        <menuitem id="menu_gen_timetable" name="Generate Time Table" parent="menu_myschool_all" action="act_open_generate_time_table_view"/>
     </data>
 </openerp>
