@@ -79,11 +79,12 @@ class op_student(osv.Model):
         vals.update({'name': full_name})
         vals['stu_reg_number'] = self.pool.get('ir.sequence').get(cr, uid, 'myschool.op_student') or '/'
         vals.update({'is_student': True})
+        stu_id = vals['stu_reg_number']
 
-        course_map_ref = self.pool.get('op.batch')
-        df_mapped_course = course_map_ref.search(cr, uid, ['&', ('student_id', '=', ),
-                                                           ('default_course', '=', True)], context=context)
-        # df_course = course_map_ref.browse(cr, uid, df_mapped_course[0], context=context)
+        # batchg_map_ref = self.pool.get('op.batch')
+        # df_mapped_batch = batchg_map_ref.search(cr, uid, ['&', ('student_id', '=', stu_id),
+        #                                                   ('default_course', '=', True)], context=context)
+        # df_course = batchg_map_ref.browse(cr, uid, df_mapped_batch[0], context=context)
         # self.write(cr, uid, stu_id, {
         #     'course_id': df_course.course_id.id,
         #     'division_id': df_course.division_id.id,

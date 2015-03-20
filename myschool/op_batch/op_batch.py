@@ -12,8 +12,6 @@ class op_batch(osv.Model):
             [('planned', 'Planned'), ('running', 'Running'), ('cancel', 'Cancel'), ('finished', 'finished')],
             string='State'),
         'course_id': fields.many2one('op.course', string='Course', ondelete='restrict', required=True)
-        # 'standard_id': fields.many2one('op.standard', 'Standard', required=True),
-
     }
 
     _sql_constraints = [('code', 'UNIQUE (code)', 'The CODE of the Batch must be unique!')]
