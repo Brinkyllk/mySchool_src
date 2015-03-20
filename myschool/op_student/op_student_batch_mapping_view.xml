@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="view_op_student_batch_mapping_form" model="ir.ui.view">
+            <field name="name">op.student.batch.mapping.form</field>
+            <field name="model">op.student.batch.mapping</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <form string="Student Batch Mapping">
+                    <field name="course_id" />
+                    <field name="batch_id" options="{'create': false, 'create_edit': false}" />
+                    <field name="default_course"/>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_op_student_batch_mapping_tree" model="ir.ui.view">
+            <field name="name">op.student.batch.mapping.tree</field>
+            <field name="model">op.student.batch.mapping</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <tree string="Student Batch Mapping">
+                    <field name="course_id" />
+                    <field name="batch_id"  />
+                    <field name="default_course"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_open_op_student_batch_mapping_view">
+            <field name="name">Student Batch Mapping</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">op.student.batch.mapping</field>
+            <field name="view_type">tree</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="act_open_op_student_batch_mapping_view_tree">
+            <field name="act_window_id" ref="act_open_op_student_batch_mapping_view" />
+            <field name="sequence" eval="10" />
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_op_student_batch_mapping_tree" />
+        </record>
+
+    </data>
+</openerp>
