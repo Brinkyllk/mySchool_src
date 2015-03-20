@@ -8,6 +8,17 @@
         <!--<menuitem id="menu_course_all" name="Course" parent="menu_myschool_main"/>-->
         <menuitem id="menu_myschool_all" name="MySchool" parent="menu_myschool_main"/>
 
+        <!--main menus-->
+        <menuitem id="menu_myschool_student" name="Student" parent="menu_myschool_main" sequence="10"/>
+        <menuitem id="menu_myschool_lecturer" name="Lecturer" parent="menu_myschool_main" sequence="20"/>
+        <menuitem id="menu_myschool_config" name="Configuration" parent="menu_myschool_main" sequence="50"/>
+
+        <!--sub menus-->
+        <menuitem id="menu_myschool_config_course_mng" name="Course Management" parent="menu_myschool_config"/>
+        <menuitem id="menu_myschool_config_standard_mng" name="Standard Management" parent="menu_myschool_config"/>
+        <menuitem id="menu_myschool_config_subject_mng" name="Subject Management" parent="menu_myschool_config"/>
+
+
         <record model="ir.actions.act_window" id="action_standard">
             <field name="name">Standard</field>
             <field name="res_model">op.standard</field>
@@ -46,10 +57,7 @@
 			<field name="res_model">op.student</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">kanban,tree,form</field>
-
 		</record>
-
-
 
         <record model="ir.actions.act_window" id="action_batch">
             <field name="name">Batch</field>
@@ -75,22 +83,23 @@
 			<field name="view_mode">kanban,tree,form</field>
 		</record>
 
-        <!--<record model="ir.actions.act_window" id="action_student_sub_mapping">-->
-            <!--<field name="name">Student Subject Mapping</field>-->
-            <!--<field name="res_model">op.student.sub.mapping</field>-->
-            <!--<field name="view_type">form</field>-->
-            <!--<field name="view_model">tree,form</field>-->
-            <!--<field name="view_id" ref="view_op_student_sub_mapping_tree"/>-->
-        <!--</record>-->
+        <record model="ir.actions.act_window" id="action_student_sub_mapping">
+            <field name="name">Student Subject Mapping</field>
+            <field name="res_model">op.student.sub.mapping</field>
+            <field name="view_type">form</field>
+            <field name="view_model">tree,form</field>
+            <field name="view_id" ref="view_op_student_sub_mapping_tree"/>
+        </record>
 
-        <menuitem id="menu_standard" name="Standard" parent="menu_myschool_all" action="action_standard"/>
-        <menuitem id="menu_subject" name="Subject" parent="menu_myschool_all" action="action_subject"/>
-        <menuitem id="menu_course" name="Course" parent="menu_myschool_all" action="action_course"/>
-        <menuitem id="menu_batch" name="Batch" parent="menu_myschool_all" action="action_batch"/>
-        <!--<menuitem id="menu_lecturer" name="Lecturer" parent="menu_myschool_all" action="action_lecturer"/>-->
-        <menuitem id="menu_lecturer" name="Lecturer" parent="menu_myschool_all" action="act_open_op_lecturer_view"/>
         <!--<menuitem id="menu_student" name="Student" parent="menu_myschool_all" action="action_student"/>-->
-        <menuitem id="menu_student" name="Student" parent="menu_myschool_all" action="act_open_op_student_view"/>
-        <!--<menuitem id="menu_student_sub_mapping" name="Student Subject Mapping" parent="menu_myschool_all" action="action_student_sub_mapping"/>-->
+        <menuitem id="menu_student" name="Student" parent="menu_myschool_student" action="act_open_op_student_view"/>
+        <menuitem id="menu_lecturer" name="Lecturer" parent="menu_myschool_lecturer" action="act_open_op_lecturer_view"/>
+        <menuitem id="menu_student_sub_mapping" name="Student Subject Mapping" parent="menu_myschool_student" action="action_student_sub_mapping"/>
+
+        <menuitem id="menu_course" name="Courses" parent="menu_myschool_config_course_mng" action="action_course"/>
+        <menuitem id="menu_batch" name="Batches" parent="menu_myschool_config_course_mng" action="action_batch"/>
+        <menuitem id="menu_standard" name="Standard" parent="menu_myschool_config_standard_mng" action="action_standard"/>
+        <menuitem id="menu_subject" name="Subject" parent="menu_myschool_config_subject_mng" action="action_subject"/>
+
     </data>
 </openerp>
