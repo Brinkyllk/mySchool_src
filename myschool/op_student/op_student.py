@@ -31,7 +31,12 @@ class op_student(osv.Model):
 
         #------ Course details ------
         # 'standard_id': fields.many2one('op.standard', string='Standard', readonly=True),
-        # 'course_id': fields.many2one('op.course', string='Course', readonly=True),
+        # 'course_id': fields.many2many('op.course', 'op_student_course_rel', 'student_id', 'course_id', string='Course(s)'),
+        'def_batch': fields.many2one('op.batch', string='Default Batch'),
+        'def_course': fields.char(string='Default Course'),
+        # 'batch_ids': fields.many2many('op.batch', 'op_student_batch_rel', 'student_id', 'batch_id', string='Batch(es)'),
+
+        'batch_ids': fields.one2many('op.student.batch.mapping', 'student_id', string='Registered Courses'),
         # 'course_ids': fields.one2many('op.student.course.mapping', 'student_id', string='Registered Courses'),
     }
 
@@ -74,14 +79,12 @@ class op_student(osv.Model):
         vals.update({'name': full_name})
         vals['stu_reg_number'] = self.pool.get('ir.sequence').get(cr, uid, 'myschool.op_student') or '/'
         vals.update({'is_student': True})
+        stu_id = vals['stu_reg_number']
 
-        #res = {}
-        #vals['stu_reg_number'] = self.pool.get('ir.sequence').get(cr, uid, 'myschool.op_student') or '/'
-        #stu_id = super(op_student, self).create(cr, uid, vals, context=context)
-        # course_map_ref = self.pool.get('op.student.course.mapping')
-        # df_mapped_course = course_map_ref.search(cr, uid, ['&', ('student_id', '=', stu_id),
-        #                                                    ('default_course', '=', True)], context=context)
-        # df_course = course_map_ref.browse(cr, uid, df_mapped_course[0], context=context)
+        # batchg_map_ref = self.pool.get('op.batch')
+        # df_mapped_batch = batchg_map_ref.search(cr, uid, ['&', ('student_id', '=', stu_id),
+        #                                                   ('default_course', '=', True)], context=context)
+        # df_course = batchg_map_ref.browse(cr, uid, df_mapped_batch[0], context=context)
         # self.write(cr, uid, stu_id, {
         #     'course_id': df_course.course_id.id,
         #     'division_id': df_course.division_id.id,

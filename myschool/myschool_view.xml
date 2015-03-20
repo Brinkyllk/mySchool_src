@@ -127,13 +127,15 @@
             <!--<field name="view_id" ref="view_op_student_course_mapping_tree" />-->
         <!--</record>-->
 
-        <menuitem id="menu_standard" name="Standard" parent="menu_myschool_all" action="action_standard"/>
-        <menuitem id="menu_subject" name="Subject" parent="menu_myschool_all" action="action_subject"/>
-        <menuitem id="menu_course" name="Course" parent="menu_myschool_all" action="action_course"/>
-        <menuitem id="menu_batch" name="Batch" parent="menu_myschool_all" action="action_batch"/>
-        <menuitem id="menu_lecturer" name="Lecturer" parent="menu_myschool_all" action="act_open_op_lecturer_view"/>
-        <menuitem id="menu_student" name="Student" parent="menu_myschool_all" action="act_open_op_student_view"/>
-        <menuitem id="menu_student_sub_mapping" name="Student Subject Mapping" parent="menu_myschool_all" action="action_student_sub_mapping"/>
+        <!--<menuitem id="menu_student" name="Student" parent="menu_myschool_all" action="action_student"/>-->
+        <menuitem id="menu_student" name="Student" parent="menu_myschool_student" action="act_open_op_student_view"/>
+        <menuitem id="menu_lecturer" name="Lecturer" parent="menu_myschool_lecturer" action="act_open_op_lecturer_view"/>
+        <!--<menuitem id="menu_student_sub_mapping" name="Student Subject Mapping" parent="menu_myschool_student" action="action_student_sub_mapping"/>-->
+
+        <menuitem id="menu_course" name="Courses" parent="menu_myschool_config_course_mng" action="action_course"/>
+        <menuitem id="menu_batch" name="Batches" parent="menu_myschool_config_course_mng" action="action_batch"/>
+        <menuitem id="menu_standard" name="Standard" parent="menu_myschool_config_standard_mng" action="action_standard"/>
+        <menuitem id="menu_subject" name="Subject" parent="menu_myschool_config_subject_mng" action="action_subject"/>
         <menuitem id="menu_period" name="Period" parent="menu_myschool_all" action="act_open_op_period_view"/>
         <menuitem id="menu_classroom" name="Class Room" parent="menu_myschool_all" action="act_open_op_classroom_view"/>
         <menuitem id="menu_timetable" name="Time Table" parent="menu_myschool_all" action="act_open_op_timetable_view"/>
