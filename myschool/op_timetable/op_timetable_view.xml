@@ -168,7 +168,7 @@
                                 <div><b><field name="period_id"/></b></div>
 	                           	<div>
 		                           	<li t-if="record.lecturer_id.raw_value">
-										Faculty:
+										Lecturer:
 										<field name="lecturer_id"/>
 									</li>
 		                           	<li t-if="record.subject_id.raw_value">

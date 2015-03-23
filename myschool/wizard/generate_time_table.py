@@ -1,7 +1,7 @@
 from osv import osv
 from osv import fields
 import datetime
-from openerp.addons.myschool import utils
+from .. import utils
 
 week_number = {'Mon': 1,
                'Tue': 2,
@@ -58,7 +58,7 @@ class generate_time_table(osv.osv_memory):
             end_time = datetime.timedelta(hours=line.period_id.duration)
             cu_en_date = curr_date + end_time
             a = time_pool.create(cr, uid, {
-                'lecturer_id': line.faculty_id.id,
+                'lecturer_id': line.lecturer_id.id,
                 'subject_id': line.subject_id.id,
                 'standard_id': self_obj.standard_id.id,
                 'period_id': line.period_id.id,
