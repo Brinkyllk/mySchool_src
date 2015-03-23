@@ -19,6 +19,9 @@
 #
 #/#############################################################################
 from openerp.osv import osv, fields
+from openerp.tools.translate import _
+# from openerp import _
+from openerp.exceptions import Warning
 
 
 class res_partner(osv.Model):
@@ -38,11 +41,11 @@ class res_partner(osv.Model):
     #         res.append((course['id'], name))
     #     return res
 
-    def write(self, cr, uid, ids, vals, context=None):
-
-        stud = self.browse(cr, uid, ids, context=context)[0]
-
-        if ('name' in vals) & (stud.is_student is True):
-            raise osv.except_osv(('Error'), ('Cannot Edit the Student'))
-        else:
-            return super(res_partner, self).write(cr, uid, ids, vals, context=context)
+    # def write(self, cr, uid, ids, vals, context=None):
+    #
+    #     stud = self.browse(cr, uid, ids, context=context)[0]
+    #
+    #     if ('name' in vals) & (stud.is_student is True):
+    #         raise Warning(_("Cannot Edit the Student."))
+    #     else:
+    #         return super(res_partner, self).write(cr, uid, ids, vals, context=context)

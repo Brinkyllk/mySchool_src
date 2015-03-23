@@ -5,7 +5,7 @@ import op_batch
 import op_lecturer
 import op_student
 import res_partner
-import op_student_sub_mapping
 import op_timetable
 import op_classroom
 import wizard
+import utils
