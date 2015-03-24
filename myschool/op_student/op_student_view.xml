@@ -108,6 +108,7 @@
                                 <group col="4" colspan="4">
                                     <field name="gender"/>
                                     <field name="phone"/>
+                                    <field name="birth_date"/>
                                 </group>
                                 <separator colspan="4" string="Address Details"/>
                                 <group>
@@ -141,8 +142,8 @@
                             <page string="Batches">
                                 <separator colspan="4" string="Course Details"/>
                                 <group col="4" colspan="4">
-                                    <field name="def_batch"/>
                                     <field name="def_course"/>
+                                    <field name="def_batch"/>
                                 </group>
                                 <tree editable="True">
                                     <field name="batch_ids"/>
