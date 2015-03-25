@@ -38,6 +38,10 @@ class op_student(osv.Model):
 
         'batch_ids': fields.one2many('op.student.batch.mapping', 'student_id', string='Registered Courses'),
         # 'course_ids': fields.one2many('op.student.course.mapping', 'student_id', string='Registered Courses'),
+
+        #payment schedule
+        'payment_schedule_ids': fields.one2many('op.payment.schedule', 'student_payment_id', 'Payment Schedules'),
+
     }
 
     _sql_constraints = [('id_number', 'UNIQUE (id_number)', 'The NIC  of the Student  must be unique!')]
@@ -122,6 +126,26 @@ class op_student(osv.Model):
         values.update({'name': full_name})
 
         return super(op_student, self).write(cr, uid, ids, values, context=context)
+
+    def my_test(self,cr, uid, ids, context=None):
+        res = {}
+        reads = self.read(cr, uid, ids, fields=None, context=context)
+        dictionary_reads = reads[0]
+        payment_schedule_ids = dictionary_reads.get('payment_schedule_ids')
+        res = payment_schedule_ids,
+
+        return {
+            'res_model': 'op.payment.schedule',
+            'view_mode': 'form',
+            'view_type': 'form',
+            'res_model': 'op.payment.schedule',
+            'type': 'ir.actions.act_window',
+            'context': {'test': res}
+                }
+
+
+
+
 
 
 

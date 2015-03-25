@@ -14,7 +14,7 @@
     """,
     'author': 'OpenArc System Management Pvt. Ltd.',
     'website': 'http://www.openarc.lk',
-    'depends': ['product', 'web', 'base'],
+    'depends': ['product', 'web', 'base','account'],
     'data': [
         'op_standard/op_standard_view.xml',
         'op_subject/op_subject_view.xml',
@@ -23,6 +23,7 @@
         'op_lecturer/op_lecturer_view.xml',
         'op_student/op_student_view.xml',
         'op_student/op_student_sequence.xml',
+        'op_payment_schedule/op_payment_schedule_view.xml',
         'op_student/op_student_batch_mapping_view.xml',
         'myschool_view.xml'
 

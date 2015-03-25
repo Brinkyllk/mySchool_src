@@ -132,12 +132,25 @@
                             </page>
 
                             <page string="Parent">
-                                <separator string="Parent Details" colspan="4"/>
+                                <separator string="Parent" colspan="4"/>
                                 <group>
                                     <field name="parent_name"/>
                                     <field name="contact_no"/>
                                 </group>
                             </page>
+
+                            <page string="Payment Schedule">
+                                <separator string="Product Details" colspan="4"/>
+                                <group>
+                                    <tree editable="True">
+                                        <field name="payment_schedule_ids"/>
+                                    </tree>
+                                </group>
+                                <group>
+                                    <button name="my_test" string="Show Details" type="object"/>
+                                </group>
+                            </page>
+
                             <page string="Batches">
                                 <separator colspan="4" string="Course Details"/>
                                 <group col="4" colspan="4">
@@ -204,7 +217,6 @@
 			<field name="view_mode">kanban</field>
 			<field name="view_id" ref="kanban_view_student" />
 		</record>
-
 
 
     </data>

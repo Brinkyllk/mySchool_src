@@ -5,3 +5,4 @@ import op_batch
 import op_lecturer
 import op_student
 import res_partner
+import op_payment_schedule
