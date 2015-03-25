@@ -1,1 +1,1 @@
-__author__ = 'sakvith'
+import generate_time_table
