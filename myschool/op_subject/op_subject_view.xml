@@ -24,6 +24,7 @@
             <field name="model">op.subject</field>
             <field name="arch" type="xml">
                 <tree string="Subject">
+                    <!--<field name="subject_ids"/>-->
                     <field name="code"/>
                     <field name="name"/>
                     <field name="type"/>
@@ -38,6 +39,7 @@
 			<field name="priority" eval="8" />
 			<field name="arch" type="xml">
 				<search string="Subject">
+					<!--<field name="subject_ids" />-->
 					<field name="name" />
 					<field name="code" />
 					<field name="type" />

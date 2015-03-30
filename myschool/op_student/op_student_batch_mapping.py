@@ -10,6 +10,7 @@ class op_student_batch_mapping(osv.Model):
                                     required=True, options="{'create_edit': False }"),
         'default_course': fields.boolean('Default Course'),
         'course_id': fields.many2one('op.course', 'Course', required=True),
+        'product_id': fields.related('product_id', 'name', string='Related Product', type='char', readonly=True),
     }
 
     def create(self, cr, uid, vals, context=None):

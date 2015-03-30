@@ -43,10 +43,14 @@ class op_student(osv.Model):
         #------ Course details ------
         'def_batch': fields.many2one('op.batch', string='Batch', readonly=True),
         'def_course': fields.many2one('op.course', 'Course', readonly=True),
+        'search_batch': fields.char('Search Batch', invisible=True),
 
-
+        #------ Map many Courses ------
         'batch_ids': fields.one2many('op.student.batch.mapping', 'student_id', string='Registered Courses'),
-        # 'course_ids': fields.one2many('op.student.course.mapping', 'student_id', string='Registered Courses'),
+
+        #------ Map many Courses ------
+        # 'subject_ids': fields.many2many('op.subject', 'op_course_subject_rel', 'student_id', 'subject_id',
+        #                                 string='Subjects'),
 
         #payment schedule
         'payment_schedule_ids': fields.one2many('op.payment.schedule', 'student_payment_id', 'Payment Schedules'),
@@ -193,6 +197,10 @@ class op_student(osv.Model):
             'type': 'ir.actions.act_window',
             'context': {'test': res}
                 }
+
+    def fnct_search(obj, cr, uid, op_student_batch_mapping, name, args):
+
+        return
 
 
 

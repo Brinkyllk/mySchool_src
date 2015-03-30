@@ -9,6 +9,7 @@ class op_subject(osv.Model):
         # 'type': fields.selection([('t', 'Theory'), ('p', 'Practical'),  ('pt','Both'), ('o', 'Other')], string='Type'),
         'type': fields.selection([('core', 'Core'), ('elective', 'Elective')], string='Type'),
         'standard_id': fields.many2one('op.standard', 'Standard', required=True),
+        # 'subject_ids': fields.many2one('op.student.sub.map', 'Subject map')
 
     }
 

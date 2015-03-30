@@ -13,8 +13,6 @@ class op_payment_schedule(osv.Model):
         'student_payment_id': fields.many2one('op.student', 'Student'),
         # 'product': fields.related('product_id', 'name', string='Batch', type='char', readonly=True),
         'schedule_lines': fields.one2many('op.payment.schedule.lines', 'payment_schedule_lines_ids', string='Lines'),
-
-
     }
 
 
