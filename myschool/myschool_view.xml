@@ -17,6 +17,7 @@
         <menuitem id="menu_myschool_config_standard_mng" name="Standard Management" parent="menu_myschool_config"/>
         <menuitem id="menu_myschool_config_subject_mng" name="Subject Management" parent="menu_myschool_config"/>
 
+        <!--standard action-->
         <record model="ir.actions.act_window" id="action_standard">
             <field name="name">Standard</field>
             <field name="res_model">op.standard</field>
@@ -25,6 +26,7 @@
             <field name="view_id" ref="view_standard_tree"/>
         </record>
 
+        <!--subject action-->
         <record model="ir.actions.act_window" id="action_subject">
             <field name="name">Subject</field>
             <field name="res_model">op.subject</field>
@@ -33,6 +35,7 @@
             <field name="view id" ref="view_subject_tree"/>
         </record>
 
+        <!--course action-->
         <record model="ir.actions.act_window" id="action_course">
             <field name="name">Course</field>
             <field name="res_model">op.course</field>
@@ -49,6 +52,7 @@
             <!--<field name="view_id" ref="view_student_tree"/>-->
         <!--</record>-->
 
+        <!--student action-->
         <record model="ir.actions.act_window" id="act_open_op_student_view">
 			<field name="name">Student</field>
 			<field name="type">ir.actions.act_window</field>
@@ -57,6 +61,7 @@
 			<field name="view_mode">kanban,tree,form</field>
 		</record>
 
+        <!--batch action-->
         <record model="ir.actions.act_window" id="action_batch">
             <field name="name">Batch</field>
             <field name="res_model">op.batch</field>
@@ -65,7 +70,7 @@
             <field name="view_id" ref="view_batch_tree"/>
         </record>
 
-
+        <!--lecture action-->
         <record model="ir.actions.act_window" id="act_open_op_lecturer_view">
 			<field name="name">Lecturer</field>
 			<field name="type">ir.actions.act_window</field>
@@ -121,13 +126,12 @@
         <!--<menuitem id="menu_student" name="Student" parent="menu_myschool_all" action="action_student"/>-->
         <menuitem id="menu_student" name="Student" parent="menu_myschool_student" action="act_open_op_student_view"/>
         <menuitem id="menu_lecturer" name="Lecturer" parent="menu_myschool_lecturer" action="act_open_op_lecturer_view"/>
-        <!--<menuitem id="menu_student_sub_mapping" name="Student Subject Mapping" parent="menu_myschool_student" action="action_student_sub_mapping"/>-->
+
 
         <menuitem id="menu_course" name="Courses" parent="menu_myschool_config_course_mng" action="action_course"/>
         <menuitem id="menu_batch" name="Batches" parent="menu_myschool_config_course_mng" action="action_batch"/>
         <menuitem id="menu_standard" name="Standard" parent="menu_myschool_config_standard_mng" action="action_standard"/>
         <menuitem id="menu_subject" name="Subject" parent="menu_myschool_config_subject_mng" action="action_subject"/>
-
         <menuitem id="menu_period" name="Period" parent="menu_myschool_all" action="act_open_op_period_view"/>
         <menuitem id="menu_classroom" name="Class Room" parent="menu_myschool_all" action="act_open_op_classroom_view"/>
         <menuitem id="menu_timetable" name="Time Table" parent="menu_myschool_all" action="act_open_op_timetable_view"/>

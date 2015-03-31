@@ -158,6 +158,9 @@
                                 <group col="4" colspan="4">
                                     <field name="def_course"/>
                                     <field name="def_batch"/>
+                                    <field name="search_batch">
+                                        <!--<attribute name="invisible">True</attribute>-->
+                                    </field>
                                 </group>
                                 <tree editable="True">
                                     <field name="batch_ids"/>
@@ -197,7 +200,6 @@
 			<field name="res_model">op.student</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">kanban,tree,form</field>
-			<!--<field name="search_view_id" ref="view_op_student_search" />-->
 			<field name="domain">[]</field>
 			<field name="context">{}</field>
 		</record>
