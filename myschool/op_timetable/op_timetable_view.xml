@@ -8,7 +8,7 @@
 			<field name="model">op.period</field>
 			<field name="priority" eval="8" />
 			<field name="arch" type="xml">
-				<tree string="Period" editable="bottom">
+				<tree string="Period">
 					<field name="name" />
 					<field name="hour" />
 					<field name="minute" />
@@ -99,6 +99,7 @@
                     <field name="classroom_id" />
 					<field name="start_datetime" />
 					<field name="end_datetime" />
+                    <field name="state" />
 				</tree>
 			</field>
 		</record>
@@ -109,6 +110,12 @@
 			<field name="priority" eval="8" />
 			<field name="arch" type="xml">
 				<form string="Time Table" version="7.0">
+                    <header>
+                        <button string="Complete" type="workflow" name="action_complete" class="oe_button oe_form_button oe_highlight oe_form_visible" icon="gtk-apply"/>
+                        <button string="Postponed" type="workflow" name="action_postponed" class="oe_button oe_form_button oe_highlight oe_form_visible" icon="gtk-jump-to"/>
+                        <button string="Cancel" type="workflow" name="action_cancel" class="oe_button oe_form_button oe_highlight oe_form_visible" icon="gtk-cancel"/>
+                        <field name="state" widget="statusbar" readonly="True" float="right"/>
+                    </header>
 					<sheet>
 						<separator colspan="4" string="Time Table" />
 						<group colspan="4" col="4">
@@ -126,6 +133,35 @@
 			</field>
 		</record>
 
+		<record id="view_op_timetable_search" model="ir.ui.view">
+			<field name="name">op.timetable.search</field>
+			<field name="model">op.timetable</field>
+			<field name="priority" eval="8" />
+			<field name="arch" type="xml">
+				<search string="Time Table">
+					<field name="lecturer_id" select="True" />
+					<field name="standard_id" select="True" />
+					<field name="period_id" select="True" />
+					<field name="subject_id" select="True" />
+                    <field name="classroom_id" select="True"/>
+					<field name="start_datetime" select="True" />
+					<field name="end_datetime" select="True" />
+					<newline />
+					<filter string="Today" domain="[('start_datetime', '&gt;=', time.strftime('%%Y-%%m-%%d 00:00:00')),('start_datetime', '&lt;=', time.strftime('%%Y-%%m-%%d 23:59:59'))]" />
+					<group expand="0" string="Group By...">
+						<filter string="Lecturer" domain="[]"
+							context="{'group_by':'lecturer_id'}" />
+						<filter string="Standard" domain="[]"
+							context="{'group_by':'standard_id'}" />
+						<filter string="period" domain="[]"
+							context="{'group_by':'period_id'}" />
+						<filter string="Subject" domain="[]"
+							context="{'group_by':'subject_id'}" />
+					</group>
+				</search>
+			</field>
+		</record>
+
         <record id="view_op_timetable_calendar" model="ir.ui.view">
 			<field name="name">op.timetable.calendar</field>
 			<field name="model">op.timetable</field>
@@ -137,7 +173,7 @@
 					<field name="period_id" />
 					<field name="subject_id" />
                     <field name="classroom_id" />
-                    <!--<field name="state" />-->
+                    <field name="state" />
 				</calendar>
 			</field>
 		</record>
@@ -206,7 +242,7 @@
 			<field name="res_model">op.timetable</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">tree,form</field>
-			<!--<field name="search_view_id" ref="view_op_timetable_search" />-->
+			<field name="search_view_id" ref="view_op_timetable_search" />
 			<field name="domain">[]</field>
 			<field name="context">{}</field>
 		</record>

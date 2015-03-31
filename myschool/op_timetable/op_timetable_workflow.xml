@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <!-- Workflow -->
+        <record model="workflow" id="workflow_op_timetable">
+            <field name="name">op.timetable.basic</field>
+            <field name="osv">op.timetable</field>
+            <field name="on_create" eval="True" />
+        </record>
+
+        <!-- Activity -->
+        <!--<record id="action_planned" model="workflow.activity">-->
+			<!--<field name="wkf_id" ref="workflow_op_timetable" />-->
+			<!--<field name="flow_start">True</field>-->
+			<!--<field name="name">planned</field>-->
+		<!--</record>-->
+
+        <record model="workflow.activity" id="action_planned">
+            <field name="wkf_id" ref="workflow_op_timetable"/>
+            <field name="name">planned</field>
+
+            <!--<field name="split_mode">XOR | OR | AND</field>-->
+            <!--<field name="join_mode">XOR | AND</field>-->
+            <field name="kind">function</field>
+
+            <field name="action">action_planned()</field>
+            <!--<field name="signal_send">''(...)''</field>-->
+            <field name="flow_start" eval='True' />
+            <field name="flow_stop" eval='False' />
+        </record>
+
+        <record model="workflow.activity" id="action_complete">
+            <field name="wkf_id" ref="workflow_op_timetable"/>
+            <field name="name">Complete</field>
+
+            <!--<field name="split_mode">XOR | OR | AND</field>-->
+            <!--<field name="join_mode">XOR | AND</field>-->
+            <field name="kind">function</field>
+
+            <field name="action">action_complete()</field>
+            <!--<field name="signal_send">''(...)''</field>-->
+            <!--<field name="flow_start" eval='False' />-->
+            <field name="flow_stop" eval='True' />
+        </record>
+
+        <record model="workflow.activity" id="action_cancel">
+            <field name="wkf_id" ref="workflow_op_timetable"/>
+            <field name="name">Cancel</field>
+
+            <!--<field name="split_mode">XOR | OR | AND</field>-->
+            <!--<field name="join_mode">XOR | AND</field>-->
+            <field name="kind">function</field>
+
+            <field name="action">action_cancel()</field>
+            <!--<field name="signal_send">''(...)''</field>-->
+            <!--<field name="flow_start" eval='False' />-->
+            <field name="flow_stop" eval='True' />
+        </record>
+
+        <record model="workflow.activity" id="action_postponed">
+            <field name="wkf_id" ref="workflow_op_timetable"/>
+            <field name="name">Postponed</field>
+
+            <!--<field name="split_mode">XOR | OR | AND</field>-->
+            <!--<field name="join_mode">XOR | AND</field>-->
+            <field name="kind">function</field>
+
+            <field name="action">action_postponed()</field>
+            <!--<field name="signal_send">''(...)''</field>-->
+            <!--<field name="flow_start" eval='False' />-->
+            <field name="flow_stop" eval='False' />
+        </record>
+
+        <!--  Transition -->
+        <record model="workflow.transition" id="transition_planned_cancel">
+            <field name="act_from" ref="action_planned"/>
+            <field name="act_to" ref="action_cancel"/>
+
+            <!--<field name="signal">(...)</field>-->
+            <!--<field name="role_id" ref="role_id'_1_'"/>-->
+            <!--<field name="condition">(...)</field>-->
+
+            <!--<field name="trigger_model">(...)</field>-->
+            <!--<field name="trigger_expr_id">(...)</field>-->
+        </record>
+        <record model="workflow.transition" id="transition_planned_complete">
+            <field name="act_from" ref="action_planned"/>
+            <field name="act_to" ref="action_complete"/>
+
+            <!--<field name="signal">(...)</field>-->
+            <!--<field name="role_id" ref="role_id'_1_'"/>-->
+            <!--<field name="condition">(...)</field>-->
+
+            <!--<field name="trigger_model">(...)</field>-->
+            <!--<field name="trigger_expr_id">(...)</field>-->
+        </record>
+        <record model="workflow.transition" id="transition_planned_postponed">
+            <field name="act_from" ref="action_planned"/>
+            <field name="act_to" ref="action_postponed"/>
+
+            <!--<field name="signal">(...)</field>-->
+            <!--<field name="role_id" ref="role_id'_1_'"/>-->
+            <!--<field name="condition">(...)</field>-->
+
+            <!--<field name="trigger_model">(...)</field>-->
+            <!--<field name="trigger_expr_id">(...)</field>-->
+        </record>
+        <record model="workflow.transition" id="transition_postponed_planned">
+            <field name="act_from" ref="action_postponed"/>
+            <field name="act_to" ref="action_planned"/>
+
+            <!--<field name="signal">(...)</field>-->
+            <!--<field name="role_id" ref="role_id'_1_'"/>-->
+            <!--<field name="condition">(...)</field>-->
+
+            <!--<field name="trigger_model">(...)</field>-->
+            <!--<field name="trigger_expr_id">(...)</field>-->
+        </record>
+        <record model="workflow.transition" id="transition_postponed_cancel">
+            <field name="act_from" ref="action_postponed"/>
+            <field name="act_to" ref="action_cancel"/>
+
+            <!--<field name="signal">(...)</field>-->
+            <!--<field name="role_id" ref="role_id'_1_'"/>-->
+            <!--<field name="condition">(...)</field>-->
+
+            <!--<field name="trigger_model">(...)</field>-->
+            <!--<field name="trigger_expr_id">(...)</field>-->
+        </record>
+
+    </data>
+</openerp>

@@ -1,5 +1,6 @@
-from osv import osv
-from osv import fields
+from openerp.osv import osv
+from openerp.osv import fields
+import netsvc
 
 
 class op_period(osv.osv):
@@ -39,13 +40,41 @@ class op_timetable(osv.osv):
         'end_datetime': fields.datetime('End', required=True),
         'lecturer_id': fields.many2one('op.lecturer', 'Lecturer', required=True),
         'standard_id': fields.many2one('op.standard', 'Standard', required=True),
-        'classroom_id': fields.many2one('op.classroom', 'Classroom', readonly=True),
+        'classroom_id': fields.many2one('op.classroom', 'Classroom', required=True),
         'subject_id': fields.many2one('op.subject', 'Subject', required=True),
         'color': fields.integer('Color Index'),
         'type': fields.selection(
             [('Monday', 'Monday'), ('Tuesday', 'Tuesday'), ('Wednesday', 'Wednesday'), ('Thursday', 'Thursday'),
              ('Friday', 'Friday'), ('Saturday', 'Saturday')], 'Days'),
+        'state': fields.selection([('planned', 'Planned'),
+                                   ('completed', 'Completed'),
+                                   ('postponed', 'Postponed'),
+                                   ('cancelled', 'Cancelled')], readonly=True, select=True, string='State'),
     }
+
+    _defaults = {
+        'state': 'planned',
+    }
+
+    def action_planned(self, cr, uid, ids, context=None):
+        wf_service = netsvc.LocalService("workflow")
+        self.write(cr, uid, ids, {'state': 'planned'})
+        for inv_id in ids:
+            wf_service.trg_delete(uid, 'op.timetable', inv_id, cr)
+            wf_service.trg_create(uid, 'op.timetable', inv_id, cr)
+        return True
+
+    def action_cancel(self, cr, uid, ids, context=None):
+        self.write(cr, uid, ids, {'state': 'cancelled'})
+        return True
+
+    def action_postponed(self, cr, uid, ids, context=None):
+        self.write(cr, uid, ids, {'state': 'postponed'})
+        return True
+
+    def action_complete(self, cr, uid, ids, context=None):
+        self.write(cr, uid, ids, {'state': 'completed'})
+        return True
 
 
 op_timetable()

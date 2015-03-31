@@ -1,5 +1,5 @@
-from osv import osv
-from osv import fields
+from openerp.osv import osv
+from openerp.osv import fields
 import datetime
 from .. import utils
 
@@ -20,6 +20,7 @@ class generate_time_table(osv.osv_memory):
 
     _columns = {
         'standard_id': fields.many2one('op.standard', 'Standard', required=True),
+        'classroom_id': fields.many2one('op.classroom', 'Classroom', required=True),
         'time_table_lines': fields.one2many('gen.time.table.line', 'gen_time_table', 'Time Table Lines', required=True),
         'time_table_lines_1': fields.one2many('gen.time.table.line', 'gen_time_table', 'Time Table Lines',
                                               domain=[('day', '=', '1')], required=True),
@@ -64,7 +65,8 @@ class generate_time_table(osv.osv_memory):
                 'period_id': line.period_id.id,
                 'start_datetime': curr_date.strftime("%Y-%m-%d %H:%M:%S"),
                 'end_datetime': cu_en_date.strftime("%Y-%m-%d %H:%M:%S"),
-                'type': curr_date.strftime('%A'), })
+                'type': curr_date.strftime('%A'),
+                'classroom_id': self_obj.classroom_id.id, })
 
             curr_date = curr_date+datetime.timedelta(days=day_cnt)
 

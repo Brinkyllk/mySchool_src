@@ -19,6 +19,7 @@
             <field name="arch" type="xml">
                 <form string="Standard" version="7.0">
                     <sheet>
+                        <separator string="Standard" colspan="4" />
                         <group>
                             <field name="code"/>
                             <field name="name"/>
@@ -47,11 +48,7 @@
 			<field name="view_type">form</field>
 			<field name="view_mode">tree,form</field>
 			<field name="search_view_id" ref="view_op_standard_search" />
-			<field name="domain">[]</field>
-			<field name="context">{}</field>
 		</record>
-
-
 
     </data>
 </openerp>

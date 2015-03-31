@@ -98,6 +98,7 @@
                             <field name="id_number"/>
                             <field name="email"/>
                             <field name="stu_reg_number"/>
+                            <field name="user_id"/>
                             <button name="genid" type="object" string="Get Number"/>
                                     <!--groups="myschool.group_op_back_office_admin,myschool.group_op_back_office"-->
                             <!--<field name="alumni_boolean"/>-->
