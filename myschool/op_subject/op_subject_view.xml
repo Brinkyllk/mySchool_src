@@ -9,8 +9,8 @@
                 <form string="Subject" version="7.0">
                      <sheet>
                          <group>
-                            <field name="name"/>
                             <field name="code"/>
+                            <field name="name"/>
                             <field name="type"/>
                             <field name="standard_id" />
                          </group>

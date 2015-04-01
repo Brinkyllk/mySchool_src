@@ -16,6 +16,9 @@ class op_lecturer(osv.Model):
 
     }
 
+    _sql_constraints = [('name', 'UNIQUE (name)', 'The Lecturer  must be unique!')]
+
+
     def create(self, cr, uid, vals, context=None):
         vals.update({'supplier': True, 'customer': False})
         return super(op_lecturer,self).create(cr, uid, vals, context=context)
