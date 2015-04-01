@@ -104,7 +104,7 @@
                             <!--<field name="alumni_boolean"/>-->
                         </group>
                         <notebook colspan="4">
-                            <page string="Details">
+                            <page string="Personal Details">
                                 <separator colspan="4" string="Personal Information"/>
                                 <group col="4" colspan="4">
                                     <field name="gender"/>
@@ -133,7 +133,7 @@
                                 </group>
                             </page>
 
-                            <page string="Parent">
+                            <page string="Parent/Guardian Details">
                                 <separator string="Parent" colspan="4"/>
                                 <group>
                                     <field name="parent_name"/>
@@ -158,9 +158,6 @@
                                 <group col="4" colspan="4">
                                     <field name="def_course"/>
                                     <field name="def_batch"/>
-                                    <field name="search_batch">
-                                        <!--<attribute name="invisible">True</attribute>-->
-                                    </field>
                                 </group>
                                 <tree editable="True">
                                     <field name="batch_ids"/>

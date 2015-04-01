@@ -5,14 +5,14 @@ from openerp.tools.translate import _
 
 class op_student(osv.Model):
 
-    def _get_def_batch(self, cr, uid, ids, field_name, arg, context=None):
-        res = {}
-        get_batch = self.pool.get('op.student.batch.mapping')
-        read_batch = get_batch.browse(cr, uid, ids, context=context)
-        results = read_batch.read(cr, uid, [0], ['batch_id'], context=context)
-        print results
-        # ['def_batch'] = res[results.id]
-        return
+    # def _get_def_batch(self, cr, uid, ids, field_name, arg, context=None):
+    #     res = {}
+    #     get_batch = self.pool.get('op.student.batch.mapping')
+    #     read_batch = get_batch.browse(cr, uid, ids, context=context)
+    #     results = read_batch.read(cr, uid, [0], ['batch_id'], context=context)
+    #     print results
+    #     # ['def_batch'] = res[results.id]
+    #     return
 
     _name = 'op.student'
     _description = 'Student'
@@ -43,7 +43,6 @@ class op_student(osv.Model):
         #------ Course details ------
         'def_batch': fields.many2one('op.batch', string='Batch', readonly=True),
         'def_course': fields.many2one('op.course', 'Course', readonly=True),
-        'search_batch': fields.char('Search Batch', invisible=True),
 
         #------ Map many Courses ------
         'batch_ids': fields.one2many('op.student.batch.mapping', 'student_id', string='Registered Courses'),
@@ -198,9 +197,10 @@ class op_student(osv.Model):
             'context': {'test': res}
                 }
 
-    def fnct_search(obj, cr, uid, op_student_batch_mapping, name, args):
-
-        return
+    # def fnct_search(self, cr, uid, op_student_batch_mapping, name, args):
+    #     all_batches = self.pool.get('op.student.batch.mapping')
+    #     batch_ids = all_batches.browse(cr, uid, )
+    #     return
 
 
 
