@@ -132,10 +132,11 @@
         <menuitem id="menu_batch" name="Batches" parent="menu_myschool_config_course_mng" action="action_batch"/>
         <menuitem id="menu_standard" name="Standard" parent="menu_myschool_config_standard_mng" action="action_standard"/>
         <menuitem id="menu_subject" name="Subject" parent="menu_myschool_config_subject_mng" action="action_subject"/>
-        <menuitem id="menu_period" name="Period" parent="menu_myschool_all" action="act_open_op_period_view"/>
-        <menuitem id="menu_classroom" name="Class Room" parent="menu_myschool_all" action="act_open_op_classroom_view"/>
-        <menuitem id="menu_timetable" name="Time Table" parent="menu_myschool_all" action="act_open_op_timetable_view"/>
-        <menuitem id="menu_gen_timetable" name="Generate Time Table" parent="menu_myschool_all" action="act_open_generate_time_table_view"/>
+
+        <!--<menuitem id="menu_period" name="Period" parent="menu_myschool_all" action="act_open_op_period_view"/>-->
+        <!--<menuitem id="menu_classroom" name="Class Room" parent="menu_myschool_all" action="act_open_op_classroom_view"/>-->
+        <!--<menuitem id="menu_timetable" name="Time Table" parent="menu_myschool_all" action="act_open_op_timetable_view"/>-->
+        <!--<menuitem id="menu_gen_timetable" name="Generate Time Table" parent="menu_myschool_all" action="act_open_generate_time_table_view"/>-->
 
     </data>
 </openerp>
