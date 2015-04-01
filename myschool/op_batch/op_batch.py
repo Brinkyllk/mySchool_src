@@ -2,6 +2,8 @@ from openerp.osv import osv, fields
 
 
 class op_batch(osv.Model):
+
+
     _name = 'op.batch'
     _columns = {
         'name': fields.char(size=25, string='Name', required=True),
@@ -11,7 +13,7 @@ class op_batch(osv.Model):
         'state': fields.selection(
             [('planned', 'Planned'), ('running', 'Running'), ('cancel', 'Cancel'), ('finished', 'finished')],
             string='State'),
-        'course_id': fields.many2one('op.course', string='Course', ondelete='restrict', required=True)
+        'course_id': fields.many2one('op.course', string='Course', ondelete='restrict', required=True),
     }
 
     _sql_constraints = [('code', 'UNIQUE (code)', 'The CODE of the Batch must be unique!')]

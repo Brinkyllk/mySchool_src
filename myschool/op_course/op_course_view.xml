@@ -10,9 +10,10 @@
                     <sheet>
                         <!--<label for="name" class="oe_edit_only"/>-->
                         <group>
-                            <field name="name"/>
                             <field name="code"/>
+                            <field name="name"/>
                             <field name="level"/>
+                            <!--<field name="search_course"/>-->
                         </group>
                         <notebook>
                             <page string="Subjects">
@@ -43,8 +44,8 @@
             <field name="model">op.course</field>
             <field name="arch" type="xml">
                 <tree string="MySchool" version="7.0">
-                    <field name="name"/>
                     <field name="code"/>
+                    <field name="name"/>
                     <field name="level"/>
                     <field name="subject_ids"/>
                 </tree>
@@ -57,10 +58,11 @@
 			<field name="priority" eval="8" />
 			<field name="arch" type="xml">
 				<search string="Course">
-					<field name="name" />
 					<field name="code" />
+					<field name="name" />
 					<field name="level" />
                     <field name="subject_ids"/>
+                    <!--<field name="search_course"/>-->
 					<newline />
 					<group expand="0" string="Group By...">
 						<filter string="Course Level" domain="[]" context="{'group_by':'level'}" />
