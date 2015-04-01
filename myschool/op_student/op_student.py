@@ -108,8 +108,7 @@ class op_student(osv.Model):
         # de_course = vals['course_id']
         course_count = course_map_ref.search(cr, uid, [('student_id', '=', stu_id)], count=True, context=context)
         if course_count < 1:
-            if vals['course_id'] == 0:
-                raise osv.except_osv(_(u'Error'), _(u'Course is mandatory'))
+            raise osv.except_osv(_(u'Error'), _(u'Course is mandatory'))
             return
 
         # Assign default course
