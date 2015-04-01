@@ -58,8 +58,6 @@ class op_student(osv.Model):
 
     _sql_constraints = [('id_number', 'UNIQUE (id_number)', 'The NIC  of the Student  must be unique!')]
 
-
-
     def _check_nic(self, nic):
         pass
 

@@ -16,6 +16,10 @@ class op_course(osv.Model):
         'product': fields.related('product_id', 'name', string='Batch', type='char', readonly=True),
         'subject_ids': fields.many2many('op.subject', 'op_course_subject_rel', 'course_id', 'subject_id',
                                         string='Subjects'),
+
+
+        # ----------- test ----------
+        # 'course_id': fields.many2one('op.standard', 'Course'),
     }
 
     _sql_constraints = [('code', 'UNIQUE (code)', 'The CODE of the COURSE must be unique!')]

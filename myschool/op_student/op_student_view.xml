@@ -99,7 +99,7 @@
                             <field name="email"/>
                             <field name="stu_reg_number"/>
                             <field name="user_id"/>
-                            <button name="genid" type="object" string="Get Number"/>
+                            <!--<button name="genid" type="object" string="Get Number"/>-->
                                     <!--groups="myschool.group_op_back_office_admin,myschool.group_op_back_office"-->
                             <!--<field name="alumni_boolean"/>-->
                         </group>
@@ -153,7 +153,7 @@
                                 </group>
                             </page>
 
-                            <page string="Batches">
+                            <page string="Courses">
                                 <separator colspan="4" string="Course Details"/>
                                 <group col="4" colspan="4">
                                     <field name="def_course"/>
@@ -164,10 +164,10 @@
                                 </tree>
                                 <!--<field name="batch_ids"/>-->
                             </page>
-                            <page string="Subjects">
-                                <separator colspan="4" string="Subjects"/>
-                                    <button name="genid" type="object" string="View Subject Results"/>
-                            </page>
+                            <!--<page string="Subjects">-->
+                                <!--<separator colspan="4" string="Subjects"/>-->
+                                    <!--<button name="genid" type="object" string="View Subject Results"/>-->
+                            <!--</page>-->
                         </notebook>
                     </sheet>
                 </form>
