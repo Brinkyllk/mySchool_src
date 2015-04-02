@@ -15,7 +15,7 @@
         <!--sub menus-->
         <menuitem id="menu_myschool_config_course_mng" name="Course Management" parent="menu_myschool_config"/>
         <menuitem id="menu_myschool_config_standard_mng" name="Standard Management" parent="menu_myschool_config"/>
-        <menuitem id="menu_myschool_config_subject_mng" name="Subject Management" parent="menu_myschool_config"/>
+        <menuitem id="menu_myschool_config_subject_mng" name="Subject(s) Management" parent="menu_myschool_config"/>
 
         <!--standard action-->
         <record model="ir.actions.act_window" id="action_standard">
@@ -131,7 +131,7 @@
         <menuitem id="menu_course" name="Courses" parent="menu_myschool_config_course_mng" action="action_course"/>
         <menuitem id="menu_batch" name="Batches" parent="menu_myschool_config_course_mng" action="action_batch"/>
         <menuitem id="menu_standard" name="Standard" parent="menu_myschool_config_standard_mng" action="action_standard"/>
-        <menuitem id="menu_subject" name="Subject" parent="menu_myschool_config_subject_mng" action="action_subject"/>
+        <menuitem id="menu_subject" name="Subjects" parent="menu_myschool_config_subject_mng" action="action_subject"/>
 
         <!--<menuitem id="menu_period" name="Period" parent="menu_myschool_all" action="act_open_op_period_view"/>-->
         <!--<menuitem id="menu_classroom" name="Class Room" parent="menu_myschool_all" action="act_open_op_classroom_view"/>-->
