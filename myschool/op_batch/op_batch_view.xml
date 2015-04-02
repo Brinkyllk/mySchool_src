@@ -8,6 +8,7 @@
             <field name="arch" type="xml">
                 <form string="Batch" version="7.0">
                     <sheet>
+                        <separator string="Batch" colspan="4" />
                         <group>
                             <field name="code"/>
                             <field name="name"/>
