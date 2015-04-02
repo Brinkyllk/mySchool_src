@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <form string="MySchool" version="7.0">
                     <sheet>
-                        <!--<label for="name" class="oe_edit_only"/>-->
+                        <separator string="Course" colspan="4" />
                         <group>
                             <field name="code"/>
                             <field name="name"/>
