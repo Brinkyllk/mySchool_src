@@ -1,4 +1,6 @@
 from openerp.osv import osv, fields
+from datetime import date, datetime
+
 
 class op_lecturer(osv.Model):
     _name = 'op.lecturer'
@@ -18,11 +20,26 @@ class op_lecturer(osv.Model):
 
     _sql_constraints = [('name', 'UNIQUE (name)', 'The Lecturer  must be unique!')]
 
-
     def create(self, cr, uid, vals, context=None):
         vals.update({'supplier': True, 'customer': False})
         return super(op_lecturer,self).create(cr, uid, vals, context=context)
 
+    def _check_birthday(self, cr, uid, vals, context=None):
+        for obj in self.browse(cr, uid, vals):
+            print "OK"
+            date_birth_day = obj.birth_date
+            date_today = date.today()
+            if date_birth_day and date_today:
+                datetime_format = "%Y-%m-%d"
+                bday = datetime.strptime(date_birth_day, datetime_format)
+                tday = datetime.strptime(date_today.strftime('%Y%m%d'), '%Y%m%d')
+                if tday < bday:
+                    return False
+                return True
+
+    _constraints = [
+        (_check_birthday, 'Birth Day cannot be future date!', ['birth_date']),
+    ]
 
 
 

@@ -1,5 +1,5 @@
 from openerp.osv import fields, osv
-import time
+from datetime import date, datetime
 from openerp.tools.translate import _
 
 
@@ -178,6 +178,19 @@ class op_student(osv.Model):
 
         return super(op_student, self).write(cr, uid, ids, values, context=context)
 
+    def _check_birthday(self, cr, uid, vals, context=None):
+        for obj in self.browse(cr, uid, vals):
+            print "OK"
+            date_birth_day = obj.birth_date
+            date_today = date.today()
+            if date_birth_day and date_today:
+                datetime_format = "%Y-%m-%d"
+                bday = datetime.strptime(date_birth_day, datetime_format)
+                tday = datetime.strptime(date_today.strftime('%Y%m%d'), '%Y%m%d')
+                if tday < bday:
+                    return False
+                return True
+
     def my_test(self,cr, uid, ids, context=None):
         res = {}
         reads = self.read(cr, uid, ids, fields=None, context=context)
@@ -192,7 +205,12 @@ class op_student(osv.Model):
             'res_model': 'op.payment.schedule',
             'type': 'ir.actions.act_window',
             'context': {'test': res}
-                }
+        }
+
+    _constraints = [
+        (_check_birthday, 'Birth Day cannot be future date!', ['birth_date']),
+    ]
+
 
     # def fnct_search(self, cr, uid, op_student_batch_mapping, name, args):
     #     all_batches = self.pool.get('op.student.batch.mapping')
