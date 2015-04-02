@@ -141,18 +141,6 @@
                                 </group>
                             </page>
 
-                            <page string="Payment Schedule">
-                                <separator string="Product Details" colspan="4"/>
-                                <group>
-                                    <tree editable="True">
-                                        <field name="payment_schedule_ids"/>
-                                    </tree>
-                                </group>
-                                <group>
-                                    <button name="my_test" string="Show Details" type="object"/>
-                                </group>
-                            </page>
-
                             <page string="Courses">
                                 <separator colspan="4" string="Course Details"/>
                                 <group col="4" colspan="4">
@@ -168,6 +156,21 @@
                                 <!--<separator colspan="4" string="Subjects"/>-->
                                     <!--<button name="genid" type="object" string="View Subject Results"/>-->
                             <!--</page>-->
+
+                            <!--<page string="Payment Schedule">-->
+                                <!--&lt;!&ndash;<separator string="Product Details" colspan="4"/>&ndash;&gt;-->
+                                <!--<group>-->
+                                    <!--<tree editable="True">-->
+                                        <!--&lt;!&ndash;<field name="payment_schedule_ids"/>&ndash;&gt;-->
+                                    <!--</tree>-->
+                                <!--</group>-->
+                                <!--<group>-->
+                                    <!--&lt;!&ndash;<button name="my_test" string="Show Details" type="object"/>&ndash;&gt;-->
+                                <!--</group>-->
+
+                            <!--</page>-->
+
+
                         </notebook>
                     </sheet>
                 </form>

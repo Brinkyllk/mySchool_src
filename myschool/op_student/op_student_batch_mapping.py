@@ -59,6 +59,38 @@ class op_student_batch_mapping(osv.Model):
 
         return True
 
+    # related to the payment schedule
+    # def view_details(self, cr, uid, ids, context=None):
+    #     res = {}
+    #     stu_bat_map = self.pool.get('op.student.batch.mapping')
+    #     course_ids = stu_bat_map.search(cr, uid, [('id', '=', ids)], context=context)
+    #     stu_bat_map_obj = stu_bat_map.browse(cr, uid, course_ids, context=context)
+    #     stu_bat_map_course_id = stu_bat_map_obj[0].course_id
+    #     course = self.pool.get('op.course')
+    #     course_id = course.search(cr, uid, [('id', '=',  stu_bat_map_course_id.id)], context=context)
+    #     # product_id = course[0]
+    #     cr.execute('SELECT product_id FROM op_course '\
+    #                'WHERE id=%s',(course_id))
+    #
+    #     course_product = course.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+    #     product_id = course_product[0].id
+    #     print product_id
+    #     product = self.pool.get('product.product').browse(cr, uid, product_id, context=context)
+    #     product_price = product.price_get('list_price')[product.id]
+    #     print product_price
+    #     res = [product_id, product_price]
+    #
+    #     # return res
+    #     return {
+    #         'res_model': 'op.payment.schedule',
+    #         'view_mode': 'tree',
+    #         'view_type': 'tree',
+    #         'res_model': 'op.payment.schedule',
+    #         'type': 'ir.actions.act_window',
+    #         'nodestroy': True,
+    #         'target': 'new',#current
+    #         'context': {'test': res}
+    #             }
 
 
 
