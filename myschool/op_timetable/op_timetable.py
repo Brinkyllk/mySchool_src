@@ -1,6 +1,6 @@
 from openerp.osv import osv
 from openerp.osv import fields
-import netsvc
+from openerp import netsvc
 
 
 class op_period(osv.osv):
