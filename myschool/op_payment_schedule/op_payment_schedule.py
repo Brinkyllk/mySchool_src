@@ -24,35 +24,53 @@ class op_payment_schedule(osv.Model):
     #         res['list_price'] = amount_unit
     #     return {'value': res}
 
-    # def default_get(self, cr, uid, fields_list, context=None):
-    #     res ={}
-    #     print fields_list
-    #     test_list = context.__getitem__('test')
-    #     print test_list
-    #     for line in test_list:
-    #         for element in line:
+    def default_get(self, cr, uid, fields, context=None):#fields_list
+        res ={}
+        print fields
+        test_list = context.__getitem__('test')
+        print test_list[0]
+        print test_list[1]
+
+
+        # for line in test_list:
+        #     for element in line:
+        #
+        #         payment_schedule = self.pool.get('op.payment.schedule')
+        #         payment_ids = payment_schedule.search(cr, uid, [('id', '=', element)], context=context)
+        #         payment_obj = payment_schedule.browse(cr, uid, payment_ids, context=context)
+        #
+        #         price = payment_obj[0].list_price
+        #         payment_term_id = payment_obj[0].payment_term.id
+        #         invoice_date = payment_obj[0].invoice_date
+        #
+        #         print price
+        #         print payment_term_id
+        #         print invoice_date
+        #
+        #         p_sch_list = self.pool.get('account.payment.term').compute(cr, uid, payment_term_id, price, date_ref=invoice_date)
+        #         print p_sch_list
+        #
+        #         for list_tuple in p_sch_list:
+        #             schedule_lines = []
+        #             schedule_lines.append((0, 0, {'due_date': list_tuple[0],'amount': list_tuple[1]}))
+        #         # payment_schedule.create(cr, uid, {'schedule_lines': schedule_lines}, context)
+        pass
+
+        product_id = test_list[0]
+        product = self.pool.get('product.product').browse(cr, uid, product_id, context=context)
+        pro_name = product.name_template
+        product_price = test_list[1]
+        obj_pay_sch = self.pool.get('op.payment.schedule')
+
+
+
+        return res
+
+    # def write(self, cr, uid, ids, values, context=None):
+    #     list = self.default_get(cr, uid, ids, context)
+    #     print list
     #
-    #             payment_schedule = self.pool.get('op.payment.schedule')
-    #             payment_ids = payment_schedule.search(cr, uid, [('id', '=', element)], context=context)
-    #             payment_obj = payment_schedule.browse(cr, uid, payment_ids, context=context)
-    #
-    #             price = payment_obj[0].list_price
-    #             payment_term_id = payment_obj[0].payment_term.id
-    #             invoice_date = payment_obj[0].invoice_date
-    #
-    #             print price
-    #             print payment_term_id
-    #             print invoice_date
-    #
-    #             p_sch_list = self.pool.get('account.payment.term').compute(cr, uid, payment_term_id, price, date_ref=invoice_date)
-    #             print p_sch_list
-    #
-    #             for list_tuple in p_sch_list:
-    #                 schedule_lines = []
-    #                 schedule_lines.append((0, 0, {'due_date': list_tuple[0],'amount': list_tuple[1]}))
-    #             # payment_schedule.create(cr, uid, {'schedule_lines': schedule_lines}, context)
-    #
-    #     return res
+    #     return super(op_payment_schedule, self).write(cr, uid, ids, values, context=context)
 
     # def my_test(self,cr, uid, ids, context=None):
     #     pass
