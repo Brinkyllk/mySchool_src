@@ -4,6 +4,7 @@ from openerp.osv import osv, fields
 
 class op_course(osv.Model):
     _name = 'op.course'
+    # to do (Related Field)
     _inherits = {'product.product': 'product_id'}
 
     _columns = {
