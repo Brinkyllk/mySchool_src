@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
     <data>
-        <record id="view_op_student_batch_mapping_form" model="ir.ui.view">
-            <field name="name">op.student.batch.mapping.form</field>
-            <field name="model">op.student.batch.mapping</field>
-            <field name="priority" eval="8" />
-            <field name="arch" type="xml">
-                <form string="Student Batch Mapping">
-                    <field name="course_id" />
-                    <field name="batch_id" options="{'create': false, 'create_edit': false}" />
-                    <field name="default_course"/>
-                </form>
-            </field>
-        </record>
 
         <record id="view_op_student_batch_mapping_tree" model="ir.ui.view">
             <field name="name">op.student.batch.mapping.tree</field>
@@ -23,6 +11,7 @@
                     <field name="course_id" />
                     <field name="batch_id"  />
                     <field name="default_course"/>
+                    <!--<button name="view_details" string="view" type="object"/>-->
                 </tree>
             </field>
         </record>

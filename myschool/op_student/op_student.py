@@ -1,3 +1,4 @@
+import re
 from openerp.osv import fields, osv
 from datetime import date, datetime
 from openerp.tools.translate import _
@@ -78,6 +79,14 @@ class op_student(osv.Model):
         return {}
 
     def create(self, cr, uid, vals, context=None):
+        #Phone number Validation
+        if 'phone' in vals and vals['phone']:
+            if re.match("^[0-9]*$", vals['phone']) != None:
+                pass
+            else:
+                raise osv.except_osv(_('Invalid Mobile No'),_('Please enter a valid Phone Number'))
+            return
+
         # Clean NIC
         if 'id_number' in vals:
             try:
@@ -97,9 +106,8 @@ class op_student(osv.Model):
             full_name = vals['first_name'].strip() + ' ' + vals['last_name'].strip()
         else:
             full_name = vals['initials'] + ' ' + vals['first_name'].strip() + ' ' + vals['last_name'].strip()
-
         vals.update({'name': full_name})  # Update Partner record
-        # Get student ID
+
         # Get student ID
         vals['stu_reg_number'] = self.pool.get('ir.sequence').get(cr, uid, 'myschool.op_student') or '/'
         vals.update({'is_student': True})  # Partner type is student
@@ -141,6 +149,13 @@ class op_student(osv.Model):
             self.validate_email(cr, uid, ids, values['email'])
             # res = super(op_student, self).write(cr, uid, ids, values, context=context)
             return True
+        #Phone number Validation
+        if 'phone' in values and values['phone']:
+            if re.match("^[0-9]*$", values['phone']) != None:
+                pass
+            else:
+                raise osv.except_osv(_('Invalid Mobile No'),_('Please enter a valid Phone Number'))
+                return
 
         #clean NIC
         if 'id_number' in values:
