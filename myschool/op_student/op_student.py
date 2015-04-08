@@ -1,6 +1,7 @@
 from openerp.osv import fields, osv
 from datetime import date, datetime
 from openerp.tools.translate import _
+import re
 
 
 class op_student(osv.Model):
@@ -61,6 +62,12 @@ class op_student(osv.Model):
     def _check_nic(self, nic):
         pass
 
+    # to do........
+    def validate_email(self, cr, uid, ids, email):
+        if re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email)== None:
+            raise osv.except_osv('Invalid Email', 'Please enter a valid email address')
+        return True
+
     def genid(self, cr, uid, ids, context=None):
         stud = self.browse(cr, uid, ids, context=context)[0]
 
@@ -71,7 +78,6 @@ class op_student(osv.Model):
         return {}
 
     def create(self, cr, uid, vals, context=None):
-
         # Clean NIC
         if 'id_number' in vals:
             try:
@@ -121,9 +127,20 @@ class op_student(osv.Model):
         # vals.update({'course_id': def_course[0].course_id.id})
         self.write(cr, uid, [stu_id], {'def_course': def_course[0].course_id.id,
                                        'def_batch': def_course[0].batch_id.id, }, context=context)
-        return stu_id
+        # return stu_id
+
+        # email validation on create
+        if 'email' in vals:
+            self.validate_email(cr, uid, [], vals['email'])
+            res = super(op_student, self).create(cr, uid, vals, context=context)
+            return res
 
     def write(self, cr, uid, ids, values, context=None):
+
+        if 'email' in values:
+            self.validate_email(cr, uid, ids, values['email'])
+            # res = super(op_student, self).write(cr, uid, ids, values, context=context)
+            return True
 
         #clean NIC
         if 'id_number' in values:
