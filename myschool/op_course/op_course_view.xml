@@ -13,7 +13,6 @@
                             <field name="code"/>
                             <field name="name"/>
                             <field name="level"/>
-                            <!--<field name="search_course"/>-->
                         </group>
                         <notebook>
                             <page string="Subjects">
@@ -24,13 +23,9 @@
                             <page string="Product">
                                 <separator colspan="4" string="Product Details"/>
                                 <group>
-                                    <field name="product"/>
-                                    <field name="list_price"/>
-                                    <field name="state"/>
-                                </group>
-                                <group>
-                                    <field name="categ_id"/>
-                                    <field name="active"/>
+                                    <field name="product_id"/>
+                                    <field name="price"/>
+                                    <!--<field name="state"/>-->
                                 </group>
                             </page>
                         </notebook>
@@ -62,7 +57,6 @@
 					<field name="name" />
 					<field name="level" />
                     <field name="subject_ids"/>
-                    <!--<field name="search_course"/>-->
 					<newline />
 					<group expand="0" string="Group By...">
 						<filter string="Course Level" domain="[]" context="{'group_by':'level'}" />
