@@ -1,4 +1,3 @@
-import re
 from openerp.osv import fields, osv
 from datetime import date, datetime
 from openerp.tools.translate import _
@@ -63,13 +62,20 @@ class op_student(osv.Model):
     def _check_nic(self, nic):
         pass
 
-    # to do........
+    # email validation........
     def validate_email(self, cr, uid, ids, email):
         if email is False:
             return True
         if re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email)== None:
             raise osv.except_osv('Invalid Email', 'Please enter a valid email address')
         return True
+
+    # def validate_NIC(self, cr, uid, ids, id_number):
+    #     if id_number is None:
+    #         return True
+    #     if re.match('^\d{9}(X|V)$', id_number)== None:
+    #         raise osv.except_osv('Invalid NIC', 'Please enter a valid NIC')
+    #     return True
 
     def genid(self, cr, uid, ids, context=None):
         stud = self.browse(cr, uid, ids, context=context)[0]
@@ -139,24 +145,36 @@ class op_student(osv.Model):
                                        'def_batch': def_course[0].batch_id.id, }, context=context)
         # return stu_id
 
+        # NIC validation on create
+        # if 'id_number' in vals:
+        #     self.validate_NIC(cr, uid, [], vals['id_number'])
+        #     return True
+
         # email validation on create
         if 'email' in vals:
             self.validate_email(cr, uid, [], vals['email'])
-            res = super(op_student, self).create(cr, uid, vals, context=context)
-            return res
+            return True
+
+        res = super(op_student, self).create(cr, uid, vals, context=context)
+        return res
 
     def write(self, cr, uid, ids, values, context=None):
-
+        # NIC validation on write
         if 'email' in values:
             self.validate_email(cr, uid, ids, values['email'])
-            # res = super(op_student, self).write(cr, uid, ids, values, context=context)
             return True
+
+        # # NIC validation on write
+        # if 'id_number' in values:
+        #     self.validate_NIC(cr, uid, ids, values['id_number'])
+        #     return True
+
         #Phone number Validation
         if 'phone' in values and values['phone']:
             if re.match("^[0-9]*$", values['phone']) != None:
                 pass
             else:
-                raise osv.except_osv(_('Invalid Mobile No'),_('Please enter a valid Phone Number'))
+                raise osv.except_osv(_('Invalid Mobile No'), _('Please enter a valid Phone Number'))
                 return
 
         #clean NIC
@@ -214,7 +232,6 @@ class op_student(osv.Model):
 
     def _check_birthday(self, cr, uid, vals, context=None):
         for obj in self.browse(cr, uid, vals):
-            print "OK"
             date_birth_day = obj.birth_date
             date_today = date.today()
             if date_birth_day and date_today:
