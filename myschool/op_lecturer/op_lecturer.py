@@ -1,8 +1,17 @@
 from openerp.osv import osv, fields
 from datetime import date, datetime
+import re
 
 
 class op_lecturer(osv.Model):
+
+    def validate_email(self, cr, uid, ids, email):
+        if email is False:
+            return True
+        if re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email)== None:
+            raise osv.except_osv('Invalid Email', 'Please enter a valid email address')
+        return True
+
     _name = 'op.lecturer'
     _inherits = {'res.partner': 'partner_id'}
 
@@ -20,9 +29,20 @@ class op_lecturer(osv.Model):
 
     _sql_constraints = [('name', 'UNIQUE (name)', 'The Lecturer  must be unique!')]
 
+    # overriding create method
     def create(self, cr, uid, vals, context=None):
         vals.update({'supplier': True, 'customer': False})
-        return super(op_lecturer,self).create(cr, uid, vals, context=context)
+        if 'email' in vals:
+            self.validate_email(cr, uid, [], vals['email'])
+        res = super(op_lecturer, self).create(cr, uid, vals, context=context)
+        return res
+
+    # overriding write method
+    def write(self, cr, uid, ids, values, context=None):
+        if 'email' in values:
+            self.validate_email(cr, uid, ids, values['email'])
+            res = super(op_lecturer, self).write(cr, uid, ids, values, context=context)
+            return res
 
     def _check_birthday(self, cr, uid, vals, context=None):
         for obj in self.browse(cr, uid, vals):
