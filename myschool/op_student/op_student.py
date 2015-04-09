@@ -87,7 +87,7 @@ class op_student(osv.Model):
                 pass
             else:
                 raise osv.except_osv(_('Invalid Mobile No'),_('Please enter a valid Phone Number'))
-            return
+                return
 
         # Clean NIC
         if 'id_number' in vals:
@@ -120,8 +120,8 @@ class op_student(osv.Model):
 
         # Many to Many course logic
         course_map_ref = self.pool.get('op.student.batch.mapping')  # get reference to object
+
         # Validate Course mandatory
-        # de_course = vals['course_id']
         course_count = course_map_ref.search(cr, uid, [('student_id', '=', stu_id)], count=True, context=context)
         if course_count < 1:
             raise osv.except_osv(_(u'Error'), _(u'Course is mandatory'))

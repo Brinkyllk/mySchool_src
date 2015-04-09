@@ -12,8 +12,9 @@ class op_course(osv.Model):
         'name': fields.char(string='Name', required=True),
         'level': fields.selection([('certification', 'Certification'), ('diploma', 'Diploma'), ('degree', 'Degree')],
                                   string='Course Level'),
-        'product_id': fields.many2one('product.product', 'Product', ondelete='restrict'),
+        'product_id': fields.many2one('product.product', 'Product', ondelete='restrict', readonly=True),
         'price': fields.related('product_id', 'list_price', string='Price', type='char'),
+        'category': fields.related('uom_id', 'category_id', string='Category', type='char'),
         'subject_ids': fields.many2many('op.subject', 'op_course_subject_rel', 'course_id', 'subject_id',
                                         string='Subject(s)'),
 
@@ -29,11 +30,22 @@ class op_course(osv.Model):
         #Reffer producy
         productRef = self.pool.get('product.product')
 
-        product = {'name': vals['name'], 'list_price': vals['price']}
+        product = {'name': vals['name'], 'list_price': vals['price'], 'category_id': vals['category']}
         pid = productRef.create(cr, uid, product, context=context)
         vals.update({'product_id': pid})
 
         return super(op_course, self).create(cr, uid, vals, context=context)
+
+    def write(self, cr, uid, values, context=None):
+        #Write Product
+        productRef = self.pool.get('product.product')
+
+        product = {'name': values['name'], 'list_price': values['price'], 'category_id': values['category']}
+        pid = productRef.create(cr, uid, product, context=context)
+        values.update({'product_id': pid})
+
+        return super(op_course, self).create(cr, uid, values, context=context)
+        return
 
 
 
