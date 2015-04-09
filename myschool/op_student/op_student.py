@@ -120,7 +120,6 @@ class op_student(osv.Model):
 
         # Many to Many course logic
         course_map_ref = self.pool.get('op.student.batch.mapping')  # get reference to object
-
         # Validate Course mandatory
         course_count = course_map_ref.search(cr, uid, [('student_id', '=', stu_id)], count=True, context=context)
         if course_count < 1:
