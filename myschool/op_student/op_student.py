@@ -70,12 +70,12 @@ class op_student(osv.Model):
             raise osv.except_osv('Invalid Email', 'Please enter a valid email address')
         return True
 
-    # def validate_NIC(self, cr, uid, ids, id_number):
-    #     if id_number is None:
-    #         return True
-    #     if re.match('^\d{9}(X|V)$', id_number)== None:
-    #         raise osv.except_osv('Invalid NIC', 'Please enter a valid NIC')
-    #     return True
+    def validate_NIC(self, cr, uid, ids, id_number):
+        if id_number is None:
+            return True
+        if re.match('^\d{9}(X|V)$', id_number)== None:
+            raise osv.except_osv('Invalid NIC', 'Please enter a valid NIC')
+        return True
 
     def genid(self, cr, uid, ids, context=None):
         stud = self.browse(cr, uid, ids, context=context)[0]
@@ -125,6 +125,10 @@ class op_student(osv.Model):
         if 'email' in vals:
             self.validate_email(cr, uid, [], vals['email'])
 
+        # NIC validation on create
+        if 'id_number' in vals:
+            self.validate_NIC(cr, uid, [], vals['id_number'])
+
         # Save student and get record id
         stu_id = super(op_student, self).create(cr, uid, vals, context=context)
 
@@ -148,20 +152,14 @@ class op_student(osv.Model):
                                        'def_batch': def_course[0].batch_id.id, }, context=context)
         return stu_id
 
-        # NIC validation on create
-        # if 'id_number' in vals:
-        #     self.validate_NIC(cr, uid, [], vals['id_number'])
-        #     return True
-
     def write(self, cr, uid, ids, values, context=None):
         # email validation on write
         if 'email' in values:
             self.validate_email(cr, uid, ids, values['email'])
 
         # # NIC validation on write
-        # if 'id_number' in values:
-        #     self.validate_NIC(cr, uid, ids, values['id_number'])
-        #     return True
+        if 'id_number' in values:
+            self.validate_NIC(cr, uid, ids, values['id_number'])
 
         #Phone number Validation
         if 'phone' in values and values['phone']:
