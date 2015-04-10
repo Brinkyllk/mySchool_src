@@ -13,6 +13,7 @@
                             <field name="code"/>
                             <field name="name"/>
                             <field name="level"/>
+                            <!--<field name="search_course"/>-->
                         </group>
                         <notebook>
                             <page string="Subjects">
@@ -25,6 +26,7 @@
                                 <group>
                                     <field name="product_id"/>
                                     <field name="price"/>
+                                    <!--<field name="category"/>-->
                                     <!--<field name="state"/>-->
                                 </group>
                             </page>
@@ -42,7 +44,7 @@
                     <field name="code"/>
                     <field name="name"/>
                     <field name="level"/>
-                    <field name="subject_ids"/>
+                    <!--<field name="subject_ids"/>-->
                 </tree>
             </field>
         </record>
