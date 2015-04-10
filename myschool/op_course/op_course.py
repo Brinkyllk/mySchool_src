@@ -30,7 +30,7 @@ class op_course(osv.Model):
         #Reffer producy
         productRef = self.pool.get('product.product')
 
-        product = {'name': vals['name'], 'list_price': vals['price']}
+        product = {'name': vals['name'], 'list_price': vals['price'], 'iscourse':True}
         pid = productRef.create(cr, uid, product, context=context)
         vals.update({'product_id': pid})
 
@@ -38,16 +38,10 @@ class op_course(osv.Model):
 
     def write(self, cr, uid, ids, values, context=None):
         #Write Product
-        prodet = self.browse(cr, uid, ids, context=context)[0]
-        proid = prodet.product_id
-        print proid
-        productRef = self.pool.get('product.product')
-        propid = productRef.search(cr, uid, ['product_id', '=', proid])
-        # product = {'name': values['name']}
-        product = {'name': propid.name}
-        pid = productRef.write(cr, uid, product, context=context)
-        values.update({'product_id': pid})
-
+        if 'name' in values:
+            prodid = self.browse(cr, uid, ids, context=context)[0].product_id.id
+            productRef = self.pool.get('product.product')
+            productRef.write(cr, uid, prodid, {'name':values['name']}, context=context)
         return super(op_course, self).write(cr, uid, ids, values, context=context)
 
 
