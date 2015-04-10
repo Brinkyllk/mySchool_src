@@ -14,6 +14,7 @@ class op_course(osv.Model):
                                   string='Course Level'),
         'product_id': fields.many2one('product.product', 'Product', ondelete='restrict', readonly=True),
         'price': fields.related('product_id', 'list_price', string='Price', type='char'),
+        # 'category': fields.related('uom_id', 'category_id', string='Category', type='char'),
         'subject_ids': fields.many2many('op.subject', 'op_course_subject_rel', 'course_id', 'subject_id',
                                         string='Subject(s)'),
 
@@ -25,17 +26,29 @@ class op_course(osv.Model):
     _sql_constraints = [('code', 'UNIQUE (code)', 'The CODE of the COURSE must be unique!')]
 
 
-    def create(self, cr, uid, vals, context = None):
+    def create(self, cr, uid, vals, context=None):
         #Reffer producy
         productRef = self.pool.get('product.product')
 
-        product = {'name': vals['name'], 'list_price': vals['price'], 'category_id': vals['category']}
+        product = {'name': vals['name'], 'list_price': vals['price']}
         pid = productRef.create(cr, uid, product, context=context)
         vals.update({'product_id': pid})
 
         return super(op_course, self).create(cr, uid, vals, context=context)
 
+    def write(self, cr, uid, ids, values, context=None):
+        #Write Product
+        prodet = self.browse(cr, uid, ids, context=context)[0]
+        proid = prodet.product_id
+        print proid
+        productRef = self.pool.get('product.product')
+        propid = productRef.search(cr, uid, ['product_id', '=', proid])
+        # product = {'name': values['name']}
+        product = {'name': propid.name}
+        pid = productRef.write(cr, uid, product, context=context)
+        values.update({'product_id': pid})
 
+        return super(op_course, self).write(cr, uid, ids, values, context=context)
 
 
 
