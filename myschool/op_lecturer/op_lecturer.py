@@ -1,6 +1,7 @@
 from openerp.osv import osv, fields
 from datetime import date, datetime
 import re
+from openerp.tools.translate import _
 
 
 class op_lecturer(osv.Model):
@@ -10,6 +11,13 @@ class op_lecturer(osv.Model):
             return True
         if re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email)== None:
             raise osv.except_osv('Invalid Email', 'Please enter a valid email address')
+        return True
+
+    def validate_mobile(self, cr, uid, ids, phone):
+        if phone is False:
+            return True
+        if re.match("^[0-9]*$", phone)== None:
+            raise osv.except_osv('Invalid Mobile No', 'Please enter a valid Phone Number')
         return True
 
     _name = 'op.lecturer'
@@ -23,6 +31,7 @@ class op_lecturer(osv.Model):
         'language': fields.selection([('sinhala', 'Sinhala'), ('english', 'English'), ('tamil', 'Tamil')], string='Language'),
         'bank_acc_num': fields.char(size=64, string='Bank Acc Number'),
         'lecturer_subject_ids': fields.many2many('op.subject', 'lecturer_subject_rel', 'op_lecturer_id', 'op_subject_id', string='Subjects'),
+        'phone': fields.char(string='Phone Number', size=256),
         # 'mobile_no': fields.char(size=15, string='Mobile Number', required=True),
 
     }
@@ -34,19 +43,27 @@ class op_lecturer(osv.Model):
         vals.update({'supplier': True, 'customer': False})
         if 'email' in vals:
             self.validate_email(cr, uid, [], vals['email'])
+
+        if 'phone' in vals:
+            self.validate_mobile(cr, uid, [], vals['phone'])
+
         res = super(op_lecturer, self).create(cr, uid, vals, context=context)
         return res
 
     # overriding write method
     def write(self, cr, uid, ids, values, context=None):
+        values.update({'supplier': True, 'customer': False})
         if 'email' in values:
             self.validate_email(cr, uid, ids, values['email'])
-            res = super(op_lecturer, self).write(cr, uid, ids, values, context=context)
-            return res
+
+        if 'phone' in values:
+            self.validate_mobile(cr, uid, [], values['phone'])
+
+        res = super(op_lecturer, self).write(cr, uid, ids, values, context=context)
+        return res
 
     def _check_birthday(self, cr, uid, vals, context=None):
         for obj in self.browse(cr, uid, vals):
-            print "OK"
             date_birth_day = obj.birth_date
             date_today = date.today()
             if date_birth_day and date_today:

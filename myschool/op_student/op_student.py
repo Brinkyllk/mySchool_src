@@ -73,6 +73,8 @@ class op_student(osv.Model):
     def validate_NIC(self, cr, uid, ids, id_number):
         if id_number is None:
             return True
+        if id_number is False:
+            return True
         if re.match('^\d{9}(X|V)$', id_number)== None:
             raise osv.except_osv('Invalid NIC', 'Please enter a valid NIC')
         return True
@@ -92,8 +94,7 @@ class op_student(osv.Model):
             if re.match("^[0-9]*$", vals['phone']) != None:
                 pass
             else:
-                raise osv.except_osv(_('Invalid Mobile No'),_('Please enter a valid Phone Number'))
-                return
+                raise osv.except_osv(_('Invalid Mobile No'), _('Please enter a valid Phone Number'))
 
         # Clean NIC
         if 'id_number' in vals:
@@ -167,7 +168,6 @@ class op_student(osv.Model):
                 pass
             else:
                 raise osv.except_osv(_('Invalid Mobile No'), _('Please enter a valid Phone Number'))
-                return
 
         #clean NIC
         if 'id_number' in values:
@@ -234,21 +234,21 @@ class op_student(osv.Model):
                     return False
                 return True
 
-    def my_test(self,cr, uid, ids, context=None):
-        res = {}
-        reads = self.read(cr, uid, ids, fields=None, context=context)
-        dictionary_reads = reads[0]
-        payment_schedule_ids = dictionary_reads.get('payment_schedule_ids')
-        res = payment_schedule_ids,
-
-        return {
-            'res_model': 'op.payment.schedule',
-            'view_mode': 'form',
-            'view_type': 'form',
-            'res_model': 'op.payment.schedule',
-            'type': 'ir.actions.act_window',
-            'context': {'test': res}
-        }
+    # def my_test(self,cr, uid, ids, context=None):
+    #     res = {}
+    #     reads = self.read(cr, uid, ids, fields=None, context=context)
+    #     dictionary_reads = reads[0]
+    #     payment_schedule_ids = dictionary_reads.get('payment_schedule_ids')
+    #     res = payment_schedule_ids,
+    #
+    #     return {
+    #         'res_model': 'op.payment.schedule',
+    #         'view_mode': 'form',
+    #         'view_type': 'form',
+    #         'res_model': 'op.payment.schedule',
+    #         'type': 'ir.actions.act_window',
+    #         'context': {'test': res}
+    #     }
 
     _constraints = [
         (_check_birthday, 'Birth Day cannot be future date!', ['birth_date']),
