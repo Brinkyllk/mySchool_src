@@ -29,14 +29,17 @@
 						<separator colspan="4" string="Period" />
 						<group colspan="4" col="4">
 							<field name="name" select="1" />
-							<field name="duration" widget="float_time" />
-                        </group>
-							<newline />
-							<group colspan="4" col="4">
-								<field name="hour" />
-								<field name="minute" />
-								<field name="am_pm" />
-							</group>
+                        <!--</group>-->
+                            <newline />
+                        <!--<group colspan="4" col="4">-->
+                            <h3>Starting Time:</h3>
+                            <newline />
+							<field name="hour" />
+							<field name="minute" />
+							<field name="am_pm" />
+                            <newline/>
+                            <field name="duration" widget="float_time" />
+						</group>
 
 					</sheet>
 				</form>

@@ -23,9 +23,9 @@
 										</a>
 									</h4>
 									<ul>
-										<li t-if="record.mobile.raw_value">
+										<li t-if="record.phone.raw_value">
 											<!--Mobile:-->
-											<field name="mobile" />
+											<field name="phone" />
 										</li>
                                         <!--<li t-if="record.category.raw_value">-->
 											<!--&lt;!&ndash;Category:&ndash;&gt;-->
@@ -74,7 +74,7 @@
 								<group col="4" colspan="4">
 
                                     <field name="category"/>
-                                    <field name="mobile" />
+                                    <!--<field name="phone" />-->
 							        <!--<field name="mobile_no" />-->
 							        <field name="email" />
 								</group>

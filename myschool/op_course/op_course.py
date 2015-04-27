@@ -25,12 +25,11 @@ class op_course(osv.Model):
 
     _sql_constraints = [('code', 'UNIQUE (code)', 'The CODE of the COURSE must be unique!')]
 
-
     def create(self, cr, uid, vals, context=None):
         #Reffer producy
         productRef = self.pool.get('product.product')
 
-        product = {'name': vals['name'], 'list_price': vals['price'], 'iscourse':True}
+        product = {'name': vals['name'], 'list_price': vals['price']}
         pid = productRef.create(cr, uid, product, context=context)
         vals.update({'product_id': pid})
 
@@ -41,7 +40,7 @@ class op_course(osv.Model):
         if 'name' in values:
             prodid = self.browse(cr, uid, ids, context=context)[0].product_id.id
             productRef = self.pool.get('product.product')
-            productRef.write(cr, uid, prodid, {'name':values['name']}, context=context)
+            productRef.write(cr, uid, prodid, {'name': values['name']}, context=context)
         return super(op_course, self).write(cr, uid, ids, values, context=context)
 
 
