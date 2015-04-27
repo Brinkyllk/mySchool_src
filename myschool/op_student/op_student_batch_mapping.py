@@ -11,7 +11,7 @@ class op_student_batch_mapping(osv.Model):
         'default_course': fields.boolean('Default Course'),
         'course_id': fields.many2one('op.course', 'Course', required=True),
         'product_id': fields.related('product_id', 'name', string='Related Product', type='char', readonly=True),
-        'payment_term': fields.many2one('account.payment.term', 'Payment Terms'),
+        # 'payment_term': fields.many2one('account.payment.term', 'Payment Terms'),
     }
 
     def create(self, cr, uid, vals, context=None):
@@ -60,7 +60,7 @@ class op_student_batch_mapping(osv.Model):
 
         return True
 
-    # related to the payment schedule
+    # related to the payment schedule button object
     def view_details(self, cr, uid, ids, context=None):
         res = {}
         stu_bat_map = self.pool.get('op.student.batch.mapping')
@@ -81,7 +81,14 @@ class op_student_batch_mapping(osv.Model):
         print product_price
         res = [product_id, product_price]
 
-        # return res
+        # product_data = ({'product_id': product_id,
+        #                     'list_price': product_price})
+        #
+        # obj_payment = self.pool.get('op.payment.schedule')
+        # payid = obj_payment.create(cr, uid, product_data, context=context )
+        # obj_payment.update( payid)
+        #
+        # return super('op_student_batch',self).create(cr, uid, obj_payment,context=context)
         return {
             'res_model': 'op.payment.schedule',
             'view_mode': 'form',
