@@ -40,6 +40,13 @@ class op_payment_schedule(osv.Model):
 
         res = p_term_list,
 
+        payment_schedule_obj = self.pool.get('op.payment.schedule')
+
+        for line in p_term_list:
+            sub_lines = []
+            sub_lines.append((0, 0, {'due_date': line[0], 'amount': line[1]}))
+            payment_schedule_obj.create(cr, uid, {'schedule_lines': sub_lines}, context)
+
         return {
             'name': 'Payment Schedule Line',
             'view_mode': 'form',
