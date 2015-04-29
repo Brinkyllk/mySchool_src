@@ -14,7 +14,7 @@
                             <field name="list_price"/>
                             <field name="payment_term"/>
                             <field name="invoice_date"/>
-                            <!--<button name="my_test" string="Show Details" type="object"/>-->
+                            <button name="my_test" string="Show Details" type="object"/>
                         </group>
 
                     </group>
@@ -37,6 +37,16 @@
             </field>
         </record>
 
+        <!--<record id="op.payment.schedule.lines_tree" model="ir.ui.view">-->
+            <!--<field name="name">op.payment.schedule.lines.tree</field>-->
+            <!--<field name="model">op.payment.schedule.lines</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<form string="Payment Schedule" >-->
+                        <!--<field name="due_date" />-->
+                        <!--<field name="amount" />-->
+                <!--</form>-->
+            <!--</field>-->
+        <!--</record>-->
 
         <!--<record id="myschool_payment_detail_line_form" model="ir.ui.view">-->
             <!--<field name="name">myschool.payment.detail.line.form</field>-->
