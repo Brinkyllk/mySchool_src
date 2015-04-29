@@ -24,7 +24,7 @@
 				<form string="Table Line">
 					<field name="day" />
 					<field name="period_id" />
-					<field name="lecturer_id" />
+					<field name="lecturer_id" onchange="onchange_lecturer(lecture_id, context)"/>
 					<field name="subject_id" />
 				</form>
 			</field>

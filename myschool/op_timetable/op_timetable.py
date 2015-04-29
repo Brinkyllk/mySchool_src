@@ -45,11 +45,11 @@ class op_timetable(osv.osv):
         'color': fields.integer('Color Index'),
         'type': fields.selection(
             [('Monday', 'Monday'), ('Tuesday', 'Tuesday'), ('Wednesday', 'Wednesday'), ('Thursday', 'Thursday'),
-             ('Friday', 'Friday'), ('Saturday', 'Saturday')], 'Days'),
+             ('Friday', 'Friday'), ('Saturday', 'Saturday'), ('Sunday', 'Sunday')], 'Days'),
         'state': fields.selection([('planned', 'Planned'),
                                    ('completed', 'Completed'),
                                    ('postponed', 'Postponed'),
-                                   ('cancelled', 'Cancelled')], readonly=True, select=True, string='State'),
+                                   ('cancelled', 'Cancelled')], readonly=True, string='State'),
     }
 
     _defaults = {
@@ -57,11 +57,11 @@ class op_timetable(osv.osv):
     }
 
     def action_planned(self, cr, uid, ids, context=None):
-        wf_service = netsvc.LocalService("workflow")
+        # wf_service = netsvc.LocalService("workflow")
         self.write(cr, uid, ids, {'state': 'planned'})
-        for inv_id in ids:
-            wf_service.trg_delete(uid, 'op.timetable', inv_id, cr)
-            wf_service.trg_create(uid, 'op.timetable', inv_id, cr)
+        # for inv_id in ids:
+            # wf_service.trg_delete(uid, 'op.timetable', inv_id, cr)
+            # wf_service.trg_create(uid, 'op.timetable', inv_id, cr)
         return True
 
     def action_cancel(self, cr, uid, ids, context=None):

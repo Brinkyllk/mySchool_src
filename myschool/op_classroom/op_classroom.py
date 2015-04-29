@@ -7,8 +7,8 @@ class op_classroom(osv.osv):
     _columns = {
         'name': fields.char(size=16, string='Name', required=True),
         'code': fields.char(size=4, string='Code', required=True),
-        'course_id': fields.many2one('op.course', 'Course', required=True),
-        'standard_id': fields.many2one('op.standard', 'Standard', required=True),
+        # 'course_id': fields.many2one('op.course', 'Course', required=True),
+        # 'standard_id': fields.many2one('op.standard', 'Standard', required=True),
         'capacity': fields.integer(string='No. Of Person'),
         # 'facility': fields.many2many('op.facility', 'classroom_facility_rel', 'op_classroom_id', 'op_facility_id',
         #                              string='Facilities'),
