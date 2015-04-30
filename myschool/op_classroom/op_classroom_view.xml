@@ -8,8 +8,8 @@
 			<field name="priority" eval="8" />
 			<field name="arch" type="xml">
 				<tree string="Classroom">
+                    <field name="code" />
 					<field name="name" />
-					<field name="code" />
 					<field name="capacity" />
 					<!--<field name="facility" />-->
 				</tree>
@@ -25,10 +25,10 @@
 					<sheet>
 						<separator string="ClassRoom" colspan="4" />
 						<group col="4">
+                            <field name="code" />
 							<field name="name" />
-							<field name="code" />
-							<field name="course_id" />
-							<field name="standard_id" />
+							<!--<field name="course_id" />-->
+							<!--<field name="standard_id" />-->
 							<field name="capacity" />
 						</group>
 						<!--<notebook>	-->
@@ -59,8 +59,8 @@
 			<field name="priority" eval="8" />
 			<field name="arch" type="xml">
 				<search string="Classroom">
+                    <field name="code" />
 					<field name="name" />
-					<field name="code" />
 					<field name="capacity" />
 					<!--<field name="facility" />-->
 					<newline />

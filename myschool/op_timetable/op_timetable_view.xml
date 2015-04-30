@@ -114,10 +114,17 @@
 			<field name="arch" type="xml">
 				<form string="Time Table" version="7.0">
                     <header>
-                        <button string="Complete" type="workflow" name="action_complete" class="oe_button oe_form_button oe_highlight oe_form_visible" icon="gtk-apply"/>
-                        <button string="Postponed" type="workflow" name="action_postponed" class="oe_button oe_form_button oe_highlight oe_form_visible" icon="gtk-jump-to"/>
-                        <button string="Cancel" type="workflow" name="action_cancel" class="oe_button oe_form_button oe_highlight oe_form_visible" icon="gtk-cancel"/>
-                        <field name="state" widget="statusbar" readonly="True" float="right"/>
+                        <button string="Planned" type="workflow" name="action_planned" class="" icon="gtk-undo" states="postponed"/>
+                        <button string="Complete" type="workflow" name="action_complete" class="" icon="gtk-apply" states="planned, postponed"/>
+                        <button string="Postponed" type="workflow" name="action_postponed" class="" icon="gtk-jump-to" states="planned"/>
+                        <button string="Cancel" type="workflow" name="action_cancel" class="" icon="gtk-cancel" states="planned, postponed"/>
+                        <field name="state" widget="statusbar" readonly="True" statusbar_visible="planned, completed, postponed, cancelled"
+                                statusbar_colors='{
+                                "planned":"blue",
+                                "complete":"blue",
+                                "postponed":"blue",
+                                "cancel":"red"
+                                }'/>
                     </header>
 					<sheet>
 						<separator colspan="4" string="Time Table" />

@@ -5,7 +5,7 @@ from .. import utils
 
 week_number = {'Mon': 1,
                'Tue': 2,
-               'Web': 3,
+               'Wed': 3,
                'Thu': 4,
                'Fri': 5,
                'Sat': 6,
@@ -93,6 +93,14 @@ generate_time_table()
 
 
 class generate_time_table_line(osv.osv_memory):
+
+    def onchange_lecturer(self, cr, uid, lecturer_id, context=None):
+        lecturer = lecturer_id
+        related_records = self.pool.get('lecturer_subject_rel').browse(cr, uid, [('op_lecturer_id', '=', lecturer)])
+        related_subjects = related_records.op_subject_id
+        subject_ids = self.pool.get('op.subject').browse(cr, uid, [('subject_id', '=', related_subjects)])
+        return{'value': {'subject_id': subject_ids}}
+
     _name = 'gen.time.table.line'
     _description = 'Generate Time Table Lines'
     _rec_name = 'day'
