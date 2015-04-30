@@ -19,6 +19,24 @@ class op_payment_schedule(osv.Model):
         'invoice_date': time.strftime('%Y-%m-%d'),
     }
 
+    #Pass default values to product name and product price
+    def default_get(self, cr, uid,  fields, context=None):
+        res = super(op_payment_schedule, self).default_get(cr, uid, fields, context=context)
+        if 'product_id' in fields:
+            print fields
+            res['product_id'] = context.get('active_id')
+
+            #product price
+            productId=[res['product_id']]
+
+            cr.execute('SELECT list_price FROM product_template '\
+                   'WHERE id=%s',(productId))
+
+            allPrice = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+            price = allPrice[0].id
+            res['list_price'] = price
+        return res
+
 
     def my_test(self,cr, uid, ids, context=None):
         reads = self.read(cr, uid, ids, fields=None, context=context)
