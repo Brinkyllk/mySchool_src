@@ -53,7 +53,7 @@ class op_student(osv.Model):
         #                                 string='Subjects'),
 
         #payment schedule
-        'payment_schedule_ids': fields.one2many('op.payment.schedule', 'student_payment_id', 'Payment Schedules'),
+        'payment_schedule_id': fields.one2many('op.payment.schedule', 'student_id', 'Payment Schedules')
 
     }
 
