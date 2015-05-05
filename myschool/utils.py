@@ -81,4 +81,3 @@ def server_to_local_timestamp(src_tstamp_str, src_format, dst_format, dst_tz_nam
         if not ignore_unparsable_time:
             return False
     return res
-
