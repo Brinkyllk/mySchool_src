@@ -89,6 +89,40 @@ class generate_time_table(osv.osv_memory):
 
         return {'type': 'ir.actions.act_window_close'}
 
+
+    # def _check_startdate(self, cr, uid, dates, context=None):
+    #     for obj in self.browse(cr, uid,  dates):
+    #         selected_start_date = obj.start_date
+    #         current_date = date.today()
+    #         if selected_start_date and current_date:
+    #             datetime_format = "%Y-%m-%d"
+    #             sdate = datetime.strptime(selected_start_date, datetime_format)
+    #             tday = datetime.strptime(current_date.strftime('%Y%m%d'), '%Y%m%d')
+    #             if sdate < tday:
+    #                 return False
+    #             else:
+    #                 return True
+    #
+    # _constraints = [
+    #     (_check_startdate,'Invalid Starting Date!',['start_date']),
+    # ]
+
+    def _check_date(self, cr, uid, vals, context=None):
+        for obj in self.browse(cr, uid, vals):
+            start_date = obj.start_date
+            end_date = obj.end_date
+            if start_date and end_date:
+                datetime_format = "%Y-%m-%d"
+                from_dt = datetime.datetime.strptime(start_date, datetime_format)
+                to_dt = datetime.datetime.strptime(end_date, datetime_format)
+                if to_dt < from_dt:
+                    return False
+                return True
+
+    _constraints = [
+        (_check_date, 'End Date should be greater than Start Date!', ['start_date', 'end_date']),
+    ]
+
 generate_time_table()
 
 
@@ -103,6 +137,7 @@ class generate_time_table_line(osv.osv_memory):
 
     _name = 'gen.time.table.line'
     _description = 'Generate Time Table Lines'
+    _inherits = {'op.lecturer': 'lecturer_subject_ids'}
     _rec_name = 'day'
 
     _columns = {
@@ -119,5 +154,12 @@ class generate_time_table_line(osv.osv_memory):
                                  ], 'Day', required=True),
         'period_id': fields.many2one('op.period', 'Period',  required=True),
     }
+
+    def onchange_lecturer(self, cr, uid, lecturer_id, context=None):
+        lecturer = lecturer_id
+        related_records = self.pool.get('lecturer_subject_rel').browse(cr, uid, [('op_lecturer_id', '=', lecturer)])
+        related_subjects = related_records.op_subject_id
+        subject_ids = self.pool.get('op.subject').browse(cr, uid, [('subject_id', '=', related_subjects)])
+        return{'value': {'subject_id': subject_ids}}
 
 generate_time_table_line()

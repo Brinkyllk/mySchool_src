@@ -25,6 +25,18 @@ class op_period(osv.osv):
         'sequence': fields.integer('Sequence'),
     }
 
+    def _check_duration(self, cr, uid, vals, context=None):
+        for obj in self.browse(cr, uid, vals):
+            time_duration = obj.duration
+            if time_duration < 1:
+                return False
+            else:
+                return True
+
+    _constraints = [
+        (_check_duration,'Duration cannot be lower than one hour', ['duration']),
+    ]
+
 
 op_period()
 
@@ -55,6 +67,13 @@ class op_timetable(osv.osv):
     _defaults = {
         'state': 'planned',
     }
+
+    def onchange_lecturer(self, cr, uid, lecturer_id):
+        lecturer = lecturer_id
+        related_records = self.pool.get('lecturer_subject_rel').browse(cr, uid, [('op_lecturer_id', '=', lecturer)])
+        related_subjects = related_records.op_subject_id
+        subject_ids = self.pool.get('op.subject').browse(cr, uid, [('subject_id', '=', related_subjects)])
+        return{'value': {'subject_id': subject_ids}}
 
     def action_planned(self, cr, uid, ids, context=None):
         # wf_service = netsvc.LocalService("workflow")
