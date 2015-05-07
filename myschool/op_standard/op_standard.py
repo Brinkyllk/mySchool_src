@@ -24,6 +24,7 @@ class op_standard(osv.Model):
         # 'semester_ids': fields.one2many('op.semester', 'semester_id', string='Academic Term'),
         # 'code': fields.char(size=8, string='Code', required=True),
         'name': fields.char(size=32, string='Standard', readonly=True),
+        'subject_id': fields.one2many('op.subject', 'standard_id', string='Subjects(s)', options="{'create_edit': False}", readonly=True)
     }
 
     def create(self, cr, uid, vals, context=None):

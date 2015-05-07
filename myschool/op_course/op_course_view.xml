@@ -16,6 +16,11 @@
                             <!--<field name="search_course"/>-->
                         </group>
                         <notebook>
+                            <page string="Standards">
+                                <separator colspan="4" string="Standards"/>
+                                    <field name="standard_id"/>
+                                <!--<field name= "level" string= "Share it... :" widget= "test" />-->
+                            </page>
                             <page string="Subjects">
                                 <separator colspan="4" string="Subjects"/>
                                     <field name="subject_ids"/>

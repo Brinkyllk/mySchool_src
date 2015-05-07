@@ -79,6 +79,7 @@
                             <field name="semester_id"/>
                             <!--<field name="code"/>-->
                             <field name="name"/>
+                            <field name="subject_id"/>
                         </group>
                     </sheet>
                 </form>
