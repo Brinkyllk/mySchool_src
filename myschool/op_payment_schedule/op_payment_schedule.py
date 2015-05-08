@@ -37,13 +37,10 @@ class op_payment_schedule(osv.Model):
 
 
     def generate_schedule_lines(self,cr, uid, ids, context=None):
-        reads = self.read(cr, uid, ids, fields=None, context=context)
-        print reads[0]
-        dictionary_reads = reads[0]
-        product_id = dictionary_reads.get('product_id')[0]
-        result_price = float(dictionary_reads.get('list_price'))#getlistprice
-        tuple_payment_term_id = dictionary_reads.get('payment_term')
-        payment_term_id = tuple_payment_term_id[0]#get payment term id
+        dictionary_reads = self.read(cr, uid, ids, fields=None, context=context)[0]
+
+        result_price = float(dictionary_reads.get('list_price'))
+        payment_term_id = dictionary_reads.get('payment_term')[0]
         date_invoice = dictionary_reads.get('invoice_date')
 
         p_term_list = self.pool.get('account.payment.term').compute(cr, uid, payment_term_id, result_price, date_ref=date_invoice)
@@ -54,10 +51,19 @@ class op_payment_schedule(osv.Model):
         for line in p_term_list:
             sub_lines = []
             sub_lines.append((0, 0, {'due_date': line[0], 'amount': line[1]}))
-            payment_schedule_obj.create(cr, uid, {'schedule_lines': sub_lines}, context)
+
+            # payment_schedule_obj.create(cr, uid, {'schedule_lines': sub_lines}, context)
+
             # pay_sch_line_id  = payment_schedule_obj.create(cr, uid, {'schedule_lines': sub_lines}, context)
             # vals_payment_schedule = self.id(cr, uid, line, pay_sch_line_id, context=context)
             # payment_schedule_line_obj.create(cr, uid, vals_payment_schedule)
+
+            payment_data = ({'schedule_lines': sub_lines,
+                                 })
+            obj_payment = self.pool.get('op.payment.schedule')
+            payid = obj_payment.create(cr, uid, payment_data, context=context )
+            print payid
+            # obj_payment.update(payid)
 
         return {
             'name': 'Payment Schedule Line',
@@ -65,5 +71,5 @@ class op_payment_schedule(osv.Model):
             'view_type': 'tree',
             'res_model': 'op.payment.schedule.line',
             'type': 'ir.actions.act_window',
-            'context': {'test': res}
+            'context': {'test': payid}
                 }
