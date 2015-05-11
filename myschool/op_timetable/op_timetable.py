@@ -25,6 +25,18 @@ class op_period(osv.osv):
         'sequence': fields.integer('Sequence'),
     }
 
+    def _check_duration(self, cr, uid, vals, context=None):
+        for obj in self.browse(cr, uid, vals):
+            time_duration = obj.duration
+            if time_duration == 0:
+                return False
+            else:
+                return True
+
+    _constraints = [
+        (_check_duration,'Duration cannot be zero hours', ['duration']),
+    ]
+
 
 op_period()
 
@@ -55,6 +67,7 @@ class op_timetable(osv.osv):
     _defaults = {
         'state': 'planned',
     }
+
 
     def action_planned(self, cr, uid, ids, context=None):
         # wf_service = netsvc.LocalService("workflow")

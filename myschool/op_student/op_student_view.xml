@@ -96,7 +96,7 @@
                         <group col="4" colspan="4">
                             <field name="partner"/>
                             <field name="id_number"/>
-                            <field name="email" />
+                            <field name="email" on_change="ValidateEmail(email)"/>
                             <field name="stu_reg_number"/>
                             <field name="user_id"/>
                             <!--<button name="genid" type="object" string="Get Number"/>-->
@@ -146,8 +146,9 @@
                                 <group col="4" colspan="4">
                                     <field name="def_course"/>
                                     <field name="def_batch"/>
+                                    <field name="def_standard"/>
                                 </group>
-                                <tree editable="True">
+                                <tree>
                                     <field name="batch_ids"/>
                                 </tree>
                                 <!--<field name="batch_ids"/>-->
