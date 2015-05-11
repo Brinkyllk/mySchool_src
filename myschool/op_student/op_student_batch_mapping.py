@@ -8,10 +8,17 @@ class op_student_batch_mapping(osv.Model):
         'student_id': fields.many2one('op.student', string='Student'),
         'batch_id': fields.many2one('op.batch', string='Batch', domain="[('course_id', '=', course_id)]",
                                     required=True, options="{'create_edit': False }"),
+        'standard_id': fields.many2one('op.standard', string='Standard', domain="[('course_id', '=', course_id)]",
+                                        required=True, options="{'create_edit': False }"),
+
+        'subject_id': fields.many2one('op.subject', string='Subjects', domain="[('standard_id', '=', standard_id)]",
+                                       required=True),
+
+
         'default_course': fields.boolean('Default Course'),
         'course_id': fields.many2one('op.course', 'Course', required=True),
         'product_id': fields.related('product_id', 'name', string='Related Product', type='char', readonly=True),
-        # 'payment_term': fields.many2one('account.payment.term', 'Payment Terms'),
+
     }
 
     def create(self, cr, uid, vals, context=None):
@@ -60,35 +67,9 @@ class op_student_batch_mapping(osv.Model):
 
         return True
 
-    # related to the payment schedule button object
+
     def view_details(self, cr, uid, ids, context=None):
-        res = {}
-        stu_bat_map = self.pool.get('op.student.batch.mapping')
-        course_ids = stu_bat_map.search(cr, uid, [('id', '=', ids)], context=context)
-        stu_bat_map_obj = stu_bat_map.browse(cr, uid, course_ids, context=context)
-        stu_bat_map_course_id = stu_bat_map_obj[0].course_id
-        course = self.pool.get('op.course')
-        course_id = course.search(cr, uid, [('id', '=',  stu_bat_map_course_id.id)], context=context)
-        # product_id = course[0]
-        cr.execute('SELECT product_id FROM op_course '\
-                   'WHERE id=%s',(course_id))
 
-        course_product = course.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
-        product_id = course_product[0].id
-        print product_id
-        product = self.pool.get('product.product').browse(cr, uid, product_id, context=context)
-        product_price = product.price_get('list_price')[product.id]
-        print product_price
-        res = [product_id, product_price]
-
-        # product_data = ({'product_id': product_id,
-        #                     'list_price': product_price})
-        #
-        # obj_payment = self.pool.get('op.payment.schedule')
-        # payid = obj_payment.create(cr, uid, product_data, context=context )
-        # obj_payment.update( payid)
-        #
-        # return super('op_student_batch',self).create(cr, uid, obj_payment,context=context)
         return {
             'res_model': 'op.payment.schedule',
             'view_mode': 'form',
@@ -96,9 +77,6 @@ class op_student_batch_mapping(osv.Model):
             'res_model': 'op.payment.schedule',
             'type': 'ir.actions.act_window',
             'nodestroy': True,
-            'target': 'new',#current
-            'context': {'test': res}
+            'target': 'new',
                 }
-
-
 

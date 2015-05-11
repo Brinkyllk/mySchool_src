@@ -146,6 +146,7 @@
                                 <group col="4" colspan="4">
                                     <field name="def_course"/>
                                     <field name="def_batch"/>
+                                    <field name="def_standard"/>
                                 </group>
                                 <tree editable="True">
                                     <field name="batch_ids"/>

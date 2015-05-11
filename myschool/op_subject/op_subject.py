@@ -8,7 +8,7 @@ class op_subject(osv.Model):
         'code': fields.char(size=8, string='Code', required=True),
         # 'type': fields.selection([('t', 'Theory'), ('p', 'Practical'),  ('pt','Both'), ('o', 'Other')], string='Type'),
         'type': fields.selection([('core', 'Core'), ('elective', 'Elective')], string='Type'),
-        'standard_id': fields.many2one('op.standard', 'Standard'),
+        'standard_id': fields.many2one('op.standard', 'Standard', select=True, required=True),
     }
 
     _sql_constraints = [('code', 'UNIQUE (code)', 'The CODE of the SUBJECT must be unique!')]
