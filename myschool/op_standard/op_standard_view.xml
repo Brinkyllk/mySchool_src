@@ -71,7 +71,7 @@
             <field name="name">op.standard.form</field>
             <field name="model">op.standard</field>
             <field name="arch" type="xml">
-                <form string="Standard" version="7.0">
+                <form string="Standard" version="8.0">
                     <sheet>
                         <separator string="Standard" colspan="4" />
                         <group>
@@ -79,8 +79,14 @@
                             <field name="semester_id"/>
                             <!--<field name="code"/>-->
                             <field name="name"/>
-                            <field name="subject_id"/>
+                            <!--<field name="subject_id"/>-->
                         </group>
+                        <notebook colspan="4">
+                            <page string="Subjects">
+                                <separator string="Subject(s)" colspan="4"/>
+                                <field name="subject_id"/>
+                            </page>
+                        </notebook>
                     </sheet>
                 </form>
             </field>
