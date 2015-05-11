@@ -18,13 +18,13 @@ class op_classroom(osv.osv):
     def _check_capacity(self, cr, uid, vals, context=None):
         for obj in self.browse(cr, uid, vals):
             no_persons = obj.capacity
-            if no_persons < 10:
+            if no_persons == 0:
                 return False
             else:
                 return True
 
     _constraints = [
-        (_check_capacity,'Number of Persons cannot be lower than 10', ['capacity']),
+        (_check_capacity,'Number of Persons cannot be zero', ['capacity']),
     ]
 
 
