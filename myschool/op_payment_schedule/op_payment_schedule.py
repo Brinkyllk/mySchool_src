@@ -11,7 +11,12 @@ class op_payment_schedule(osv.Model):
         'payment_term': fields.many2one('account.payment.term', 'Payment Terms', required=True),
         'invoice_date': fields.date(string='Invoice Date', required=True),
         'student_id': fields.many2one('op.student', 'Student', readonly=True),
-        'schedule_lines': fields.one2many('op.payment.schedule.line', 'payment_schedule_line_ids', string='Lines'),
+        'line_ids': fields.one2many('op.payment.schedule.line', 'schedule_id', string='Lines'),
+
+    }
+
+    _defaults = {
+       'invoice_date': time.strftime('%Y-%m-%d')
     }
 
 
@@ -37,33 +42,19 @@ class op_payment_schedule(osv.Model):
 
 
     def generate_schedule_lines(self,cr, uid, ids, context=None):
-        dictionary_reads = self.read(cr, uid, ids, fields=None, context=context)[0]
+        ps_obj = self.browse(cr, uid, ids, context=context)
 
-        result_price = float(dictionary_reads.get('list_price'))
-        payment_term_id = dictionary_reads.get('payment_term')[0]
-        date_invoice = dictionary_reads.get('invoice_date')
+        result_price = ps_obj.list_price
+        payment_term_id = ps_obj.payment_term.ids[0]
+        date_invoice = ps_obj.invoice_date
 
         p_term_list = self.pool.get('account.payment.term').compute(cr, uid, payment_term_id, result_price, date_ref=date_invoice)
-        res = p_term_list
 
         payment_schedule_obj = self.pool.get('op.payment.schedule')
-        # payment_schedule_line_obj = self.pool.get('op.payment.schedule.line')
         for line in p_term_list:
             sub_lines = []
             sub_lines.append((0, 0, {'due_date': line[0], 'amount': line[1]}))
-
-            # payment_schedule_obj.create(cr, uid, {'schedule_lines': sub_lines}, context)
-
-            # pay_sch_line_id  = payment_schedule_obj.create(cr, uid, {'schedule_lines': sub_lines}, context)
-            # vals_payment_schedule = self.id(cr, uid, line, pay_sch_line_id, context=context)
-            # payment_schedule_line_obj.create(cr, uid, vals_payment_schedule)
-
-            payment_data = ({'schedule_lines': sub_lines,
-                                 })
-            obj_payment = self.pool.get('op.payment.schedule')
-            payid = obj_payment.create(cr, uid, payment_data, context=context )
-            print payid
-            # obj_payment.update(payid)
+            payment_schedule_obj.write(cr, uid, ids, {'line_ids': sub_lines}, context=context)
 
         return {
             'name': 'Payment Schedule Line',
@@ -71,5 +62,4 @@ class op_payment_schedule(osv.Model):
             'view_type': 'tree',
             'res_model': 'op.payment.schedule.line',
             'type': 'ir.actions.act_window',
-            'context': {'test': payid}
                 }
