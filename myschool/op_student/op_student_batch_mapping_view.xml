@@ -12,7 +12,7 @@
                     <field name="batch_id"  />
                     <field name="standard_id"/>
                     <field name="default_course"/>
-                    <field name="subject_id"/>
+                    <!--<field name="subject_id"/>-->
                     <!--from object-->
                     <button name="view_details" string="view" type="object"/>
                 </tree>
