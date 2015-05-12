@@ -17,8 +17,6 @@ week_number = {'Mon': 1,
 
 
 class generate_time_table(osv.osv_memory):
-
-
     _name = 'generate.time.table'
     _description = 'Generate Time Table'
     _rec_name = 'standard_id'
@@ -45,7 +43,7 @@ class generate_time_table(osv.osv_memory):
         'end_date': fields.date('End Date', required=True),
     }
 
-    # checking the availability of the lecturer#
+    # ...............checking the availability of the lecturer...........................#
     def _lecturer_conflict(self, cr, uid, ids, context=None):
         day_list = ['None', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
         for self_object in self.browse(cr, uid, ids, context=context):
@@ -55,12 +53,44 @@ class generate_time_table(osv.osv_memory):
             lec_id = line.lecturer_id.id
             per_start = line.period_id.start_time
             per_end = line.period_id.end_time
-            per_id = line.period_id.id
             day = int(line.day)
             obj = self.pool.get('op.timetable').search(cr, uid, [('lecturer_id', '=', lec_id), ], order=None)
             if obj:
                 for record_id in obj:
                     details = self.pool.get('op.timetable').read(cr, uid, record_id, ['type', 'start_datetime', 'period_id'])
+                    period_get = details.get('period_id')
+                    period_get_id = period_get[0]
+                    period_info = self.pool.get('op.period').read(cr, uid, period_get_id, ['start_time', 'end_time'])
+                    period_info_start = period_info.get('start_time')
+                    period_info_end = period_info.get('end_time')
+                    day_type = str(details.get('type'))
+                    if day_type == day_list[day]:
+                        assigned_date = details.get('start_datetime')
+                        asn_date = dateutil.parser.parse(assigned_date).date()
+                        st_date = dateutil.parser.parse(start_date).date()
+                        en_date = dateutil.parser.parse(end_date).date()
+                        if st_date <= asn_date <= en_date:
+                            if per_start <= period_info_start < per_end or per_start < period_info_end <= per_end:
+                                return False
+            else:
+                return True
+        return True
+
+    # ........classroom conflict detection..............#
+    def _classroom_conflict(self, cr, uid, ids, context=None):
+        day_list = ['None', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        for self_obj in self.browse(cr, uid, ids, context=context):
+            line = self_obj.time_table_lines
+            start_date = self_obj.start_date
+            end_date = self_obj.end_date
+            cls_id = self_obj.classroom_id.id
+            per_start = line.period_id.start_time
+            per_end = line.period_id.end_time
+            day = int(line.day)
+            obj = self.pool.get('op.timetable').search(cr, uid, [('classroom_id', '=', cls_id)], order=None)
+            if obj:
+                for rec_id in obj:
+                    details = self.pool.get('op.timetable').read(cr, uid, rec_id, ['type', 'start_datetime', 'period_id'])
                     period_get = details.get('period_id')
                     period_get_id = period_get[0]
                     period_info = self.pool.get('op.period').read(cr, uid, period_get_id, ['start_time', 'end_time'])
@@ -112,7 +142,6 @@ class generate_time_table(osv.osv_memory):
 
         return True
 
-
     def act_gen_time_table(self, cr, uid, ids, context={}):
         for self_obj in self.browse(cr, uid, ids, context=context):
             st_date = datetime.datetime.strptime(self_obj.start_date,'%Y-%m-%d')
@@ -130,24 +159,6 @@ class generate_time_table(osv.osv_memory):
 
         return {'type': 'ir.actions.act_window_close'}
 
-
-    # def _check_startdate(self, cr, uid, dates, context=None):
-    #     for obj in self.browse(cr, uid,  dates):
-    #         selected_start_date = obj.start_date
-    #         current_date = date.today()
-    #         if selected_start_date and current_date:
-    #             datetime_format = "%Y-%m-%d"
-    #             sdate = datetime.strptime(selected_start_date, datetime_format)
-    #             tday = datetime.strptime(current_date.strftime('%Y%m%d'), '%Y%m%d')
-    #             if sdate < tday:
-    #                 return False
-    #             else:
-    #                 return True
-    #
-    # _constraints = [
-    #     (_check_startdate,'Invalid Starting Date!',['start_date']),
-    # ]
-
     def _check_date(self, cr, uid, vals, context=None):
         for obj in self.browse(cr, uid, vals):
             start_date = obj.start_date
@@ -160,16 +171,15 @@ class generate_time_table(osv.osv_memory):
                     return False
                 return True
 
-    _constraints = [
-                    (_check_date, 'End Date should be greater than Start Date!', ['start_date', 'end_date']),
+    _constraints = [(_check_date, 'End Date should be greater than Start Date!', ['start_date', 'end_date']),
                     (_lecturer_conflict, 'Lecturer not available', ['start_date']),
+                    (_classroom_conflict, 'Classroom is not available', ['start_date']),
                     ]
 
 generate_time_table()
 
 
 class generate_time_table_line(osv.osv_memory):
-
 
     # def onchange_lecturer(self, cr, uid, lecturer_id, context=None):
     #     lecturer = lecturer_id
@@ -193,28 +203,9 @@ class generate_time_table_line(osv.osv_memory):
                                  ('5', 'Friday'),
                                  ('6', 'Saturday'),
                                  ('7', 'Sunday'),
-                                 ], 'Day', required=True),
-        'period_id': fields.many2one('op.period', 'Period',  required=True),
+                                ], 'Day', required=True),
+        'period_id': fields.many2one('op.period', 'Period', required=True),
+    }
 
-        }
-
-    # def create(self, cr, uid, ids, context=None):
-    #     obj = self.pool.get('op.timetable').browse(cr, uid, ids)
-    #     # new = obj.browse('op.timetable').get('lecture_id')
-    #     classroom = obj.classroom_id
-    #     print classroom
-    #     return
-    #
-    #
-
-
-
-    # def onchange_lecturer(self, cr, uid, lecturer_id, context=None):
-    #     lecturer = lecturer_id
-    #     related_records = self.pool.get('lecturer_subject_rel').browse(cr, uid, [('op_lecturer_id', '=', lecturer)])
-    #     related_subjects = related_records.op_subject_id
-    #     subject_ids = self.pool.get('op.subject').browse(cr, uid, [('subject_id', '=', related_subjects)])
-    #     return{'value': {'subject_id': subject_ids}}
-    #
 
 generate_time_table_line()

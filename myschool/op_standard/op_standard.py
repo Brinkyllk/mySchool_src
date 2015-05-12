@@ -20,7 +20,7 @@ class op_standard(osv.Model):
     _columns = {
         # 'course_ids': fields.one2many('op.course', 'course_id', string='Course'),
         'course_id': fields.many2one('op.course', 'Course', select=True, required=True),
-        'semester_id': fields.many2one('op.semester', 'Semester', select=True, required=True),
+        'semester_id': fields.many2one('op.semester', 'Academic Term', select=True, required=True),
         # 'semester_ids': fields.one2many('op.semester', 'semester_id', string='Academic Term'),
         # 'code': fields.char(size=8, string='Code', required=True),
         'name': fields.char(size=32, string='Standard', readonly=True),

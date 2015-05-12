@@ -9,7 +9,7 @@ class op_batch(osv.Model):
         'name': fields.char(size=25, string='Name', required=True),
         'code': fields.char(size=15, string='Code', required=True),
         'start_date': fields.date(size=15, string='Start Date', required=True),
-        'end_date': fields.date(size=15, string='End Date', required=True, onchange="validate_date_range"),
+        'end_date': fields.date(size=15, string='End Date', required=True,),
         'state': fields.selection(
             [('planned', 'Planned'), ('running', 'Running'), ('cancel', 'Cancel'), ('finished', 'finished')],
             string='State'),

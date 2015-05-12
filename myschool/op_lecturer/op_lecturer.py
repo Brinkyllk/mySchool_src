@@ -5,7 +5,6 @@ from openerp.tools.translate import _
 
 
 class op_lecturer(osv.Model):
-
     def validate_email(self, cr, uid, ids, email):
         if email is False:
             return True
@@ -16,7 +15,7 @@ class op_lecturer(osv.Model):
     def validate_mobile(self, cr, uid, ids, phone):
         if phone is False:
             return True
-        if re.match("^[0-9]*$", phone)== None:
+        if re.match("^[0-9]*$", phone) == None:
             raise osv.except_osv('Invalid Mobile No', 'Please enter a valid Phone Number')
         return True
 
@@ -26,17 +25,20 @@ class op_lecturer(osv.Model):
     _columns = {
         'partner_id': fields.many2one('res.partner', 'Partner', required=True, ondelete="restrict"),
         'birth_date': fields.date(string='Birth Date', required=True),
-        'category': fields.selection([('parttime', 'Part Time'), ('visiting', 'Visiting'), ('fulltime', 'Full Time')], string='Category', required=True),
-        'gender': fields.selection([('m','Male'),('f','Female')], string='Gender', required=True),
-        'language': fields.selection([('sinhala', 'Sinhala'), ('english', 'English'), ('tamil', 'Tamil')], string='Language'),
+        'category': fields.selection([('parttime', 'Part Time'), ('visiting', 'Visiting'), ('fulltime', 'Full Time')],
+                                     string='Category', required=True),
+        'gender': fields.selection([('m', 'Male'), ('f', 'Female')], string='Gender', required=True),
+        'language': fields.selection([('sinhala', 'Sinhala'), ('english', 'English'), ('tamil', 'Tamil')],
+                                     string='Language'),
         'bank_acc_num': fields.char(size=64, string='Bank Acc Number'),
-        'lecturer_subject_ids': fields.many2many('op.subject', 'lecturer_subject_rel', 'op_lecturer_id', 'op_subject_id', string='Subjects'),
+        'lecturer_subject_ids': fields.many2many('op.subject', 'lecturer_subject_rel', 'op_lecturer_id',
+                                                 'op_subject_id', string='Subjects'),
         'phone': fields.char(string='Phone Number', size=256),
         # 'mobile_no': fields.char(size=15, string='Mobile Number', required=True),
 
     }
 
-    _sql_constraints = [('name', 'UNIQUE (name)', 'The Lecturer  must be unique!')]
+    # _sql_constraints = [('name', 'UNIQUE (name)', 'The Lecturer  must be unique!')]
 
     # overriding create method
     def create(self, cr, uid, vals, context=None):
