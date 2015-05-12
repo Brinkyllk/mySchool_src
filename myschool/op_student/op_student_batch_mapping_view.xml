@@ -9,13 +9,15 @@
             <field name="arch" type="xml">
                 <form string="Student Batch Mapping">
                     <sheet>
-                        <group>
-                            <field name="student_id" invisible="True"/>
-                            <field name="course_id" />
-                            <field name="batch_id"  />
-                            <field name="standard_id"/>
-                            <field name="default_course"/>
-                            <field name="subject_id" widget="many2many_checkboxes"/>
+                        <group col="4" colspan="4">
+                            <group>
+                                <field name="student_id" invisible="True"/>
+                                <field name="course_id" />
+                                <field name="batch_id"  />
+                                <field name="standard_id"/>
+                                <field name="default_course"/>
+                                <field name="subject_id" widget="many2many_checkboxes"/>
+                            </group>
                         </group>
                     </sheet>
                 </form>
