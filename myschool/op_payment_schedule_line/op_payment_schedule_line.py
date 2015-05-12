@@ -9,5 +9,3 @@ class op_payment_schedule_line(osv.Model):
                 'due_date': fields.date('Due Date'),
                 'amount': fields.float('Amount'),
                 }
-
-
