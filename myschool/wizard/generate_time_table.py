@@ -44,6 +44,41 @@ class generate_time_table(osv.osv_memory):
     }
 
     # ...............checking the availability of the lecturer...........................#
+    # checking standard conflict #
+    def _standard_conflict(self, cr, uid, ids, context=None):
+        day_list = ['None', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        for self_object in self.browse(cr, uid, ids, context=context):
+            line = self_object.time_table_lines
+            start_date = self_object.start_date
+            end_date = self_object.end_date
+            standard_id = self_object.standard_id.id
+            per_start = line.period_id.start_time
+            per_end = line.period_id.end_time
+            day = int(line.day)
+            obj = self.pool.get('op.timetable').search(cr, uid, [('standard_id', '=', standard_id), ], order=None)
+            if obj:
+                for record_id in obj:
+                    details = self.pool.get('op.timetable').read(cr, uid, record_id, ['type', 'start_datetime', 'period_id'])
+                    period_get = details.get('period_id')
+                    period_get_id = period_get[0]
+                    period_info = self.pool.get('op.period').read(cr, uid, period_get_id, ['start_time', 'end_time'])
+                    period_info_start = period_info.get('start_time')
+                    period_info_end = period_info.get('end_time')
+                    day_type = str(details.get('type'))
+                    if day_type == day_list[day]:
+                        assigned_date = details.get('start_datetime')
+                        asn_date = dateutil.parser.parse(assigned_date).date()
+                        st_date = dateutil.parser.parse(start_date).date()
+                        en_date = dateutil.parser.parse(end_date).date()
+                        if st_date <= asn_date <= en_date:
+                            if per_start <= period_info_start < per_end or per_start < period_info_end < per_end:
+                                return False
+
+            else:
+                return True
+        return True
+
+    # checking the availability of the lecturer#
     def _lecturer_conflict(self, cr, uid, ids, context=None):
         day_list = ['None', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
         for self_object in self.browse(cr, uid, ids, context=context):
@@ -102,7 +137,7 @@ class generate_time_table(osv.osv_memory):
                         asn_date = dateutil.parser.parse(assigned_date).date()
                         st_date = dateutil.parser.parse(start_date).date()
                         en_date = dateutil.parser.parse(end_date).date()
-                        if st_date < asn_date < en_date:
+                        if st_date <= asn_date <= en_date:
                             if per_start <= period_info_start < per_end or per_start < period_info_end < per_end:
                                 return False
 
@@ -173,7 +208,8 @@ class generate_time_table(osv.osv_memory):
 
     _constraints = [(_check_date, 'End Date should be greater than Start Date!', ['start_date', 'end_date']),
                     (_lecturer_conflict, 'Lecturer not available', ['start_date']),
-                    (_classroom_conflict, 'Classroom is not available', ['start_date']),
+                    (_standard_conflict, 'Standard must not available', ['standard_id']),
+                    (_classroom_conflict, 'Classroom is not available', ['classroom_id']),
                     ]
 
 generate_time_table()
@@ -206,6 +242,5 @@ class generate_time_table_line(osv.osv_memory):
                                 ], 'Day', required=True),
         'period_id': fields.many2one('op.period', 'Period', required=True),
     }
-
 
 generate_time_table_line()
