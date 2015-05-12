@@ -6,18 +6,13 @@ class op_student_batch_mapping(osv.Model):
 
     _columns = {
         'student_id': fields.many2one('op.student', string='Student'),
+        'course_id': fields.many2one('op.course', 'Course', required=True),
         'batch_id': fields.many2one('op.batch', string='Batch', domain="[('course_id', '=', course_id)]",
                                     required=True, options="{'create_edit': False }"),
         'standard_id': fields.many2one('op.standard', string='Standard', domain="[('course_id', '=', course_id)]",
                                         required=True, options="{'create_edit': False }"),
-
-        'subject_id': fields.many2one('op.subject', string='Subjects', domain="[('standard_id', '=', standard_id)]",
-                                       required=True),
-
-
         'default_course': fields.boolean('Default Course'),
-        'course_id': fields.many2one('op.course', 'Course', required=True),
-        'product_id': fields.related('product_id', 'name', string='Related Product', type='char', readonly=True),
+        # 'product_id': fields.related('product_id', 'name', string='Related Product', type='char', readonly=True),
 
     }
 

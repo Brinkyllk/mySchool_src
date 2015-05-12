@@ -5,7 +5,6 @@ import re
 
 
 class op_student(osv.Model):
-
     # def _get_def_batch(self, cr, uid, ids, field_name, arg, context=None):
     #     res = {}
     #     get_batch = self.pool.get('op.student.batch.mapping')
@@ -67,16 +66,23 @@ class op_student(osv.Model):
     def validate_email(self, cr, uid, ids, email):
         if email is False:
             return True
-        if re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email)== None:
-            raise osv.except_osv('Invalid Email', 'Please enter a valid email address')
+        if re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email) != None:
+            raise osv.except_osv(_('Invalid Email'), _('Please enter a valid email address'))
         return True
+
+    def validate_phone(self, cr, uid, ids, number):
+        if number is False:
+            if re.match("^[0-9]*$", number) != None:
+                pass
+            else:
+                raise osv.except_osv(_('Invalid Mobile No'), _('Please enter a valid Phone Number'))
 
     def validate_NIC(self, cr, uid, ids, id_number):
         if id_number is None:
             return True
         if id_number is False:
             return True
-        if re.match('^\d{9}(X|V)$', id_number)== None:
+        if re.match('^\d{9}(X|V)$', id_number) == None:
             raise osv.except_osv('Invalid NIC', 'Please enter a valid NIC')
         return True
 
@@ -152,7 +158,7 @@ class op_student(osv.Model):
         # vals.update({'course_id': def_course[0].course_id.id})
         self.write(cr, uid, [stu_id], {'def_course': def_course[0].course_id.id,
                                        'def_batch': def_course[0].batch_id.id,
-                                       'def_standard': def_course[0].standard_id.id}, context=context)
+                                       'def_standard': def_course[0].standard_id.id, }, context=context)
         return stu_id
 
     def write(self, cr, uid, ids, values, context=None):
@@ -212,8 +218,7 @@ class op_student(osv.Model):
 
             if stdc:
                 super(op_student, self).write(cr, uid, ids, {'def_course': stdc.course_id.id,
-                                                             'def_batch': stdc.batch_id.id,
-                                                             'def_standard': stdc.standard_id.id, }, context=context)
+                                                             'def_batch': stdc.batch_id.id, }, context=context)
                 return True
             else:
                 coursemaps = course_map_ref.search(cr, uid, [('student_id', '=', ids[0])], context=context)
@@ -221,7 +226,7 @@ class op_student(osv.Model):
                 course_map_ref.write(cr, uid, setmap.id, {'default_course': True}, context=context)
                 super(op_student, self).write(cr, uid, ids, {'def_course': setmap.course_id.id,
                                                              'def_batch': setmap.batch_id.id,
-                                                             'def_standard': setmap.standard_id.id, }, context=context)
+                                                             'def_standard': setmap.standard_id.id,}, context=context)
                 return True
 
         return super(op_student, self).write(cr, uid, ids, values, context=context)
