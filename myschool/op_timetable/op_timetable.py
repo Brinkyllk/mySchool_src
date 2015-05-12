@@ -56,7 +56,7 @@ class op_period(osv.osv):
                 return True
 
     _constraints = [
-        (_check_duration,'Duration cannot be zero hours', ['duration']),
+        (_check_duration, 'Duration cannot be zero hours', ['duration']),
     ]
 
 
@@ -89,7 +89,6 @@ class op_timetable(osv.osv):
     _defaults = {
         'state': 'planned',
     }
-
 
     def action_planned(self, cr, uid, ids, context=None):
         # wf_service = netsvc.LocalService("workflow")

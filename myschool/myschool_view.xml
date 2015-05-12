@@ -115,7 +115,7 @@
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">op.timetable</field>
 			<field name="view_type">form</field>
-			<field name="view_mode">kanban,calendar,tree,form</field>
+			<field name="view_mode">calendar,kanban,tree,form</field>
 		</record>
 
         <!--Genarate time table action-->
