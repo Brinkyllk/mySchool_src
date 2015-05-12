@@ -62,7 +62,6 @@ class op_student_batch_mapping(osv.Model):
 
         return True
 
-
     def view_details(self, cr, uid, ids, context=None):
 
         return {

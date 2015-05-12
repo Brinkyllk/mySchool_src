@@ -66,7 +66,7 @@ class op_student(osv.Model):
     def validate_email(self, cr, uid, ids, email):
         if email is False:
             return True
-        if re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email) != None:
+        if re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email) is None:
             raise osv.except_osv(_('Invalid Email'), _('Please enter a valid email address'))
         return True
 
