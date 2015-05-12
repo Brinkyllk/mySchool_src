@@ -1,6 +1,8 @@
 from openerp.osv import osv
 from openerp.osv import fields
 from openerp import netsvc
+import time
+import datetime
 
 
 class op_period(osv.osv):
@@ -23,7 +25,27 @@ class op_period(osv.osv):
         'duration': fields.float('Duration'),
         'am_pm': fields.selection([('am', 'AM'), ('pm', 'PM')], 'AM/PM', required=True),
         'sequence': fields.integer('Sequence'),
+        'start_time': fields.float('Start Time'),
+        'end_time': fields.float('End Time')
     }
+
+    def create(self, cr, uid, vals, context=None):
+        hours = float(vals['hour'])
+        duration = vals['duration']
+        minute = float(vals['minute'])
+        val = minute/60
+        start_time = hours+val
+        am_pm = vals['am_pm']
+        if am_pm == 'pm':
+            if hours == 12.00:
+                pass
+            else:
+                start_time += 12.00
+        end_time = start_time + duration
+        vals.update({'start_time': start_time, 'end_time': end_time})
+        return super(op_period, self).create(cr, uid, vals, context=context)
+
+
 
     def _check_duration(self, cr, uid, vals, context=None):
         for obj in self.browse(cr, uid, vals):

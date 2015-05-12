@@ -53,23 +53,29 @@ class generate_time_table(osv.osv_memory):
             start_date = self_object.start_date
             end_date = self_object.end_date
             lec_id = line.lecturer_id.id
+            per_start = line.period_id.start_time
+            per_end = line.period_id.end_time
             per_id = line.period_id.id
             day = int(line.day)
-            obj = []
-            details = {}
-            obj = self.pool.get('op.timetable').search(cr, uid, ['&', ('lecturer_id', '=', lec_id), ('period_id', '=', per_id), ], order=None)
+            obj = self.pool.get('op.timetable').search(cr, uid, [('lecturer_id', '=', lec_id), ], order=None)
             if obj:
                 for record_id in obj:
-                    details = self.pool.get('op.timetable').read(cr, uid, [record_id], ['type', 'start_datetime'])
-                    print details
-                    day_type = str((details[0]).get('type'))
+                    details = self.pool.get('op.timetable').read(cr, uid, record_id, ['type', 'start_datetime', 'period_id'])
+                    period_get = details.get('period_id')
+                    period_get_id = period_get[0]
+                    period_info = self.pool.get('op.period').read(cr, uid, period_get_id, ['start_time', 'end_time'])
+                    period_info_start = period_info.get('start_time')
+                    period_info_end = period_info.get('end_time')
+                    day_type = str(details.get('type'))
                     if day_type == day_list[day]:
-                        assigned_date = (details[0]).get('start_datetime')
+                        assigned_date = details.get('start_datetime')
                         asn_date = dateutil.parser.parse(assigned_date).date()
                         st_date = dateutil.parser.parse(start_date).date()
                         en_date = dateutil.parser.parse(end_date).date()
                         if st_date < asn_date < en_date:
-                            return False
+                            if per_start <= period_info_start < per_end or per_start < period_info_end < per_end:
+                                return False
+
             else:
                 return True
         return True
