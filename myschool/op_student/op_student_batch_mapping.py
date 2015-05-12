@@ -11,6 +11,8 @@ class op_student_batch_mapping(osv.Model):
                                     required=True, options="{'create_edit': False }"),
         'standard_id': fields.many2one('op.standard', string='Standard', domain="[('course_id', '=', course_id)]",
                                         required=True, options="{'create_edit': False }"),
+        'subject_id': fields.many2many('op.subject', domain="[('standard_id', '=', standard_id)]",
+                                       string='Subjects'),
         'default_course': fields.boolean('Default Course'),
         # 'product_id': fields.related('product_id', 'name', string='Related Product', type='char', readonly=True),
 
@@ -63,7 +65,6 @@ class op_student_batch_mapping(osv.Model):
         return True
 
     def view_details(self, cr, uid, ids, context=None):
-
         return {
             'res_model': 'op.payment.schedule',
             'view_mode': 'form',
@@ -72,5 +73,5 @@ class op_student_batch_mapping(osv.Model):
             'type': 'ir.actions.act_window',
             'nodestroy': True,
             'target': 'new',
-                }
+        }
 
