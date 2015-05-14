@@ -24,18 +24,13 @@ class op_payment_schedule(osv.Model):
         browse = self.browse(cr, uid, ids, context=context)
 
         productId=[browse.product_id.id]
-        newProductId = str(productId[0])
+        newProductId = productId[0]
 
         studentId=[browse.student_id.id]
-        newStudentId = str(studentId[0])
+        newStudentId = studentId[0]
 
-        cr.execute('SELECT id FROM op_payment_schedule '\
-                       'WHERE product_id=%s and student_id=%s',(newProductId,newStudentId))
-
-        course_product = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
-        paymentScheduleId = int(course_product[0].id)
-        print type (paymentScheduleId)
-        print paymentScheduleId
+        paymentScheduleRef = self.pool.get('op.payment.schedule')
+        paymentScheduleId = paymentScheduleRef.search(cr,uid, ['&',('product_id', '=', newProductId), ('student_id', '=', newStudentId)])[0]
 
         obj = self.pool.get('op.payment.schedule.line').search(cr, uid, [('schedule_id', '=', paymentScheduleId), ], order=None)
         if obj:
