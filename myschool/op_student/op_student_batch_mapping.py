@@ -80,6 +80,7 @@ class op_student_batch_mapping(osv.Model):
         batchRef = self.pool.get('op.student.batch.mapping')
         batchId = batchRef.browse(cr,uid, ids, context=context)[0]
         courseId = batchRef.browse(cr,uid, batchId.course_id.id, context=context)[0]
+        studentId = batchRef.browse(cr,uid, batchId.student_id.id, context=context)[0].id
 
         courseRef = self.pool.get('op.course')
         productId = courseRef.browse(cr,uid, courseId.id, context=context)[0]
@@ -87,8 +88,9 @@ class op_student_batch_mapping(osv.Model):
 
         paymentScheduleRef = self.pool.get('op.payment.schedule')
         scheduleId = paymentScheduleRef.browse(cr,uid, course_id.id, context=context)[0].id
-        paymentScheduleId = paymentScheduleRef.search(cr,uid, [('product_id', '=', scheduleId)])[0]
+        paymentScheduleId = paymentScheduleRef.search(cr,uid, ['&',('product_id', '=', scheduleId), ('student_id', '=', studentId)])
         domain = [('schedule_id', '=', paymentScheduleId)]
+
         return {
             'type': 'ir.actions.act_window',
             'name': 'Payment Schedule',
