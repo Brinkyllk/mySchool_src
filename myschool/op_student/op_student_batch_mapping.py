@@ -75,3 +75,26 @@ class op_student_batch_mapping(osv.Model):
             'target': 'new',
         }
 
+    #Show data of the relevant student
+    def view_schedule_line(self, cr, uid, ids, context=None):
+        batchRef = self.pool.get('op.student.batch.mapping')
+        batchId = batchRef.browse(cr,uid, ids, context=context)[0]
+        courseId = batchRef.browse(cr,uid, batchId.course_id.id, context=context)[0]
+
+        courseRef = self.pool.get('op.course')
+        productId = courseRef.browse(cr,uid, courseId.id, context=context)[0]
+        course_id = courseRef.browse(cr,uid, productId.product_id.id, context=context)[0]
+
+        paymentScheduleRef = self.pool.get('op.payment.schedule')
+        scheduleId = paymentScheduleRef.browse(cr,uid, course_id.id, context=context)[0].id
+        paymentScheduleId = paymentScheduleRef.search(cr,uid, [('product_id', '=', scheduleId)])[0]
+        domain = [('schedule_id', '=', paymentScheduleId)]
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'payment schedule1111',
+            'view_mode': 'tree',
+            'view_type': 'form,tree',
+            'res_model': 'op.payment.schedule.line',
+            'target': 'new',
+            'domain': domain
+        }

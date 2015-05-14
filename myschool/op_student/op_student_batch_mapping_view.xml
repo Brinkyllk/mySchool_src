@@ -54,7 +54,7 @@
                             <field name="standard_id"/>
                             <field name="default_course"/>
                             <button name="view_details" string="Create a payment term for this product" type="object" icon="STOCK_ADD"/>
-                            <button name="%(payment_schedule_act)d" type="action" string="View schedule lines" icon="gtk-redo"/>
+                            <button name="view_schedule_line" type="object" string="View schedule lines" icon="gtk-redo"/>
                 </tree>
             </field>
         </record>

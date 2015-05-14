@@ -34,6 +34,8 @@ class op_payment_schedule(osv.Model):
 
         course_product = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
         paymentScheduleId = int(course_product[0].id)
+        print type (paymentScheduleId)
+        print paymentScheduleId
 
         obj = self.pool.get('op.payment.schedule.line').search(cr, uid, [('schedule_id', '=', paymentScheduleId), ], order=None)
         if obj:
@@ -41,7 +43,11 @@ class op_payment_schedule(osv.Model):
                 details = self.pool.get('op.payment.schedule.line').read(cr, uid, record_id, ['schedule_id'])
                 scheduleId = details.get('schedule_id')
                 newScheduleId = scheduleId[0]
-                return False
+                print type (newScheduleId)
+                print newScheduleId
+                if paymentScheduleId == newScheduleId:
+                    return False
+                return True
         else:
             return True
 
@@ -83,5 +89,3 @@ class op_payment_schedule(osv.Model):
             sub_lines.append((0, 0, {'due_date': line[0], 'amount': line[1]}))
             payment_schedule_obj.write(cr, uid, ids, {'line_ids': sub_lines}, context=context)
         return True
-
-
