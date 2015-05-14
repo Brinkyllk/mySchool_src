@@ -91,7 +91,7 @@ class op_student_batch_mapping(osv.Model):
         domain = [('schedule_id', '=', paymentScheduleId)]
         return {
             'type': 'ir.actions.act_window',
-            'name': 'payment schedule1111',
+            'name': 'Payment Schedule',
             'view_mode': 'tree',
             'view_type': 'form,tree',
             'res_model': 'op.payment.schedule.line',
