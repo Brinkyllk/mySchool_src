@@ -19,6 +19,33 @@ class op_payment_schedule(osv.Model):
        'invoice_date': time.strftime('%Y-%m-%d')
     }
 
+    #validate same payment term
+    def _checkSamePaymentTerm(self, cr, uid, ids, context=None):
+        browse = self.browse(cr, uid, ids, context=context)
+
+        productId=[browse.product_id.id]
+        newProductId = str(productId[0])
+
+        studentId=[browse.student_id.id]
+        newStudentId = str(studentId[0])
+
+        cr.execute('SELECT id FROM op_payment_schedule '\
+                       'WHERE product_id=%s and student_id=%s',(newProductId,newStudentId))
+
+        course_product = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+        paymentScheduleId = int(course_product[0].id)
+
+        obj = self.pool.get('op.payment.schedule.line').search(cr, uid, [('schedule_id', '=', paymentScheduleId), ], order=None)
+        if obj:
+            for record_id in obj:
+                details = self.pool.get('op.payment.schedule.line').read(cr, uid, record_id, ['schedule_id'])
+                scheduleId = details.get('schedule_id')
+                newScheduleId = scheduleId[0]
+                return False
+        else:
+            return True
+
+    _constraints = [(_checkSamePaymentTerm, ("For this product already create a payment schedule"),['product_id'])]
 
     def default_get(self, cr, uid, fields, context=None):
 
@@ -55,11 +82,6 @@ class op_payment_schedule(osv.Model):
             sub_lines = []
             sub_lines.append((0, 0, {'due_date': line[0], 'amount': line[1]}))
             payment_schedule_obj.write(cr, uid, ids, {'line_ids': sub_lines}, context=context)
+        return True
 
-        return {
-            'name': 'Payment Schedule Line',
-            'view_mode': 'tree',
-            'view_type': 'tree',
-            'res_model': 'op.payment.schedule.line',
-            'type': 'ir.actions.act_window',
-                }
+

@@ -9,13 +9,15 @@
             <field name="arch" type="xml">
                 <form string="Student Batch Mapping">
                     <sheet>
-                        <group>
-                            <field name="student_id" invisible="True"/>
-                            <field name="course_id" />
-                            <field name="batch_id"  />
-                            <field name="standard_id"/>
-                            <field name="default_course"/>
-                            <field name="subject_id" widget="many2many_checkboxes"/>
+                        <group col="4" colspan="4">
+                            <group>
+                                <field name="student_id" invisible="True"/>
+                                <field name="course_id" />
+                                <field name="batch_id"  />
+                                <field name="standard_id"/>
+                                <field name="default_course"/>
+                                <field name="subject_id" widget="many2many_checkboxes"/>
+                            </group>
                         </group>
                     </sheet>
                 </form>
@@ -41,18 +43,18 @@
         </record>
 
         <record id="view_op_student_batch_mapping_tree" model="ir.ui.view">
-            <field name="name">op.student.batch.mapping.tree</field>
+            <field name="name">op.student.batch.mapping.form</field>
             <field name="model">op.student.batch.mapping</field>
             <field name="priority" eval="8" />
             <field name="arch" type="xml">
                 <tree string="Student Batch Mapping">
-                    <field name="course_id" />
-                    <field name="batch_id"  />
-                    <field name="standard_id"/>
-                    <field name="default_course"/>
-
-                    <!--from object to call payment-->
-                    <button name="view_details" string="view" type="object"/>
+                            <field name="student_id" invisible="True"/>
+                            <field name="course_id" />
+                            <field name="batch_id"  />
+                            <field name="standard_id"/>
+                            <field name="default_course"/>
+                            <button name="view_details" string="Create a payment term for this product" type="object" icon="STOCK_ADD"/>
+                            <button name="%(payment_schedule_act)d" type="action" string="View schedule lines" icon="gtk-redo"/>
                 </tree>
             </field>
         </record>
