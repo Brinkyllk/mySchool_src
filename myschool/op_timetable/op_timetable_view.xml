@@ -93,6 +93,7 @@
 			<field name="name">op.timetable.tree</field>
 			<field name="model">op.timetable</field>
 			<field name="priority" eval="8" />
+            <field name="sequence" eval="3" />
 			<field name="arch" type="xml">
 				<tree string="Time Table">
 					<field name="lecturer_id"/>
@@ -111,6 +112,7 @@
 			<field name="name">op.timetable.form</field>
 			<field name="model">op.timetable</field>
 			<field name="priority" eval="8" />
+            <field name="sequence" eval="4" />
 			<field name="arch" type="xml">
 				<form string="Time Table" version="7.0">
                     <header>
@@ -176,6 +178,7 @@
 			<field name="name">op.timetable.calendar</field>
 			<field name="model">op.timetable</field>
 			<field name="priority" eval="8" />
+            <field name="sequence" eval="1" />
 			<field name="arch" type="xml">
 				<calendar string="Time Table" date_start="start_datetime"
 					color="lecturer_id" date_stop="end_datetime" mode="week">
@@ -191,6 +194,7 @@
         <record model="ir.ui.view" id="view_timetable_kanban">
             <field name="name">timetable.kanban</field>
             <field name="model">op.timetable</field>
+            <field name="sequence" eval="2" />
             <field name="arch" type="xml">
                 <kanban default_group_by="type" class="oe_background_grey" version="7.0" create="false" edit="false">
 
@@ -251,7 +255,7 @@
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">op.timetable</field>
 			<field name="view_type">form</field>
-			<field name="view_mode">tree,form</field>
+			<field name="view_mode">calendar,kanban,tree,form</field>
 			<field name="search_view_id" ref="view_op_timetable_search" />
 			<field name="domain">[]</field>
 			<field name="context">{}</field>

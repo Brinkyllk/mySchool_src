@@ -14,7 +14,7 @@
                             <field name="payment_term"/>
                             <field name="invoice_date"/>
                             <field name="student_id" invisible="True"/>
-                            <button name="generate_schedule_lines" string="Payment Details" type="object"/>
+                            <button name="generate_schedule_lines" string="Create" type="object" class="oe_button oe_form_button_save oe_highlight"/>
                         </group>
                     </group>
                 </form>

@@ -66,7 +66,7 @@ class op_student(osv.Model):
     def validate_email(self, cr, uid, ids, email):
         if email is False:
             return True
-        if re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email) != None:
+        if re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email) is None:
             raise osv.except_osv(_('Invalid Email'), _('Please enter a valid email address'))
         return True
 
@@ -218,7 +218,8 @@ class op_student(osv.Model):
 
             if stdc:
                 super(op_student, self).write(cr, uid, ids, {'def_course': stdc.course_id.id,
-                                                             'def_batch': stdc.batch_id.id, }, context=context)
+                                                             'def_batch': stdc.batch_id.id,
+                                                             'def_standard': stdc.standard_id.id, }, context=context)
                 return True
             else:
                 coursemaps = course_map_ref.search(cr, uid, [('student_id', '=', ids[0])], context=context)
@@ -226,7 +227,7 @@ class op_student(osv.Model):
                 course_map_ref.write(cr, uid, setmap.id, {'default_course': True}, context=context)
                 super(op_student, self).write(cr, uid, ids, {'def_course': setmap.course_id.id,
                                                              'def_batch': setmap.batch_id.id,
-                                                             'def_standard': setmap.standard_id.id,}, context=context)
+                                                             'def_standard': setmap.standard_id.id, }, context=context)
                 return True
 
         return super(op_student, self).write(cr, uid, ids, values, context=context)

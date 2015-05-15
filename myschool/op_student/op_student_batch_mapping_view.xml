@@ -1,20 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
     <data>
+        
+        <record id="view_op_student_batch_mapping_form" model="ir.ui.view">
+            <field name="name">op.student.batch.mapping.form</field>
+            <field name="model">op.student.batch.mapping</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <form string="Student Batch Mapping">
+                    <sheet>
+                        <group col="4" colspan="4">
+                            <group>
+                                <field name="student_id" invisible="True"/>
+                                <field name="course_id" />
+                                <field name="batch_id"  />
+                                <field name="standard_id"/>
+                                <field name="default_course"/>
+                                <field name="subject_id" widget="many2many_checkboxes"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_open_op_student_batch_mapping_view">
+            <field name="name">Student Batch Mapping</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">op.student.batch.mapping</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <!--<field name="search_view_id" ref="view_op_student_batch_mapping_search" />-->
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="act_open_op_student_batch_mapping_view_form">
+            <field name="act_window_id" ref="act_open_op_student_batch_mapping_view" />
+            <field name="sequence" eval="10" />
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_op_student_batch_mapping_form" />
+        </record>
 
         <record id="view_op_student_batch_mapping_tree" model="ir.ui.view">
-            <field name="name">op.student.batch.mapping.tree</field>
+            <field name="name">op.student.batch.mapping.form</field>
             <field name="model">op.student.batch.mapping</field>
             <field name="priority" eval="8" />
             <field name="arch" type="xml">
                 <tree string="Student Batch Mapping">
-                    <field name="course_id" />
-                    <field name="batch_id"  />
-                    <field name="standard_id"/>
-                    <field name="default_course"/>
-                    <!--<field name="subject_id"/>-->
-                    <!--from object-->
-                    <button name="view_details" string="view" type="object"/>
+                            <field name="student_id" invisible="True"/>
+                            <field name="course_id" />
+                            <field name="batch_id"  />
+                            <field name="standard_id"/>
+                            <field name="default_course"/>
+                            <button name="view_details" string="Create a payment term for this product" type="object" icon="STOCK_ADD"/>
+                            <button name="view_schedule_line" type="object" string="View schedule lines" icon="gtk-redo"/>
                 </tree>
             </field>
         </record>

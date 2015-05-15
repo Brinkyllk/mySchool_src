@@ -11,6 +11,8 @@ class op_student_batch_mapping(osv.Model):
                                     required=True, options="{'create_edit': False }"),
         'standard_id': fields.many2one('op.standard', string='Standard', domain="[('course_id', '=', course_id)]",
                                         required=True, options="{'create_edit': False }"),
+        'subject_id': fields.many2many('op.subject', domain="[('standard_id', '=', standard_id)]",
+                                       string='Subjects'),
         'default_course': fields.boolean('Default Course'),
         # 'product_id': fields.related('product_id', 'name', string='Related Product', type='char', readonly=True),
 
@@ -62,9 +64,7 @@ class op_student_batch_mapping(osv.Model):
 
         return True
 
-
     def view_details(self, cr, uid, ids, context=None):
-
         return {
             'res_model': 'op.payment.schedule',
             'view_mode': 'form',
@@ -73,5 +73,30 @@ class op_student_batch_mapping(osv.Model):
             'type': 'ir.actions.act_window',
             'nodestroy': True,
             'target': 'new',
-                }
+        }
 
+    #Show data of the relevant student
+    def view_schedule_line(self, cr, uid, ids, context=None):
+        batchRef = self.pool.get('op.student.batch.mapping')
+        batchId = batchRef.browse(cr,uid, ids, context=context)[0]
+        courseId = batchRef.browse(cr,uid, batchId.course_id.id, context=context)[0]
+        studentId = batchRef.browse(cr,uid, batchId.student_id.id, context=context)[0].id
+
+        courseRef = self.pool.get('op.course')
+        productId = courseRef.browse(cr,uid, courseId.id, context=context)[0]
+        course_id = courseRef.browse(cr,uid, productId.product_id.id, context=context)[0]
+
+        paymentScheduleRef = self.pool.get('op.payment.schedule')
+        scheduleId = paymentScheduleRef.browse(cr,uid, course_id.id, context=context)[0].id
+        paymentScheduleId = paymentScheduleRef.search(cr,uid, ['&',('product_id', '=', scheduleId), ('student_id', '=', studentId)])
+        domain = [('schedule_id', '=', paymentScheduleId)]
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Payment Schedule',
+            'view_mode': 'tree',
+            'view_type': 'form,tree',
+            'res_model': 'op.payment.schedule.line',
+            'target': 'new',
+            'domain': domain
+        }

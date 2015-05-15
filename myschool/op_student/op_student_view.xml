@@ -96,7 +96,7 @@
                         <group col="4" colspan="4">
                             <field name="partner"/>
                             <field name="id_number"/>
-                            <field name="email" on_change="ValidateEmail(email)"/>
+                            <field name="email"/>
                             <field name="stu_reg_number"/>
                             <field name="user_id"/>
                             <!--<button name="genid" type="object" string="Get Number"/>-->
