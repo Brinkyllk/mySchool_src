@@ -244,21 +244,23 @@ class op_student(osv.Model):
                     return False
                 return True
 
-    # def my_test(self,cr, uid, ids, context=None):
-    #     res = {}
-    #     reads = self.read(cr, uid, ids, fields=None, context=context)
-    #     dictionary_reads = reads[0]
-    #     payment_schedule_ids = dictionary_reads.get('payment_schedule_ids')
-    #     res = payment_schedule_ids,
-    #
-    #     return {
-    #         'res_model': 'op.payment.schedule',
-    #         'view_mode': 'form',
-    #         'view_type': 'form',
-    #         'res_model': 'op.payment.schedule',
-    #         'type': 'ir.actions.act_window',
-    #         'context': {'test': res}
-    #     }
+    # Related to the show Payment Schedule lines for particular student
+    def show_payment_details(self, cr, uid, ids, context=None):
+        stu_id = ids[0]
+        ps_obj = self.pool.get('op.payment.schedule')
+        stu_ps_id_list = ps_obj.search(cr, uid, [('student_id', '=', stu_id)])
+        print stu_ps_id_list
+        domain = [('schedule_id', '=', stu_ps_id_list)]
+
+        return {
+            'name': 'Payment Schedule Line',
+            'view_mode': 'tree',
+            'view_type': 'tree',
+            'res_model': 'op.payment.schedule.line',
+            'type': 'ir.actions.act_window',
+            'nodestroy': True,
+            'domain': domain,
+                }
 
     _constraints = [
         (_check_birthday, 'Birth Day cannot be future date!', ['birth_date']),
