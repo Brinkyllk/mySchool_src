@@ -122,4 +122,20 @@ class op_timetable(osv.osv):
             return True
         return True
 
+    # def timetable_postponed(self, cr, uid, ids, context=None):
+    #     time_pool = self.pool.get('op.timetable')
+    #     time_browse = time_pool.browse(cr, uid, ids, context=context)[0]
+    #     time_id = time_browse.id
+    #     domain = [('timetable_id', '=', time_id)]
+    #     return {
+    #         'type': 'ir.actions.act_window',
+    #         'name': 'Timetable Postponed',
+    #         'view_mode': 'form',
+    #         'view_type': 'form',
+    #         'res_model': 'timetable_postponed',
+    #         'res_id': 'timetable_postponed_view',
+    #         'target': 'new',
+    #         'domain': domain,
+    #     }
+
     _constraints = [(_validate_backdate, 'You cannot backdate records!', ['start_datetime'])]

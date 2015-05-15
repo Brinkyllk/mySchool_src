@@ -27,6 +27,7 @@
         'op_student/op_student_batch_mapping_view.xml',
         'op_timetable/op_timetable_view.xml',
         'op_timetable/op_timetable_workflow.xml',
+        'op_timetable/timetable_postponed_view.xml',
         'op_classroom/op_classroom_view.xml',
         'wizard/generate_time_table_view.xml',
         'op_payment_schedule_line/op_payment_schedule_line_view.xml',
