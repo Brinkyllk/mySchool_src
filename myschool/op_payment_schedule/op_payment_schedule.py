@@ -16,7 +16,7 @@ class op_payment_schedule(osv.Model):
     }
 
     _defaults = {
-       'invoice_date': time.strftime('%Y-%m-%d')
+       'invoice_date': fields.date.context_today
     }
 
     #validate same payment term
@@ -62,9 +62,18 @@ class op_payment_schedule(osv.Model):
         course = courseRef.browse(cr,uid, batchMap.course_id.id, context=context)[0]
         product = productRef.browse(cr, uid, course.product_id.id, context=context)[0]
 
+        productId = product.id
+        studentId = batchMap.student_id.id
+
+        paymentScheduleRef = self.pool.get('op.payment.schedule')
+        paymentScheduleId = paymentScheduleRef.search(cr,uid, ['&',('product_id', '=', productId), ('student_id', '=', studentId)])
+        paymentTermId = paymentScheduleRef.browse(cr, uid, paymentScheduleId, context=context)
+        newPaymentTermId = paymentScheduleRef.browse(cr, uid, paymentTermId.payment_term.id, context=context)
+
         data['product_id'] = product.id
         data['list_price'] = product.lst_price
         data['student_id'] = batchMap.student_id.id
+        data['payment_term'] = newPaymentTermId.id
 
         return data
 
