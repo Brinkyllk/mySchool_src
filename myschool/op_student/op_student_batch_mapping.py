@@ -1,4 +1,5 @@
 from openerp.osv import osv, fields
+from openerp.tools.translate import _
 
 
 class op_student_batch_mapping(osv.Model):
@@ -89,7 +90,11 @@ class op_student_batch_mapping(osv.Model):
         paymentScheduleRef = self.pool.get('op.payment.schedule')
         scheduleId = paymentScheduleRef.browse(cr,uid, course_id.id, context=context)[0].id
         paymentScheduleId = paymentScheduleRef.search(cr,uid, ['&',('product_id', '=', scheduleId), ('student_id', '=', studentId)])
-        domain = [('schedule_id', '=', paymentScheduleId)]
+        # check already created a  payment schedule
+        if len(paymentScheduleId) == 0:
+            raise osv.except_osv(_('No payment schedule'), _('You have not create a payment schedule for this product yet'))
+        else:
+            domain = [('schedule_id', '=', paymentScheduleId)]
 
         return {
             'type': 'ir.actions.act_window',
