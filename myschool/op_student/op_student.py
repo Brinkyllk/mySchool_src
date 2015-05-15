@@ -246,11 +246,15 @@ class op_student(osv.Model):
 
     # Related to the show Payment Schedule lines for particular student
     def show_payment_details(self, cr, uid, ids, context=None):
+        stu_ps_id_list = []
         stu_id = ids[0]
         ps_obj = self.pool.get('op.payment.schedule')
         stu_ps_id_list = ps_obj.search(cr, uid, [('student_id', '=', stu_id)])
-        print stu_ps_id_list
-        domain = [('schedule_id', '=', stu_ps_id_list)]
+        # check already created a  payment schedule
+        if len(stu_ps_id_list) == 0:
+            raise osv.except_osv(_('No payment schedule'), _('You have not create a payment schedule for the student yet'))
+        else:
+            domain = [('schedule_id', '=', stu_ps_id_list)]
 
         return {
             'name': 'Payment Schedule Line',
