@@ -48,9 +48,8 @@ class op_student(osv.Model):
         #------ Map many Courses ------
         'batch_ids': fields.one2many('op.student.batch.mapping', 'student_id', string='Registered Courses'),
 
-        #------ Map many Courses ------
-        # 'subject_ids': fields.many2many('op.subject', 'op_course_subject_rel', 'student_id', 'subject_id',
-        #                                 string='Subjects'),
+        #----Subjects-results------
+        'subject_ids': fields.one2many('op.subject.mapping', 'stu_course_map_id', string='Subject Results'),
 
         #payment schedule
         'payment_schedule_id': fields.one2many('op.payment.schedule', 'student_id', 'Payment Schedules')
@@ -218,8 +217,7 @@ class op_student(osv.Model):
 
             if stdc:
                 super(op_student, self).write(cr, uid, ids, {'def_course': stdc.course_id.id,
-                                                             'def_batch': stdc.batch_id.id,
-                                                             'def_standard': stdc.standard_id.id, }, context=context)
+                                                             'def_batch': stdc.batch_id.id, }, context=context)
                 return True
             else:
                 coursemaps = course_map_ref.search(cr, uid, [('student_id', '=', ids[0])], context=context)
@@ -227,7 +225,7 @@ class op_student(osv.Model):
                 course_map_ref.write(cr, uid, setmap.id, {'default_course': True}, context=context)
                 super(op_student, self).write(cr, uid, ids, {'def_course': setmap.course_id.id,
                                                              'def_batch': setmap.batch_id.id,
-                                                             'def_standard': setmap.standard_id.id, }, context=context)
+                                                             'def_standard': setmap.standard_id.id,}, context=context)
                 return True
 
         return super(op_student, self).write(cr, uid, ids, values, context=context)
