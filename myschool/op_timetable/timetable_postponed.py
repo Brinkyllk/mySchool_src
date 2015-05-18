@@ -1,7 +1,7 @@
 from openerp.osv import osv, fields
 
 
-class op_payment_schedule_line(osv.Model):
+class op_payment_schedule_line(osv.osv_memory):
     _name = 'timetable.postponed'
     _columns = {
         'timetable_id': fields.many2one('op.period'),
