@@ -12,7 +12,7 @@
                         <field name="date" />
                     </group>
                     <footer>
-                        <button string="Save" type="workflow" name="action_postponed" class="oe_highlight" />
+                        <button string="Save" type="object" name="get_data" class="oe_highlight" />
                     </footer>
                 </form>
             </field>

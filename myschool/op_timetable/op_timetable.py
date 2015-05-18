@@ -72,7 +72,7 @@ class op_timetable(osv.osv):
     _rec_name = 'lecturer_id'
 
     _columns = {
-        'period_id': fields.many2one('op.period', 'Period', required=True, readonly=True ),
+        'period_id': fields.many2one('op.period', 'Period', required=True, readonly=True),
         'start_datetime': fields.datetime('Start', required=True, readonly=True),
         'end_datetime': fields.datetime('End', required=True, readonly=True),
         'lecturer_id': fields.many2one('op.lecturer', 'Lecturer', required=True, readonly=True),
@@ -94,11 +94,11 @@ class op_timetable(osv.osv):
         'state': 'planned',
     }
 
-    @api.onchange('start_datetime')
-    def onchange_weekday(self):
-        st_date = dateutil.parser.parse(self.start_datetime).date()
-        day = calendar.day_name[st_date.weekday()]
-        self.type = day
+    # @api.onchange('start_datetime')
+    # def onchange_weekday(self):
+    #     st_date = dateutil.parser.parse(self.start_datetime).date()
+    #     day = calendar.day_name[st_date.weekday()]
+    #     self.type = day
 
     #............checking the availability of the lecturer.......................#
     def _lecturer_conflict(self, cr, uid, ids, context=None):
@@ -110,8 +110,8 @@ class op_timetable(osv.osv):
             per_end = self_object.period_id.end_time
             day = str(self_object.type)
             obj = self.pool.get("op.timetable").search(cr, uid, [('lecturer_id', '=', lec_id)])
-            obj_len = len(obj)-1
-            obj.pop(obj_len)
+            # obj_len = len(obj)-1
+            # obj.pop(obj_len)
             print obj
             if obj:
                 for record_id in obj:
