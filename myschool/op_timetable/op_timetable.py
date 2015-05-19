@@ -226,11 +226,13 @@ class op_timetable(osv.osv):
                 return False
             return True
         return True
-    _constraints = [#(_lecturer_conflict, 'Lecturer not available!!', ['start_datetime', 'end_datetime', 'period_id']),
-                    #(_classroom_conflict, 'Classroom not available', ['classroom_id', 'period_id', 'start_datetime', 'end_datetime']),
-                    #(_standard_conflict, 'Standard not available', ['standard_id', 'start_datetime', 'end_datetime']),
-                    (_validate_backdate, 'You cannot backdate records!', ['start_datetime']),
 
-                    ]
+    _constraints = [
+        (_lecturer_conflict, 'Lecturer not available!!', ['start_datetime', 'end_datetime', 'period_id']),
+        (_classroom_conflict, 'Classroom not available', ['classroom_id', 'period_id', 'start_datetime', 'end_datetime']),
+        (_standard_conflict, 'Standard not available', ['standard_id', 'start_datetime', 'end_datetime']),
+        (_validate_backdate, 'You cannot backdate records!', ['start_datetime']),
+
+    ]
 
 
