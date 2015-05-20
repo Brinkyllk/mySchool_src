@@ -11,13 +11,29 @@ class op_student_batch_mapping(osv.Model):
         'batch_id': fields.many2one('op.batch', string='Batch', domain="[('course_id', '=', course_id)]",
                                     required=True, options="{'create_edit': False }"),
         'standard_id': fields.many2one('op.standard', string='Standard', domain="[('course_id', '=', course_id)]",
-                                        required=True, options="{'create_edit': False }"),
-        'subject_id': fields.many2many('op.subject', domain="[('standard_id', '=', standard_id)]",
-                                       string='Subjects'),
-        'default_course': fields.boolean('Default Course'),
-        # 'product_id': fields.related('product_id', 'name', string='Related Product', type='char', readonly=True),
+                                       required=True, options="{'create_edit': False }"),
+        # 'standard_id': fields.many2many('op.standard', domain="[('course_id', '=', course_id)]", string='Standards'),
+        'subject_id': fields.many2many('op.subject', domain="[('standard_id', '=', standard_id)]", string='Subjects'),
 
+        # 'result_id': fields.many2many('op.subject', domain="[('subject_id', '=', subject_id)]", string='Pass Subjects'),
+        'default_course': fields.boolean('Default Course'),
+
+        # 'result_table_lines': fields.one2many('op.result.mapping', 'gen_result_table', 'Result Table Lines', required=True),
+        'result_table_lines_1': fields.one2many('op.result.mapping', 'gen_result_table', 'Result Table', required=True),
+
+        # 'product_id': fields.related('product_id', 'name', string='Related Product', type='char', readonly=True),
     }
+
+    # def core_subjects_get(self, cr, uid, fields, context=None):
+    #     data = super(op_student_batch_mapping, self).default_get(cr, uid, fields, context=context)
+    #     AA = ['student_id']
+    #     print AA
+    #     studentref = self.pool.get('op.student.batch.mapping')
+    #     studentmap = studentref.browse(cr, uid, student_id, context=context)[0]
+    #
+    #
+    #     # data['student_id'] = studentmap.student_id
+    #     return data
 
     def create(self, cr, uid, vals, context=None):
         def_count = self.search(cr, uid,
@@ -105,3 +121,28 @@ class op_student_batch_mapping(osv.Model):
             'target': 'new',
             'domain': domain
         }
+
+class op_result_mapping(osv.Model):
+    _name = 'op.result.mapping'
+    _rec_name = 'course_id'
+    _columns = {
+        'gen_result_table': fields.many2one('op.student.batch.mapping', 'Result Table', required=True),
+        'stu_course_map_id': fields.many2one('op.student.batch.mapping', string='Course Mapping'),
+        'student_id': fields.many2one('op.student', string='Student'),
+        'course_id': fields.many2one('op.student.batch.mapping', 'Course'),
+        # 'standard_id': fields.many2one('op.standard', string='Standard', domain="[('course_id', '=', course_id)]",
+        #                                required=True, options="{'create_edit': False }"),
+        'standard_id': fields.many2one('op.standard', string='Standard', domain="[('course_id', '=', course_id)]",
+                                        options="{'create_edit': False }"),
+        'subject_id': fields.many2one('op.subject', string='Subjects'),
+        'grade': fields.selection([('1', 'A'), ('2', 'B'), ('3', 'C'),
+                                   ('4', 'D'), ('5', 'S'), ('6', 'F'),
+                                   ('7', 'Pass'), ('8', 'Fail'), ('9', 'I')
+                                   ], 'Grade', required=True),
+    }
+
+    def laod_subjects(self, cr, uid, ids, context=None):
+
+        return
+
+op_result_mapping()

@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
     <data>
+
+        <record id="view_op_result_mapping_tree" model="ir.ui.view">
+			<field name="name">op.result.mapping.tree</field>
+			<field name="model">op.result.mapping</field>
+			<field name="priority" eval="8" />
+			<field name="arch" type="xml">
+				<tree string="ResultTable " editable="top">
+					<!--<field name="course_id"/>-->
+					<!--<field name="standard_id"/>-->
+					<field name="subject_id" />
+					<field name="grade" />
+					<!--<field name="subject_id" domain="[('id','in',parent.lecturer_subject_ids[0][2])]" />-->
+					<!--<field name="lecturer_subject_ids"/>-->
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_op_result_mapping_form" model="ir.ui.view">
+			<field name="name">op.result.mapping.form</field>
+			<field name="model">op.result.mapping</field>
+			<field name="priority" eval="8" />
+			<field name="arch" type="xml">
+				<form string="Table Line">
+					<!--<field name="course_id"/>-->
+					<!--<field name="standard_id"/>-->
+					<field name="subject_id" />
+					<field name="grade" />
+				</form>
+			</field>
+		</record>
         
         <record id="view_op_student_batch_mapping_form" model="ir.ui.view">
             <field name="name">op.student.batch.mapping.form</field>
@@ -17,8 +47,15 @@
                                 <field name="standard_id"/>
                                 <field name="default_course"/>
                                 <field name="subject_id" widget="many2many_checkboxes"/>
+                               <!--<field name="result_id" widget="many2many_checkboxes"/>-->
                             </group>
                         </group>
+                        <notebook>
+								 <page string="Results">
+                                     <separator colspan="4" string="Subject Results"/>
+									<field name="result_table_lines_1"/>
+								</page>
+                        </notebook>
                     </sheet>
                 </form>
             </field>
