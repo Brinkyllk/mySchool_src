@@ -14,13 +14,7 @@ class op_course(osv.Model):
                                   string='Course Level'),
         'product_id': fields.many2one('product.product', 'Product', ondelete='restrict', readonly=True),
         'price': fields.related('product_id', 'list_price', string='Price', type='char'),
-        # 'category': fields.related('uom_id', 'category_id', string='Category', type='char'),
-        # 'subject_ids': fields.many2many('op.subject', 'op_course_subject_rel', 'course_id', 'subject_id',
-        #                                 string='Subject(s)'),
         'subject_ids': fields.one2many('op.subject', 'name', string='Subject(s)', options="{'create_edit': False}", readonly=True),
-        # 'standard_ids': fields.many2many('op.standard', 'op_course_standard_rel', 'course_id', 'semester_id',
-        #                                  string='Standard(s)'),
-        #'standard_id': fields.one2many('op.standard',  'course_id', string='Standards', options="{'create_edit': False }")
         'standard_id': fields.one2many('op.standard', 'course_id', string='Standard(s)', options="{'create_edit': False}", readonly=True)
 
 
@@ -35,7 +29,6 @@ class op_course(osv.Model):
     def create(self, cr, uid, vals, context=None):
         #Reffer producy
         productRef = self.pool.get('product.product')
-
         product = {'name': vals['name'], 'list_price': vals['price']}
         pid = productRef.create(cr, uid, product, context=context)
         vals.update({'product_id': pid})
@@ -48,7 +41,13 @@ class op_course(osv.Model):
             prodid = self.browse(cr, uid, ids, context=context)[0].product_id.id
             productRef = self.pool.get('product.product')
             productRef.write(cr, uid, prodid, {'name': values['name']}, context=context)
-        return super(op_course, self).write(cr, uid, ids, values, context=context)
+            return super(op_course, self).write(cr, uid, ids, values, context=context)
+        if 'price' in values:
+            prodid = self.browse(cr, uid, ids, context=context)[0].product_id.id
+            productRef = self.pool.get('product.template')
+            productRef.write(cr, uid, prodid, {'list_price': values['price']}, context=context)
+            return True
+
 
 
 

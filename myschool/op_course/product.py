@@ -13,7 +13,6 @@ class product_template(osv.Model):
         return super(product_template).unlink(cr, uid, ids, context)
 
     def write(self, cr, uid, ids, vals, context=None):
-
         if 'name' in vals:
             rec = self.browse(cr, uid, ids, context)[0]
             if rec.iscourse:
