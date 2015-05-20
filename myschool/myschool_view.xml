@@ -73,6 +73,16 @@
 			<field name="view_mode">kanban,tree,form</field>
 		</record>
 
+         <!--payment schedule-->
+        <record model="ir.actions.act_window" id="payment_schedule_act">
+			<field name="name">Payment Schedule</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">op.payment.schedule.line</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree</field>
+			<field name="target">current</field>
+		</record>
+
         <!--batch action-->
         <record model="ir.actions.act_window" id="action_batch">
             <field name="name">Batch</field>
@@ -139,6 +149,7 @@
 
         <!--action menus............. -->
         <menuitem id="menu_student" name="Student" parent="menu_myschool_student" action="act_open_op_student_view"/>
+        <menuitem id="menu_payment_schedule" name="Student payments" parent="menu_myschool_student" action="payment_schedule_act"/>
         <menuitem id="menu_lecturer" name="Lecturer" parent="menu_myschool_lecturer" action="act_open_op_lecturer_view"/>
 
 
