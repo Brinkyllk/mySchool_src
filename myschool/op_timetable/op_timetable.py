@@ -100,100 +100,7 @@ class op_timetable(osv.osv):
     #     day = calendar.day_name[st_date.weekday()]
     #     self.type = day
 
-    #............checking the availability of the lecturer.......................#
-    def _lecturer_conflict(self, cr, uid, ids, context=None):
-        for self_object in self.browse(cr, uid, ids, context=context):
-            start_date = dateutil.parser.parse(self_object.start_datetime).date()
-            end_date = dateutil.parser.parse(self_object.end_datetime).date()
-            lec_id = self_object.lecturer_id.id
-            per_start = self_object.period_id.start_time
-            per_end = self_object.period_id.end_time
-            day = str(self_object.type)
-            obj = self.pool.get("op.timetable").search(cr, uid, [('lecturer_id', '=', lec_id)])
-            # obj_len = len(obj)-1
-            # obj.pop(obj_len)
-            print obj
-            if obj:
-                for record_id in obj:
-                    details = self.pool.get('op.timetable').read(cr, uid, record_id, ['type', 'start_datetime', 'period_id'])
-                    period_get = details.get('period_id')
-                    period_get_id = period_get[0]
-                    period_info = self.pool.get('op.period').read(cr, uid, period_get_id, ['start_time', 'end_time'])
-                    period_info_start = period_info.get('start_time')
-                    period_info_end = period_info.get('end_time')
-                    day_type = str(details.get('type'))
-                    if day_type == day:
-                        asn_date = dateutil.parser.parse(details.get('start_datetime')).date()
-                        if start_date <= asn_date <= end_date:
-                            if per_start <= period_info_start < per_end or per_start < period_info_end <= per_end:
-                                return False
-            else:
-                return True
-        return True
 
-
-    #...............checking the availability of the classroom................#
-    def _classroom_conflict(self, cr, uid, ids, context=None):
-        for self_obj in self.browse(cr, uid, ids, context=context):
-            start_date = dateutil.parser.parse(self_obj.start_datetime).date()
-            end_date = dateutil.parser.parse(self_obj.end_datetime).date()
-            cls_id = self_obj.classroom_id.id
-            per_start = self_obj.period_id.start_time
-            per_end = self_obj.period_id.end_time
-            day = str(self_obj.type)
-            obj = self.pool.get("op.timetable").search(cr, uid, [('classroom_id', '=', cls_id)])
-            obj_len = len(obj)-1
-            obj.pop(obj_len)
-            if obj:
-                for rec_id in obj:
-                    details = self.pool.get('op.timetable').read(cr, uid, rec_id, ['type', 'start_datetime', 'period_id'])
-                    period_get = details.get('period_id')
-                    period_get_id = period_get[0]
-                    period_info = self.pool.get('op.period').read(cr, uid, period_get_id, ['start_time', 'end_time'])
-                    period_info_start = period_info.get('start_time')
-                    period_info_end = period_info.get('end_time')
-                    day_type = str(details.get('type'))
-                    if day_type == day:
-                        asn_date = dateutil.parser.parse(details.get('start_datetime')).date()
-                        if start_date <= asn_date <= end_date:
-                            if per_start <= period_info_start < per_end or per_start < period_info_end < per_end:
-                                return False
-
-            else:
-                return True
-        return True
-
-    #..................checking the availability of the standard..............#
-    def _standard_conflict(self, cr, uid, ids, context=None):
-        day_list = ['None', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-        for self_object in self.browse(cr, uid, ids, context=context):
-            start_date = dateutil.parser.parse(self_object.start_datetime).date()
-            end_date = dateutil.parser.parse(self_object.end_datetime).date()
-            standard_id = self_object.standard_id.id
-            per_start = self_object.period_id.start_time
-            per_end = self_object.period_id.end_time
-            day = str(self_object.type)
-            obj = self.pool.get('op.timetable').search(cr, uid, [('standard_id', '=', standard_id), ], order=None)
-            obj_len = len(obj)-1
-            obj.pop(obj_len)
-            if obj:
-                for record_id in obj:
-                    details = self.pool.get('op.timetable').read(cr, uid, record_id, ['type', 'start_datetime', 'period_id'])
-                    period_get = details.get('period_id')
-                    period_get_id = period_get[0]
-                    period_info = self.pool.get('op.period').read(cr, uid, period_get_id, ['start_time', 'end_time'])
-                    period_info_start = period_info.get('start_time')
-                    period_info_end = period_info.get('end_time')
-                    day_type = str(details.get('type'))
-                    if day_type == day:
-                        asn_date = dateutil.parser.parse(details.get('start_datetime')).date()
-                        if start_date <= asn_date <= end_date:
-                            if per_start <= period_info_start < per_end or per_start < period_info_end < per_end:
-                                return False
-
-            else:
-                return True
-        return True
 
     def action_planned(self, cr, uid, ids, context=None):
         # wf_service = netsvc.LocalService("workflow")
@@ -228,9 +135,6 @@ class op_timetable(osv.osv):
         return True
 
     _constraints = [
-        (_lecturer_conflict, 'Lecturer not available!!', ['start_datetime', 'end_datetime', 'period_id']),
-        (_classroom_conflict, 'Classroom not available', ['classroom_id', 'period_id', 'start_datetime', 'end_datetime']),
-        (_standard_conflict, 'Standard not available', ['standard_id', 'start_datetime', 'end_datetime']),
         (_validate_backdate, 'You cannot backdate records!', ['start_datetime']),
 
     ]
