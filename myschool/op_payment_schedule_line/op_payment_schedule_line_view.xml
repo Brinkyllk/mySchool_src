@@ -54,11 +54,15 @@
 			<field name="priority" eval="8" />
 			<field name="arch" type="xml">
 				<search string="Payment">
+					<field name="stu_reg_no"/>
+					<field name="full_name"/>
 					<field name="due_date"/>
                     <field name="amount" />
 
                     <newline />
 					<group expand="0" string="Group By...">
+						<filter string="Student No" domain="[]" context="{'group_by':'stu_reg_no'}" />
+						<filter string="Student Name" domain="[]" context="{'group_by':'full_name'}" />
 						<filter string="Due Date" domain="[]" context="{'group_by':'due_date'}" />
                         <filter string="Amount" domain="[]" context="{'group_by':'amount'}" />
 					</group>
