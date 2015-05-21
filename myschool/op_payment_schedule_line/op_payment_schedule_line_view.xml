@@ -20,8 +20,23 @@
             </field>
        </record>
 
+        <record id="op_payment_schedule_line_tree_id" model="ir.ui.view">
+			<field name="name">op.payment.schedule.line.tree</field>
+			<field name="model">op.payment.schedule.line</field>
+			<field name="priority" eval="8" />
+			<field name="arch" type="xml">
+				<tree string="Payment Schedule Line" create="false" delete="false">
+                    <field name="stu_reg_no" />
+					<field name="full_name" />
+                    <field name="due_date" />
+                    <field name="amount" />
+                    <button name="" string="Create" type="object" class="oe_button oe_form_button_save oe_highlight"/>
+				</tree>
+			</field>
+		</record>
+
         <record id="op_payment_schedule_line_tree" model="ir.ui.view">
-			<field name="name">op.payment.schedule.line.form</field>
+			<field name="name">op.payment.schedule.line.tree</field>
 			<field name="model">op.payment.schedule.line</field>
 			<field name="priority" eval="8" />
 			<field name="arch" type="xml">
@@ -34,13 +49,14 @@
         <!--end of tree view for payment_schedule -->
 
         <record id="view_op_payment_schedule_search" model="ir.ui.view">
-			<field name="name">op.payment.schedule.line.form.search</field>
+			<field name="name">op.payment.schedule.line.tree.search</field>
 			<field name="model">op.payment.schedule.line</field>
 			<field name="priority" eval="8" />
 			<field name="arch" type="xml">
 				<search string="Payment">
 					<field name="due_date"/>
                     <field name="amount" />
+
                     <newline />
 					<group expand="0" string="Group By...">
 						<filter string="Due Date" domain="[]" context="{'group_by':'due_date'}" />
@@ -59,7 +75,7 @@
 			<field name="res_model">op.payment.schedule.line</field>
 			<field name="view_type">tree</field>
 			<field name="view_mode">tree</field>
-			<field name="view_id" ref="op_payment_schedule_line_tree" />
+			<field name="view_id" ref="op_payment_schedule_line_tree_id" />
             <field name="search_view_id" ref="view_op_payment_schedule_search" />
 			<field name="domain">[]</field>
             <field name="context">{}</field>
@@ -69,7 +85,7 @@
             <field name="act_window_id" ref="payment_schedule_act" />
             <field name="sequence" eval="10" />
             <field name="view_mode">tree</field>
-            <field name="view_id" ref="op_payment_schedule_line_tree" />
+            <field name="view_id" ref="op_payment_schedule_line_tree_id" />
             <field name="search_view_id" ref="view_op_payment_schedule_search" />
         </record>
 	</data>
