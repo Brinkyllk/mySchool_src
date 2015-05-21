@@ -43,7 +43,7 @@
                     <field name="amount" />
                     <newline />
 					<group expand="0" string="Group By...">
-						<filter string="Due date" domain="[]" context="{'group_by':'due_date'}" />
+						<filter string="Due Date" domain="[]" context="{'group_by':'due_date'}" />
                         <filter string="Amount" domain="[]" context="{'group_by':'amount'}" />
 					</group>
 				</search>
