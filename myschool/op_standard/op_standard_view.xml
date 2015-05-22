@@ -71,7 +71,7 @@
             <field name="name">op.standard.form</field>
             <field name="model">op.standard</field>
             <field name="arch" type="xml">
-                <form string="Standard" version="8.0">
+                <form string="Standard" version="7.0">
                     <sheet>
                         <separator string="Standard" colspan="4" />
                         <group>
