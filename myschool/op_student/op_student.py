@@ -1,6 +1,7 @@
 from openerp.osv import fields, osv
 from datetime import date, datetime
 from openerp.tools.translate import _
+# from validate_email import validate_email
 import re
 
 
@@ -37,7 +38,7 @@ class op_student(osv.Model):
         'partner': fields.related('partner_id', 'name', string='Related Customer', type='char', readonly=True),
 
         #------ Parent details ------
-        'parent_name': fields.char(string='Parent Name', size=256),
+        'parent_name': fields.char(string='Parent Name', size=30),
         'contact_no': fields.char(string='Contact Number', size=256),
 
         #------ Course details ------
@@ -47,6 +48,12 @@ class op_student(osv.Model):
 
         #------ Map many Courses ------
         'batch_ids': fields.one2many('op.student.batch.mapping', 'student_id', string='Registered Courses'),
+        # 'result_id': fields.one2many('op.student.result.mapping', 'student_id', string='Results'),
+
+
+
+        #----Subjects-results------
+        # 'subject_ids': fields.one2many('op.subject.mapping', 'stu_course_map_id', string='Subject Results'),
 
         #payment schedule
         'payment_schedule_id': fields.one2many('op.payment.schedule', 'student_id', 'Payment Schedules')
@@ -63,7 +70,6 @@ class op_student(osv.Model):
         if email is False:
             return True
         if re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email) is None:
-        # if re.match("[A-Z0-9._%+-]+@(?:[A-Z0-9-]+\.)+ (?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)$", email) is None:
             raise osv.except_osv(_('Invalid Email'), _('Please enter a valid email address'))
         return True
 
@@ -91,7 +97,7 @@ class op_student(osv.Model):
             if re.match("/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/*$", vals['phone']) != None:
                 pass
             else:
-                raise osv.except_osv(_('Invalid Mobile No'), _('Please enter a valid Phone Number'))
+                raise osv.except_osv(_('Invalid Phone Number'), _('Please enter a valid Phone Number'))
 
         # Clean NIC
         if 'id_number' in vals:
@@ -165,7 +171,7 @@ class op_student(osv.Model):
             if re.match("^[0-9]*$", values['phone']) != None:
                 pass
             else:
-                raise osv.except_osv(_('Invalid Mobile No'), _('Please enter a valid Phone Number'))
+                raise osv.except_osv(_('Invalid Phone No'), _('Please enter a valid Phone Number'))
 
         #clean NIC
         if 'id_number' in values:

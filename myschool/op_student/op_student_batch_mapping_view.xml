@@ -48,7 +48,7 @@
                                 <field name="batch_id"  />
                                 <field name="standard_id"/>
                                 <field name="default_course"/>
-                                <field name="subject_id" widget="many2many_checkboxes"/>
+                                <field name="subject_id" domain="[('standard_id', '=', standard_id)]" widget="many2many_checkboxes"/>
                                <!--<field name="result_id" widget="many2many_checkboxes"/>-->
                             </group>
                         </group>
