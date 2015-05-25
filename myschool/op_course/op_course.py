@@ -28,12 +28,6 @@ class op_course(osv.Model):
 
 
     def create(self, cr, uid, vals, context=None):
-        if 'price' in vals and vals['price']:
-            if re.match("^[0-9]*$", 'price') != None:
-                pass
-            else:
-                raise osv.except_osv(_('Price is Invalid'), _('Do not enter characters for price'))
-
         #Reffer producy
         productRef = self.pool.get('product.product')
         product = {'name': vals['name'], 'list_price': vals['price']}
@@ -43,13 +37,6 @@ class op_course(osv.Model):
         return super(op_course, self).create(cr, uid, vals, context=context)
 
     def write(self, cr, uid, ids, values, context=None):
-
-        if 'price' in values and values['price']:
-            if re.match("^[0-9]*$", 'price') != None:
-                pass
-            else:
-                raise osv.except_osv(_('Price is Invalid'), _('Do not enter characters for price'))
-
         #Write Product
         if 'name' in values:
             prodid = self.browse(cr, uid, ids, context=context)[0].product_id.id
