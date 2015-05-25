@@ -84,12 +84,19 @@ class op_payment_schedule(osv.Model):
         result_price = ps_obj.list_price
         payment_term_id = ps_obj.payment_term.ids[0]
         date_invoice = ps_obj.invoice_date
+        student = ps_obj.student_id.id
 
-        p_term_list = self.pool.get('account.payment.term').compute(cr, uid, payment_term_id, result_price, date_ref=date_invoice)
+        studentRef = self.pool.get('op.student').read(cr, uid, student, ['last_name', 'first_name', 'stu_reg_number'])
+        firstName = studentRef['first_name']
+        lastName = studentRef['last_name']
+        full_name = str(firstName + ' ' + lastName)
+        studentRegNo = str(studentRef['stu_reg_number'])
+
+        p_term_list = self.pool.get('account.payment.term').compute(cr, uid, payment_term_id, result_price, date_ref=date_invoice, )
 
         payment_schedule_obj = self.pool.get('op.payment.schedule')
         for line in p_term_list:
             sub_lines = []
-            sub_lines.append((0, 0, {'due_date': line[0], 'amount': line[1]}))
+            sub_lines.append((0, 0, {'due_date': line[0], 'amount': line[1], 'full_name':full_name, 'stu_reg_no':studentRegNo}))
             payment_schedule_obj.write(cr, uid, ids, {'line_ids': sub_lines}, context=context)
         return True
