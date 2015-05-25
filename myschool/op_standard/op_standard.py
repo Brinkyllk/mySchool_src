@@ -34,7 +34,7 @@ class op_standard(osv.Model):
         course_code = course.code
         semester_code = semester.code
 
-        stand = course_code + '  ' + semester_code
+        stand = course_code + ' ' + semester_code
         vals.update({'name': stand})
 
         res = super(op_standard, self).create(cr, uid, vals, context=context)

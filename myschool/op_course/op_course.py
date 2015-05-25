@@ -5,27 +5,38 @@ from openerp import api
 
 
 class op_course(osv.Model):
+    @api.onchange('code')
+    def onchange_case(self, cr, uid,  ids, code):
+        if code != False:
+            result = {'value': {
+                'code': str(code).upper()
+            }
+        }
+            return result
+        else:
+            return True
+
     _name = 'op.course'
     # to do (Related Field)
 
     _columns = {
-        'code': fields.char(size=8, string='Code', required=True),
-        'name': fields.char(string='Name', size=25, required=True),
+        'code': fields.char(size=8, string='Code', select=True, required=True),
+        'name': fields.char(string='Name', required=True, size=74),
         'level': fields.selection([('certification', 'Certification'), ('diploma', 'Diploma'), ('degree', 'Degree')],
                                   string='Course Level'),
         'product_id': fields.many2one('product.product', 'Product', ondelete='restrict', readonly=True),
         'price': fields.related('product_id', 'list_price', string='Price', type='char'),
-        'subject_ids': fields.one2many('op.subject', 'name', string='Subject(s)', options="{'create_edit': False}", readonly=True),
-        'standard_id': fields.one2many('op.standard', 'course_id', string='Standard(s)', options="{'create_edit': False}", readonly=True)
+        'subject_ids': fields.one2many('op.subject', 'name', string='Subject(s)', options="{'create_edit': False}",
+                                       readonly=True),
+        'standard_id': fields.one2many('op.standard', 'course_id', string='Standard(s)',
+                                       options="{'create_edit': False}", readonly=True)
 
 
         # ----------- test ----------
         # 'course_id': fields.many2one('op.standard', 'Course'),
     }
 
-
     _sql_constraints = [('code', 'UNIQUE (code)', 'The CODE of the COURSE must be unique!')]
-
 
     def create(self, cr, uid, vals, context=None):
         #Reffer producy
