@@ -141,7 +141,7 @@
                                 </group>
                             </page>
 
-                            <page string="Courses">
+                            <page string="Course/Result Details">
                                 <separator colspan="4" string="Course Details"/>
                                 <group col="4" colspan="4">
                                     <field name="def_course"/>
@@ -153,6 +153,7 @@
                                 </tree>
                                 <!--<field name="batch_ids"/>-->
                             </page>
+
                             <!--<page string="Subjects">-->
                                 <!--<separator colspan="4" string="Subjects"/>-->
                                     <!--<button name="genid" type="object" string="View Subject Results"/>-->
@@ -165,6 +166,12 @@
                                     <button name="show_payment_details" string="Show Payment Details" type="object"/>
                                 </group>
 							</page>
+                            <!--<page string="Subject Results">-->
+                                <!--<separator string="Subject Results" colspan="4"/>-->
+                                <!--<tree editable="True">-->
+                                    <!--<field name="subject_ids"/>-->
+                                <!--</tree>-->
+                            <!--</page>-->
                         </notebook>
                     </sheet>
                 </form>
