@@ -4,7 +4,7 @@ from openerp.tools.translate import _
 
 class op_student_batch_mapping(osv.Model):
     _name = 'op.student.batch.mapping'
-
+    # _rec_name = 'subject_id'
     _columns = {
         'student_id': fields.many2one('op.student', string='Student'),
         'course_id': fields.many2one('op.course', 'Course', required=True),
@@ -13,14 +13,19 @@ class op_student_batch_mapping(osv.Model):
         'standard_id': fields.many2one('op.standard', string='Standard', domain="[('course_id', '=', course_id)]",
                                        required=True, options="{'create_edit': False }"),
         # 'standard_id': fields.many2many('op.standard', domain="[('course_id', '=', course_id)]", string='Standards'),
-        'subject_id': fields.many2many('op.subject', domain="[('standard_id', '=', standard_id)]", string='Subjects'),
+        # 'subject_id': fields.one2many('op.subject', domain="[('standard_id', '=', standard_id)]", string='Subjects'),
+        'subject_id': fields.one2many('op.subject', 'rel_subjects', string='Subjects(s)',
+                                      options="{'create_edit': False}", store=True),
+
+        # 'subject_id': fields.one2many('op.subject', 'standard_id', string='Subjects(s)',
+        #                               options="{'create_edit': False}", readonly=True)
 
         # 'result_id': fields.many2many('op.subject', domain="[('subject_id', '=', subject_id)]", string='Pass Subjects'),
         'default_course': fields.boolean('Default Course'),
         # 'product_id': fields.related('product_id', 'name', string='Related Product', type='char', readonly=True),
 
         # 'result_table_lines': fields.one2many('op.result.mapping', 'gen_result_table', 'Result Table Lines', required=True),
-        'result_table_lines_1': fields.one2many('op.result.mapping', 'gen_result_table', 'Result Table', required=True),
+        'result_table_lines_1': fields.one2many('op.result.mapping', 'gen_result_table', 'Result Table'),
 
         # 'product_id': fields.related('product_id', 'name', string='Related Product', type='char', readonly=True),
     }
@@ -150,25 +155,31 @@ class op_student_batch_mapping(osv.Model):
 
 class op_result_mapping(osv.Model):
     _name = 'op.result.mapping'
-    _rec_name = 'course_id'
+    _rec_name = 'gen_result_table'
     _columns = {
         'gen_result_table': fields.many2one('op.student.batch.mapping', 'Result Table'),
-        'stu_course_map_id': fields.many2one('op.student.batch.mapping', string='Course Mapping'),
-        'student_id': fields.many2one('op.student', string='Student'),
-        'course_id': fields.many2one('op.student.batch.mapping', 'Course'),
+        # 'stu_course_map_id': fields.many2one('op.student.batch.mapping', string='Course Mapping'),
+        # 'student_id': fields.many2one('op.student', string='Student'),
+        # 'course_id': fields.many2one('op.student.batch.mapping', 'Course'),
         # 'standard_id': fields.many2one('op.standard', string='Standard', domain="[('course_id', '=', course_id)]",
         #                                required=True, options="{'create_edit': False }"),
-        'standard_id': fields.many2one('op.standard', string='Standard', domain="[('course_id', '=', course_id)]",
-                                        options="{'create_edit': False }"),
-        'subject_id': fields.many2one('op.subject', string='Subjects'),
+        # 'standard_id': fields.many2one('op.standard', string='Standard', domain="[('course_id', '=', course_id)]",
+        #                                 options="{'create_edit': False }"),
+        'subject_id': fields.many2one('op.subject', string='Subjects',
+                                      options="{'create_edit': False }"),
+        # 'standard_id': fields.many2one('op.standard', string='Standard', domain="[('course_id', '=', course_id)]",
+        #                                required=True, options="{'create_edit': False }"),
         'grade': fields.selection([('1', 'A'), ('2', 'B'), ('3', 'C'),
                                    ('4', 'D'), ('5', 'S'), ('6', 'F'),
                                    ('7', 'Pass'), ('8', 'Fail'), ('9', 'I')
-                                   ], 'Grade'),
+                                  ], 'Grade'),
     }
 
-    def laod_subjects(self, cr, uid, ids, context=None):
+    def default_get(self, cr, uid, fields, context=None):
 
-        return
+        data = super(op_result_mapping, self).default_get(cr, uid, fields, context=context)
+        global batch_map
+        batch_map = context.get('active_id')
+        return data
 
 op_result_mapping()

@@ -44,10 +44,9 @@ class op_lecturer(osv.Model):
                                                  'op_subject_id', string='Subjects'),
         'phone': fields.char(string='Phone Number', size=256),
         # 'mobile_no': fields.char(size=15, string='Mobile Number', required=True),
-
     }
 
-    # _sql_constraints = [('name', 'UNIQUE (name)', 'The Lecturer  must be unique!')]
+    _sql_constraints = [('bank_acc_num', 'UNIQUE (bank_acc_num)', 'Bank Acc Number  must be unique!')]
 
     # overriding create method
     def create(self, cr, uid, vals, context=None):
