@@ -1,3 +1,2 @@
 import op_student
 import op_student_batch_mapping
-import op_subject_mapping

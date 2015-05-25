@@ -1,6 +1,7 @@
 from openerp.osv import osv, fields
 from datetime import date, datetime
 import re
+from validate_email import validate_email
 from openerp.tools.translate import _
 
 
@@ -8,15 +9,23 @@ class op_lecturer(osv.Model):
     def validate_email(self, cr, uid, ids, email):
         if email is False:
             return True
-        if re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email)== None:
+        is_valid = validate_email(email)
+        if is_valid is False:
             raise osv.except_osv('Invalid Email', 'Please enter a valid email address')
         return True
 
-    def validate_mobile(self, cr, uid, ids, phone):
+    def validate_phone(self, cr, uid, ids, phone):
         if phone is False:
             return True
-        if re.match("^[0-9]*$", phone) == None:
-            raise osv.except_osv('Invalid Mobile No', 'Please enter a valid Phone Number')
+        if re.match("/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/*$", phone) != None:
+            raise osv.except_osv(_('Invalid Mobile No'), _('Please enter a valid Phone Number'))
+        return True
+
+    def validate_acc_num(self, cr, uid, ids, acc_num):
+        if acc_num is False:
+            return True
+        if re.match("^[0-9]*$", acc_num) == None:
+            raise osv.except_osv('Invalid Account No', 'Please enter a valid Account Number')
         return True
 
     _name = 'op.lecturer'
@@ -43,23 +52,38 @@ class op_lecturer(osv.Model):
     # overriding create method
     def create(self, cr, uid, vals, context=None):
         vals.update({'supplier': True, 'customer': False})
+
+        #Phone number Validation
+        if 'phone' in vals:
+            self.validate_phone(cr, uid, [], vals['phone'])
+
         if 'email' in vals:
             self.validate_email(cr, uid, [], vals['email'])
 
-        if 'phone' in vals:
-            self.validate_mobile(cr, uid, [], vals['phone'])
+        # if 'phone' in vals:
+        #     self.validate_mobile(cr, uid, [], vals['phone'])
+
+        if 'bank_acc_num' in vals:
+            self.validate_acc_num(cr, uid, [], vals['bank_acc_num'])
 
         res = super(op_lecturer, self).create(cr, uid, vals, context=context)
         return res
 
     # overriding write method
     def write(self, cr, uid, ids, values, context=None):
+        #Phone number Validation
+        if 'phone' in values:
+            self.validate_phone(cr, uid, [], values['phone'])
+
         values.update({'supplier': True, 'customer': False})
         if 'email' in values:
             self.validate_email(cr, uid, ids, values['email'])
 
-        if 'phone' in values:
-            self.validate_mobile(cr, uid, [], values['phone'])
+        # if 'phone' in values:
+        #     self.validate_mobile(cr, uid, [], values['phone'])
+
+        if 'bank_acc_num' in values:
+            self.validate_acc_num(cr, uid, [], values['bank_acc_num'])
 
         res = super(op_lecturer, self).write(cr, uid, ids, values, context=context)
         return res

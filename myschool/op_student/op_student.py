@@ -48,9 +48,6 @@ class op_student(osv.Model):
         #------ Map many Courses ------
         'batch_ids': fields.one2many('op.student.batch.mapping', 'student_id', string='Registered Courses'),
 
-        #----Subjects-results------
-        'subject_ids': fields.one2many('op.subject.mapping', 'stu_course_map_id', string='Subject Results'),
-
         #payment schedule
         'payment_schedule_id': fields.one2many('op.payment.schedule', 'student_id', 'Payment Schedules')
 
@@ -66,15 +63,9 @@ class op_student(osv.Model):
         if email is False:
             return True
         if re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email) is None:
+        # if re.match("[A-Z0-9._%+-]+@(?:[A-Z0-9-]+\.)+ (?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)$", email) is None:
             raise osv.except_osv(_('Invalid Email'), _('Please enter a valid email address'))
         return True
-
-    def validate_phone(self, cr, uid, ids, number):
-        if number is False:
-            if re.match("^[0-9]*$", number) != None:
-                pass
-            else:
-                raise osv.except_osv(_('Invalid Mobile No'), _('Please enter a valid Phone Number'))
 
     def validate_NIC(self, cr, uid, ids, id_number):
         if id_number is None:
@@ -97,7 +88,7 @@ class op_student(osv.Model):
     def create(self, cr, uid, vals, context=None):
         #Phone number Validation
         if 'phone' in vals and vals['phone']:
-            if re.match("^[0-9]*$", vals['phone']) != None:
+            if re.match("/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/*$", vals['phone']) != None:
                 pass
             else:
                 raise osv.except_osv(_('Invalid Mobile No'), _('Please enter a valid Phone Number'))

@@ -1,4 +1,5 @@
 from openerp.osv import osv, fields
+import re
 from openerp import api
 # from tools.translate import _
 
@@ -9,7 +10,7 @@ class op_course(osv.Model):
 
     _columns = {
         'code': fields.char(size=8, string='Code', required=True),
-        'name': fields.char(string='Name', required=True),
+        'name': fields.char(string='Name', size=25, required=True),
         'level': fields.selection([('certification', 'Certification'), ('diploma', 'Diploma'), ('degree', 'Degree')],
                                   string='Course Level'),
         'product_id': fields.many2one('product.product', 'Product', ondelete='restrict', readonly=True),
@@ -27,6 +28,12 @@ class op_course(osv.Model):
 
 
     def create(self, cr, uid, vals, context=None):
+        if 'price' in vals and vals['price']:
+            if re.match("^[0-9]*$", 'price') != None:
+                pass
+            else:
+                raise osv.except_osv(_('Price is Invalid'), _('Do not enter characters for price'))
+
         #Reffer producy
         productRef = self.pool.get('product.product')
         product = {'name': vals['name'], 'list_price': vals['price']}
@@ -36,6 +43,13 @@ class op_course(osv.Model):
         return super(op_course, self).create(cr, uid, vals, context=context)
 
     def write(self, cr, uid, ids, values, context=None):
+
+        if 'price' in values and values['price']:
+            if re.match("^[0-9]*$", 'price') != None:
+                pass
+            else:
+                raise osv.except_osv(_('Price is Invalid'), _('Do not enter characters for price'))
+
         #Write Product
         if 'name' in values:
             prodid = self.browse(cr, uid, ids, context=context)[0].product_id.id

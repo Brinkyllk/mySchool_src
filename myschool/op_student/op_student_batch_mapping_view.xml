@@ -42,6 +42,8 @@
                         <group col="4" colspan="4">
                             <group>
                                 <field name="student_id" invisible="True"/>
+                            </group>
+                            <group>
                                 <field name="course_id" />
                                 <field name="batch_id"  />
                                 <field name="standard_id"/>
@@ -80,18 +82,18 @@
         </record>
 
         <record id="view_op_student_batch_mapping_tree" model="ir.ui.view">
-            <field name="name">op.student.batch.mapping.form</field>
+            <field name="name">op.student.batch.mapping.tree</field>
             <field name="model">op.student.batch.mapping</field>
             <field name="priority" eval="8" />
             <field name="arch" type="xml">
                 <tree string="Student Batch Mapping">
-                            <field name="student_id" invisible="True"/>
-                            <field name="course_id" />
-                            <field name="batch_id"  />
-                            <field name="standard_id"/>
-                            <field name="default_course"/>
-                            <button name="view_details" string="Create a payment term for this product" type="object" icon="STOCK_ADD"/>
-                            <button name="view_schedule_line" type="object" string="View schedule lines" icon="gtk-redo"/>
+                    <field name="student_id" invisible="True"/>
+                    <field name="course_id" />
+                    <field name="batch_id"  />
+                    <field name="standard_id"/>
+                    <field name="default_course"/>
+                    <button name="view_details" string="Create a payment term for this product" type="object" icon="STOCK_ADD"/>
+                    <button name="view_schedule_line" type="object" string="View schedule lines" icon="gtk-redo"/>
                 </tree>
             </field>
         </record>

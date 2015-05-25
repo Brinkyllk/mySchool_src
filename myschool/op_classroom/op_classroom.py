@@ -9,7 +9,7 @@ class op_classroom(osv.osv):
         'code': fields.char(size=4, string='Code', required=True),
         # 'course_id': fields.many2one('op.course', 'Course', required=True),
         # 'standard_id': fields.many2one('op.standard', 'Standard', required=True),
-        'capacity': fields.integer(string='No. Of Person'),
+        'capacity': fields.char(size=5, string='No. Of Person'),
         # 'facility': fields.many2many('op.facility', 'classroom_facility_rel', 'op_classroom_id', 'op_facility_id',
         #                              string='Facilities'),
         'asset_line': fields.one2many('op.asset', 'asset_id', 'Asset', required=True),

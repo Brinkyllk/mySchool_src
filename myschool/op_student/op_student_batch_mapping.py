@@ -17,6 +17,7 @@ class op_student_batch_mapping(osv.Model):
 
         # 'result_id': fields.many2many('op.subject', domain="[('subject_id', '=', subject_id)]", string='Pass Subjects'),
         'default_course': fields.boolean('Default Course'),
+        # 'product_id': fields.related('product_id', 'name', string='Related Product', type='char', readonly=True),
 
         # 'result_table_lines': fields.one2many('op.result.mapping', 'gen_result_table', 'Result Table Lines', required=True),
         'result_table_lines_1': fields.one2many('op.result.mapping', 'gen_result_table', 'Result Table', required=True),
@@ -126,7 +127,7 @@ class op_result_mapping(osv.Model):
     _name = 'op.result.mapping'
     _rec_name = 'course_id'
     _columns = {
-        'gen_result_table': fields.many2one('op.student.batch.mapping', 'Result Table', required=True),
+        'gen_result_table': fields.many2one('op.student.batch.mapping', 'Result Table'),
         'stu_course_map_id': fields.many2one('op.student.batch.mapping', string='Course Mapping'),
         'student_id': fields.many2one('op.student', string='Student'),
         'course_id': fields.many2one('op.student.batch.mapping', 'Course'),
@@ -138,7 +139,7 @@ class op_result_mapping(osv.Model):
         'grade': fields.selection([('1', 'A'), ('2', 'B'), ('3', 'C'),
                                    ('4', 'D'), ('5', 'S'), ('6', 'F'),
                                    ('7', 'Pass'), ('8', 'Fail'), ('9', 'I')
-                                   ], 'Grade', required=True),
+                                   ], 'Grade'),
     }
 
     def laod_subjects(self, cr, uid, ids, context=None):
