@@ -5,6 +5,7 @@ from openerp import api
 
 
 class op_course(osv.Model):
+
     @api.onchange('code')
     def onchange_case(self, cr, uid,  ids, code):
         if code != False:
