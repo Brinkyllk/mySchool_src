@@ -20,6 +20,18 @@
             </field>
        </record>
 
+        <record id="op_payment_schedule_line_tree" model="ir.ui.view">
+			<field name="name">op.payment.schedule.line.tree</field>
+			<field name="model">op.payment.schedule.line</field>
+			<field name="priority" eval="8" />
+			<field name="arch" type="xml">
+				<tree string="Payment Schedule Line" create="false" delete="false">
+					<field name="due_date" />
+                    <field name="amount" />
+				</tree>
+			</field>
+		</record>
+
         <record id="op_payment_schedule_line_tree_id" model="ir.ui.view">
 			<field name="name">op.payment.schedule.line.tree</field>
 			<field name="model">op.payment.schedule.line</field>
@@ -35,17 +47,6 @@
 			</field>
 		</record>
 
-        <record id="op_payment_schedule_line_tree" model="ir.ui.view">
-			<field name="name">op.payment.schedule.line.tree</field>
-			<field name="model">op.payment.schedule.line</field>
-			<field name="priority" eval="8" />
-			<field name="arch" type="xml">
-				<tree string="Payment Schedule Line" create="false" delete="false">
-					<field name="due_date" />
-                    <field name="amount" />
-				</tree>
-			</field>
-		</record>
         <!--end of tree view for payment_schedule -->
 
         <record id="view_op_payment_schedule_search" model="ir.ui.view">

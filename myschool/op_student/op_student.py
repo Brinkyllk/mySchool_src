@@ -38,8 +38,8 @@ class op_student(osv.Model):
         'partner': fields.related('partner_id', 'name', string='Related Customer', type='char', readonly=True),
 
         #------ Parent details ------
-        'parent_name': fields.char(string='Parent Name', size=30),
-        'contact_no': fields.char(string='Contact Number', size=256),
+        'parent_name': fields.char(string='Parent Name', size=60),
+        'contact_no': fields.char(string='Contact Number', size=12),
 
         #------ Course details ------
         'def_batch': fields.many2one('op.batch', string='Batch', readonly=True),

@@ -29,6 +29,30 @@ class op_student_batch_mapping(osv.Model):
 
         # 'product_id': fields.related('product_id', 'name', string='Related Product', type='char', readonly=True),
     }
+    #Check same Course
+    def _checkSameCourse(self, cr, uid, ids, context=None):
+        browse = self.browse(cr, uid, ids, context=context)
+
+        studentId = [browse.student_id.id]
+        newstudentId = studentId[0]
+
+        batch_id = [browse.batch_id.id]
+        newBatchId = batch_id[0]
+
+        courseId=[browse.course_id.id]
+        newCourseId = courseId[0]
+
+        standardId=[browse.standard_id.id]
+        newStandardId = standardId[0]
+
+        object = self.search(cr,uid, ['&',('student_id', '=', newstudentId),('course_id', '=', newCourseId),('batch_id', '=', newBatchId), ('standard_id', '=', newStandardId)])
+
+        if len(object)>= 2:
+            return False
+        else:
+            return True
+
+    _constraints = [(_checkSameCourse, ("This course already assigned to the following student"),['course_id'])]
 
     # def core_subjects_get(self, cr, uid, fields, context=None):
     #     data = super(op_student_batch_mapping, self).default_get(cr, uid, fields, context=context)
@@ -92,11 +116,11 @@ class op_student_batch_mapping(osv.Model):
             'res_model': 'op.payment.schedule',
             'view_mode': 'form',
             'view_type': 'form',
-            'res_model': 'op.payment.schedule',
             'type': 'ir.actions.act_window',
             'nodestroy': True,
             'target': 'new',
         }
+
 
     #Show data of the relevant student
     def view_schedule_line(self, cr, uid, ids, context=None):
@@ -119,13 +143,14 @@ class op_student_batch_mapping(osv.Model):
             domain = [('schedule_id', '=', paymentScheduleId)]
 
         return {
-            'type': 'ir.actions.act_window',
-            'name': 'Payment Schedule',
+            'name': 'Payment Schedule Line',
             'view_mode': 'tree',
-            'view_type': 'form,tree',
+            'view_type': 'tree',
             'res_model': 'op.payment.schedule.line',
+            'type': 'ir.actions.act_window',
+            'nodestroy': True,
             'target': 'new',
-            'domain': domain
+            'domain': domain,
         }
 
 class op_result_mapping(osv.Model):
