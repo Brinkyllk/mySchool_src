@@ -39,7 +39,7 @@
             <field name="arch" type="xml">
                 <form string="Student Batch Mapping">
                     <sheet>
-                        <group col="4" colspan="4">
+                        <!--<group col="4" colspan="4">-->
                             <group>
                                 <field name="student_id" invisible="True"/>
                             </group>
@@ -51,7 +51,7 @@
                                 <field name="subject_id" domain="[('standard_id', '=', standard_id)]" widget="many2many_checkboxes"/>
                                <!--<field name="result_id" widget="many2many_checkboxes"/>-->
                             </group>
-                        </group>
+                        <!--</group>-->
                         <notebook>
 								 <page string="Results">
                                      <separator colspan="4" string="Subject Results"/>
