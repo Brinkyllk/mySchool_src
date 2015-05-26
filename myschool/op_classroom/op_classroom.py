@@ -1,19 +1,34 @@
 from openerp.osv import osv, fields
+from openerp import api
 
 
 class op_classroom(osv.osv):
+
+    #--Code change to upper case---
+    @api.onchange('code')
+    def onchange_case(self, cr, uid, ids, code):
+        if code != False:
+            result = {'value': {
+                'code': str(code).upper()
+            }
+            }
+            return result
+        else:
+            return True
+
     _name = 'op.classroom'
 
     _columns = {
         'name': fields.char(size=16, string='Name', required=True),
-        'code': fields.char(size=4, string='Code', required=True),
+        'code': fields.char(size=8, string='Code', required=True),
         # 'course_id': fields.many2one('op.course', 'Course', required=True),
         # 'standard_id': fields.many2one('op.standard', 'Standard', required=True),
-        'capacity': fields.char(size=5, string='No. Of Person'),
+        'capacity': fields.integer(size=5, string='No. Of Person'),
         # 'facility': fields.many2many('op.facility', 'classroom_facility_rel', 'op_classroom_id', 'op_facility_id',
         #                              string='Facilities'),
         'asset_line': fields.one2many('op.asset', 'asset_id', 'Asset', required=True),
     }
+
     #.... check passing nul values..#
     def _check_invalid_data(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids, context=context)

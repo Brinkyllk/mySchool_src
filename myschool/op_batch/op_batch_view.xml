@@ -10,7 +10,7 @@
                     <sheet>
                         <separator string="Batch" colspan="4" />
                         <group>
-                            <field name="code"/>
+                            <field name="code" on_change='onchange_case(code)'/>
                             <field name="name"/>
                             <field name="course_id"/>
                             <field name="start_date"/>

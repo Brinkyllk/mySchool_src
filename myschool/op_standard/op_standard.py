@@ -1,8 +1,21 @@
 from openerp.osv import fields
 from openerp.osv import osv
+from openerp import api
 
 
 class op_semester(osv.Model):
+
+    @api.onchange('code')
+    def onchange_case(self, cr, uid, ids, code):
+        if code != False:
+            result = {'value': {
+                'code': str(code).upper()
+            }
+            }
+            return result
+        else:
+            return True
+
     _name = 'op.semester'
     _description = 'Semester'
     _columns = {
@@ -36,6 +49,7 @@ class op_semester(osv.Model):
 
 
 class op_standard(osv.Model):
+
     _name = 'op.standard'
     _description = 'Standard'
     _columns = {

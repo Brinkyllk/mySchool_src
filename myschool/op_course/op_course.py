@@ -6,13 +6,14 @@ from openerp import api
 
 class op_course(osv.Model):
 
+    #--Code change to upper case---
     @api.onchange('code')
-    def onchange_case(self, cr, uid,  ids, code):
+    def onchange_case(self, cr, uid, ids, code):
         if code != False:
             result = {'value': {
                 'code': str(code).upper()
             }
-        }
+            }
             return result
         else:
             return True
@@ -77,11 +78,14 @@ class op_course(osv.Model):
             productRef = self.pool.get('product.product')
             productRef.write(cr, uid, prodid, {'name': values['name']}, context=context)
             return super(op_course, self).write(cr, uid, ids, values, context=context)
+
         if 'price' in values:
             prodid = self.browse(cr, uid, ids, context=context)[0].product_id.id
             productRef = self.pool.get('product.template')
             productRef.write(cr, uid, prodid, {'list_price': values['price']}, context=context)
             return True
+
+        return super(op_course, self).write(cr, uid, ids, values, context=context)
 
 
 

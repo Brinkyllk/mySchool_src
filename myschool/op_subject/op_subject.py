@@ -1,7 +1,21 @@
 from openerp.osv import osv, fields
+from openerp import api
 
 
 class op_subject(osv.Model):
+
+    #--Code change to upper case---
+    @api.onchange('code')
+    def onchange_case(self, cr, uid, ids, code):
+        if code != False:
+            result = {'value': {
+                'code': str(code).upper()
+            }
+            }
+            return result
+        else:
+            return True
+
     _name = 'op.subject'
     _columns = {
         'name': fields.char(size=50, string='Name', required=True),

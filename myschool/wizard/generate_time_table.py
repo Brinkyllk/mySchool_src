@@ -253,7 +253,7 @@ class generate_time_table_line(osv.osv_memory):
                                  ('5', 'Friday'),
                                  ('6', 'Saturday'),
                                  ('7', 'Sunday'),
-                                ], 'Day', required=True),
+                                 ], 'Day', required=True),
         'period_id': fields.many2one('op.period', 'Period', required=True),
     }
 

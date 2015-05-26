@@ -1,13 +1,25 @@
 from openerp.osv import osv, fields
 import datetime
+from openerp import api
 
 
 class op_batch(osv.Model):
 
+    @api.onchange('code')
+    def onchange_case(self, cr, uid, ids, code):
+        if code != False:
+            result = {'value': {
+                'code': str(code).upper()
+            }
+            }
+            return result
+        else:
+            return True
+
     _name = 'op.batch'
     _columns = {
         'name': fields.char(size=25, string='Name', required=True),
-        'code': fields.char(size=15, string='Code', required=True),
+        'code': fields.char(size=8, string='Code', required=True),
         'start_date': fields.date(size=15, string='Start Date', required=True),
         'end_date': fields.date(size=15, string='End Date', required=True,),
         'state': fields.selection(
