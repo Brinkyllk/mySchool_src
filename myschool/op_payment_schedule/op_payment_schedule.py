@@ -76,7 +76,7 @@ class op_payment_schedule(osv.Model):
         data['product_id'] = product.id
         data['list_price'] = product.lst_price
         data['student_id'] = batchMap.student_id.id
-        # data['payment_term'] = newPaymentTermId.id
+        data['payment_term'] = newPaymentTermId.id
 
         return data
 
