@@ -29,22 +29,25 @@ class op_payment_schedule(osv.Model):
         studentId=[browse.student_id.id]
         newStudentId = studentId[0]
 
-        paymentScheduleRef = self.pool.get('op.payment.schedule')
-        paymentScheduleId = paymentScheduleRef.search(cr,uid, ['&',('product_id', '=', newProductId), ('student_id', '=', newStudentId)])[0]
-
-        obj = self.pool.get('op.payment.schedule.line').search(cr, uid, [('schedule_id', '=', paymentScheduleId), ], order=None)
-        if obj:
-            for record_id in obj:
-                details = self.pool.get('op.payment.schedule.line').read(cr, uid, record_id, ['schedule_id'])
-                scheduleId = details.get('schedule_id')
-                newScheduleId = scheduleId[0]
-                print type (newScheduleId)
-                print newScheduleId
-                if paymentScheduleId == newScheduleId:
-                    return False
-                return True
+        paymentScheduleId = self.search(cr,uid, ['&',('product_id', '=', newProductId), ('student_id', '=', newStudentId)])
+        if len(paymentScheduleId)>1:
+            return False
         else:
             return True
+
+        # obj = self.pool.get('op.payment.schedule.line').search(cr, uid, [('schedule_id', '=', paymentScheduleId), ], order=None)
+        # if obj:
+        #     for record_id in obj:
+        #         details = self.pool.get('op.payment.schedule.line').read(cr, uid, record_id, ['schedule_id'])
+        #         scheduleId = details.get('schedule_id')
+        #         newScheduleId = scheduleId[0]
+        #         print type (newScheduleId)
+        #         print newScheduleId
+        #         if paymentScheduleId == newScheduleId:
+        #             return False
+        #         return True
+        # else:
+        #     return True
 
     _constraints = [(_checkSamePaymentTerm, ("For this product already create a payment schedule"),['product_id'])]
 
@@ -73,7 +76,7 @@ class op_payment_schedule(osv.Model):
         data['product_id'] = product.id
         data['list_price'] = product.lst_price
         data['student_id'] = batchMap.student_id.id
-        data['payment_term'] = newPaymentTermId.id
+        # data['payment_term'] = newPaymentTermId.id
 
         return data
 
