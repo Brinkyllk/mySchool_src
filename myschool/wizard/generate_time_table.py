@@ -1,6 +1,8 @@
 from openerp.osv import osv
 from openerp.osv import fields
+from openerp import api
 from datetime import date
+
 import dateutil
 import datetime
 from .. import utils
@@ -217,12 +219,24 @@ generate_time_table()
 
 class generate_time_table_line(osv.osv_memory):
 
-    # def onchange_lecturer(self, cr, uid, lecturer_id, context=None):
-    #     lecturer = lecturer_id
-    #     related_records = self.pool.get('lecturer_subject_rel').browse(cr, uid, [('op_lecturer_id', '=', lecturer)])
-    #     related_subjects = related_records.op_subject_id
-    #     subject_ids = self.pool.get('op.subject').browse(cr, uid, [('subject_id', '=', related_subjects)])
-    #     return{'value': {'subject_id': subject_ids}}
+    # @api.onchange('lecturer_id')
+    # def _onchange_lecturer(self):
+    #     if self.lecturer_id:
+    #         sub_id =[]
+    #         a = []
+    #         lecturer = self.lecturer_id.id
+    #         query = """select op_subject_id from lecturer_subject_rel where op_lecturer_id='%s'""" % lecturer
+    #         self.env.cr.execute(query)
+    #         a = self.env.cr.fetchall()
+    #         b = (len(a)-1)
+    #         d = 0
+    #         for i in a:
+    #             e = i[0]
+    #             sub_id.append(e)
+    #             d += 1
+    #         return [('subject_id', 'in', sub_id)]
+    #     else:
+    #         return None
 
     _name = 'gen.time.table.line'
     _description = 'Generate Time Table Lines'
