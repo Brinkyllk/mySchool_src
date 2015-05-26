@@ -1,7 +1,7 @@
 from openerp.osv import fields, osv
 from datetime import date, datetime
 from openerp.tools.translate import _
-# from validate_email import validate_email
+from validate_email import validate_email
 import re
 
 
@@ -22,9 +22,9 @@ class op_student(osv.Model):
         #------ personal details ------
         'partner_id': fields.many2one('res.partner', 'Partner', required=True, ondelete="restrict", readonly=True),
         'initials': fields.char(size=20, string='Initials'),
-        'first_name': fields.char(size=50, string='First Name', required=True, select=True),
-        'middle_name': fields.char(size=50, string='Middle Name'),
-        'last_name': fields.char(size=58, string='Last Name', required=True, select=True),
+        'first_name': fields.char(size=15, string='First Name', required=True, select=True),
+        'middle_name': fields.char(size=15, string='Middle Name'),
+        'last_name': fields.char(size=15, string='Last Name', required=True, select=True),
         'gender': fields.selection([('m', 'Male'), ('f', 'Female')], string='Gender', required=True),
         'birth_date': fields.date(string='Birth Date', required=True),
         'nationality': fields.many2one('res.country', string='Nationality test'),
@@ -48,12 +48,6 @@ class op_student(osv.Model):
 
         #------ Map many Courses ------
         'batch_ids': fields.one2many('op.student.batch.mapping', 'student_id', string='Registered Courses'),
-        # 'result_id': fields.one2many('op.student.result.mapping', 'student_id', string='Results'),
-
-
-
-        #----Subjects-results------
-        # 'subject_ids': fields.one2many('op.subject.mapping', 'stu_course_map_id', string='Subject Results'),
 
         #payment schedule
         'payment_schedule_id': fields.one2many('op.payment.schedule', 'student_id', 'Payment Schedules')
@@ -69,7 +63,8 @@ class op_student(osv.Model):
     def validate_email(self, cr, uid, ids, email):
         if email is False:
             return True
-        if re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email) is None:
+        is_valid = validate_email(email)
+        if is_valid is False:
             raise osv.except_osv(_('Invalid Email'), _('Please enter a valid email address'))
         return True
 
@@ -92,6 +87,10 @@ class op_student(osv.Model):
         return {}
 
     def create(self, cr, uid, vals, context=None):
+        # email validation on write
+        if 'email' in vals:
+            self.validate_email(cr, uid, [], vals['email'])
+
         #Phone number Validation
         if 'phone' in vals and vals['phone']:
             if re.match("/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/*$", vals['phone']) != None:
