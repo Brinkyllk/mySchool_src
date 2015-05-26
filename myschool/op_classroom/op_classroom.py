@@ -21,13 +21,14 @@ class op_classroom(osv.osv):
         new_code = str(obj.code)
         name = new_name.replace(" ", "")
         code = new_code.replace(" ", "")
+        n_name = ''.join([i for i in name if not i.isdigit()])
+        n_code = ''.join([i for i in code if not i.isdigit()])
         #isalpha python inbuilt function Returns true if string
             #has at least 1 character and all characters are alphabetic and false otherwise.
         if name or code:
-            if code.isalpha() and name.isalpha():
-                return True
-            else:
-                return False
+            if n_code.isalpha() or code.isdigit():
+                if n_name.isalpha() or name.isdigit():
+                    return True
         else:
             return False
 
