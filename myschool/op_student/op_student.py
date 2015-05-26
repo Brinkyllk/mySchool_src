@@ -59,6 +59,23 @@ class op_student(osv.Model):
     def _check_nic(self, nic):
         pass
 
+    #.... check passing nul values..#
+    def _check_invalid_data(self, cr, uid, ids, context=None):
+        obj = self.browse(cr, uid, ids, context=context)
+        fnew_name = str(obj.first_name)
+        lnew_code = str(obj.last_name)
+        fname = fnew_name.replace(" ", "")
+        lname = lnew_code.replace(" ", "")
+        #isalpha python inbuilt function Returns true if string
+            #has at least 1 character and all characters are alphabetic and false otherwise.
+        if fname or lname:
+            if fname.isalpha() and lname.isalpha():
+                return True
+            else:
+                return False
+        else:
+            return False
+
     # email validation........
     def validate_email(self, cr, uid, ids, email):
         if email is False:
@@ -262,6 +279,7 @@ class op_student(osv.Model):
 
     _constraints = [
         (_check_birthday, 'Birth Day cannot be future date!', ['birth_date']),
+        (_check_invalid_data, 'Entered Invalid Data!!', ['name', 'code']),
     ]
 
 

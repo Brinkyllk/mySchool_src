@@ -33,6 +33,25 @@ class res_partner(osv.Model):
         #'stu_reg_id': fields.char(string='Student No.', size=7, readonly=True),
     }
 
+    #.... check passing nul values..#
+    def _check_invalid_data(self, cr, uid, ids, context=None):
+        obj = self.browse(cr, uid, ids, context=context)
+        new_name = str(obj.name)
+        name = new_name.replace(" ", "")
+        #isalpha python inbuilt function Returns true if string
+            #has at least 1 character and all characters are alphabetic and false otherwise.
+        if name:
+            if name.isalpha():
+                return True
+            else:
+                return False
+        else:
+            return False
+
+    _constraints = [
+                    (_check_invalid_data, 'Entered Invalid Data!!', ['name']),
+    ]
+
     # def name_get(self, cr, uid, ids, context=None):
     #     res = []
     #     student = self.pool.get('op.student')

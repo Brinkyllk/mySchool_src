@@ -16,6 +16,27 @@ class op_batch(osv.Model):
         'course_id': fields.many2one('op.course', string='Course', ondelete='restrict', required=True),
     }
 
+    #.... check passing nul values..#
+    def _check_invalid_data(self, cr, uid, ids, context=None):
+        obj = self.browse(cr, uid, ids, context=context)
+        new_name = str(obj.name)
+        new_code = str(obj.code)
+        name = new_name.replace(" ", "")
+        code = new_code.replace(" ", "")
+        n_name = ''.join([i for i in name if not i.isdigit()])
+        n_code = ''.join([i for i in code if not i.isdigit()])
+        #isalpha python inbuilt function Returns true if string
+            #has at least 1 character and all characters are alphabetic and false otherwise.
+        if name or code:
+            if n_code.isalpha() or code.isdigit():
+                if n_name.isalpha() or name.isdigit():
+                    return True
+        else:
+            return False
+
+
+
+
     _sql_constraints = [('code', 'UNIQUE (code)', 'The CODE of the Batch must be unique!')]
 
     def _check_date(self, cr, uid, vals, context=None):
@@ -32,6 +53,7 @@ class op_batch(osv.Model):
 
     _constraints = [
         (_check_date, 'End Date should be greater than Start Date!', ['start_date', 'end_date']),
+        (_check_invalid_data, 'Entered Invalid Data!!', ['name', 'code']),
     ]
 
     _defaults = {

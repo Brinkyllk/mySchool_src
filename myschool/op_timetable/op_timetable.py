@@ -100,8 +100,6 @@ class op_timetable(osv.osv):
     #     day = calendar.day_name[st_date.weekday()]
     #     self.type = day
 
-
-
     def action_planned(self, cr, uid, ids, context=None):
         # wf_service = netsvc.LocalService("workflow")
         self.write(cr, uid, ids, {'state': 'planned'})

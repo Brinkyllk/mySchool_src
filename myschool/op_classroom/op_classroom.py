@@ -14,6 +14,22 @@ class op_classroom(osv.osv):
         #                              string='Facilities'),
         'asset_line': fields.one2many('op.asset', 'asset_id', 'Asset', required=True),
     }
+    #.... check passing nul values..#
+    def _check_invalid_data(self, cr, uid, ids, context=None):
+        obj = self.browse(cr, uid, ids, context=context)
+        new_name = str(obj.name)
+        new_code = str(obj.code)
+        name = new_name.replace(" ", "")
+        code = new_code.replace(" ", "")
+        #isalpha python inbuilt function Returns true if string
+            #has at least 1 character and all characters are alphabetic and false otherwise.
+        if name or code:
+            if code.isalpha() and name.isalpha():
+                return True
+            else:
+                return False
+        else:
+            return False
 
     def _check_capacity(self, cr, uid, vals, context=None):
         for obj in self.browse(cr, uid, vals):
@@ -25,6 +41,7 @@ class op_classroom(osv.osv):
 
     _constraints = [
         (_check_capacity,'Number of Persons cannot be zero', ['capacity']),
+        (_check_invalid_data, 'Entered Invalid Data!!', ['name', 'code']),
     ]
 
 
