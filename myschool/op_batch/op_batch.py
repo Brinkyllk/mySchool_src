@@ -1,6 +1,7 @@
 from openerp.osv import osv, fields
 import datetime
 from openerp import api
+import re
 
 
 class op_batch(osv.Model):
@@ -33,6 +34,7 @@ class op_batch(osv.Model):
         obj = self.browse(cr, uid, ids, context=context)
         new_name = str(obj.name)
         new_code = str(obj.code)
+        new_name = re.sub('[/-]', '', new_name)
         name = new_name.replace(" ", "")
         code = new_code.replace(" ", "")
         n_name = ''.join([i for i in name if not i.isdigit()])
@@ -72,5 +74,17 @@ class op_batch(osv.Model):
         'state': 'planned',
     }
 
+    def create(self, cr, uid, vals, context=None):
+        code = vals['code'].strip()
+        name = vals['name'].strip()
+        vals.update({'code':code, 'name':name})
+        return super(op_batch, self).create(cr, uid, vals, context=context)
 
-
+    def write(self, cr, uid, ids,  values, context=None):
+        if 'name' in values:
+            name = values['name'].strip()
+            values.update({'name': name})
+        if 'code' in values:
+            code = values['code'].strip()
+            values.update({'code': code})
+        return super(op_batch, self).write(cr, uid, ids,  values, context=context)

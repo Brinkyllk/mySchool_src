@@ -60,6 +60,20 @@ class op_classroom(osv.osv):
         (_check_invalid_data, 'Entered Invalid Data!!', ['name', 'code']),
     ]
 
+    def create(self, cr, uid, vals, context=None):
+        code = vals['code'].strip()
+        name = vals['name'].strip()
+        vals.update({'code':code, 'name':name})
+        return super(op_classroom, self).create(cr, uid, vals, context=context)
+
+    def write(self, cr, uid, ids,  values, context=None):
+        if 'name' in values:
+            name = values['name'].strip()
+            values.update({'name': name})
+        if 'code' in values:
+            code = values['code'].strip()
+            values.update({'code': code})
+        return super(op_classroom, self).write(cr, uid, ids,  values, context=context)
 
 op_classroom()
 

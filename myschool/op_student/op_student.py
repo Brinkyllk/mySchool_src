@@ -128,6 +128,18 @@ class op_student(osv.Model):
         return {}
 
     def create(self, cr, uid, vals, context=None):
+        if 'first_name' in vals:
+            fname = vals['first_name'].strip()
+            vals.update({'first_name': fname})
+        if 'middle_name' in vals:
+            mname =vals['middle[_name'].strip()
+            vals.update({'middle_name':mname})
+        if 'last_name' in vals:
+            lname = vals['last_name'].strip()
+            vals.update({'last_name': lname})
+        if 'initials' in vals:
+            init = vals['initials'].strip()
+            vals.update({'initials': init})
         # email validation on write
         if 'email' in vals:
             self.validate_email(cr, uid, [], vals['email'])
@@ -198,6 +210,19 @@ class op_student(osv.Model):
         return stu_id
 
     def write(self, cr, uid, ids, values, context=None):
+        if 'initials' in values:
+            init = values['initials'].strip()
+            values.update({'initials': init})
+        if 'first_name' in values:
+            fname = values['first_name'].strip()
+            values.update({'first_name': fname})
+        if 'middle_name' in values:
+            mname =values['middle_name'].strip()
+            values.update({'middle_name':mname})
+        if 'last_name' in values:
+            lname = values['last_name'].strip()
+            values.update({'last_name': lname})
+
         # email validation on write
         if 'email' in values:
             self.validate_email(cr, uid, ids, values['email'])

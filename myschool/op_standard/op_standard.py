@@ -47,6 +47,21 @@ class op_semester(osv.Model):
 
     _sql_constraints = [('code', 'UNIQUE (code)', 'The CODE of the Standard must be unique!')]
 
+    def create(self, cr, uid, vals, context=None):
+        code = vals['code'].strip()
+        name = vals['name'].strip()
+        vals.update({'code':code, 'name':name})
+        return super(op_semester, self).create(cr, uid, vals, context=context)
+
+    def write(self, cr, uid, ids,  values, context=None):
+        if 'name' in values:
+            name = values['name'].strip()
+            values.update({'name': name})
+        if 'code' in values:
+            code = values['code'].strip()
+            values.update({'code': code})
+        return super(op_semester, self).write(cr, uid, ids,  values, context=context)
+
 
 class op_standard(osv.Model):
 

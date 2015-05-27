@@ -52,6 +52,18 @@ class res_partner(osv.Model):
                     (_check_invalid_data, 'Entered Invalid Data!!', ['name']),
     ]
 
+    def create(self, cr, uid, vals, context=None):
+        name = vals['name'].strip()
+        vals.update({'name':name})
+        return super(res_partner, self).create(cr, uid, vals, context=context)
+
+    def write(self, cr, uid, ids,  values, context=None):
+        if 'name' in values:
+            name = values['name'].strip()
+            values.update({'name': name})
+        return super(res_partner, self).write(cr, uid, ids,  values, context=context)
+
+
     # def name_get(self, cr, uid, ids, context=None):
     #     res = []
     #     student = self.pool.get('op.student')

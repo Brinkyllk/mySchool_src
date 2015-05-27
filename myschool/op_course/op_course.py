@@ -56,9 +56,6 @@ class op_course(osv.Model):
         else:
             return False
 
-
-
-
     _constraints = [
                     (_check_invalid_data, 'Entered Invalid Data!!', ['name', 'code']),
     ]
@@ -67,6 +64,14 @@ class op_course(osv.Model):
 
     def create(self, cr, uid, vals, context=None):
         #Reffer producy
+        productRef = self.pool.get('product.product')
+        product = {'name': vals['name'], 'list_price': vals['price']}
+        pid = productRef.create(cr, uid, product, context=context)
+        code = vals['code'].strip()
+        name = vals['name'].strip()
+        vals.update({'product_id': pid,'name':name, 'code':code})
+        return super(op_course, self).create(cr, uid, vals, context=context)
+
         price = re.sub('[.]', '', vals['price'])
         newPrice = price.isdigit()
         if newPrice is True:
@@ -83,6 +88,9 @@ class op_course(osv.Model):
         if 'name' in values:
             prodid = self.browse(cr, uid, ids, context=context)[0].product_id.id
             productRef = self.pool.get('product.product')
+            name = values['code'].strip()
+            code = values['name'].strip()
+            values.update({'code':code,'name': name})
             productRef.write(cr, uid, prodid, {'name': values['name']}, context=context)
             return super(op_course, self).write(cr, uid, ids, values, context=context)
 

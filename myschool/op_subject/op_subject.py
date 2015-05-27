@@ -50,4 +50,17 @@ class op_subject(osv.Model):
 
     _sql_constraints = [('code', 'UNIQUE (code)', 'The CODE of the SUBJECT must be unique!')]
 
+    def create(self, cr, uid, vals, context=None):
+        code = vals['code'].strip()
+        name = vals['name'].strip()
+        vals.update({'code':code, 'name':name})
+        return super(op_subject, self).create(cr, uid, vals, context=context)
 
+    def write(self, cr, uid, ids,  values, context=None):
+        if 'name' in values:
+            name = values['name'].strip()
+            values.update({'name': name})
+        if 'code' in values:
+            code = values['code'].strip()
+            values.update({'code': code})
+        return super(op_subject, self).write(cr, uid, ids,  values, context=context)
