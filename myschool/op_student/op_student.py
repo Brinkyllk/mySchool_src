@@ -94,6 +94,30 @@ class op_student(osv.Model):
             raise osv.except_osv('Invalid NIC', 'Please enter a valid NIC')
         return True
 
+    #phone number validation for student
+    def phoneNumberValidation(self, cr, uid, ids, phoneNumber):
+        phone_re = re.compile(ur'^(\+\d{1,1}[- ]?)?\d{10}$')
+        valid_phone = False
+        if phoneNumber is False:
+            return True
+        if phone_re.match(phoneNumber):
+            valid_phone=True
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Phone No'), _('Please enter a valid Phone Number'))
+
+    #phone number validation for parent
+    def phoneNumberValidationParent(self, cr, uid, ids, phoneNumber):
+        phone_re = re.compile(ur'^(\+\d{1,1}[- ]?)?\d{10}$')
+        valid_phone = False
+        if phoneNumber is False:
+            return True
+        if phone_re.match(phoneNumber):
+            valid_phone=True
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Phone No'), _('Please enter a valid Phone Number'))
+
     def genid(self, cr, uid, ids, context=None):
         stud = self.browse(cr, uid, ids, context=context)[0]
 
@@ -108,12 +132,11 @@ class op_student(osv.Model):
         if 'email' in vals:
             self.validate_email(cr, uid, [], vals['email'])
 
-        #Phone number Validation
-        if 'phone' in vals and vals['phone']:
-            if re.match("/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/*$", vals['phone']) != None:
-                pass
-            else:
-                raise osv.except_osv(_('Invalid Phone Number'), _('Please enter a valid Phone Number'))
+        # phone number validation on create
+        if 'phone' in vals:
+            self.phoneNumberValidation(cr, uid, [], vals['phone'])
+        if 'contact_no' in vals:
+            self.phoneNumberValidationParent(cr, uid, [], vals['contact_no'])
 
         # Clean NIC
         if 'id_number' in vals:
@@ -182,12 +205,11 @@ class op_student(osv.Model):
         if 'id_number' in values:
             self.validate_NIC(cr, uid, ids, values['id_number'])
 
-        #Phone number Validation
-        if 'phone' in values and values['phone']:
-            if re.match("/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/*$", values['phone']) != None:
-                pass
-            else:
-                raise osv.except_osv(_('Invalid Phone No'), _('Please enter a valid Phone Number'))
+        # phone number validation on write
+        if 'phone' in values:
+            self.phoneNumberValidation(cr, uid, [], values['phone'])
+        if 'contact_no' in values:
+            self.phoneNumberValidationParent(cr, uid, [], values['contact_no'])
 
         #clean NIC
         if 'id_number' in values:
