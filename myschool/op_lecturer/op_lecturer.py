@@ -24,7 +24,7 @@ class op_lecturer(osv.Model):
             valid_phone=True
             return True
         else:
-            raise osv.except_osv(_('Invalid Phone No'), _('Please enter a valid Phone Number'))
+            raise osv.except_osv(_('Invalid Phone Number'), _('Please enter a valid Phone Number'))
 
     def validate_acc_num(self, cr, uid, ids, acc_num):
         if acc_num is False:
@@ -48,10 +48,22 @@ class op_lecturer(osv.Model):
         'lecturer_subject_ids': fields.many2many('op.subject', 'lecturer_subject_rel', 'op_lecturer_id',
                                                  'op_subject_id', string='Subjects'),
         'phone': fields.char(string='Phone Number', size=256),
+        'id_number': fields.char(size=10, string='NIC', required=True),
         # 'mobile_no': fields.char(size=15, string='Mobile Number', required=True),
     }
 
-    _sql_constraints = [('bank_acc_num', 'UNIQUE (bank_acc_num)', 'Bank Acc Number  must be unique!')]
+    _sql_constraints = [('bank_acc_num', 'UNIQUE (bank_acc_num)', 'Bank Acc Number  must be unique!'),
+                        ('id_number', 'UNIQUE (id_number)', 'The NIC  of the Student  must be unique!')
+    ]
+
+    def validate_NIC(self, cr, uid, ids, id_number):
+        if id_number is None:
+            return True
+        if id_number is False:
+            return True
+        if re.match('^\d{9}(X|V)$', id_number) == None:
+            raise osv.except_osv('Invalid NIC', 'Please enter a valid NIC')
+        return True
 
     # overriding create method
     def create(self, cr, uid, vals, context=None):
@@ -66,6 +78,10 @@ class op_lecturer(osv.Model):
 
         if 'bank_acc_num' in vals:
             self.validate_acc_num(cr, uid, [], vals['bank_acc_num'])
+
+        # NIC validation on create
+        if 'id_number' in vals:
+            self.validate_NIC(cr, uid, [], vals['id_number'])
 
         res = super(op_lecturer, self).create(cr, uid, vals, context=context)
         return res
@@ -82,6 +98,10 @@ class op_lecturer(osv.Model):
 
         if 'bank_acc_num' in values:
             self.validate_acc_num(cr, uid, [], values['bank_acc_num'])
+
+        # NIC validation on create
+        if 'id_number' in values:
+            self.validate_NIC(cr, uid, [], values['id_number'])
 
         res = super(op_lecturer, self).write(cr, uid, ids, values, context=context)
         return res

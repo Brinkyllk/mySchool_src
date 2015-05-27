@@ -76,7 +76,8 @@
                                     <field name="category"/>
                                     <!--<field name="phone" />-->
 							        <!--<field name="mobile_no" />-->
-							        <field name="email" />
+							        <field name="id_number" />
+                                    <field name="email" />
 								</group>
 							</group>
 						</group>

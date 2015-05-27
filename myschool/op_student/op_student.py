@@ -104,7 +104,7 @@ class op_student(osv.Model):
             valid_phone=True
             return True
         else:
-            raise osv.except_osv(_('Invalid Phone No'), _('Please enter a valid Phone Number'))
+            raise osv.except_osv(_('Invalid Phone Number'), _('Please enter a valid Phone Number'))
 
     #phone number validation for parent
     def phoneNumberValidationParent(self, cr, uid, ids, phoneNumber):
@@ -116,7 +116,7 @@ class op_student(osv.Model):
             valid_phone=True
             return True
         else:
-            raise osv.except_osv(_('Invalid Phone No'), _('Please enter a valid Phone Number'))
+            raise osv.except_osv(_('Invalid Phone Number'), _('Please enter a valid Phone Number'))
 
     def genid(self, cr, uid, ids, context=None):
         stud = self.browse(cr, uid, ids, context=context)[0]
@@ -146,6 +146,7 @@ class op_student(osv.Model):
                     vals['id_number'] = None
             except:
                 vals['id_number'] = None
+
         # Fix initials if empty
         try:
             initials = vals['initials'].strip()
