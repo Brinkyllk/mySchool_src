@@ -87,6 +87,7 @@
 								<group col="4">
 									<field name="birth_date"/>
 									<field name="language"/>
+									<field name="bank"/>
                                     <field name="bank_acc_num"/>
                                     <field name="gender"/>
                                     <field name="phone" />
@@ -188,6 +189,7 @@
                     <field name="category"/>
                     <field name="gender"/>
                     <field name="language"/>
+                    <field name="bank"/>
                     <field name="bank_acc_num"/>
                     <field name="lecturer_subject_ids"/>
                     <newline />
