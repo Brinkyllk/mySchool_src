@@ -56,6 +56,9 @@ class op_course(osv.Model):
         else:
             return False
 
+
+
+
     _constraints = [
                     (_check_invalid_data, 'Entered Invalid Data!!', ['name', 'code']),
     ]
@@ -64,12 +67,16 @@ class op_course(osv.Model):
 
     def create(self, cr, uid, vals, context=None):
         #Reffer producy
-        productRef = self.pool.get('product.product')
-        product = {'name': vals['name'], 'list_price': vals['price']}
-        pid = productRef.create(cr, uid, product, context=context)
-        vals.update({'product_id': pid})
-
-        return super(op_course, self).create(cr, uid, vals, context=context)
+        price = re.sub('[.]', '', vals['price'])
+        newPrice = price.isdigit()
+        if newPrice is True:
+            productRef = self.pool.get('product.product')
+            product = {'name': vals['name'], 'list_price': vals['price']}
+            pid = productRef.create(cr, uid, product, context=context)
+            vals.update({'product_id': pid})
+            return super(op_course, self).create(cr, uid, vals, context=context)
+        else:
+            raise osv.except_osv('Invalid Product Price', 'Please enter a valid price')
 
     def write(self, cr, uid, ids, values, context=None):
         #Write Product
@@ -80,12 +87,15 @@ class op_course(osv.Model):
             return super(op_course, self).write(cr, uid, ids, values, context=context)
 
         if 'price' in values:
-            prodid = self.browse(cr, uid, ids, context=context)[0].product_id.id
-            productRef = self.pool.get('product.template')
-            productRef.write(cr, uid, prodid, {'list_price': values['price']}, context=context)
-            return True
-
-        return super(op_course, self).write(cr, uid, ids, values, context=context)
+            price = re.sub('[.]', '', values['price'])
+            newPrice = price.isdigit()
+            if newPrice is True:
+                prodid = self.browse(cr, uid, ids, context=context)[0].product_id.id
+                productRef = self.pool.get('product.template')
+                productRef.write(cr, uid, prodid, {'list_price': values['price']}, context=context)
+                return super(op_course, self).write(cr, uid, ids, values, context=context)
+            else:
+                raise osv.except_osv('Invalid Product Price', 'Please enter a valid price')
 
 
 

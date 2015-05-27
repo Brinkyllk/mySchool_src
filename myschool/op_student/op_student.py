@@ -3,7 +3,7 @@ from datetime import date, datetime
 from openerp.tools.translate import _
 from validate_email import validate_email
 import re
-
+import time
 
 class op_student(osv.Model):
     # def _get_def_batch(self, cr, uid, ids, field_name, arg, context=None):
@@ -94,6 +94,30 @@ class op_student(osv.Model):
             raise osv.except_osv('Invalid NIC', 'Please enter a valid NIC')
         return True
 
+    #phone number validation for student
+    def phoneNumberValidation(self, cr, uid, ids, phoneNumber):
+        phone_re = re.compile(ur'^(\+\d{1,1}[- ]?)?\d{10}$')
+        valid_phone = False
+        if phoneNumber is False:
+            return True
+        if phone_re.match(phoneNumber):
+            valid_phone=True
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Phone Number'), _('Please enter a valid Phone Number'))
+
+    #phone number validation for parent
+    def phoneNumberValidationParent(self, cr, uid, ids, phoneNumber):
+        phone_re = re.compile(ur'^(\+\d{1,1}[- ]?)?\d{10}$')
+        valid_phone = False
+        if phoneNumber is False:
+            return True
+        if phone_re.match(phoneNumber):
+            valid_phone=True
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Phone Number'), _('Please enter a valid Phone Number'))
+
     def genid(self, cr, uid, ids, context=None):
         stud = self.browse(cr, uid, ids, context=context)[0]
 
@@ -108,12 +132,11 @@ class op_student(osv.Model):
         if 'email' in vals:
             self.validate_email(cr, uid, [], vals['email'])
 
-        #Phone number Validation
-        if 'phone' in vals and vals['phone']:
-            if re.match("/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/*$", vals['phone']) != None:
-                pass
-            else:
-                raise osv.except_osv(_('Invalid Phone Number'), _('Please enter a valid Phone Number'))
+        # phone number validation on create
+        if 'phone' in vals:
+            self.phoneNumberValidation(cr, uid, [], vals['phone'])
+        if 'contact_no' in vals:
+            self.phoneNumberValidationParent(cr, uid, [], vals['contact_no'])
 
         # Clean NIC
         if 'id_number' in vals:
@@ -123,6 +146,7 @@ class op_student(osv.Model):
                     vals['id_number'] = None
             except:
                 vals['id_number'] = None
+
         # Fix initials if empty
         try:
             initials = vals['initials'].strip()
@@ -182,12 +206,11 @@ class op_student(osv.Model):
         if 'id_number' in values:
             self.validate_NIC(cr, uid, ids, values['id_number'])
 
-        #Phone number Validation
-        if 'phone' in values and values['phone']:
-            if re.match("/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/*$", values['phone']) != None:
-                pass
-            else:
-                raise osv.except_osv(_('Invalid Phone No'), _('Please enter a valid Phone Number'))
+        # phone number validation on write
+        if 'phone' in values:
+            self.phoneNumberValidation(cr, uid, [], values['phone'])
+        if 'contact_no' in values:
+            self.phoneNumberValidationParent(cr, uid, [], values['contact_no'])
 
         #clean NIC
         if 'id_number' in values:
@@ -276,6 +299,51 @@ class op_student(osv.Model):
             'nodestroy': True,
             'domain': domain,
                 }
+
+
+    def create_invoice(self, cr, uid, ids, context={}):
+        """ Create invoice for fee payment process of student """
+
+        invoice_pool = self.pool.get('account.invoice')
+
+        default_fields = invoice_pool.fields_get(cr, uid, context=context)
+        invoice_default = invoice_pool.default_get(cr, uid, default_fields, context=context)
+
+        for student in self.browse(cr, uid, ids, context=context):
+
+            onchange_partner = invoice_pool.onchange_partner_id(cr, uid, [], type='out_invoice', \
+                                partner_id=student.partner_id.id)
+            invoice_default.update(onchange_partner['value'])
+
+
+            invoice_data = {
+                            'partner_id': student.partner_id.id,
+                            'date_invoice': time.strftime('%Y-%m-%d'),
+                            # 'payment_term': student.standard_id.payment_term and student.standard_id.payment_term.id or student.course_id.payment_term and student.course_id.payment_term.id or False,
+                            }
+
+        invoice_default.update(invoice_data)
+        invoice_id = invoice_pool.create(cr, uid, invoice_default, context=context)
+
+        models_data = self.pool.get('ir.model.data')
+        form_view = models_data.get_object_reference(cr, uid, 'account', 'invoice_form')
+        tree_view = models_data.get_object_reference(cr, uid, 'account', 'invoice_tree')
+        value = {
+                'domain': str([('id', '=', invoice_id)]),
+                'view_type': 'form',
+                'view_mode': 'form',
+                'res_model': 'account.invoice',
+                'view_id': False,
+                'views': [(form_view and form_view[1] or False, 'form'),
+                          (tree_view and tree_view[1] or False, 'tree')],
+                'type': 'ir.actions.act_window',
+                'res_id': invoice_id,
+                'target': 'current',
+                'nodestroy': True
+            }
+        return value
+
+
 
     _constraints = [
         (_check_birthday, 'Birth Day cannot be future date!', ['birth_date']),

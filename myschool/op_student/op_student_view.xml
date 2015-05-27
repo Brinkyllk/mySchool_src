@@ -58,8 +58,8 @@
                     <header>
                         <span>
                             <!--groups="myschool.group_op_back_office_admin,myschool.group_op_back_office">-->
-                            <!--<button name="create_invoice" string="Create Invoice"-->
-                                    <!--type="object" icon="gtk-apply"/>-->
+                            <button name="create_invoice" string="Create Invoice"
+                                    type="object" icon="gtk-apply"/>
                         </span>
                     </header>
                     <sheet>
