@@ -24,7 +24,7 @@ class op_student(osv.Model):
         'initials': fields.char(size=20, string='Initials'),
         'first_name': fields.char(size=15, string='First Name', required=True, select=True),
         'middle_name': fields.char(size=15, string='Middle Name'),
-        'last_name': fields.char(size=15, string='Last Name', required=True, select=True),
+        'last_name': fields.char(size=20, string='Last Name', required=True, select=True),
         'gender': fields.selection([('m', 'Male'), ('f', 'Female')], string='Gender', required=True),
         'birth_date': fields.date(string='Birth Date', required=True),
         'nationality': fields.many2one('res.country', string='Nationality test'),
@@ -184,7 +184,7 @@ class op_student(osv.Model):
 
         #Phone number Validation
         if 'phone' in values and values['phone']:
-            if re.match("^[0-9]*$", values['phone']) != None:
+            if re.match("/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/*$", values['phone']) != None:
                 pass
             else:
                 raise osv.except_osv(_('Invalid Phone No'), _('Please enter a valid Phone Number'))

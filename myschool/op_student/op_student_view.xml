@@ -77,15 +77,15 @@
                                     <tr>
                                         <td>
                                             <field name="first_name" placeholder="First Name"
-                                                   style="padding-right:10px; width: 200px;"/>
+                                                   style="padding-right:10px;"/>
                                         </td>
                                         <td>
                                             <field name="middle_name" placeholder="Middle Name"
-                                                   style="padding-right:10px; margin-left: 5px; width: 150px;"/>
+                                                   style="padding-right:10px; margin-left: 5px;"/>
                                         </td>
                                         <td>
                                             <field name="last_name" placeholder="Last Name"
-                                                   style="padding-right:10px; margin-left: 5px; width: 200px;"/>
+                                                   style="padding-right:10px; margin-left: 5px;"/>
                                         </td>
                                     </tr>
                                 </table>
