@@ -8,10 +8,10 @@ import  calendar
 class timetable_postponed(osv.osv_memory):
     _name = 'timetable.postponed'
     _columns = {
-        'timetable_id': fields.many2one('op.period'),
-        'period_id': fields.many2one('op.period', 'Period'),
-        'classroom_id': fields.many2one('op.classroom', 'Classroom'),
-        'date': fields.date('Date'),
+        # 'timetable_id': fields.many2one('op.timetable'),
+        'period_id': fields.many2one('op.period', 'Period', required=True),
+        'classroom_id': fields.many2one('op.classroom', 'Classroom', required=True),
+        'date': fields.date('Date', required=True),
     }
 
 

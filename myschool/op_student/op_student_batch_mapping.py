@@ -172,11 +172,10 @@ class op_result_mapping(osv.Model):
         'grade': fields.selection([('1', 'A'), ('2', 'B'), ('3', 'C'),
                                    ('4', 'D'), ('5', 'S'), ('6', 'F'),
                                    ('7', 'Pass'), ('8', 'Fail'), ('9', 'I')
-                                  ], 'Grade'),
+                                   ], 'Grade'),
     }
 
     def default_get(self, cr, uid, fields, context=None):
-
         data = super(op_result_mapping, self).default_get(cr, uid, fields, context=context)
         global batch_map
         batch_map = context.get('active_id')

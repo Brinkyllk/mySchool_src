@@ -6,13 +6,14 @@ from openerp import api
 
 class op_course(osv.Model):
 
+    #--Code change to upper case---
     @api.onchange('code')
-    def onchange_case(self, cr, uid,  ids, code):
+    def onchange_case(self, cr, uid, ids, code):
         if code != False:
             result = {'value': {
                 'code': str(code).upper()
             }
-        }
+            }
             return result
         else:
             return True
@@ -37,6 +38,28 @@ class op_course(osv.Model):
         # 'course_id': fields.many2one('op.standard', 'Course'),
     }
 
+    #.... check passing nul values..#
+    def _check_invalid_data(self, cr, uid, ids, context=None):
+        obj = self.browse(cr, uid, ids, context=context)
+        new_name = str(obj.name)
+        new_code = str(obj.code)
+        name = new_name.replace(" ", "")
+        code = new_code.replace(" ", "")
+        n_name = ''.join([i for i in name if not i.isdigit()])
+        n_code = ''.join([i for i in code if not i.isdigit()])
+        #isalpha python inbuilt function Returns true if string
+            #has at least 1 character and all characters are alphabetic and false otherwise.
+        if name or code:
+            if n_code.isalpha() or code.isdigit():
+                if n_name.isalpha() or name.isdigit():
+                    return True
+        else:
+            return False
+
+    _constraints = [
+                    (_check_invalid_data, 'Entered Invalid Data!!', ['name', 'code']),
+    ]
+
     _sql_constraints = [('code', 'UNIQUE (code)', 'The CODE of the COURSE must be unique!')]
 
     def create(self, cr, uid, vals, context=None):
@@ -55,11 +78,14 @@ class op_course(osv.Model):
             productRef = self.pool.get('product.product')
             productRef.write(cr, uid, prodid, {'name': values['name']}, context=context)
             return super(op_course, self).write(cr, uid, ids, values, context=context)
+
         if 'price' in values:
             prodid = self.browse(cr, uid, ids, context=context)[0].product_id.id
             productRef = self.pool.get('product.template')
             productRef.write(cr, uid, prodid, {'list_price': values['price']}, context=context)
             return True
+
+        return super(op_course, self).write(cr, uid, ids, values, context=context)
 
 
 

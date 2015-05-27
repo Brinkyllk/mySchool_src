@@ -34,6 +34,20 @@ class op_period(osv.osv):
         'end_time': fields.float('End Time')
     }
 
+    #.... check passing nul values..#
+    def _check_invalid_data(self, cr, uid, ids, context=None):
+        obj = self.browse(cr, uid, ids, context=context)
+        new_name = str(obj.name)
+        name = new_name.replace(" ", "")
+        n_name = ''.join([i for i in name if not i.isdigit()])
+        #isalpha python inbuilt function Returns true if string
+            #has at least 1 character and all characters are alphabetic and false otherwise.
+        if name:
+            if n_name.isalpha() or name.isdigit():
+                return True
+        else:
+            return False
+
     def create(self, cr, uid, vals, context=None):
         hours = float(vals['hour'])
         duration = vals['duration']
@@ -60,6 +74,7 @@ class op_period(osv.osv):
 
     _constraints = [
         (_check_duration, 'Duration cannot be zero hours', ['duration']),
+        (_check_invalid_data, 'Entered Invalid Data!!', ['name']),
     ]
 
 
@@ -99,8 +114,6 @@ class op_timetable(osv.osv):
     #     st_date = dateutil.parser.parse(self.start_datetime).date()
     #     day = calendar.day_name[st_date.weekday()]
     #     self.type = day
-
-
 
     def action_planned(self, cr, uid, ids, context=None):
         # wf_service = netsvc.LocalService("workflow")

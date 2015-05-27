@@ -22,7 +22,7 @@
                     <sheet>
                         <separator string="Academic Term" colspan="4" />
                         <group>
-                            <field name="code"/>
+                            <field name="code" on_change='onchange_case(code)'/>
                             <field name="name"/>
                         </group>
                     </sheet>

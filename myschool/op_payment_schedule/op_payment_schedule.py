@@ -61,8 +61,8 @@ class op_payment_schedule(osv.Model):
         courseRef = self.pool.get('op.course')
         productRef = self.pool.get('product.product')
 
-        batchMap = batchRef.browse(cr,uid, batchmapId, context=context)[0]
-        course = courseRef.browse(cr,uid, batchMap.course_id.id, context=context)[0]
+        batchMap = batchRef.browse(cr, uid, batchmapId, context=context)[0]
+        course = courseRef.browse(cr, uid, batchMap.course_id.id, context=context)[0]
         product = productRef.browse(cr, uid, course.product_id.id, context=context)[0]
 
         productId = product.id
@@ -76,10 +76,9 @@ class op_payment_schedule(osv.Model):
         data['product_id'] = product.id
         data['list_price'] = product.lst_price
         data['student_id'] = batchMap.student_id.id
-        # data['payment_term'] = newPaymentTermId.id
+        data['payment_term'] = newPaymentTermId.id
 
         return data
-
 
     def generate_schedule_lines(self,cr, uid, ids, context=None):
         ps_obj = self.browse(cr, uid, ids, context=context)

@@ -116,7 +116,7 @@
 			<field name="arch" type="xml">
 				<form string="Time Table" version="7.0">
                     <header>
-                        <button string="Planned" type="workflow" name="action_planned" class="" icon="gtk-undo" states="postponed"/>
+                        <button string="Planned" type="object" name="action_planned" class="" icon="gtk-undo" states="postponed"/>
                         <button string="Complete" type="workflow" name="action_complete" class="" icon="gtk-apply" states="planned, postponed"/>
                         <button string="Postponed" type="action" name="$(action_timetable_postponed)d" class="" icon="gtk-jump-to" states="planned"/>
                         <button string="Cancel" type="workflow" name="action_cancel" class="" icon="gtk-cancel" states="planned, postponed"/>
