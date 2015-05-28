@@ -33,6 +33,13 @@ class op_student(osv.Model):
         #'photo': fields.related('partner_id', 'image', string='Photo', type='binary', readonly=True),
         'email': fields.char(string='Email', size=128),
         'phone': fields.char(string='Phone Number', size=256),
+
+        'address_line1': fields.char('address line1', size=20),
+        'address_line2': fields.char('address line2', size=25),
+        'town': fields.char('town', size=25),
+        'province': fields.char('province', size=20),
+        'nation': fields.char('nation', size=20),
+
         'user_id': fields.many2one('res.users', 'User'),
         'stu_reg_number': fields.char(string='Student No.', size=7, readonly=True),
         'partner': fields.related('partner_id', 'name', string='Related Customer', type='char', readonly=True),
@@ -58,6 +65,53 @@ class op_student(osv.Model):
 
     def _check_nic(self, nic):
         pass
+
+    #------check spaces in address line one----#
+    def _check_add_l_one(self, cr, uid, ids, context=None):
+        obj = self.browse(cr, uid, ids, context=context)
+        value = str(obj.address_line1)
+        if not value:
+            return False
+        else:
+            return True
+
+    #------check spaces in address line two----#
+    def _check_add_l_two(self, cr, uid, ids, context=None):
+        obj = self.browse(cr, uid, ids, context=context)
+        value = str(obj.address_line2)
+        if not value:
+            return False
+        else:
+            return True
+
+    #-----check spaces in town-----------------#
+    def _check_town(self, cr, uid, ids, context=None):
+        obj = self.browse(cr, uid, ids, context=context)
+        value = str(obj.town)
+        if not value:
+            return False
+        else:
+            return True
+
+    #-----check spaces in province--------------#
+    def _check_province(self, cr, uid, ids, context=None):
+        obj = self.browse(cr, uid, ids, context=context)
+        value = str(obj.province)
+        if not value:
+            return False
+        else:
+            return True
+
+    #-----check spaces in country---------------#
+    def _check_nation(self, cr, uid, ids, context=None):
+        obj = self.browse(cr, uid, ids, context=context)
+        value = str(obj.nation)
+        new_value = value.replace(" ", "")
+        if not new_value or not new_value.isalpha():
+            return False
+        else:
+            return True
+
 
     #.... check passing nul values..#
     def _check_invalid_data(self, cr, uid, ids, context=None):
@@ -172,6 +226,28 @@ class op_student(osv.Model):
             full_name = vals['initials'] + ' ' + vals['first_name'].strip() + ' ' + vals['last_name'].strip()
         vals.update({'name': full_name})  # Update Partner record
 
+        # Update Partner record
+        if 'address_line1' in vals:
+            line1 = vals['address_line1'].strip()
+            vals.update({'address_line1': line1, 'street':line1})
+            # vals.update({'street': vals['address_line1']})
+
+        if 'address_line2' in vals:
+            line2 = vals['address_line2'].strip()
+            vals.update({'street2': line2, 'address_line2': line2})
+
+        if 'town' in vals:
+            twn = vals['town'].strip()
+            vals.update({'city': twn, 'town': twn})
+
+        if 'province' in vals:
+            prvn = vals['province'].strip()
+            vals.update({'province': prvn})
+
+        if 'nation' in vals:
+            cntry = vals['nation'].strip()
+            vals.update({'nation': cntry})
+
         # Get student ID
         vals['stu_reg_number'] = self.pool.get('ir.sequence').get(cr, uid, 'myschool.op_student') or '/'
         vals.update({'is_student': True})  # Partner type is student
@@ -262,6 +338,26 @@ class op_student(osv.Model):
         full_name = initials + '  ' + first_nm + ' ' + last_nm
         values.update({'name': full_name})
 
+        if 'address_line1' in values:
+            line1 = values['address_line1'].strip()
+            values.update({'street': line1, 'address_line1': line1})
+
+        if 'address_line2' in values:
+            line2 = values['address_line2'].strip()
+            values.update({'street2': line2, 'address_line2': line2})
+
+        if 'town' in values:
+            twn = values['town'].strip()
+            values.update({'city': twn, 'town': twn})
+
+        if 'province' in values:
+            prvn = values['province'].strip()
+            values.update({'province': prvn})
+
+        if 'nation' in values:
+            cntry = values['nation'].strip()
+            values.update({'nation': cntry})
+
         if 'batch_ids' in values:
             # Many to Many course logic
             course_map_ref = self.pool.get('op.student.batch.mapping')  # get reference to object
@@ -323,7 +419,7 @@ class op_student(osv.Model):
             'type': 'ir.actions.act_window',
             'nodestroy': True,
             'domain': domain,
-                }
+            }
 
 
     def create_invoice(self, cr, uid, ids, context={}):
@@ -373,6 +469,11 @@ class op_student(osv.Model):
     _constraints = [
         (_check_birthday, 'Birth Day cannot be future date!', ['birth_date']),
         (_check_invalid_data, 'Entered Invalid Data!!', ['name', 'code']),
+        (_check_add_l_one, 'Entered Invalid Data in Address !!', ['address_line1']),
+        (_check_add_l_two, 'Entered Invalid Data in Address !!', ['address_line2']),
+        (_check_town, 'Entered Invalid Data in Address !!', ['town']),
+        (_check_province, 'Entered Invalid Data in Address !!', ['province']),
+        (_check_nation, 'Entered Invalid Data in Address !!', ['nation']),
     ]
 
 
