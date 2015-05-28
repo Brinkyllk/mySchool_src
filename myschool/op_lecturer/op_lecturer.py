@@ -66,7 +66,7 @@ class op_lecturer(osv.Model):
     }
 
     _sql_constraints = [('bank_acc_num', 'UNIQUE (bank_acc_num)', 'Bank Acc Number  must be unique!'),
-                        ('id_number', 'UNIQUE (id_number)', 'The NIC  of the Student  must be unique!')
+                        ('id_number', 'UNIQUE (id_number)', 'The NIC  of the Lecturer  must be unique!')
     ]
 
     def validate_NIC(self, cr, uid, ids, id_number):
@@ -143,25 +143,39 @@ class op_lecturer(osv.Model):
             self.validate_NIC(cr, uid, [], vals['id_number'])
 
         if 'address_line1' in vals:
-            line1 = vals['address_line1'].strip()
-            vals.update({'address_line1': line1, 'street':line1})
-            # vals.update({'street': vals['address_line1']})
+            if vals['address_line1'] is False or None:
+                pass
+            else:
+                line1 = vals['address_line1'].strip()
+                vals.update({'street': line1, 'address_line1': line1})
 
         if 'address_line2' in vals:
-            line2 = vals['address_line2'].strip()
-            vals.update({'street2': line2, 'address_line2': line2})
+            if vals['address_line2'] is False or None:
+                pass
+            else:
+                line2 = vals['address_line2'].strip()
+                vals.update({'street2': line2, 'address_line2': line2})
 
         if 'town' in vals:
-            twn = vals['town'].strip()
-            vals.update({'city': twn, 'town': twn})
+            if vals['town'] is False or None:
+                pass
+            else:
+                twn = vals['town'].strip()
+                vals.update({'city': twn, 'town': twn})
 
         if 'province' in vals:
-            prvn = vals['province'].strip()
-            vals.update({'province': prvn})
+            if vals['province'] is False or None:
+                pass
+            else:
+                prvn = vals['province'].strip()
+                vals.update({'province': prvn})
 
         if 'nation' in vals:
-            cntry = vals['nation'].strip()
-            vals.update({'nation': cntry})
+            if vals['nation'] is False or None:
+                pass
+            else:
+                cntry = vals['nation'].strip()
+                vals.update({'nation': cntry})
 
         res = super(op_lecturer, self).create(cr, uid, vals, context=context)
         return res
@@ -184,24 +198,39 @@ class op_lecturer(osv.Model):
             self.validate_NIC(cr, uid, [], values['id_number'])
 
         if 'address_line1' in values:
-            line1 = values['address_line1'].strip()
-            values.update({'street': line1, 'address_line1': line1})
+            if values['address_line1'] is False or None:
+                pass
+            else:
+                line1 = values['address_line1'].strip()
+                values.update({'street': line1, 'address_line1': line1})
 
         if 'address_line2' in values:
-            line2 = values['address_line2'].strip()
-            values.update({'street2': line2, 'address_line2': line2})
+            if values['address_line2'] is False or None:
+                pass
+            else:
+                line2 = values['address_line2'].strip()
+                values.update({'street2': line2, 'address_line2': line2})
 
         if 'town' in values:
-            twn = values['town'].strip()
-            values.update({'city': twn, 'town': twn})
+            if values['town'] is False or None:
+                pass
+            else:
+                twn = values['town'].strip()
+                values.update({'city': twn, 'town': twn})
 
         if 'province' in values:
-            prvn = values['province'].strip()
-            values.update({'province': prvn})
+            if values['province'] is False or None:
+                pass
+            else:
+                prvn = values['province'].strip()
+                values.update({'province': prvn})
 
         if 'nation' in values:
-            cntry = values['nation'].strip()
-            values.update({'nation': cntry})
+            if values['nation'] is False or None:
+                pass
+            else:
+                cntry = values['nation'].strip()
+                values.update({'nation': cntry})
 
         res = super(op_lecturer, self).write(cr, uid, ids, values, context=context)
         return res

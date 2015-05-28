@@ -189,15 +189,25 @@ class op_student(osv.Model):
         if 'first_name' in vals:
             fname = vals['first_name'].strip()
             vals.update({'first_name': fname})
+
         if 'middle_name' in vals:
-            mname =vals['middle[_name'].strip()
-            vals.update({'middle_name':mname})
+            if vals['middle_name'] is False or None:
+                pass
+            else:
+                mi_name = vals['middle_name'].strip()
+                vals.update({'middle_name': mi_name})
+
         if 'last_name' in vals:
             lname = vals['last_name'].strip()
             vals.update({'last_name': lname})
+
         if 'initials' in vals:
-            init = vals['initials'].strip()
-            vals.update({'initials': init})
+            if vals['initials'] is False or None:
+                pass
+            else:
+                initls = vals['initials'].strip()
+                vals.update({'initials': initls})
+
         # email validation on write
         if 'email' in vals:
             self.validate_email(cr, uid, [], vals['email'])
@@ -230,27 +240,41 @@ class op_student(osv.Model):
             full_name = vals['initials'] + ' ' + vals['first_name'].strip() + ' ' + vals['last_name'].strip()
         vals.update({'name': full_name})  # Update Partner record
 
-        # Update Partner record
+        # Address lines and update res.partner
         if 'address_line1' in vals:
-            line1 = vals['address_line1'].strip()
-            vals.update({'address_line1': line1, 'street':line1})
-            # vals.update({'street': vals['address_line1']})
+            if vals['address_line1'] is False or None:
+                pass
+            else:
+                line1 = vals['address_line1'].strip()
+                vals.update({'street': line1, 'address_line1': line1})
 
         if 'address_line2' in vals:
-            line2 = vals['address_line2'].strip()
-            vals.update({'street2': line2, 'address_line2': line2})
+            if vals['address_line2'] is False or None:
+                pass
+            else:
+                line2 = vals['address_line2'].strip()
+                vals.update({'street2': line2, 'address_line2': line2})
 
         if 'town' in vals:
-            twn = vals['town'].strip()
-            vals.update({'city': twn, 'town': twn})
+            if vals['town'] is False or None:
+                pass
+            else:
+                twn = vals['town'].strip()
+                vals.update({'city': twn, 'town': twn})
 
         if 'province' in vals:
-            prvn = vals['province'].strip()
-            vals.update({'province': prvn})
+            if vals['province'] is False or None:
+                pass
+            else:
+                prvn = vals['province'].strip()
+                vals.update({'province': prvn})
 
         if 'nation' in vals:
-            cntry = vals['nation'].strip()
-            vals.update({'nation': cntry})
+            if vals['nation'] is False or None:
+                pass
+            else:
+                cntry = vals['nation'].strip()
+                vals.update({'nation': cntry})
 
         # Get student ID
         vals['stu_reg_number'] = self.pool.get('ir.sequence').get(cr, uid, 'myschool.op_student') or '/'
@@ -291,14 +315,23 @@ class op_student(osv.Model):
 
     def write(self, cr, uid, ids, values, context=None):
         if 'initials' in values:
-            init = values['initials'].strip()
-            values.update({'initials': init})
+            if values['initials'] is False or None:
+                pass
+            else:
+                initls = values['initials'].strip()
+                values.update({'initials': initls})
+
         if 'first_name' in values:
             fname = values['first_name'].strip()
             values.update({'first_name': fname})
+
         if 'middle_name' in values:
-            mname =values['middle_name'].strip()
-            values.update({'middle_name':mname})
+            if values['middle_name'] is False or None:
+                pass
+            else:
+                mi_name = values['middle_name'].strip()
+                values.update({'middle_name': mi_name})
+
         if 'last_name' in values:
             lname = values['last_name'].strip()
             values.update({'last_name': lname})
@@ -327,40 +360,43 @@ class op_student(osv.Model):
         first_nm = '' if not exstu.first_name else exstu.first_name
         last_nm = '' if not exstu.last_name else exstu.last_name
 
-        #IF initials are change
-        if 'initials' in values:
-            initials = values['initials'].strip()
-
-        #IF first_name are change
-        if 'first_name' in values:
-            first_nm = values['first_name'].strip()
-
-        #IF first_name are change
-        if 'last_name' in values:
-            last_nm = values['last_name'].strip()
-
         full_name = initials + '  ' + first_nm + ' ' + last_nm
         values.update({'name': full_name})
 
         if 'address_line1' in values:
-            line1 = values['address_line1'].strip()
-            values.update({'street': line1, 'address_line1': line1})
+            if values['address_line1'] is False or None:
+                pass
+            else:
+                line1 = values['address_line1'].strip()
+                values.update({'street': line1, 'address_line1': line1})
 
         if 'address_line2' in values:
-            line2 = values['address_line2'].strip()
-            values.update({'street2': line2, 'address_line2': line2})
+            if values['address_line2'] is False or None:
+                pass
+            else:
+                line2 = values['address_line2'].strip()
+                values.update({'street2': line2, 'address_line2': line2})
 
         if 'town' in values:
-            twn = values['town'].strip()
-            values.update({'city': twn, 'town': twn})
+            if values['town'] is False or None:
+                pass
+            else:
+                twn = values['town'].strip()
+                values.update({'city': twn, 'town': twn})
 
         if 'province' in values:
-            prvn = values['province'].strip()
-            values.update({'province': prvn})
+            if values['province'] is False or None:
+                pass
+            else:
+                prvn = values['province'].strip()
+                values.update({'province': prvn})
 
         if 'nation' in values:
-            cntry = values['nation'].strip()
-            values.update({'nation': cntry})
+            if values['nation'] is False or None:
+                pass
+            else:
+                cntry = values['nation'].strip()
+                values.update({'nation': cntry})
 
         if 'batch_ids' in values:
             # Many to Many course logic
