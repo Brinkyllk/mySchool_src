@@ -10,9 +10,8 @@
 				<tree string="TimeTable Line" editable="top">
 					<field name="day" />
 					<field name="period_id" />
-					<field name="lecturer_id" onchange="onchange_lecturer(lecturer_id)" />
-					<field name="subject_id" />
-					<!--<field name="subject_id" domain="[('id','in',parent.lecturer_subject_ids[0][2])]" />-->
+					<field name="lecturer_id"  />
+					<field name="subject_id"/>
 					<!--<field name="lecturer_subject_ids"/>-->
 				</tree>
 			</field>

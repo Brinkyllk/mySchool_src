@@ -220,21 +220,22 @@ generate_time_table()
 class generate_time_table_line(osv.osv_memory):
 
     # @api.onchange('lecturer_id')
-    # def _onchange_lecturer(self):
+    # def onchange_lecturer(self):
     #     if self.lecturer_id:
-    #         sub_id =[]
-    #         a = []
+    #         global sub_ids
+    #         sub_ids = []
+    #         # a = []
     #         lecturer = self.lecturer_id.id
-    #         query = """select op_subject_id from lecturer_subject_rel where op_lecturer_id='%s'""" % lecturer
+    #         query = "select op_subject_id from lecturer_subject_rel where op_lecturer_id='%s'" % lecturer
     #         self.env.cr.execute(query)
     #         a = self.env.cr.fetchall()
-    #         b = (len(a)-1)
+    #         # b = (len(a)-1)
     #         d = 0
     #         for i in a:
     #             e = i[0]
-    #             sub_id.append(e)
+    #             sub_ids.append(e)
     #             d += 1
-    #         return [('subject_id', 'in', sub_id)]
+    #         return sub_ids
     #     else:
     #         return None
 

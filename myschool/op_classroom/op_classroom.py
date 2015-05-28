@@ -3,7 +3,6 @@ from openerp import api
 
 
 class op_classroom(osv.osv):
-
     #--Code change to upper case---
     @api.onchange('code')
     def onchange_case(self, cr, uid, ids, code):
@@ -39,7 +38,7 @@ class op_classroom(osv.osv):
         n_name = ''.join([i for i in name if not i.isdigit()])
         n_code = ''.join([i for i in code if not i.isdigit()])
         #isalpha python inbuilt function Returns true if string
-            #has at least 1 character and all characters are alphabetic and false otherwise.
+        #has at least 1 character and all characters are alphabetic and false otherwise.
         if name or code:
             if n_code.isalpha() or code.isdigit():
                 if n_name.isalpha() or name.isdigit():
@@ -55,8 +54,10 @@ class op_classroom(osv.osv):
             else:
                 return True
 
+    _sql_constraints = [('code', 'UNIQUE(code)', 'The CODE of the class room must be unique!')]
+
     _constraints = [
-        (_check_capacity,'Number of Persons cannot be zero', ['capacity']),
+        (_check_capacity, 'Number of Persons cannot be zero', ['capacity']),
         (_check_invalid_data, 'Entered Invalid Data!!', ['name', 'code']),
     ]
 

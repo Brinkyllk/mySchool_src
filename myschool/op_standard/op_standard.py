@@ -45,7 +45,7 @@ class op_semester(osv.Model):
                     (_check_invalid_data, 'Entered Invalid Data!!', ['name', 'code']),
     ]
 
-    _sql_constraints = [('code', 'UNIQUE (code)', 'The CODE of the Standard must be unique!')]
+    _sql_constraints = [('code', 'UNIQUE (code)', 'The CODE of the Academic Term must be unique!')]
 
     def create(self, cr, uid, vals, context=None):
         code = vals['code'].strip()
