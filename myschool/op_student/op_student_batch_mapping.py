@@ -14,8 +14,7 @@ class op_student_batch_mapping(osv.Model):
                                        required=True, options="{'create_edit': False }"),
         # 'standard_id': fields.many2many('op.standard', domain="[('course_id', '=', course_id)]", string='Standards'),
         # 'subject_id': fields.one2many('op.subject', domain="[('standard_id', '=', standard_id)]", string='Subjects'),
-        'subject_id': fields.one2many('op.subject', 'rel_subjects', string='Subjects(s)',
-                                      options="{'create_edit': False}", store=True),
+        'subject_id': fields.many2many('op.subject', string='Subjects(s)'),
 
         # 'subject_id': fields.one2many('op.subject', 'standard_id', string='Subjects(s)',
         #                               options="{'create_edit': False}", readonly=True)
