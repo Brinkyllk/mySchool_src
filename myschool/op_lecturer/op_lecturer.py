@@ -38,7 +38,7 @@ class op_lecturer(osv.Model):
 
     _columns = {
         'partner_id': fields.many2one('res.partner', 'Partner', required=True, ondelete="restrict"),
-        'birth_date': fields.date(string='Birth Date', required=True),
+        'birth_date': fields.date(string='Birth Date / Registered Date', required=True),
         'category': fields.selection([('parttime', 'Part Time'), ('visiting', 'Visiting'), ('fulltime', 'Full Time')],
                                      string='Category', required=True),
         'gender': fields.selection([('m', 'Male'), ('f', 'Female')], string='Gender', required=True),
@@ -59,6 +59,10 @@ class op_lecturer(osv.Model):
         'phone': fields.char(string='Phone Number', size=256),
         'id_number': fields.char(size=10, string='NIC', required=True),
         # 'mobile_no': fields.char(size=15, string='Mobile Number', required=True),
+    }
+
+    _defaults = {
+       'gender': 'm'
     }
 
     _sql_constraints = [('bank_acc_num', 'UNIQUE (bank_acc_num)', 'Bank Acc Number  must be unique!'),
@@ -216,11 +220,11 @@ class op_lecturer(osv.Model):
 
     _constraints = [
         (_check_birthday, 'Birth Day cannot be future date!', ['birth_date']),
-        (_check_add_l_one, 'Entered Invalid Data in Address !!', ['address_line1']),
-        (_check_add_l_two, 'Entered Invalid Data in Address !!', ['address_line2']),
-        (_check_town, 'Entered Invalid Data in Address !!', ['town']),
-        (_check_province, 'Entered Invalid Data in Address !!', ['province']),
-        (_check_nation, 'Entered Invalid Data in Address !!', ['nation']),
+        (_check_add_l_one, 'Entered Invalid Data in Address line1 !!', ['address_line1']),
+        (_check_add_l_two, 'Entered Invalid Data in Address line2 !!', ['address_line2']),
+        (_check_town, 'Entered Invalid Data in City !!', ['town']),
+        (_check_province, 'Entered Invalid Data in Province !!', ['province']),
+        (_check_nation, 'Entered Invalid Data in Country !!', ['nation']),
     ]
 
 # class op_lecturer_bank(osv.osv):

@@ -58,8 +58,8 @@
                     <header>
                         <span>
                             <!--groups="myschool.group_op_back_office_admin,myschool.group_op_back_office">-->
-                            <button name="create_invoice" string="Create Invoice"
-                                    type="object" icon="gtk-apply"/>
+                            <!--<button name="create_invoice" string="Create Invoice"-->
+                                    <!--type="object" icon="gtk-apply"/>-->
                         </span>
                     </header>
                     <sheet>
@@ -119,12 +119,12 @@
                                     <!--</div>-->
                                     <label for="street" string="Address"/>
                                     <div name="div_address">
-                                        <field name="address_line1" placeholder="Street..."/>
-                                        <field name="address_line2" placeholder="Street2"/>
+                                        <field name="address_line1" placeholder="Address line1"/>
+                                        <field name="address_line2" placeholder="Address line2"/>
                                         <div class="address_format">
                                             <field name="town" placeholder="City" style="width: 40%%"/>
                                             <field name="province"
-                                                   placeholder="State" style="width: 30%%" />
+                                                   placeholder="Province" style="width: 30%%" />
                                             <field name="nation" class="oe_no_button"
                                                    placeholder="Country" style="width: 30%%" options='{"no_open": True}'/>
                                             <!--<field name="zip" placeholder="ZIP" style="width: 20%%"/>-->

@@ -26,7 +26,7 @@ class op_student(osv.Model):
         'middle_name': fields.char(size=15, string='Middle Name'),
         'last_name': fields.char(size=20, string='Last Name', required=True, select=True),
         'gender': fields.selection([('m', 'Male'), ('f', 'Female')], string='Gender', required=True),
-        'birth_date': fields.date(string='Birth Date', required=True),
+        'birth_date': fields.date(string='Birth Date / Registered Date', required=True),
         'nationality': fields.many2one('res.country', string='Nationality test'),
         'language': fields.many2one('res.lang', string='Mother Tongue'),
         'id_number': fields.char(size=10, string='NIC'),
@@ -59,6 +59,10 @@ class op_student(osv.Model):
         #payment schedule
         'payment_schedule_id': fields.one2many('op.payment.schedule', 'student_id', 'Payment Schedules')
 
+    }
+
+    _defaults = {
+       'gender': 'm'
     }
 
     _sql_constraints = [('id_number', 'UNIQUE (id_number)', 'The NIC  of the Student  must be unique!')]
@@ -469,11 +473,11 @@ class op_student(osv.Model):
     _constraints = [
         (_check_birthday, 'Birth Day cannot be future date!', ['birth_date']),
         (_check_invalid_data, 'Entered Invalid Data!!', ['name', 'code']),
-        (_check_add_l_one, 'Entered Invalid Data in Address !!', ['address_line1']),
-        (_check_add_l_two, 'Entered Invalid Data in Address !!', ['address_line2']),
-        (_check_town, 'Entered Invalid Data in Address !!', ['town']),
-        (_check_province, 'Entered Invalid Data in Address !!', ['province']),
-        (_check_nation, 'Entered Invalid Data in Address !!', ['nation']),
+        (_check_add_l_one, 'Entered Invalid Data in Address line1 !!', ['address_line1']),
+        (_check_add_l_two, 'Entered Invalid Data in Address line2 !!', ['address_line2']),
+        (_check_town, 'Entered Invalid Data in City !!', ['town']),
+        (_check_province, 'Entered Invalid Data in Province !!', ['province']),
+        (_check_nation, 'Entered Invalid Data in Country !!', ['nation']),
     ]
 
 

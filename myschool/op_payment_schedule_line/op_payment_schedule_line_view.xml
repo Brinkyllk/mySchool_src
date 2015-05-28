@@ -42,8 +42,8 @@
 					<field name="full_name" />
                     <field name="due_date" />
                     <field name="amount" />
-                    <button name="%(account.action_invoice_tree1)d" string="Create Invoice" type="action" class="oe_button oe_form_button_save oe_highlight"/>
-				</tree>
+                    <button name="create_invoice" string="Create Invoice" type="object" class="oe_button oe_form_button_save oe_highlight"/>
+                </tree>
 			</field>
 		</record>
 
