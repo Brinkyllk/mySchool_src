@@ -71,7 +71,7 @@
                             <h2>
                                 <table>
                                     <tr>
-                                        <field name="initials" placeholder="Initials"
+                                        <field name="initials" on_change='onchange_case(initials)' placeholder="Initials"
                                                style="padding-right:10px; width: 150px;"/>
                                     </tr>
                                     <tr>

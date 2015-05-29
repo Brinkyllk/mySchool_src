@@ -3,17 +3,22 @@ from datetime import date, datetime
 from openerp.tools.translate import _
 from validate_email import validate_email
 import re
+from openerp import api
 import time
 
 class op_student(osv.Model):
-    # def _get_def_batch(self, cr, uid, ids, field_name, arg, context=None):
-    #     res = {}
-    #     get_batch = self.pool.get('op.student.batch.mapping')
-    #     read_batch = get_batch.browse(cr, uid, ids, context=context)
-    #     results = read_batch.read(cr, uid, [0], ['batch_id'], context=context)
-    #     print results
-    #     # ['def_batch'] = res[results.id]
-    #     return
+
+    #--Code change to upper case---
+    @api.onchange('initials')
+    def onchange_case(self, cr, uid, ids, initials):
+        if initials != False:
+            result = {'value': {
+                'initials': str(initials).upper()
+            }
+            }
+            return result
+        else:
+            return True
 
     _name = 'op.student'
     _description = 'Student'
