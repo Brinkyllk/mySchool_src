@@ -120,14 +120,18 @@ class op_student(osv.Model):
     #.... check passing nul values..#
     def _check_invalid_data(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids, context=context)
+        initials  = str(obj.initials)
         fnew_name = str(obj.first_name)
+        middle_name = str(obj.middle_name)
         lnew_code = str(obj.last_name)
+        initials = initials.replace(" ","")
         fname = fnew_name.replace(" ", "")
+        mname = middle_name.replace(" ","")
         lname = lnew_code.replace(" ", "")
         #isalpha python inbuilt function Returns true if string
             #has at least 1 character and all characters are alphabetic and false otherwise.
-        if fname or lname:
-            if fname.isalpha() and lname.isalpha():
+        if fname or lname or initials or mname:
+            if fname.isalpha() and lname.isalpha() and initials.isalpha() and mname.isalpha():
                 return True
             else:
                 return False
@@ -508,7 +512,7 @@ class op_student(osv.Model):
 
     _constraints = [
         (_check_birthday, 'Birth Day cannot be future date!', ['birth_date']),
-        (_check_invalid_data, 'Entered Invalid Data!!', ['name', 'code']),
+        (_check_invalid_data, 'Entered Invalid Name Details!!', ['name']),
         (_check_add_l_one, 'Entered Invalid Data in Address line1 !!', ['address_line1']),
         (_check_add_l_two, 'Entered Invalid Data in Address line2 !!', ['address_line2']),
         (_check_town, 'Entered Invalid Data in City !!', ['town']),
