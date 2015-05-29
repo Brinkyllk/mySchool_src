@@ -76,15 +76,15 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <field name="first_name" placeholder="First Name"
+                                            <field name="first_name" placeholder="First Name" on_change='onchange_fname(first_name)'
                                                    style="padding-right:10px;"/>
                                         </td>
                                         <td>
-                                            <field name="middle_name" placeholder="Middle Name"
+                                            <field name="middle_name" placeholder="Middle Name" on_change='onchange_mname(middle_name)'
                                                    style="padding-right:10px; margin-left: 5px;"/>
                                         </td>
                                         <td>
-                                            <field name="last_name" placeholder="Last Name"
+                                            <field name="last_name" placeholder="Last Name" on_change='onchange_lname(last_name)'
                                                    style="padding-right:10px; margin-left: 5px;"/>
                                         </td>
                                     </tr>

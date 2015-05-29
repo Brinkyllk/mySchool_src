@@ -20,6 +20,42 @@ class op_student(osv.Model):
         else:
             return True
 
+    #--First name first letter capitalization---
+    @api.onchange('first_name')
+    def onchange_fname(self, cr, uid, ids, first_name):
+        if first_name != False:
+            result = {'value': {
+                'first_name': str(first_name).title()
+            }
+            }
+            return result
+        else:
+            return True
+
+    #--Last name first letter capitalization---
+    @api.onchange('last_name')
+    def onchange_lname(self, cr, uid, ids, last_name):
+        if last_name != False:
+            result = {'value': {
+                'last_name': str(last_name).title()
+            }
+            }
+            return result
+        else:
+            return True
+
+    #--Middle name first letter capitalization---
+    @api.onchange('middle_name')
+    def onchange_mname(self, cr, uid, ids, middle_name):
+        if middle_name != False:
+            result = {'value': {
+                'middle_name': str(middle_name).title()
+            }
+            }
+            return result
+        else:
+            return True
+
     _name = 'op.student'
     _description = 'Student'
     _inherits = {'res.partner': 'partner_id'}
