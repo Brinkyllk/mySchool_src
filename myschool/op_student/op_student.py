@@ -358,15 +358,51 @@ class op_student(osv.Model):
         if 'id_number' in values:
             values['id_number'] = values['id_number'].strip()
 
-        exstu = self.browse(cr, uid, ids, context=context)[0]
-        # Rename the partner name
-        initials = '' if not exstu.initials else exstu.initials
-        first_nm = '' if not exstu.first_name else exstu.first_name
-        last_nm = '' if not exstu.last_name else exstu.last_name
+        # exstu = self.browse(cr, uid, ids, context=None)
+        # # Rename the partner name
+        # initials = '' if not exstu.initials else exstu.initials
+        # first_nm = '' if not exstu.first_name else exstu.first_name
+        # last_nm = '' if not exstu.last_name else exstu.last_name
+        #
+        # full_name = initials + '  ' + first_nm + ' ' + last_nm
+        # values.update({'name': full_name})
 
-        full_name = initials + '  ' + first_nm + ' ' + last_nm
+        #-------- Update Partner record -------------
+        exstu = self.browse(cr, uid, ids, context=context)
+        ini = exstu.initials
+        firstName = exstu.first_name
+        lastName = exstu.last_name
+        global initial
+
+        if 'initials' in values:
+            if values['initials'] is False or None:
+                initial = ''
+            else:
+                initial = values['initials']
+        else:
+            if ini is False or None:
+                initial = ''
+            else:
+                initial = ini
+
+        if 'first_name' in values:
+            fName = values['first_name']
+        else:
+            fName = firstName
+
+        if 'last_name' in values:
+            lName = values['last_name']
+        else:
+            lName = lastName
+
+        if initial == '':
+            full_name = fName.strip() + ' ' + lName.strip()
+        else:
+            full_name = initial.strip() + ' ' + fName.strip() + ' ' + lName.strip()
         values.update({'name': full_name})
 
+
+        #-------- Update Partner record -------------
         if 'address_line1' in values:
             if values['address_line1'] is False or None:
                 pass
