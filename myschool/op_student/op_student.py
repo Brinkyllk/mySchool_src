@@ -179,6 +179,16 @@ class op_student(osv.Model):
         else:
             return False
 
+    #Can not delete all the courses of the specific student
+    def _canNotDeleteCourse(self, cr, uid, ids, context=None):
+        studentBatchMapRef = self.pool.get('op.student.batch.mapping')
+        batchMapId = studentBatchMapRef.search(cr,uid, [('student_id', 'in', ids)])
+        lenBatchMapId = len(batchMapId)
+        if lenBatchMapId == 0:
+            return False
+        else:
+            return True
+
     # email validation........
     def validate_email(self, cr, uid, ids, email):
         if email is False:
@@ -595,6 +605,7 @@ class op_student(osv.Model):
         (_check_town, 'Entered Invalid Data in City !!', ['town']),
         (_check_province, 'Entered Invalid Data in Province !!', ['province']),
         (_check_nation, 'Entered Invalid Data in Country !!', ['nation']),
+        (_canNotDeleteCourse, 'You cannot delete all the courses !!', ['batch_ids']),
     ]
 
 
