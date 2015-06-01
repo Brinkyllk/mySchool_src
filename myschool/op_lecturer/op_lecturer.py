@@ -1,11 +1,26 @@
 from openerp.osv import osv, fields
+from openerp import api
 from datetime import date, datetime
 import re
 from validate_email import validate_email
 from openerp.tools.translate import _
 
 
+
 class op_lecturer(osv.Model):
+    #lecturer name capitalization#
+    @api.onchange('name')
+    def onchange_name(self, cr, uid, ids, name):
+        if name != False:
+            result = {'value': {
+                'name': str(name).title()
+            }
+            }
+            return result
+        else:
+            return True
+
+
     def validate_email(self, cr, uid, ids, email):
         if email is False:
             return True

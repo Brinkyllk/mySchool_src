@@ -60,7 +60,7 @@
                                 <table>
                                     <tr>
                                         <td>
-                                            <field name="name" placeholder="Name"
+                                            <field name="name" placeholder="Name" on_change='onchange_name(name)'
                                                    style="padding-right:10px; width: 400px;"/>
                                         </td>
                                     </tr>
