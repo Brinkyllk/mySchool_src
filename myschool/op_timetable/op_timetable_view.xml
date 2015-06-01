@@ -118,7 +118,7 @@
                     <header>
                         <button string="Planned" type="object" name="action_planned" class="" icon="gtk-undo" states="postponed"/>
                         <button string="Complete" type="workflow" name="action_complete" class="" icon="gtk-apply" states="planned, postponed"/>
-                        <button string="Postponed" type="action" name="$(action_timetable_postponed)d" class="" icon="gtk-jump-to" states="planned"/>
+                        <button string="Postponed" type="action" name="%(action_timetable_postponed)d" class="" icon="gtk-jump-to" states="planned"/>
                         <button string="Cancel" type="workflow" name="action_cancel" class="" icon="gtk-cancel" states="planned, postponed"/>
                         <field name="state" widget="statusbar" readonly="True" statusbar_visible="planned, completed, postponed, cancelled"/>
                     </header>
@@ -227,10 +227,14 @@
 										Classroom:
 										<field name="classroom_id"/>
 									</li>
-                                    <!--<li t-if="record.state.raw_value">-->
-										<!--Status:-->
-										<!--<field name="state"/>-->
-									<!--</li>-->
+                                    <li t-if="record.period_id.raw_value">
+										Period:
+					                    <field name="period_id" />
+									</li>
+                                    <li t-if="record.state.raw_value">
+										State:
+					                    <field name="state" />
+									</li>
 								</div>
 								<div class="oe_kanban_bottom_right">
                             		<img t-att-src="kanban_image('op.lecturer', 'photo', record.lecturer_id.raw_value)" t-att-title="record.lecturer_id.value" width="24" height="24" class="oe_kanban_avatar"/>
