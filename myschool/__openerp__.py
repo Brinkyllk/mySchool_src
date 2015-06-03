@@ -17,7 +17,7 @@
     'depends': ['product', 'web', 'base','account'],
     'data': [
         'op_standard/op_standard_view.xml',
-        'op_subject_view.xml',
+        'op_subject/op_subject_view.xml',
         'op_course/op_course_view.xml',
         'op_batch/op_batch_view.xml',
         'op_lecturer/op_lecturer_view.xml',
