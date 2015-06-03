@@ -1,7 +1,6 @@
 from openerp.osv import fields, osv
 from datetime import date, datetime
 from openerp.tools.translate import _
-from validate_email import validate_email
 import re
 from openerp import api
 import time
@@ -191,12 +190,15 @@ class op_student(osv.Model):
 
     # email validation........
     def validate_email(self, cr, uid, ids, email):
+        email_re = re.compile(ur'^([a-zA-Z0-9._%-]+\@[a-zA-Z0-9_%-]+.[a-zA-Z]{2,6})$|^([a-zA-Z0-9._%-]+\@[a-zA-Z0-9_%-]+.[a-zA-Z]{2,6}.[a-zA-Z]{2,6})$')
+        valid_email = False
         if email is False:
             return True
-        is_valid = validate_email(email)
-        if is_valid is False:
-            raise osv.except_osv(_('Invalid Email'), _('Please enter a valid email address'))
-        return True
+        if email_re.match(email):
+            valid_email=True
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Email'), _('Please enter a valid Email'))
 
     def validate_NIC(self, cr, uid, ids, id_number):
         if id_number is None:
