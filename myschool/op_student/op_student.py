@@ -189,6 +189,7 @@ class op_student(osv.Model):
         else:
             return True
 
+
     # email validation........
     def validate_email(self, cr, uid, ids, email):
         email_re = re.compile(ur'^([a-zA-Z0-9._%-]+\@[a-zA-Z0-9_%-]+.[a-zA-Z]{2,6})$|^([a-zA-Z0-9._%-]+\@[a-zA-Z0-9_%-]+.[a-zA-Z]{2,6}.[a-zA-Z]{2,6})$')
@@ -608,7 +609,8 @@ class op_student(osv.Model):
         (_check_town, 'Entered Invalid Data in City !!', ['town']),
         (_check_province, 'Entered Invalid Data in Province !!', ['province']),
         (_check_nation, 'Entered Invalid Data in Country !!', ['nation']),
-        (_canNotDeleteCourse, 'You cannot delete all the courses !!', ['batch_ids']),
+        (_canNotDeleteCourse, 'Course is mandatory !!', ['batch_ids']),
+
     ]
 
 
