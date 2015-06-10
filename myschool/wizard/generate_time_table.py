@@ -45,7 +45,67 @@ class generate_time_table(osv.osv_memory):
         'end_date': fields.date('End Date', required=True),
     }
 
-    # ...............checking the availability of the lecturer...........................#
+    def create(self, cr, uid, vals, context=None):
+        # 'return super(generate_time_table, self).create(cr, uid, vals, context=context)
+        if 'time_table_lines_1'.__len__() != 0:
+            for x in vals['time_table_lines_1']:
+                per_id = x.period_id
+
+        if 'time_table_lines_2' in vals:
+            for x in vals['time_table_lines_1']:
+                per_id = x.period_id
+
+
+    def gen_datewise(self, cr, uid, line, st_date, en_date, self_obj, context={}):
+        time_pool = self.pool.get('op.timetable')
+        day_cnt = 7
+        curr_date = st_date
+        while curr_date <= en_date:
+            hour = line.period_id.hour
+            if line.period_id.am_pm == 'pm' and int(hour) != 12:
+                hour = int(hour)+12
+            per_time = '%s:%s:00' % (hour, line.period_id.minute)
+            dt_st = utils.server_to_local_timestamp(curr_date.strftime("%Y-%m-%d ") + per_time, "%Y-%m-%d %H:%M:%S",
+                                                    "%Y-%m-%d %H:%M:%S",
+                                                    'GMT',
+                                                    server_tz=context.get('tz', 'GMT'),
+                                                    )
+
+            curr_date = datetime.datetime.strptime(dt_st, "%Y-%m-%d %H:%M:%S")
+            end_time = datetime.timedelta(hours=line.period_id.duration)
+            cu_en_date = curr_date + end_time
+            a = time_pool.create(cr, uid, {
+                'lecturer_id': line.lecturer_id.id,
+                'subject_id': line.subject_id.id,
+                'standard_id': self_obj.standard_id.id,
+                'period_id': line.period_id.id,
+                'start_datetime': curr_date.strftime("%Y-%m-%d %H:%M:%S"),
+                'end_datetime': cu_en_date.strftime("%Y-%m-%d %H:%M:%S"),
+                'type': curr_date.strftime('%A'),
+                'classroom_id': self_obj.classroom_id.id, })
+
+            curr_date = curr_date+datetime.timedelta(days=day_cnt)
+
+        return True
+
+    def act_gen_time_table(self, cr, uid, ids, context={}):
+        for self_obj in self.browse(cr, uid, ids, context=context):
+            st_date = datetime.datetime.strptime(self_obj.start_date,'%Y-%m-%d')
+            en_date = datetime.datetime.strptime(self_obj.end_date,'%Y-%m-%d')
+            st_day = week_number[st_date.strftime('%a')]
+            for line in self_obj.time_table_lines:
+                if int(line.day) == st_day:
+                    self.gen_datewise(cr, uid, line, st_date, en_date, self_obj, context=context)
+                if int(line.day) < st_day:
+                    new_st_date = st_date + datetime.timedelta(days=(7 - (st_day - int(line.day))))
+                    self.gen_datewise(cr, uid, line, new_st_date, en_date, self_obj, context=context)
+                if int(line.day) > st_day:
+                    new_st_date = st_date + datetime.timedelta(days=(int(line.day) - st_day ))
+                    self.gen_datewise(cr, uid, line, new_st_date, en_date, self_obj, context=context)
+
+        return {'type': 'ir.actions.act_window_close'}
+
+        # ...............checking the availability of the lecturer...........................#
     # checking standard conflict #
     def _standard_conflict(self, cr, uid, ids, context=None):
         day_list = ['None', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -54,30 +114,31 @@ class generate_time_table(osv.osv_memory):
             start_date = self_object.start_date
             end_date = self_object.end_date
             standard_id = self_object.standard_id.id
-            per_start = line.period_id.start_time
-            per_end = line.period_id.end_time
-            day = int(line.day)
-            obj = self.pool.get('op.timetable').search(cr, uid, [('standard_id', '=', standard_id), ], order=None)
-            if obj:
-                for record_id in obj:
-                    details = self.pool.get('op.timetable').read(cr, uid, record_id, ['type', 'start_datetime', 'period_id'])
-                    period_get = details.get('period_id')
-                    period_get_id = period_get[0]
-                    period_info = self.pool.get('op.period').read(cr, uid, period_get_id, ['start_time', 'end_time'])
-                    period_info_start = period_info.get('start_time')
-                    period_info_end = period_info.get('end_time')
-                    day_type = str(details.get('type'))
-                    if day_type == day_list[day]:
-                        assigned_date = details.get('start_datetime')
-                        asn_date = dateutil.parser.parse(assigned_date).date()
-                        st_date = dateutil.parser.parse(start_date).date()
-                        en_date = dateutil.parser.parse(end_date).date()
-                        if st_date <= asn_date <= en_date:
-                            if per_start <= period_info_start < per_end or per_start < period_info_end < per_end:
-                                return False
+            for i in line:
+                per_start = i.period_id.start_time
+                per_end = i.period_id.end_time
+                day = int(i.day)
+                obj = self.pool.get('op.timetable').search(cr, uid, [('standard_id', '=', standard_id), ], order=None)
+                if obj:
+                    for record_id in obj:
+                        details = self.pool.get('op.timetable').read(cr, uid, record_id, ['type', 'start_datetime', 'period_id'])
+                        period_get = details.get('period_id')
+                        period_get_id = period_get[0]
+                        period_info = self.pool.get('op.period').read(cr, uid, period_get_id, ['start_time', 'end_time'])
+                        period_info_start = period_info.get('start_time')
+                        period_info_end = period_info.get('end_time')
+                        day_type = str(details.get('type'))
+                        if day_type == day_list[day]:
+                            assigned_date = details.get('start_datetime')
+                            asn_date = dateutil.parser.parse(assigned_date).date()
+                            st_date = dateutil.parser.parse(start_date).date()
+                            en_date = dateutil.parser.parse(end_date).date()
+                            if st_date <= asn_date <= en_date:
+                                if per_start <= period_info_start < per_end or per_start < period_info_end < per_end:
+                                    return False
 
-            else:
-                return True
+                else:
+                    return True
         return True
 
     # checking the availability of the lecturer#
@@ -147,55 +208,6 @@ class generate_time_table(osv.osv_memory):
                 return True
         return True
 
-    def gen_datewise(self, cr, uid, line, st_date, en_date, self_obj, context={}):
-        time_pool = self.pool.get('op.timetable')
-        day_cnt = 7
-        curr_date = st_date
-        while curr_date <= en_date:
-            hour = line.period_id.hour
-            if line.period_id.am_pm == 'pm' and int(hour) != 12:
-                hour = int(hour)+12
-            per_time = '%s:%s:00' % (hour, line.period_id.minute)
-            dt_st = utils.server_to_local_timestamp(curr_date.strftime("%Y-%m-%d ") + per_time, "%Y-%m-%d %H:%M:%S",
-                                                    "%Y-%m-%d %H:%M:%S",
-                                                    'GMT',
-                                                    server_tz=context.get('tz', 'GMT'),
-                                                    )
-
-            curr_date = datetime.datetime.strptime(dt_st, "%Y-%m-%d %H:%M:%S")
-            end_time = datetime.timedelta(hours=line.period_id.duration)
-            cu_en_date = curr_date + end_time
-            a = time_pool.create(cr, uid, {
-                'lecturer_id': line.lecturer_id.id,
-                'subject_id': line.subject_id.id,
-                'standard_id': self_obj.standard_id.id,
-                'period_id': line.period_id.id,
-                'start_datetime': curr_date.strftime("%Y-%m-%d %H:%M:%S"),
-                'end_datetime': cu_en_date.strftime("%Y-%m-%d %H:%M:%S"),
-                'type': curr_date.strftime('%A'),
-                'classroom_id': self_obj.classroom_id.id, })
-
-            curr_date = curr_date+datetime.timedelta(days=day_cnt)
-
-        return True
-
-    def act_gen_time_table(self, cr, uid, ids, context={}):
-        for self_obj in self.browse(cr, uid, ids, context=context):
-            st_date = datetime.datetime.strptime(self_obj.start_date,'%Y-%m-%d')
-            en_date = datetime.datetime.strptime(self_obj.end_date,'%Y-%m-%d')
-            st_day = week_number[st_date.strftime('%a')]
-            for line in self_obj.time_table_lines:
-                if int(line.day) == st_day:
-                    self.gen_datewise(cr, uid, line, st_date, en_date, self_obj, context=context)
-                if int(line.day) < st_day:
-                    new_st_date = st_date - datetime.timedelta(days=(st_day - int(line.day)))
-                    self.gen_datewise(cr, uid, line, new_st_date, en_date, self_obj, context=context)
-                if int(line.day) > st_day:
-                    new_st_date = st_date + datetime.timedelta(days=(int(line.day) - st_day ))
-                    self.gen_datewise(cr, uid, line, new_st_date, en_date, self_obj, context=context)
-
-        return {'type': 'ir.actions.act_window_close'}
-
     def _check_date(self, cr, uid, vals, context=None):
         for obj in self.browse(cr, uid, vals):
             start_date = obj.start_date
@@ -208,37 +220,17 @@ class generate_time_table(osv.osv_memory):
                     return False
                 return True
 
-    _constraints = [(_check_date, 'End Date should be greater than Start Date!', ['start_date', 'end_date']),
-                    (_lecturer_conflict, 'Lecturer not available', ['start_date']),
-                    (_standard_conflict, 'Standard must not available', ['standard_id']),
-                    (_classroom_conflict, 'Classroom is not available', ['classroom_id']),
-                    ]
+    # _constraints = [
+    #                 # (_check_date, 'End Date should be greater than Start Date!', ['start_date', 'end_date']),
+    # #               (_lecturer_conflict, 'Lecturer not available', ['start_date']),
+    #                 (_standard_conflict, 'Standard must not available', ['standard_id']),
+    # #                 (_classroom_conflict, 'Classroom is not available', ['classroom_id']),
+    #                 ]
 
 generate_time_table()
 
 
 class generate_time_table_line(osv.osv_memory):
-
-    # @api.onchange('lecturer_id')
-    # def onchange_lecturer(self):
-    #     if self.lecturer_id:
-    #         global sub_ids
-    #         sub_ids = []
-    #         # a = []
-    #         lecturer = self.lecturer_id.id
-    #         query = "select op_subject_id from lecturer_subject_rel where op_lecturer_id='%s'" % lecturer
-    #         self.env.cr.execute(query)
-    #         a = self.env.cr.fetchall()
-    #         # b = (len(a)-1)
-    #         d = 0
-    #         for i in a:
-    #             e = i[0]
-    #             sub_ids.append(e)
-    #             d += 1
-    #         return sub_ids
-    #     else:
-    #         return None
-
     _name = 'gen.time.table.line'
     _description = 'Generate Time Table Lines'
     _rec_name = 'day'
@@ -257,5 +249,18 @@ class generate_time_table_line(osv.osv_memory):
                                  ], 'Day', required=True),
         'period_id': fields.many2one('op.period', 'Period', required=True),
     }
+
+    # def _check(self, cr, uid, ids, context=None):
+    #     obj = self.browse(cr, uid, ids, context=None)
+    #     for i in obj:
+    #         a = i.period_id
+    #         b = i.lecturer_id
+    #     return True
+    #
+    # _constraints = [(_check, 'Error', ['subject_id']),
+
+    # def create(self, cr, uid, vals, context=None):
+    #     return super(generate_time_table_line, self).create(cr, uid, vals, context=context)
+
 
 generate_time_table_line()

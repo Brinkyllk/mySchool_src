@@ -408,9 +408,18 @@ class op_student(osv.Model):
         if 'contact_no' in values:
             self.phoneNumberValidationParent(cr, uid, [], values['contact_no'])
 
+
+        # if 'id_number' in values:
+        #     values['id_number'] = values['id_number'].strip()
+
         #clean NIC
         if 'id_number' in values:
-            values['id_number'] = values['id_number'].strip()
+            try:
+                values['id_number'] = values['id_number'].strip()
+                if values['id_number'] == '':
+                    values['id_number'] = None
+            except:
+                values['id_number'] = None
 
         # exstu = self.browse(cr, uid, ids, context=None)
         # # Rename the partner name
