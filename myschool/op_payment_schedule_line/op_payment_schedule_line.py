@@ -32,7 +32,7 @@ class op_payment_schedule_line(osv.Model):
         partnerId = studentRef.read(cr, uid, newStudentId,['partner_id'])
         newPartnerId = partnerId.get('partner_id')[0]
 
-        price = scheduleLineRef.read(cr, uid, newScheduleId,['amount'])['amount']
+        #price = scheduleLineRef.read(cr, uid, newScheduleId,['amount'])['amount']
 
         dueDate = scheduleLineRef.browse(cr, uid, scheduleLineId.due_date, context=context)[0]
         newDueDate = dueDate.id

@@ -33,7 +33,6 @@ class op_period(osv.osv):
         'start_time': fields.float('Start Time'),
         'end_time': fields.float('End Time')
     }
-
     #.... check passing nul values..#
     def _check_invalid_data(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids, context=context)
@@ -49,6 +48,9 @@ class op_period(osv.osv):
             return False
 
     def create(self, cr, uid, vals, context=None):
+        name = vals['name'].strip()
+        vals.update({'name':name})
+        #Start time & End Time calculation
         hours = float(vals['hour'])
         duration = vals['duration']
         minute = float(vals['minute'])
@@ -64,8 +66,53 @@ class op_period(osv.osv):
         vals.update({'start_time': start_time, 'end_time': end_time})
         return super(op_period, self).create(cr, uid, vals, context=context)
 
+    def write(self, cr, uid, ids,  values, context=None):
+        if 'name' in values:
+            name = values['name'].strip()
+            values.update({'name': name})
+
+        #Start time & End Time calculation
+        ex_per = self.browse(cr, uid, ids, context=context)
+        hr = ex_per.hour
+        du = ex_per.duration
+        min = ex_per.minute
+        ex_am_pm = ex_per.am_pm
+
+        if 'hour' in values:
+            hours = float(values['hour'])
+        else:
+            hours = float(hr)
+
+        if 'duration' in values:
+            duration = values['duration']
+        else:
+            duration = du
+
+        if 'minute' in values:
+            minute = float(values['minute'])
+        else:
+            minute = float(min)
+
+        if 'am_pm' in values:
+            am_pm_val = values['am_pm']
+        else:
+            am_pm_val = ex_am_pm
+
+        val = minute / 60
+        start_time = hours + val
+
+        if am_pm_val == 'pm':
+            if hours == 12.00:
+                pass
+            else:
+                start_time += 12.00
+        end_time = start_time + duration
+
+        values.update({'start_time': start_time, 'end_time': end_time})
+        return super(op_period, self).write(cr, uid, ids,  values, context=context)
+
     def _check_duration(self, cr, uid, vals, context=None):
-        for obj in self.browse(cr, uid, vals):
+          for obj in self.browse(cr, uid, vals):
             time_duration = obj.duration
             if time_duration == 0:
                 return False
@@ -76,18 +123,6 @@ class op_period(osv.osv):
         (_check_duration, 'Duration cannot be zero hours', ['duration']),
         (_check_invalid_data, 'Entered Invalid Data!!', ['name']),
     ]
-
-    def create(self, cr, uid, vals, context=None):
-        name = vals['name'].strip()
-        vals.update({'name':name})
-        return super(op_period, self).create(cr, uid, vals, context=context)
-
-    def write(self, cr, uid, ids,  values, context=None):
-        if 'name' in values:
-            name = values['name'].strip()
-            values.update({'name': name})
-        return super(op_period, self).write(cr, uid, ids,  values, context=context)
-
 
 op_period()
 
@@ -160,7 +195,6 @@ class op_timetable(osv.osv):
 
     _constraints = [
         (_validate_backdate, 'You cannot backdate records!', ['start_datetime']),
-
     ]
 
 
