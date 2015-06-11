@@ -90,4 +90,18 @@ class op_standard(osv.Model):
         res = super(op_standard, self).create(cr, uid, vals, context=context)
         return res
 
+    def write(self, cr, uid, ids,  values, context=None):
+        standard_obj = self.browse(cr, uid, ids, context=context)
+        # modification of semester
+        if ('semester_id' in values):
+            semester = self.pool.get('op.semester').browse(cr, uid, values['semester_id'])
+            semester_code = semester.code
+            course_id = standard_obj.course_id
+            course = self.pool.get('op.course').browse(cr, uid, course_id.id)
+            course_code = course.code
+            stand = course_code + ' ' + semester_code
+            values.update({'name': stand})
+        res = super(op_standard, self).write(cr, uid, ids,  values, context=context)
+        return res
+
     _sql_constraints = [('name', 'UNIQUE (name)', 'The Standard must be unique!')]

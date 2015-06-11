@@ -618,7 +618,7 @@ class op_student(osv.Model):
         (_check_town, 'Entered Invalid Data in City !!', ['town']),
         (_check_province, 'Entered Invalid Data in Province !!', ['province']),
         (_check_nation, 'Entered Invalid Data in Country !!', ['nation']),
-        (_canNotDeleteCourse, 'Course is mandatory !!', ['batch_ids']),
+        (_canNotDeleteCourse, 'Course is Mandatory !!', ['batch_ids']),
 
     ]
 
