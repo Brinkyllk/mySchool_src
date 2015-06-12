@@ -4,6 +4,7 @@ from openerp import api
 import re
 
 
+
 class op_batch(osv.Model):
 
     @api.onchange('code')
@@ -65,9 +66,40 @@ class op_batch(osv.Model):
                     return False
                 return True
 
+    #Check state against start date & end date
+    def _check_state(self, cr, uid, ids, context=None):
+        obj = self.browse(cr, uid, ids, context=context)
+        datetime_format = "%Y-%m-%d"
+        startDate = obj.start_date
+        fomatStartDate = datetime.datetime.strptime(startDate, datetime_format)
+        endDate = obj.end_date
+        fomatEndDate = datetime.datetime.strptime(endDate, datetime_format)
+        state = str(obj.state)
+        datTime = datetime.datetime.today()
+        todatDate = datTime.strftime('%Y-%m-%d')
+        fomatTodayDate= datetime.datetime.strptime(todatDate, datetime_format)
+        if state == 'planned':
+            if fomatTodayDate < fomatStartDate:
+                return True
+            else:
+                return False
+        elif state == 'running':
+            if fomatStartDate < fomatTodayDate:
+                return True
+            else:
+                return False
+        elif state == 'finished':
+            if fomatEndDate < fomatTodayDate:
+                return True
+            else:
+                return False
+        else:
+            return True
+
     _constraints = [
         (_check_date, 'End Date should be greater than Start Date!', ['start_date', 'end_date']),
         (_check_invalid_data, 'Entered Invalid Data!!', ['name', 'code']),
+        (_check_state, 'End date & Start date against State is wrong!!', ['state']),
     ]
 
     _defaults = {
