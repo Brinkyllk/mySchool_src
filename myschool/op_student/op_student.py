@@ -56,6 +56,42 @@ class op_student(osv.Model):
         else:
             return True
 
+    #When add a NIC auto generate the BirthDate
+    @api.onchange('id_number')
+    def onchange_nic(self, cr, uid, ids, id_number):
+        if id_number == False:
+            pass
+        else:
+            id = str(id_number)
+            year = id[0:2]
+            newYear = int(year)
+            newYear += 1900
+
+            character = (int(id[2:5]))
+            getdays = 0
+            getmonth = 0
+
+            if character >= 501 and character <= 866 or character >= 1 and character <= 366:
+                if character >= 501 and character <= 866:
+                    getdays = character - 500
+                elif character >= 1 and character <= 366:
+                    getdays = character
+
+                for i in (31,29,31,30,31,30,31,31,30,31,30,31):
+                    getmonth = getmonth + 1
+                    if getdays <= i:
+                        day = int(getdays)
+                        month = int(getmonth)
+                        break
+                    else:
+                        getdays = getdays - i
+                fdate = date(newYear,month,day)
+
+                result = {'value': {'birth_date': fdate}}
+                return result
+            else:
+                raise osv.except_osv(_('Invalid NIC'), _('Given NIC does not matched'))
+
     _name = 'op.student'
     _description = 'Student'
     _inherits = {'res.partner': 'partner_id'}

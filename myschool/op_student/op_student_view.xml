@@ -95,7 +95,7 @@
                         <separator colspan="4" string="Basic Information"/>
                         <group col="4" colspan="4">
                             <field name="partner"/>
-                            <field name="id_number"/>
+                            <field name="id_number" on_change='onchange_nic(id_number)'/>
                             <field name="email"/>
                             <field name="stu_reg_number"/>
                             <field name="user_id"/>

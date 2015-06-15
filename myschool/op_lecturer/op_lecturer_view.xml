@@ -76,7 +76,7 @@
                                     <field name="category"/>
                                     <!--<field name="phone" />-->
 							        <!--<field name="mobile_no" />-->
-							        <field name="id_number" />
+							        <field name="id_number" on_change='onchange_nic(id_number)'/>
                                     <field name="email" />
 								</group>
 							</group>
