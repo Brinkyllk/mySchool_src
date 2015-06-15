@@ -61,6 +61,8 @@ class op_student(osv.Model):
     def onchange_nic(self, cr, uid, ids, id_number):
         if id_number == False:
             pass
+        elif re.match('^\d{9}(X|V)$', id_number) == None:
+            raise osv.except_osv('Invalid NIC', 'Please enter a valid NIC')
         else:
             id = str(id_number)
             year = id[0:2]
@@ -90,7 +92,8 @@ class op_student(osv.Model):
                 result = {'value': {'birth_date': fdate}}
                 return result
             else:
-                raise osv.except_osv(_('Invalid NIC'), _('Given NIC does not matched'))
+                raise osv.except_osv('Invalid NIC', 'Please enter a valid NIC')
+
 
     _name = 'op.student'
     _description = 'Student'
