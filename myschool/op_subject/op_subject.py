@@ -29,17 +29,16 @@ class op_subject(osv.Model):
     #.... check passing nul values..#
     def _check_invalid_data(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids, context=context)
-        new_name = str(obj.name)
+        # new_name = str(obj.name)
         new_code = str(obj.code)
-        name = new_name.replace(" ", "")
+        # name = new_name.replace(" ", "")
         code = new_code.replace(" ", "")
-        n_name = ''.join([i for i in name if not i.isdigit()])
+        # n_name = ''.join([i for i in name if not i.isdigit()])
         n_code = ''.join([i for i in code if not i.isdigit()])
         #isalpha python inbuilt function Returns true if string
             #has at least 1 character and all characters are alphabetic and false otherwise.
-        if name or code:
+        if code:
             if n_code.isalpha() or code.isdigit():
-                if n_name.isalpha() or name.isdigit():
                     return True
         else:
             return False

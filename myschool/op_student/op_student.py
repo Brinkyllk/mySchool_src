@@ -228,7 +228,6 @@ class op_student(osv.Model):
         else:
             return True
 
-
     # email validation........
     def validate_email(self, cr, uid, ids, email):
         email_re = re.compile(ur'^([a-zA-Z0-9._%-]+\@[a-zA-Z0-9_%-]+.[a-zA-Z]{2,6})$|^([a-zA-Z0-9._%-]+\@[a-zA-Z0-9_%-]+.[a-zA-Z]{2,6}.[a-zA-Z]{2,6})$')

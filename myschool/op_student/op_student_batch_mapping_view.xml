@@ -66,6 +66,22 @@
 				</form>
 			</field>
 		</record>
+
+        <record id="view_op_student_batch_mapping_search" model="ir.ui.view">
+			<field name="name">op.student.batch.mapping.search</field>
+			<field name="model">op.student.batch.mapping</field>
+			<field name="priority" eval="8" />
+			<field name="arch" type="xml">
+				<search string="Student">
+					<field name="student_id"/>
+                    <field name="course_id"/>
+                    <newline />
+					<group expand="0" string="Group By...">
+						<filter string="Course" domain="[]" context="{'group_by':'course_id'}" />
+					</group>
+				</search>
+			</field>
+		</record>
         
         <record id="view_op_student_batch_mapping_form" model="ir.ui.view">
             <field name="name">op.student.batch.mapping.form</field>
