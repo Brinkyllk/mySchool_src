@@ -2,6 +2,7 @@ from openerp.osv import osv
 from openerp.osv import fields
 from openerp import api
 from datetime import date
+from collections import Counter
 
 import dateutil
 import datetime
@@ -45,16 +46,87 @@ class generate_time_table(osv.osv_memory):
         'end_date': fields.date('End Date', required=True),
     }
 
+    # over ride create method to check conflicts of subject lines#
     def create(self, cr, uid, vals, context=None):
-        # 'return super(generate_time_table, self).create(cr, uid, vals, context=context)
-        if 'time_table_lines_1'.__len__() != 0:
-            for x in vals['time_table_lines_1']:
-                per_id = x.period_id
+        if 'time_table_lines'.__len__() != 0:
+            if 'time_table_lines_1'.__len__() != 0:
+                line_1_list = []
+                d = 0
+                for x in vals['time_table_lines_1']:
+                    per_id = x[2]
+                    k = per_id['period_id']
+                    line_1_list.append(k)
+                    d += 1
+                    if [j for j,v in Counter(line_1_list).items() if v > 1]:
+                        raise osv.except_osv(('Validation'), ("You can't duplicate the period in Monday"))
 
-        if 'time_table_lines_2' in vals:
-            for x in vals['time_table_lines_1']:
-                per_id = x.period_id
+            if 'time_table_lines_2'.__len__() != 0:
+                line_2_list = []
+                d = 0
+                for x in vals['time_table_lines_2']:
+                    per_id = x[2]
+                    k = per_id['period_id']
+                    line_2_list.append(k)
+                    d += 1
+                    if [j for j, v in Counter(line_2_list).items() if v >1]:
+                        raise osv.except_osv(('Validation'), ("You can't duplicate the period in Tuesday"))
 
+            if 'time_table_lines_3'.__len__() != 0:
+                line_3_list = []
+                d = 0
+                for x in vals['time_table_lines_3']:
+                    per_id = x[2]
+                    k = per_id['period_id']
+                    line_3_list.append(k)
+                    d += 1
+                    if [j for j, v in Counter(line_3_list).items() if v >1]:
+                        raise osv.except_osv(('Validation'),("You can't duplicate the period in Wednesday"))
+
+            if 'time_table_lines_4'.__len__() != 0:
+                line_4_list =[]
+                d = 0
+                for x in vals['time_table_lines_4']:
+                    per_id = x[2]
+                    k = per_id['period_id']
+                    line_4_list.append(k)
+                    d += 1
+                    if [j for j, v in Counter(line_4_list).items() if v >1]:
+                        raise osv.except_osv(('Validation'), ("You can't duplicate the period in Thursday"))
+
+            if 'time_table_lines_5'.__len__() != 0:
+                line_5_list = []
+                d = 0
+                for x in vals['time_table_lines_5']:
+                    per_id = x[2]
+                    k = per_id['period_id']
+                    line_5_list.append(k)
+                    d += 1
+                    if [j for j, v in Counter(line_5_list).items() if v >1]:
+                        raise osv.except_osv(('Validation'), ("You can't duplicate the period in Friday"))
+
+            if 'time_table_lines_6'.__len__() != 0:
+                    line_6_list = []
+                    d = 0
+                    for x in vals['time_table_lines_6']:
+                        per_id = x[2]
+                        k = per_id['period_id']
+                        line_6_list.append(k)
+                        d += 1
+                        if [j for j, v in Counter(line_6_list).items() if v >1]:
+                            raise osv.except_osv(('Validation'), ("You can't duplicate the period in Saturday"))
+
+            if 'time_table_lines_7'.__len__() != 0:
+                line_7_list = []
+                d = 0
+                for x in vals['time_table_lines_7']:
+                    per_id = x[2]
+                    k = per_id['period_id']
+                    line_7_list.append(k)
+                    d += 1
+                    if [j for j, v in Counter(line_7_list).items() if v >1]:
+                        raise osv.except_osv(('Validation'), ("You can't duplicate the period in Sunday"))
+
+        return super(generate_time_table, self).create(cr, uid, vals, context=context)
 
     def gen_datewise(self, cr, uid, line, st_date, en_date, self_obj, context={}):
         time_pool = self.pool.get('op.timetable')
@@ -105,7 +177,6 @@ class generate_time_table(osv.osv_memory):
 
         return {'type': 'ir.actions.act_window_close'}
 
-        # ...............checking the availability of the lecturer...........................#
     # checking standard conflict #
     def _standard_conflict(self, cr, uid, ids, context=None):
         day_list = ['None', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -148,30 +219,31 @@ class generate_time_table(osv.osv_memory):
             line = self_object.time_table_lines
             start_date = self_object.start_date
             end_date = self_object.end_date
-            lec_id = line.lecturer_id.id
-            per_start = line.period_id.start_time
-            per_end = line.period_id.end_time
-            day = int(line.day)
-            obj = self.pool.get('op.timetable').search(cr, uid, [('lecturer_id', '=', lec_id), ], order=None)
-            if obj:
-                for record_id in obj:
-                    details = self.pool.get('op.timetable').read(cr, uid, record_id, ['type', 'start_datetime', 'period_id'])
-                    period_get = details.get('period_id')
-                    period_get_id = period_get[0]
-                    period_info = self.pool.get('op.period').read(cr, uid, period_get_id, ['start_time', 'end_time'])
-                    period_info_start = period_info.get('start_time')
-                    period_info_end = period_info.get('end_time')
-                    day_type = str(details.get('type'))
-                    if day_type == day_list[day]:
-                        assigned_date = details.get('start_datetime')
-                        asn_date = dateutil.parser.parse(assigned_date).date()
-                        st_date = dateutil.parser.parse(start_date).date()
-                        en_date = dateutil.parser.parse(end_date).date()
-                        if st_date <= asn_date <= en_date:
-                            if per_start <= period_info_start < per_end or per_start < period_info_end <= per_end:
-                                return False
-            else:
-                return True
+            for i in line:
+                per_start = i.period_id.start_time
+                per_end = i.period_id.end_time
+                day = int(i.day)
+                lec_id = i.lecturer_id.id
+                obj = self.pool.get('op.timetable').search(cr, uid, [('lecturer_id', '=', lec_id), ], order=None)
+                if obj:
+                    for record_id in obj:
+                        details = self.pool.get('op.timetable').read(cr, uid, record_id, ['type', 'start_datetime', 'period_id'])
+                        period_get = details.get('period_id')
+                        period_get_id = period_get[0]
+                        period_info = self.pool.get('op.period').read(cr, uid, period_get_id, ['start_time', 'end_time'])
+                        period_info_start = period_info.get('start_time')
+                        period_info_end = period_info.get('end_time')
+                        day_type = str(details.get('type'))
+                        if day_type == day_list[day]:
+                            assigned_date = details.get('start_datetime')
+                            asn_date = dateutil.parser.parse(assigned_date).date()
+                            st_date = dateutil.parser.parse(start_date).date()
+                            en_date = dateutil.parser.parse(end_date).date()
+                            if st_date <= asn_date <= en_date:
+                                if per_start <= period_info_start < per_end or per_start < period_info_end <= per_end:
+                                    return False
+                else:
+                    return True
         return True
 
     # ........classroom conflict detection..............#
@@ -182,30 +254,31 @@ class generate_time_table(osv.osv_memory):
             start_date = self_obj.start_date
             end_date = self_obj.end_date
             cls_id = self_obj.classroom_id.id
-            per_start = line.period_id.start_time
-            per_end = line.period_id.end_time
-            day = int(line.day)
-            obj = self.pool.get('op.timetable').search(cr, uid, [('classroom_id', '=', cls_id)], order=None)
-            if obj:
-                for rec_id in obj:
-                    details = self.pool.get('op.timetable').read(cr, uid, rec_id, ['type', 'start_datetime', 'period_id'])
-                    period_get = details.get('period_id')
-                    period_get_id = period_get[0]
-                    period_info = self.pool.get('op.period').read(cr, uid, period_get_id, ['start_time', 'end_time'])
-                    period_info_start = period_info.get('start_time')
-                    period_info_end = period_info.get('end_time')
-                    day_type = str(details.get('type'))
-                    if day_type == day_list[day]:
-                        assigned_date = details.get('start_datetime')
-                        asn_date = dateutil.parser.parse(assigned_date).date()
-                        st_date = dateutil.parser.parse(start_date).date()
-                        en_date = dateutil.parser.parse(end_date).date()
-                        if st_date <= asn_date <= en_date:
-                            if per_start <= period_info_start < per_end or per_start < period_info_end < per_end:
-                                return False
+            for i in line:
+                per_start = i.period_id.start_time
+                per_end = i.period_id.end_time
+                day = int(i.day)
+                obj = self.pool.get('op.timetable').search(cr, uid, [('classroom_id', '=', cls_id)], order=None)
+                if obj:
+                    for rec_id in obj:
+                        details = self.pool.get('op.timetable').read(cr, uid, rec_id, ['type', 'start_datetime', 'period_id'])
+                        period_get = details.get('period_id')
+                        period_get_id = period_get[0]
+                        period_info = self.pool.get('op.period').read(cr, uid, period_get_id, ['start_time', 'end_time'])
+                        period_info_start = period_info.get('start_time')
+                        period_info_end = period_info.get('end_time')
+                        day_type = str(details.get('type'))
+                        if day_type == day_list[day]:
+                            assigned_date = details.get('start_datetime')
+                            asn_date = dateutil.parser.parse(assigned_date).date()
+                            st_date = dateutil.parser.parse(start_date).date()
+                            en_date = dateutil.parser.parse(end_date).date()
+                            if st_date <= asn_date <= en_date:
+                                if per_start <= period_info_start < per_end or per_start < period_info_end < per_end:
+                                    return False
 
-            else:
-                return True
+                else:
+                    return True
         return True
 
     def _check_date(self, cr, uid, vals, context=None):
@@ -220,12 +293,11 @@ class generate_time_table(osv.osv_memory):
                     return False
                 return True
 
-    # _constraints = [
-    #                 # (_check_date, 'End Date should be greater than Start Date!', ['start_date', 'end_date']),
-    # #               (_lecturer_conflict, 'Lecturer not available', ['start_date']),
-    #                 (_standard_conflict, 'Standard must not available', ['standard_id']),
-    # #                 (_classroom_conflict, 'Classroom is not available', ['classroom_id']),
-    #                 ]
+    _constraints = [(_check_date, 'End Date should be greater than Start Date!', ['start_date', 'end_date']),
+                    (_lecturer_conflict, 'Lecturer not available', ['start_date']),
+                    (_standard_conflict, 'Standard must not available', ['standard_id']),
+                    (_classroom_conflict, 'Classroom is not available', ['classroom_id']),
+                    ]
 
 generate_time_table()
 
@@ -261,6 +333,9 @@ class generate_time_table_line(osv.osv_memory):
 
     # def create(self, cr, uid, vals, context=None):
     #     return super(generate_time_table_line, self).create(cr, uid, vals, context=context)
+
+
+
 
 
 generate_time_table_line()
