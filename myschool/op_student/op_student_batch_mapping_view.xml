@@ -67,6 +67,7 @@
 			</field>
 		</record>
 
+
         <record id="view_op_student_batch_mapping_search" model="ir.ui.view">
 			<field name="name">op.student.batch.mapping.search</field>
 			<field name="model">op.student.batch.mapping</field>
