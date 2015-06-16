@@ -84,13 +84,17 @@ class op_course(osv.Model):
             raise osv.except_osv('Invalid Product Price', 'Please enter a valid price')
 
     def write(self, cr, uid, ids, values, context=None):
+        if 'code' in values:
+            code = values['code'].strip()
+            values.update({'code': code})
+            return super(op_course, self).write(cr, uid, ids, values, context=context)
+
         #Write Product
         if 'name' in values:
             prodid = self.browse(cr, uid, ids, context=context)[0].product_id.id
             productRef = self.pool.get('product.product')
-            name = values['code'].strip()
-            code = values['name'].strip()
-            values.update({'code':code,'name': name})
+            name = values['name'].strip()
+            values.update({'name': name})
             productRef.write(cr, uid, prodid, {'name': values['name']}, context=context)
             return super(op_course, self).write(cr, uid, ids, values, context=context)
 
@@ -104,6 +108,9 @@ class op_course(osv.Model):
                 return super(op_course, self).write(cr, uid, ids, values, context=context)
             else:
                 raise osv.except_osv('Invalid Product Price', 'Please enter a valid price')
+
+        if 'level' in values:
+            return super(op_course, self).write(cr, uid, ids, values, context=context)
 
 
 

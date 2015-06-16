@@ -246,7 +246,7 @@ class op_student(osv.Model):
             return True
         if id_number is False:
             return True
-        if re.match('^\d{9}(X|V)$', id_number) == None:
+        if re.match('^\d{9}(X|V)$', id_number) is None:
             raise osv.except_osv('Invalid NIC', 'Please enter a valid NIC')
         return True
 
@@ -265,11 +265,11 @@ class op_student(osv.Model):
     #phone number validation for parent
     def phoneNumberValidationParent(self, cr, uid, ids, phoneNumber):
         phone_re = re.compile(ur'^(\+\d{1,1}[- ]?)?\d{10}$')
-        valid_phone = False
+        # valid_phone = False
         if phoneNumber is False:
             return True
         if phone_re.match(phoneNumber):
-            valid_phone=True
+            # valid_phone=True
             return True
         else:
             raise osv.except_osv(_('Invalid Phone Number'), _('Please enter a valid Phone Number'))
@@ -282,6 +282,12 @@ class op_student(osv.Model):
             self.write(cr, uid, ids, {'stu_reg_number': id}, context=context)
 
         return {}
+
+    # def search(self, cr, uid, ids, context=None):
+    #     ss = self.pool.get('op.student.batch.mapping')
+    #     te = ss.browse(cr, uid, [], context=context)
+    #     print te
+    #     return
 
     def create(self, cr, uid, vals, context=None):
         if 'first_name' in vals:

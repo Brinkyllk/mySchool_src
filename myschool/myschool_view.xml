@@ -83,6 +83,15 @@
 			<field name="target">current</field>
 		</record>
 
+        <!--student Search-->
+        <record model="ir.actions.act_window" id="act_open_op_student_batch_mapping_view">
+			<field name="name">Student Search</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">op.student.batch.mapping</field>
+			<field name="view_type">tree</field>
+			<field name="view_mode">kanban</field>
+		</record>
+
         <!--batch action-->
         <record model="ir.actions.act_window" id="action_batch">
             <field name="name">Batch</field>
@@ -150,6 +159,7 @@
         <!--action menus............. -->
         <menuitem id="menu_student" name="Student" parent="menu_myschool_student" action="act_open_op_student_view"/>
         <menuitem id="menu_payment_schedule" name="Student Payment Details" parent="menu_myschool_student" action="payment_schedule_act"/>
+        <menuitem id="menu_student_search" name="Student Search" parent="menu_myschool_student" action="act_open_op_student_batch_mapping_view"/>
         <menuitem id="menu_lecturer" name="Lecturer" parent="menu_myschool_lecturer" action="act_open_op_lecturer_view"/>
 
 
