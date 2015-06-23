@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record id="crm_case_form_view_leads_extended" model="ir.ui.view">
+            <field name="name">crm.lead.form.inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_form_view_leads"/>
+            <field name="arch" type="xml">
+                <field name="phone" position="after">
+                    <field name="new_one"/>
+                </field>
+                <field name="partner_name" position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="new_lead" model="ir.actions.act_window">
+            <field name="name">Lead</field>
+            <field name="res_model">crm.lead</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="crm_case_form_view_leads_extended"/>
+        </record>
+    </data>
+</openerp>
+
+
