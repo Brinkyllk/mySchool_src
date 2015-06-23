@@ -57,6 +57,18 @@ class op_lecturer(osv.Model):
             else:
                 raise osv.except_osv('Invalid NIC', 'Please enter a valid NIC')
 
+    #onchange for is_company
+    @api.multi
+    def onchange_type(self, is_company):
+        value = {'title': False}
+        if is_company:
+            value['use_parent_address'] = False
+            domain = {'title': [('domain', '=', 'partner')]}
+            value['gender'] = 'o'
+        else:
+            domain = {'title': [('domain', '=', 'contact')]}
+        return {'value': value, 'domain': domain}
+
     #Email validation
     def validate_email(self, cr, uid, ids, email):
         email_re = re.compile(ur'^([a-zA-Z0-9._%-]+\@[a-zA-Z0-9_%-]+.[a-zA-Z]{2,6})$|^([a-zA-Z0-9._%-]+\@[a-zA-Z0-9_%-]+.[a-zA-Z]{2,6}.[a-zA-Z]{2,6})$')
@@ -93,10 +105,11 @@ class op_lecturer(osv.Model):
 
     _columns = {
         'partner_id': fields.many2one('res.partner', 'Partner', required=True, ondelete="restrict"),
-        'birth_date': fields.date(string='Birth Date / Registered Date', required=True),
+        'birth_date': fields.date(string='Birth Date'),
+        'register_date': fields.date(string='Registered Date'),
         'category': fields.selection([('parttime', 'Part Time'), ('visiting', 'Visiting'), ('fulltime', 'Full Time')],
                                      string='Category', required=True),
-        'gender': fields.selection([('m', 'Male'), ('f', 'Female')], string='Gender', required=True),
+        'gender': fields.selection([('m', 'Male'), ('f', 'Female'), ('o', 'Other')], string='Gender', required=True),
         'language': fields.selection([('sinhala', 'Sinhala'), ('english', 'English'), ('tamil', 'Tamil')],
                                      string='Language'),
         'bank': fields.selection([('BOC', 'Bank of Ceylon'), ('HSBC', 'HSBC'), ('Commercial Bank', 'Commercial Bank'),
@@ -112,7 +125,7 @@ class op_lecturer(osv.Model):
         'lecturer_subject_ids': fields.many2many('op.subject', 'lecturer_subject_rel', 'op_lecturer_id',
                                                  'op_subject_id', string='Subjects'),
         'phone': fields.char(string='Phone Number', size=256),
-        'id_number': fields.char(size=10, string='NIC', required=True),
+        'id_number': fields.char(size=10, string='NIC'),
         # 'mobile_no': fields.char(size=15, string='Mobile Number', required=True),
     }
 
@@ -124,7 +137,9 @@ class op_lecturer(osv.Model):
                         ('id_number', 'UNIQUE (id_number)', 'The NIC  of the Lecturer  must be unique!')
     ]
 
-    def validate_NIC(self, cr, uid, ids, id_number):
+    def validate_NIC(self, cr, uid, ids, id_number, context=None):
+        obj = self.browse(cr, uid, ids, context=context)
+        value = str(obj.is_company)
         if id_number is None:
             return True
         if id_number is False:
@@ -232,6 +247,17 @@ class op_lecturer(osv.Model):
                 cntry = vals['nation'].strip()
                 vals.update({'nation': cntry})
 
+        if 'is_company' in vals:
+            if vals['is_company'] == True:
+                if vals['register_date'] == False or vals['register_date'] == None:
+                    raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a Registered Date..!!')
+            else:
+                if vals['birth_date'] == False or vals['birth_date'] == None:
+                    raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a NIC..!!')
+                else:
+                    if vals ['id_number'] == False or vals ['id_number'] == None:
+                        raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a NIC..!!')
+
         res = super(op_lecturer, self).create(cr, uid, vals, context=context)
         return res
 
@@ -287,23 +313,66 @@ class op_lecturer(osv.Model):
                 cntry = values['nation'].strip()
                 values.update({'nation': cntry})
 
+        if 'is_company' in values:
+            if values['is_company'] == True:
+                if 'register_date' in values:
+                    pass
+                else:
+                    raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a Registered Date..!!')
+                    # if values['register_date'] == False or values['register_date'] == None:
+                    #     raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a Registered Date..!!')
+            else:
+                if 'birth_date' in values:
+                    if values['birth_date'] == False or values['birth_date'] == None:
+                        raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a NIC..!!')
+                    else:
+                        if values['birth_date'] == False or values['birth_date'] == None:
+                            raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a NIC..!!')
+                        return True
+                elif 'id_number' in values:
+                    if values ['id_number'] == False or values ['id_number'] == None:
+                        raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a NIC..!!')
+                    else:
+                        if values['id_number'] == False or values['birth_date'] == None:
+                            raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a NIC..!!')
+                        return True
+
         res = super(op_lecturer, self).write(cr, uid, ids, values, context=context)
         return res
 
+    def _check_registered_date(self, cr, uid, vals, context=None):
+        for obj in self.browse(cr, uid, vals):
+            reg_day = obj.register_date
+            if reg_day == False or reg_day == None:
+                return True
+            else:
+                date_today = date.today()
+                if reg_day and date_today:
+                    datetime_format = "%Y-%m-%d"
+                    rday = datetime.strptime(reg_day, datetime_format)
+                    tday = datetime.strptime(date_today.strftime('%Y%m%d'), '%Y%m%d')
+                    if tday < rday:
+                        return False
+                    return True
+
     def _check_birthday(self, cr, uid, vals, context=None):
         for obj in self.browse(cr, uid, vals):
-            date_birth_day = obj.birth_date
-            date_today = date.today()
-            if date_birth_day and date_today:
-                datetime_format = "%Y-%m-%d"
-                bday = datetime.strptime(date_birth_day, datetime_format)
-                tday = datetime.strptime(date_today.strftime('%Y%m%d'), '%Y%m%d')
-                if tday < bday:
-                    return False
+            reg_day = obj.register_date
+            if reg_day == False or reg_day == None:
                 return True
+            else:
+                date_today = date.today()
+                if reg_day and date_today:
+                    datetime_format = "%Y-%m-%d"
+                    rday = datetime.strptime(reg_day, datetime_format)
+                    tday = datetime.strptime(date_today.strftime('%Y%m%d'), '%Y%m%d')
+                    if tday < rday:
+                        return False
+                    return True
+
 
     _constraints = [
-        (_check_birthday, 'Birth Day cannot be future date!', ['birth_date']),
+        (_check_registered_date, 'Registered Date cannot be future date!', ['register_date']),
         (_check_add_l_one, 'Entered Invalid Data in Address line1 !!', ['address_line1']),
         (_check_add_l_two, 'Entered Invalid Data in Address line2 !!', ['address_line2']),
         (_check_town, 'Entered Invalid Data in City !!', ['town']),

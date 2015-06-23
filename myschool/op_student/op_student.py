@@ -94,6 +94,18 @@ class op_student(osv.Model):
             else:
                 raise osv.except_osv('Invalid NIC', 'Please enter a valid NIC')
 
+    #onchange for is_company
+    @api.multi
+    def onchange_type(self, is_company):
+        value = {'title': False}
+        if is_company:
+            value['use_parent_address'] = False
+            domain = {'title': [('domain', '=', 'partner')]}
+            value['gender'] = 'o'
+        else:
+            domain = {'title': [('domain', '=', 'contact')]}
+        return {'value': value, 'domain': domain}
+
 
     _name = 'op.student'
     _description = 'Student'
@@ -105,8 +117,9 @@ class op_student(osv.Model):
         'first_name': fields.char(size=15, string='First Name', required=True, select=True),
         'middle_name': fields.char(size=15, string='Middle Name'),
         'last_name': fields.char(size=20, string='Last Name', required=True, select=True),
-        'gender': fields.selection([('m', 'Male'), ('f', 'Female')], string='Gender', required=True),
-        'birth_date': fields.date(string='Birth Date / Registered Date', required=True),
+        'gender': fields.selection([('m', 'Male'), ('f', 'Female'), ('o', 'Other')], string='Gender', required=True),
+        'birth_date': fields.date(string='Birth Date'),
+        'register_date': fields.date(string='Registered Date'),
         'nationality': fields.many2one('res.country', string='Nationality test'),
         'language': fields.many2one('res.lang', string='Mother Tongue'),
         'id_number': fields.char(size=10, string='NIC'),
@@ -410,11 +423,27 @@ class op_student(osv.Model):
                                               context=context)
         def_course = course_map_ref.browse(cr, uid, def_course_id, context=context)
 
+
+
         # vals.update({'course_id': def_course[0].course_id.id})
         self.write(cr, uid, [stu_id], {'def_course': def_course[0].course_id.id,
                                        'def_batch': def_course[0].batch_id.id,
                                        'def_standard': def_course[0].standard_id.id, }, context=context)
+
+        if 'is_company' in vals:
+            if vals['is_company'] == True:
+                if vals['register_date'] == False or vals['register_date'] == None:
+                    raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a Registered Date..!!')
+            else:
+                if vals['birth_date'] == False or vals['birth_date'] == None:
+                    raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a NIC..!!')
+                else:
+                    if vals ['id_number'] == False or vals ['id_number'] == None:
+                        raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a NIC..!!')
+
         return stu_id
+
+
 
     def write(self, cr, uid, ids, values, context=None):
         if 'initials' in values:
@@ -573,19 +602,61 @@ class op_student(osv.Model):
                                                              'def_standard': setmap.standard_id.id,}, context=context)
                 return True
 
+        if 'is_company' in values:
+            if values['is_company'] == True:
+                if 'register_date' in values:
+                    pass
+                else:
+                    raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a Registered Date..!!')
+                    # if values['register_date'] == False or values['register_date'] == None:
+                    #     raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a Registered Date..!!')
+            else:
+                if 'birth_date' in values:
+                    if values['birth_date'] == False or values['birth_date'] == None:
+                        raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a NIC..!!')
+                    else:
+                        if values['birth_date'] == False or values['birth_date'] == None:
+                            raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a NIC..!!')
+                        return True
+                elif 'id_number' in values:
+                    if values ['id_number'] == False or values ['id_number'] == None:
+                        raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a NIC..!!')
+                    else:
+                        if values['id_number'] == False or values['birth_date'] == None:
+                            raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a NIC..!!')
+                        return True
+
         return super(op_student, self).write(cr, uid, ids, values, context=context)
+
+    def _check_registered_date(self, cr, uid, vals, context=None):
+        for obj in self.browse(cr, uid, vals):
+            reg_day = obj.register_date
+            if reg_day == False or reg_day == None:
+                return True
+            else:
+                date_today = date.today()
+                if reg_day and date_today:
+                    datetime_format = "%Y-%m-%d"
+                    rday = datetime.strptime(reg_day, datetime_format)
+                    tday = datetime.strptime(date_today.strftime('%Y%m%d'), '%Y%m%d')
+                    if tday < rday:
+                        return False
+                    return True
 
     def _check_birthday(self, cr, uid, vals, context=None):
         for obj in self.browse(cr, uid, vals):
             date_birth_day = obj.birth_date
-            date_today = date.today()
-            if date_birth_day and date_today:
-                datetime_format = "%Y-%m-%d"
-                bday = datetime.strptime(date_birth_day, datetime_format)
-                tday = datetime.strptime(date_today.strftime('%Y%m%d'), '%Y%m%d')
-                if tday < bday:
-                    return False
+            if date_birth_day == False or date_birth_day ==None:
                 return True
+            else:
+                date_today = date.today()
+                if date_birth_day and date_today:
+                    datetime_format = "%Y-%m-%d"
+                    bday = datetime.strptime(date_birth_day, datetime_format)
+                    tday = datetime.strptime(date_today.strftime('%Y%m%d'), '%Y%m%d')
+                    if tday < bday:
+                        return False
+                    return True
 
     # Related to the show Payment Schedule lines for particular student
     def show_payment_details(self, cr, uid, ids, context=None):
@@ -655,6 +726,7 @@ class op_student(osv.Model):
 
 
     _constraints = [
+        (_check_registered_date, 'Registered Date cannot be future date!', ['register_date']),
         (_check_birthday, 'Birth Day cannot be future date!', ['birth_date']),
         (_check_invalid_data, 'Entered Invalid Name Details!!', ['name']),
         (_check_add_l_one, 'Entered Invalid Data in Address line1 !!', ['address_line1']),

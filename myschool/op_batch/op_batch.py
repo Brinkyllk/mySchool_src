@@ -49,9 +49,6 @@ class op_batch(osv.Model):
         else:
             return False
 
-
-
-
     _sql_constraints = [('code', 'UNIQUE (code)', 'The CODE of the Batch must be unique!')]
 
     def _check_date(self, cr, uid, vals, context=None):
@@ -78,18 +75,19 @@ class op_batch(osv.Model):
         datTime = datetime.datetime.today()
         todatDate = datTime.strftime('%Y-%m-%d')
         fomatTodayDate= datetime.datetime.strptime(todatDate, datetime_format)
+
         if state == 'planned':
-            if fomatTodayDate < fomatStartDate:
+            if fomatTodayDate < fomatStartDate < fomatEndDate:
                 return True
             else:
                 return False
         elif state == 'running':
-            if fomatStartDate < fomatTodayDate:
+            if fomatStartDate < fomatTodayDate < fomatEndDate:
                 return True
             else:
                 return False
         elif state == 'finished':
-            if fomatEndDate < fomatTodayDate:
+            if fomatStartDate < fomatEndDate < fomatTodayDate:
                 return True
             else:
                 return False

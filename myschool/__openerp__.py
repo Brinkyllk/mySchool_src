@@ -14,8 +14,9 @@
     """,
     'author': 'OpenArc System Management Pvt. Ltd.',
     'website': 'http://www.openarc.lk',
-    'depends': ['product', 'web', 'base','account'],
+    'depends': ['product', 'web', 'base','account', 'crm'],
     'data': [
+        'crm_lead/crm_lead_view.xml',
         'op_standard/op_standard_view.xml',
         'op_subject/op_subject_view.xml',
         'op_course/op_course_view.xml',
@@ -35,7 +36,6 @@
         'op_admission/op_admission_sequence.xml',
         'op_admission/op_admission_workflow_view.xml',
         'myschool_view.xml'
-
     ],
     'test': [
              'test/new_admission.yml',

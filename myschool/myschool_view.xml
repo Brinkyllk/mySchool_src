@@ -6,7 +6,7 @@
         <menuitem id="menu_myschool_config" name="MySchool Configuration"/>
 
         <!--Unclickable menu myschool-->
-        <menuitem id="menu_myschool_all" name="MySchool" parent="menu_myschool_main"/>
+        <menuitem id="menu_myschool_all" name="MySchool CRM" parent="menu_myschool_main"/>
 
         <!--main menus-->
         <menuitem id="menu_myschool_student" name="Student" parent="menu_myschool_main" sequence="10"/>
@@ -147,6 +147,14 @@
 			<field name="view_mode">form</field>
 		</record>
 
+        <record id="new_lead" model="ir.actions.act_window">
+            <field name="name">Lead</field>
+            <field name="res_model">crm.lead</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="crm_case_form_view_leads_extended"/>
+        </record>
+
         <!--<record model="ir.actions.act_window" id="action_student_sub_mapping">-->
             <!--<field name="name">Student Subject Mapping</field>-->
             <!--<field name="res_model">op.student.sub.mapping</field>-->
@@ -175,6 +183,8 @@
         <menuitem id="menu_period" name="Period" parent="menu_myschool_config_timetable_mng" action="act_open_op_period_view"/>
         <menuitem id="menu_classroom" name="Class Room" parent="menu_myschool_config_timetable_mng" action="act_open_op_classroom_view"/>
         <menuitem id="menu_gen_timetable" name="Generate Timetable" parent="menu_myschool_config_timetable_mng" action="act_open_generate_time_table_view"/>
+
+        <menuitem name ="Lead" id = "menu_lis_lab" action="new_lead" parent = "menu_myschool_all" />
 
     </data>
 </openerp>
