@@ -33,9 +33,14 @@
         'op_payment_schedule_line/op_payment_schedule_line_view.xml',
         'op_admission/op_admission_view.xml',
         'op_admission/op_admission_sequence.xml',
+        'op_admission/op_admission_workflow_view.xml',
         'myschool_view.xml'
 
     ],
+    'test': [
+             'test/new_admission.yml',
+    ],
+    'images': ['images/Admission_Process.png','images/Student_Information.png'],
 
     'installable': True,
     'auto_install': False,
