@@ -19,12 +19,26 @@ class op_lecturer(osv.Model):
         else:
             return True
 
+    # #lecturer nic capitalization
+    # @api.onchange('id_number')
+    # def onchange_name(self, cr, uid, ids, id_number):
+    #     if id_number != False:
+    #         result = {'value': {
+    #             'name': str(id_number).upper()
+    #         }
+    #         }
+    #         return result
+    #     else:
+    #         return True
+
     #When add a NIC auto generate the BirthDate
     @api.onchange('id_number')
     def onchange_nic(self, cr, uid, ids, id_number):
         if id_number == False:
-            pass
-        elif re.match('^\d{9}(X|V)$', id_number) == None:
+            result = {'value': {
+                'id_number': str(id_number).upper()
+            }}
+        elif re.match('^\d{9}(X|V|v|x)$', id_number) == None:
             raise osv.except_osv('Invalid NIC', 'Please enter a valid NIC')
         else:
             id = str(id_number)
@@ -52,7 +66,7 @@ class op_lecturer(osv.Model):
                         getdays = getdays - i
                 fdate = date(newYear,month,day)
 
-                result = {'value': {'birth_date': fdate}}
+                result = {'value': {'birth_date': fdate, 'id_number': str(id_number).upper()}}
                 return result
             else:
                 raise osv.except_osv('Invalid NIC', 'Please enter a valid NIC')
@@ -71,7 +85,7 @@ class op_lecturer(osv.Model):
 
     #Email validation
     def validate_email(self, cr, uid, ids, email):
-        email_re = re.compile(ur'^([a-zA-Z0-9._%-]+\@[a-zA-Z0-9_%-]+.[a-zA-Z]{2,6})$|^([a-zA-Z0-9._%-]+\@[a-zA-Z0-9_%-]+.[a-zA-Z]{2,6}.[a-zA-Z]{2,6})$')
+        email_re = re.compile("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$")
         valid_email = False
         if email is False:
             return True

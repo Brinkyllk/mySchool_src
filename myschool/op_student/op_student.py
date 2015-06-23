@@ -60,8 +60,10 @@ class op_student(osv.Model):
     @api.onchange('id_number')
     def onchange_nic(self, cr, uid, ids, id_number):
         if id_number == False:
-            pass
-        elif re.match('^\d{9}(X|V)$', id_number) == None:
+            result = {'value': {
+                'id_number': str(id_number).upper()
+            }}
+        elif re.match('^\d{9}(X|V|v|x)$', id_number) == None:
             raise osv.except_osv('Invalid NIC', 'Please enter a valid NIC')
         else:
             id = str(id_number)
@@ -89,7 +91,7 @@ class op_student(osv.Model):
                         getdays = getdays - i
                 fdate = date(newYear,month,day)
 
-                result = {'value': {'birth_date': fdate}}
+                result = {'value': {'birth_date': fdate, 'id_number': str(id_number).upper()}}
                 return result
             else:
                 raise osv.except_osv('Invalid NIC', 'Please enter a valid NIC')
@@ -127,9 +129,9 @@ class op_student(osv.Model):
         'email': fields.char(string='Email', size=128),
         'phone': fields.char(string='Phone Number', size=256),
 
-        'address_line1': fields.char('address line1', size=20),
-        'address_line2': fields.char('address line2', size=25),
-        'town': fields.char('town', size=25),
+        'address_line1': fields.char('address line1', size=20, required=True),
+        'address_line2': fields.char('address line2', size=25, required=True),
+        'town': fields.char('town', size=25, required=True),
         'province': fields.char('province', size=20),
         'nation': fields.char('nation', size=20),
 
@@ -243,7 +245,7 @@ class op_student(osv.Model):
 
     # email validation........
     def validate_email(self, cr, uid, ids, email):
-        email_re = re.compile(ur'^([a-zA-Z0-9._%-]+\@[a-zA-Z0-9_%-]+.[a-zA-Z]{2,6})$|^([a-zA-Z0-9._%-]+\@[a-zA-Z0-9_%-]+.[a-zA-Z]{2,6}.[a-zA-Z]{2,6})$')
+        email_re = re.compile("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$")
         valid_email = False
         if email is False:
             return True
