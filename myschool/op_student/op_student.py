@@ -94,7 +94,7 @@ class op_student(osv.Model):
             else:
                 raise osv.except_osv('Invalid NIC', 'Please enter a valid NIC')
 
-    #onchange for is_company
+    #onchange for (is_company)
     @api.multi
     def onchange_type(self, is_company):
         value = {'title': False}
