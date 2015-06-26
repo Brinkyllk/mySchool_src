@@ -6,12 +6,78 @@
             <field name="model">crm.lead</field>
             <field name="inherit_id" ref="crm.crm_case_form_view_leads"/>
             <field name="arch" type="xml">
-                <field name="phone" position="after">
-                    <field name="new_one"/>
-                </field>
-                <field name="partner_name" position="attributes">
-                    <attribute name="invisible">0</attribute>
-                </field>
+                <xpath  expr="//notebook" position="inside">
+                    <page string="Course(s) Info">
+                        <separator colspan="4" string="Course Details"/>
+                        <group name="Suitable Time Frame">
+                            <field name="courses_interested"  widget="many2many_tags" options="{'no_create_edit':'1'}"/>
+                        </group>
+                        <page string="Suitable Time Frame">
+                            <separator colspan="4" string="Suitable Time Frame"/>
+                            <group col="4" colspan="4">
+                                <field name="weekday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
+                                <field name="saturday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
+                                <field name="sunday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
+                                <!--<field name="saturday"/>-->
+                                <!--<field name="sunday" />-->
+                            </group>
+                        </page>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="crm_case_tree_view_oppor" model="ir.ui.view">
+            <field name="name">crm.lead.oppor.form.inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+            <field name="arch" type="xml">
+                <xpath  expr="//notebook/page[@string='Lead']" position="inside">
+                    <page string="Course(s) Info">
+                        <separator colspan="4" string="Course Details"/>
+                        <group name="Suitable Time Frame">
+                            <field name="courses_interested"  widget="many2many_tags" options="{'no_create_edit':'1'}"/>
+                        </group>
+                        <page string="Suitable Time Frame">
+                            <separator colspan="4" string="Suitable Time Frame"/>
+                            <group col="4" colspan="4">
+                                <field name="weekday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
+                                <field name="saturday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
+                                <field name="sunday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
+                                <!--<field name="saturday"/>-->
+                                <!--<field name="sunday" />-->
+                            </group>
+                        </page>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+
+
+        <record id="view_crm_tracking_form_inherit" model="ir.ui.view">
+            <field name="name">crm.tracking.form.inherit</field>
+            <field name="model">crm.tracking.campaign</field>
+            <field name="inherit_id" ref="crm.crm_tracking_campaign_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="section_id" position="after">
+                        <field name="source_id"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+        <record id="view_crm_source_form_inherit" model="ir.ui.view">
+            <field name="name">crm.source.form.inherit</field>
+            <field name="model">crm.tracking.source</field>
+            <field name="inherit_id" ref="crm.crm_tracking_source_view_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="name" position="after">
+                        <field name="channel_id"/>
+                    </field>
+                </data>
             </field>
         </record>
 
@@ -22,6 +88,43 @@
             <field name="view_mode">form</field>
             <field name="view_id" ref="crm_case_form_view_leads_extended"/>
         </record>
+
+        <record id="time_frame_form" model="ir.ui.view">
+			<field name="name">time.frame.form</field>
+			<field name="model">time.frame</field>
+			<field name="priority" eval="8" />
+			<field name="arch" type="xml">
+				<form string="Time Frames" version="7.0">
+					<sheet>
+						<separator string="Time Frames" colspan="4" />
+						<group col="4">
+							<field name="name" />
+						</group>
+					</sheet>
+				</form>
+			</field>
+        </record>
+
+        <record id="time_frame_tree" model="ir.ui.view">
+            <field name="name">time.frame.tree</field>
+            <field name="model">time.frame</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <tree string="Time Frames">
+                    <field name="name" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_time_frame" model="ir.actions.act_window">
+            <field name="name">Time Frame</field>
+            <field name="res_model">time.frame</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="time_frame_form"/>
+        </record>
+
+        <menuitem id="time_frame" name="Time Frames" parent="base.menu_base_config" action="action_time_frame"/>
     </data>
 </openerp>
 
