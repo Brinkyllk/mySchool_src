@@ -112,17 +112,38 @@ class op_period(osv.osv):
         return super(op_period, self).write(cr, uid, ids,  values, context=context)
 
     def _check_duration(self, cr, uid, vals, context=None):
-          for obj in self.browse(cr, uid, vals):
+        for obj in self.browse(cr, uid, vals):
             time_duration = obj.duration
             if time_duration == 0:
                 return False
             else:
                 return True
 
+    def _check_period_time(self, cr, uid, vals, context=None):
+        for obj in self.browse(cr, uid, vals):
+            id_info = obj.id
+            hour_input = obj.hour
+            minute_input = obj.minute
+            am_pm_input = obj.am_pm
+            duration_input = obj.duration
+            new_obj = self.pool.get('op.period').search(cr, uid, [('hour', '=', hour_input)], order=None)
+            for rec in new_obj:
+                if id_info != rec:
+                    get_data = self.pool.get('op.period').read(cr, uid, rec, ['minute', 'am_pm', 'duration'])
+                    a = get_data.get('minute')
+                    b = get_data.get('am_pm')
+                    c = get_data.get('duration')
+                    if a == minute_input and b == am_pm_input and c == duration_input:
+                        return False
+            return True
+
     _constraints = [
         (_check_duration, 'Duration cannot be zero hours', ['duration']),
         (_check_invalid_data, 'Entered Invalid Data!!', ['name']),
+        (_check_period_time, "Period info cannot be duplicated",['hour'])
     ]
+
+    _sql_constraints = [('name_unique','unique(name)', 'Period name must be unique!')]
 
 op_period()
 
@@ -156,10 +177,9 @@ class op_timetable(osv.osv):
     }
 
     # @api.onchange('start_datetime')
-    # def onchange_weekday(self):
-    #     st_date = dateutil.parser.parse(self.start_datetime).date()
-    #     day = calendar.day_name[st_date.weekday()]
-    #     self.type = day
+    # def onchange_slot(start_datetime):
+    #     raise osv.except_osv(('Error'), ('Click on the slot to change the slot' ) )
+    #     return False
 
     def action_planned(self, cr, uid, ids, context=None):
         # wf_service = netsvc.LocalService("workflow")
