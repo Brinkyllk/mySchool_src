@@ -290,7 +290,11 @@ class op_lecturer(osv.Model):
 
         # NIC validation on create
         if 'id_number' in values:
-            self.validate_NIC(cr, uid, [], values['id_number'])
+            idNumber = values.get('id_number')
+            if idNumber == False:
+                raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a NIC..!!')
+            else:
+                self.validate_NIC(cr, uid, [], values['id_number'])
 
         if 'address_line1' in values:
             if values['address_line1'] is False or None:

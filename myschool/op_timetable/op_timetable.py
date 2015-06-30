@@ -27,7 +27,7 @@ class op_period(osv.osv):
                                     ('30', '30'), ('45', '45'),
                                    ], 'Minute', required=True),
 
-        'duration': fields.float('Duration'),
+        'duration': fields.float('Duration', required=True),
         'am_pm': fields.selection([('am', 'AM'), ('pm', 'PM')], 'AM/PM', required=True),
         'sequence': fields.integer('Sequence'),
         'start_time': fields.float('Start Time'),
