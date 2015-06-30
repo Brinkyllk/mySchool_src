@@ -101,6 +101,17 @@ class op_standard(osv.Model):
             course_code = course.code
             stand = course_code + ' ' + semester_code
             values.update({'name': stand})
+
+        # modification of course
+        if ('course_id' in values):
+            course = self.pool.get('op.course').browse(cr, uid, values['course_id'])
+            course_code = course.code
+            semester_id = standard_obj.semester_id
+            semester = self.pool.get('op.semester').browse(cr, uid, semester_id.id)
+            semester_code = semester.code
+            stand = semester_code + ' ' + course_code
+            values.update({'name': stand})
+
         res = super(op_standard, self).write(cr, uid, ids,  values, context=context)
         return res
 
