@@ -101,15 +101,15 @@ class op_course(osv.Model):
             return super(op_course, self).write(cr, uid, ids, values, context=context)
 
         if 'price' in values:
-            price = re.sub('[.]', '', values['price'])
-            newPrice = price.isdigit()
-            if newPrice is True:
-                prodid = self.browse(cr, uid, ids, context=context)[0].product_id.id
-                productRef = self.pool.get('product.template')
-                productRef.write(cr, uid, prodid, {'list_price': values['price']}, context=context)
-                return super(op_course, self).write(cr, uid, ids, values, context=context)
-            else:
-                raise osv.except_osv('Invalid Product Price', 'Please enter a valid price')
+        #     price = re.sub('[.]', '', values['price'])
+        #     newPrice = price.isdigit()
+        #     if newPrice is True:
+        #         prodid = self.browse(cr, uid, ids, context=context)[0].product_id.id
+        #         productRef = self.pool.get('product.template')
+        #         productRef.write(cr, uid, prodid, {'list_price': values['price']}, context=context)
+             return super(op_course, self).write(cr, uid, ids, values, context=context)
+        #     else:
+        #         raise osv.except_osv('Invalid Product Price', 'Please enter a valid price')
 
         if 'level' in values:
             return super(op_course, self).write(cr, uid, ids, values, context=context)

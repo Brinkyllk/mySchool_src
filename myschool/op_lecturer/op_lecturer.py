@@ -4,15 +4,60 @@ from datetime import date, datetime
 import re
 from openerp.tools.translate import _
 
-
-
 class op_lecturer(osv.Model):
     #lecturer name capitalization#
-    @api.onchange('name')
-    def onchange_name(self, cr, uid, ids, name):
-        if name != False:
+    # @api.onchange('name')
+    # def onchange_name(self, cr, uid, ids, name):
+    #     if name != False:
+    #         result = {'value': {
+    #             'name': str(name).title()
+    #         }
+    #         }
+    #         return result
+    #     else:
+    #         return True
+
+    @api.onchange('initials')
+    def onchange_case(self, cr, uid, ids, initials):
+        if initials != False:
             result = {'value': {
-                'name': str(name).title()
+                'initials': str(initials).upper()
+            }
+            }
+            return result
+        else:
+            return True
+
+    #--First name first letter capitalization---
+    @api.onchange('first_name')
+    def onchange_fname(self, cr, uid, ids, first_name):
+        if first_name != False:
+            result = {'value': {
+                'first_name': str(first_name).title()
+            }
+            }
+            return result
+        else:
+            return True
+
+    #--Last name first letter capitalization---
+    @api.onchange('last_name')
+    def onchange_lname(self, cr, uid, ids, last_name):
+        if last_name != False:
+            result = {'value': {
+                'last_name': str(last_name).title()
+            }
+            }
+            return result
+        else:
+            return True
+
+    #--Middle name first letter capitalization---
+    @api.onchange('middle_name')
+    def onchange_mname(self, cr, uid, ids, middle_name):
+        if middle_name != False:
+            result = {'value': {
+                'middle_name': str(middle_name).title()
             }
             }
             return result
@@ -119,6 +164,10 @@ class op_lecturer(osv.Model):
 
     _columns = {
         'partner_id': fields.many2one('res.partner', 'Partner', required=True, ondelete="restrict"),
+        'initials': fields.char(size=20, string='Initials'),
+        'first_name': fields.char(size=15, string='First Name', required=True, select=True),
+        'middle_name': fields.char(size=15, string='Middle Name'),
+        'last_name': fields.char(size=20, string='Last Name', required=True, select=True),
         'birth_date': fields.date(string='Birth Date'),
         'register_date': fields.date(string='Registered Date'),
         'category': fields.selection([('parttime', 'Part Time'), ('visiting', 'Visiting'), ('fulltime', 'Full Time')],
@@ -198,7 +247,7 @@ class op_lecturer(osv.Model):
         else:
             return True
 
-    #-----check spaces in country---------------#
+    #---check spaces in country---------------#
     def _check_nation(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids, context=context)
         value = str(obj.nation)
@@ -211,6 +260,41 @@ class op_lecturer(osv.Model):
     # overriding create method
     def create(self, cr, uid, vals, context=None):
         vals.update({'supplier': True, 'customer': False})
+
+        if 'first_name' in vals:
+            fname = vals['first_name'].strip()
+            vals.update({'first_name': fname})
+
+        if 'middle_name' in vals:
+            if vals['middle_name'] is False or None:
+                pass
+            else:
+                mi_name = vals['middle_name'].strip()
+                vals.update({'middle_name': mi_name})
+
+        if 'last_name' in vals:
+            lname = vals['last_name'].strip()
+            vals.update({'last_name': lname})
+
+        if 'initials' in vals:
+            if vals['initials'] is False or None:
+                pass
+            else:
+                initls = vals['initials'].strip()
+                vals.update({'initials': initls})
+
+        # Fix initials if empty
+        try:
+            initials = vals['initials'].strip()
+        except Exception:
+            initials = ''
+            pass
+
+        if initials == '':
+            full_name = vals['first_name'].strip() + ' ' + vals['last_name'].strip()
+        else:
+            full_name = vals['initials'] + ' ' + vals['first_name'].strip() + ' ' + vals['last_name'].strip()
+        vals.update({'name': full_name})  # Update Partner record
 
         # phone number validation on create
         if 'phone' in vals:
@@ -277,6 +361,62 @@ class op_lecturer(osv.Model):
 
     # overriding write method
     def write(self, cr, uid, ids, values, context=None):
+        if 'initials' in values:
+            if values['initials'] is False or None:
+                pass
+            else:
+                initls = values['initials'].strip()
+                values.update({'initials': initls})
+
+        if 'first_name' in values:
+            fname = values['first_name'].strip()
+            values.update({'first_name': fname})
+
+        if 'middle_name' in values:
+            if values['middle_name'] is False or None:
+                pass
+            else:
+                mi_name = values['middle_name'].strip()
+                values.update({'middle_name': mi_name})
+
+        if 'last_name' in values:
+            lname = values['last_name'].strip()
+            values.update({'last_name': lname})
+
+        #-------- Update Partner record -------------
+        exstu = self.browse(cr, uid, ids, context=context)
+        ini = exstu.initials
+        firstName = exstu.first_name
+        lastName = exstu.last_name
+        global initial
+
+        if 'initials' in values:
+            if values['initials'] is False or None:
+                initial = ''
+            else:
+                initial = values['initials']
+        else:
+            if ini is False or None:
+                initial = ''
+            else:
+                initial = ini
+
+        if 'first_name' in values:
+            fName = values['first_name']
+        else:
+            fName = firstName
+
+        if 'last_name' in values:
+            lName = values['last_name']
+        else:
+            lName = lastName
+
+        if initial == '':
+            full_name = fName.strip() + ' ' + lName.strip()
+        else:
+            full_name = initial.strip() + ' ' + fName.strip() + ' ' + lName.strip()
+        values.update({'name': full_name})
+
         # phone number validation on write
         if 'phone' in values:
             self.phoneNumberValidation(cr, uid, [], values['phone'])

@@ -44,7 +44,6 @@
 			</field>
 		</record>
 
-
         <record id="view_lecturer_form" model="ir.ui.view">
             <field name="name">op.lecturer.form</field>
             <field name="model">op.lecturer</field>
@@ -53,19 +52,31 @@
                     <sheet>
                         <field name="image" widget="image" class="oe_left oe_avatar"/>
                         <div class="oe_edit_only">
-                            <label for=""/> (
+                            <label for="name"/> (
                             <field name="is_company" on_change="onchange_type(is_company)" class="oe_inline"/> <label for="is_company" string="Is a Company?"/>)
                         </div>
-                        <div class="oe_name">
+                        <div class="oe_title">
                             <h2>
                                 <field name="title" placeholder="Title" style="width: 30%%" options="{'no_create_edit':'1'}"/>
                             </h2>
                             <h2>
                                 <table>
                                     <tr>
+                                        <field name="initials" on_change='onchange_case(initials)' placeholder="Initials"
+                                               style="padding-right:10px; width: 150px;"/>
+                                    </tr>
+                                    <tr>
                                         <td>
-                                            <field name="name" placeholder="Name" on_change='onchange_name(name)'
-                                                   style="padding-right:10px; width: 400px;"/>
+                                            <field name="first_name" placeholder="First Name" on_change='onchange_fname(first_name)'
+                                                   style="padding-right:10px;"/>
+                                        </td>
+                                        <td>
+                                            <field name="middle_name" placeholder="Middle Name" on_change='onchange_mname(middle_name)'
+                                                   style="padding-right:10px; margin-left: 5px;"/>
+                                        </td>
+                                        <td>
+                                            <field name="last_name" placeholder="Last Name" on_change='onchange_lname(last_name)'
+                                                   style="padding-right:10px; margin-left: 5px;"/>
                                         </td>
                                     </tr>
                                 </table>
@@ -97,6 +108,7 @@
                                     <field name="bank_acc_num"/>
                                     <field name="gender" attrs="{'readonly': [('is_company','=',True)]}"/>
                                     <field name="phone" />
+                                    <!--<field name="partner"/>-->
                                     <!--<field name="partner"/>-->
 								</group>
 
@@ -163,9 +175,7 @@
 							<page string="Subjects Detail">
 								<field name="lecturer_subject_ids" colspan="4" nolabel="1" />
 							</page>
-
 						</notebook>
-
                     </sheet>
                 </form>
             </field>
@@ -185,7 +195,6 @@
             </field>
         </record>
 
-
         <record id="view_op_lecturer_search" model="ir.ui.view">
 			<field name="name">op.lecturer.search</field>
 			<field name="model">op.lecturer</field>
@@ -204,7 +213,6 @@
 					<group expand="0" string="Group By...">
 						<filter string="Category" domain="[]" context="{'group_by':'category'}" />
                         <filter string="Language" domain="[]" context="{'group_by':'language'}" />
-
 					</group>
 				</search>
 			</field>
@@ -239,7 +247,6 @@
 			<field name="view_mode">kanban</field>
 			<field name="view_id" ref="kanban_view_lecturer" />
 		</record>
-
 
     </data>
 </openerp>
