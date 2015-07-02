@@ -27,7 +27,7 @@ from openerp.exceptions import Warning
 class res_partner(osv.Model):
     _inherit = 'res.partner'
     _columns = {
-        'name': fields.char('Name', size=60, required=True, select=True),
+        'name': fields.char('Name', size=40, required=True, select=True),
         #'library_card_ids': fields.one2many('op.library.card', 'partner_id', 'Library Card', ),
         'is_student': fields.boolean('Student', readonly=True),
         #'stu_reg_id': fields.char(string='Student No.', size=7, readonly=True),

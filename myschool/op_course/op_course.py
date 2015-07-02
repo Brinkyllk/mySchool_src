@@ -27,11 +27,12 @@ class op_course(osv.Model):
         'level': fields.selection([('certification', 'Certification'), ('diploma', 'Diploma'), ('degree', 'Degree')],
                                   string='Course Level'),
         'product_id': fields.many2one('product.product', 'Product', ondelete='restrict', readonly=True),
-        'price': fields.related('product_id', 'list_price', string='Price', type='char'),
+        'price': fields.related('product_id', 'list_price', string='Price', type='float'),
         'subject_ids': fields.one2many('op.subject', 'name', string='Subject(s)', options="{'create_edit': False}",
                                        readonly=True),
         'standard_id': fields.one2many('op.standard', 'course_id', string='Standard(s)',
-                                       options="{'create_edit': False}", readonly=True)
+                                       options="{'create_edit': False}", readonly=True),
+        'saved': fields.boolean('Saved', readonly=True),
 
 
         # ----------- test ----------
@@ -63,6 +64,7 @@ class op_course(osv.Model):
     _sql_constraints = [('code', 'UNIQUE (code)', 'The CODE of the COURSE must be unique!')]
 
     def create(self, cr, uid, vals, context=None):
+        vals.update({'saved': True})
         #Reffer producy
         productRef = self.pool.get('product.product')
         product = {'name': vals['name'], 'list_price': vals['price']}

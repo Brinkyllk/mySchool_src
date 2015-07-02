@@ -9,8 +9,9 @@
                 <xpath  expr="//notebook" position="inside">
                     <page string="Course(s) Info">
                         <separator colspan="4" string="Course Details"/>
-                        <group name="Suitable Time Frame">
+                        <group col="4" colspan="4">
                             <field name="courses_interested"  widget="many2many_tags" options="{'no_create_edit':'1'}"/>
+                            <field name="prospective_student"/>
                         </group>
                         <page string="Suitable Time Frame">
                             <separator colspan="4" string="Suitable Time Frame"/>
@@ -18,11 +19,14 @@
                                 <field name="weekday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
                                 <field name="saturday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
                                 <field name="sunday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
-                                <!--<field name="saturday"/>-->
-                                <!--<field name="sunday" />-->
                             </group>
                         </page>
                     </page>
+                </xpath>
+                <xpath  expr="//notebook/page[@string='Extra Info']" position="inside">
+                    <group>
+                        <field name="inquiry_date"/>
+                    </group>
                 </xpath>
             </field>
         </record>
@@ -37,6 +41,7 @@
                         <separator colspan="4" string="Course Details"/>
                         <group name="Suitable Time Frame">
                             <field name="courses_interested"  widget="many2many_tags" options="{'no_create_edit':'1'}"/>
+                            <field name="prospective_student"/>
                         </group>
                         <page string="Suitable Time Frame">
                             <separator colspan="4" string="Suitable Time Frame"/>
@@ -44,16 +49,15 @@
                                 <field name="weekday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
                                 <field name="saturday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
                                 <field name="sunday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
-                                <!--<field name="saturday"/>-->
-                                <!--<field name="sunday" />-->
                             </group>
                         </page>
                     </page>
                 </xpath>
+                <xpath  expr="//group[@string='Misc']" position="inside">
+                    <field name="inquiry_date"/>
+                </xpath>
             </field>
         </record>
-
-
 
         <record id="view_crm_tracking_form_inherit" model="ir.ui.view">
             <field name="name">crm.tracking.form.inherit</field>
@@ -90,19 +94,19 @@
         </record>
 
         <record id="time_frame_form" model="ir.ui.view">
-			<field name="name">time.frame.form</field>
-			<field name="model">time.frame</field>
-			<field name="priority" eval="8" />
-			<field name="arch" type="xml">
-				<form string="Time Frames" version="7.0">
-					<sheet>
-						<separator string="Time Frames" colspan="4" />
-						<group col="4">
-							<field name="name" />
-						</group>
-					</sheet>
-				</form>
-			</field>
+            <field name="name">time.frame.form</field>
+            <field name="model">time.frame</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <form string="Time Frames" version="7.0">
+                    <sheet>
+                        <separator string="Time Frames" colspan="4" />
+                        <group col="4">
+                            <field name="name" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
         </record>
 
         <record id="time_frame_tree" model="ir.ui.view">

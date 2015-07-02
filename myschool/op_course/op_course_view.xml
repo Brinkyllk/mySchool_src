@@ -10,9 +10,10 @@
                     <sheet>
                         <separator string="Course" colspan="4" />
                         <group>
-                            <field name='code' on_change='onchange_case(code)'/>
+                            <field name='code' on_change='onchange_case(code)' attrs="{'readonly':[('saved','=', True)]}"/>
                             <field name="name"/>
                             <field name="level"/>
+                            <field name="saved" invisible="1"/>
                             <!--<field name="search_course"/>-->
                         </group>
                         <notebook>

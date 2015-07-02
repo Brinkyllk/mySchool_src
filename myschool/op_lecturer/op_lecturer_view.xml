@@ -53,7 +53,7 @@
                     <sheet>
                         <field name="image" widget="image" class="oe_left oe_avatar"/>
                         <div class="oe_edit_only">
-                            <label for="name"/> (
+                            <label for=""/> (
                             <field name="is_company" on_change="onchange_type(is_company)" class="oe_inline"/> <label for="is_company" string="Is a Company?"/>)
                         </div>
                         <div class="oe_name">

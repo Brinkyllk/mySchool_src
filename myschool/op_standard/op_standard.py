@@ -21,6 +21,7 @@ class op_semester(osv.Model):
     _columns = {
         'code': fields.char(size=8, string='Code', required=True),
         'name': fields.char(size=32, string='Name', required=True),
+        'saved': fields.boolean('Saved', readonly=True),
         # 'semester_id': fields.many2one('op.standard', 'Academic Term'),
     }
 
@@ -48,6 +49,7 @@ class op_semester(osv.Model):
     _sql_constraints = [('code', 'UNIQUE (code)', 'The CODE of the Academic Term must be unique!')]
 
     def create(self, cr, uid, vals, context=None):
+        vals.update({'saved': True})
         code = vals['code'].strip()
         name = vals['name'].strip()
         vals.update({'code':code, 'name':name})
