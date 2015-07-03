@@ -64,17 +64,6 @@ class op_lecturer(osv.Model):
         else:
             return True
 
-    # #lecturer nic capitalization
-    # @api.onchange('id_number')
-    # def onchange_name(self, cr, uid, ids, id_number):
-    #     if id_number != False:
-    #         result = {'value': {
-    #             'name': str(id_number).upper()
-    #         }
-    #         }
-    #         return result
-    #     else:
-    #         return True
 
     #When add a NIC auto generate the BirthDate
     @api.onchange('id_number')
@@ -201,7 +190,7 @@ class op_lecturer(osv.Model):
     ]
 
 
-     #.... check passing nul values..#
+     #.... check passing nul values........#
     def _check_invalid_data(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids, context=context)
         initials  = str(obj.initials)
