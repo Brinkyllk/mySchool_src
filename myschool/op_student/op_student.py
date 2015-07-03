@@ -212,7 +212,7 @@ class op_student(osv.Model):
             return True
 
 
-    #.... check passing nul values...#
+    #..... check passing nul values....#
     def _check_invalid_data(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids, context=context)
         initials  = str(obj.initials)
