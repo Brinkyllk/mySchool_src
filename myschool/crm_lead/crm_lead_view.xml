@@ -109,14 +109,14 @@
             </field>
         </record>
 
-        <record id="crm_oppor_form_view_leads_extended" model="ir.ui.view">
-            <field name="name">crm.lead.oppor.form.inherit</field>
-            <field name="model">crm.lead</field>
-            <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
-            <field name="arch" type="xml">
-                <form string="Opportunities" create="false" edit="false"></form>
-            </field>
-        </record>
+        <!--<record id="crm_oppor_form_view_leads_extended" model="ir.ui.view">-->
+            <!--<field name="name">crm.lead.oppor.form.inherit</field>-->
+            <!--<field name="model">crm.lead</field>-->
+            <!--<field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<form string="Opportunities" create="false" edit="false"></form>-->
+            <!--</field>-->
+        <!--</record>-->
 
         <!--<record id="crm_case_form_view_leads_extendeds" model="ir.ui.view">-->
             <!--<field name="name">crm.lead.form.inherit</field>-->
@@ -128,20 +128,20 @@
             <!--</field>-->
         <!--</record>-->
 
-        <record id="crm_oppor_tree_view_leads_extended" model="ir.ui.view">
-            <field name="name">Opportunities Tree</field>
-            <field name="model">crm.lead</field>
-            <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
-            <field name="arch" type="xml">
-                <tree></tree>
-                <!--<field name="Opportunities Tree" position="attributes">-->
-                    <!--&lt;!&ndash;<attributes name="attrs">&ndash;&gt;-->
-                        <!--&lt;!&ndash;'create':'false'&ndash;&gt;-->
-                    <!--&lt;!&ndash;</attributes>&ndash;&gt;-->
-                <!--</field>-->
+        <!--<record id="crm_oppor_tree_view_leads_extended" model="ir.ui.view">-->
+            <!--<field name="name">Opportunities Tree</field>-->
+            <!--<field name="model">crm.lead</field>-->
+            <!--<field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<tree></tree>-->
+                <!--&lt;!&ndash;<field name="Opportunities Tree" position="attributes">&ndash;&gt;-->
+                    <!--&lt;!&ndash;&lt;!&ndash;<attributes name="attrs">&ndash;&gt;&ndash;&gt;-->
+                        <!--&lt;!&ndash;&lt;!&ndash;'create':'false'&ndash;&gt;&ndash;&gt;-->
+                    <!--&lt;!&ndash;&lt;!&ndash;</attributes>&ndash;&gt;&ndash;&gt;-->
+                <!--&lt;!&ndash;</field>&ndash;&gt;-->
 
-            </field>
-        </record>
+            <!--</field>-->
+        <!--</record>-->
 
         <record id="time_frame_tree" model="ir.ui.view">
             <field name="name">time.frame.tree</field>
