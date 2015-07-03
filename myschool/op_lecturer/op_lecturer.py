@@ -200,6 +200,29 @@ class op_lecturer(osv.Model):
                         ('id_number', 'UNIQUE (id_number)', 'The NIC  of the Lecturer  must be unique!')
     ]
 
+
+     #.... check passing nul values..#
+    def _check_invalid_data(self, cr, uid, ids, context=None):
+        obj = self.browse(cr, uid, ids, context=context)
+        initials  = str(obj.initials)
+        fnew_name = str(obj.first_name)
+        middle_name = str(obj.middle_name)
+        lnew_code = str(obj.last_name)
+        initials = initials.replace(" ","")
+        new_ini = initials.replace("." ,"")
+        fname = fnew_name.replace(" ", "")
+        mname = middle_name.replace(" ", "")
+        lname = lnew_code.replace(" ", "")
+        #isalpha python inbuilt function Returns true if string
+            #has at least 1 character and all characters are alphabetic and false otherwise.
+        if fname or lname or new_ini or mname:
+            if fname.isalpha() and lname.isalpha() and new_ini.isalpha() and mname.isalpha():
+                return True
+            else:
+                return False
+        else:
+            return False
+
     def validate_NIC(self, cr, uid, ids, id_number, context=None):
         obj = self.browse(cr, uid, ids, context=context)
         value = str(obj.is_company)
@@ -531,6 +554,7 @@ class op_lecturer(osv.Model):
 
     _constraints = [
         (_check_registered_date, 'Registered Date cannot be future date!', ['register_date']),
+        (_check_invalid_data, 'Entered Invalid Name Details!!', ['initials','first_name','last_name','middle_name']),
         (_check_add_l_one, 'Entered Invalid Data in Address line1 !!', ['address_line1']),
         (_check_add_l_two, 'Entered Invalid Data in Address line2 !!', ['address_line2']),
         (_check_town, 'Entered Invalid Data in City !!', ['town']),
