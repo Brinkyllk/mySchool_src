@@ -48,9 +48,9 @@ class res_partner(osv.Model):
         else:
             return False
 
-    _constraints = [
-                    (_check_invalid_data, 'Entered Invalid Data!!', ['name']),
-    ]
+    # _constraints = [
+    #                 (_check_invalid_data, 'Entered Invalid Data!!', ['name']),
+    # ]
 
     def create(self, cr, uid, vals, context=None):
         # name = vals['name'].strip()
