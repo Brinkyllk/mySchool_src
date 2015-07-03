@@ -120,7 +120,7 @@ class op_student(osv.Model):
         'middle_name': fields.char(size=15, string='Middle Name'),
         'last_name': fields.char(size=20, string='Last Name', required=True, select=True),
         'gender': fields.selection([('m', 'Male'), ('f', 'Female'), ('o', 'Other')], string='Gender', required=True),
-        'birth_date': fields.date(string='Birth Date'),
+        'birth_date': fields.date(string='Birth Date', required=True),
         'register_date': fields.date(string='Registered Date'),
         'nationality': fields.many2one('res.country', string='Nationality test'),
         'language': fields.many2one('res.lang', string='Mother Tongue'),
@@ -215,14 +215,14 @@ class op_student(osv.Model):
     #..... check passing nul values....#
     def _check_invalid_data(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids, context=context)
-        initials  = str(obj.initials)
+        initials = str(obj.initials)
         fnew_name = str(obj.first_name)
         middle_name = str(obj.middle_name)
         lnew_code = str(obj.last_name)
         initials = initials.replace(" ","")
         new_ini = initials.replace("." ,"")
         fname = fnew_name.replace(" ", "")
-        mname = middle_name.replace(" ", "")
+        mname = middle_name.replace(" ","")
         lname = lnew_code.replace(" ", "")
         #isalpha python inbuilt function Returns true if string
             #has at least 1 character and all characters are alphabetic and false otherwise.
@@ -233,6 +233,18 @@ class op_student(osv.Model):
                 return False
         else:
             return False
+    #
+    # def validate_last_name(self, cr, uid, ids, last_name):
+    #     print last_name
+    #     last_name_re = re.compile("^a-zA-Z0-9.,/()-_$")
+    #     valid_last_name = False
+    #     if last_name is False:
+    #         return True
+    #     if last_name_re.match(last_name):
+    #         valid_last_name=True
+    #         return True
+    #     else:
+    #         raise osv.except_osv(_('Invalid Last Name'), _('Please enter a valid Last Name'))
 
     #Can not delete all the courses of the specific student
     def _canNotDeleteCourse(self, cr, uid, ids, context=None):
@@ -330,6 +342,9 @@ class op_student(osv.Model):
         # email validation on write
         if 'email' in vals:
             self.validate_email(cr, uid, [], vals['email'])
+
+        # if 'last_name' in vals:
+        #     self.validate_last_name(cr, uid, [], vals['last_name'])
 
         # phone number validation on create
         if 'phone' in vals:
@@ -439,10 +454,10 @@ class op_student(osv.Model):
                     raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a Registered Date..!!')
             else:
                 if vals['birth_date'] == False or vals['birth_date'] == None:
-                    raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a NIC..!!')
-                else:
-                    if vals ['id_number'] == False or vals ['id_number'] == None:
-                        raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a NIC..!!')
+                    raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a Birth Date..!!')
+                # else:
+                #     if vals ['id_number'] == False or vals ['id_number'] == None:
+                #         raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a NIC..!!')
 
         return stu_id
 
@@ -467,13 +482,16 @@ class op_student(osv.Model):
                 mi_name = values['middle_name'].strip()
                 values.update({'middle_name': mi_name})
 
-        if 'last_name' in values:
-            lname = values['last_name'].strip()
-            values.update({'last_name': lname})
+        # if 'last_name' in values:
+        #     lname = values['last_name'].strip()
+        #     values.update({'last_name': lname})
 
         # email validation on write
         if 'email' in values:
             self.validate_email(cr, uid, ids, values['email'])
+
+        # if 'last_name' in values:
+        #     self.validate_last_name(cr, uid, ids, values['last_name'])
 
         # # NIC validation on write
         if 'id_number' in values:
