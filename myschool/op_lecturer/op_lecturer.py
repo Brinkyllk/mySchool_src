@@ -296,7 +296,7 @@ class op_lecturer(osv.Model):
             full_name = vals['initials'] + ' ' + vals['first_name'].strip() + ' ' + vals['last_name'].strip()
         vals.update({'name': full_name})  # Update Partner record
 
-        # phone number validation on create.....
+        # phone number validation on create
         if 'phone' in vals:
             self.phoneNumberValidation(cr, uid, [], vals['phone'])
 
