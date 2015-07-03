@@ -220,13 +220,14 @@ class op_student(osv.Model):
         middle_name = str(obj.middle_name)
         lnew_code = str(obj.last_name)
         initials = initials.replace(" ","")
+        new_ini = initials.replace("." ,"")
         fname = fnew_name.replace(" ", "")
-        mname = middle_name.replace(" ","")
+        mname = middle_name.replace(" ", "")
         lname = lnew_code.replace(" ", "")
         #isalpha python inbuilt function Returns true if string
             #has at least 1 character and all characters are alphabetic and false otherwise.
-        if fname or lname or initials or mname:
-            if fname.isalpha() and lname.isalpha() and initials.isalpha() and mname.isalpha():
+        if fname or lname or new_ini or mname:
+            if fname.isalpha() and lname.isalpha() and new_ini.isalpha() and mname.isalpha():
                 return True
             else:
                 return False
