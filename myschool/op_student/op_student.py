@@ -227,24 +227,12 @@ class op_student(osv.Model):
         #isalpha python inbuilt function Returns true if string
             #has at least 1 character and all characters are alphabetic and false otherwise.
         if fname or lname or new_ini or mname:
-            if fname.isalpha() and lname.isalpha() and new_ini.isalpha() and mname.isalpha():
+            if fname.isalpha() and new_ini.isalpha():
                 return True
             else:
                 return False
         else:
             return False
-    #
-    # def validate_last_name(self, cr, uid, ids, last_name):
-    #     print last_name
-    #     last_name_re = re.compile("^a-zA-Z0-9.,/()-_$")
-    #     valid_last_name = False
-    #     if last_name is False:
-    #         return True
-    #     if last_name_re.match(last_name):
-    #         valid_last_name=True
-    #         return True
-    #     else:
-    #         raise osv.except_osv(_('Invalid Last Name'), _('Please enter a valid Last Name'))
 
     #Can not delete all the courses of the specific student
     def _canNotDeleteCourse(self, cr, uid, ids, context=None):
@@ -267,6 +255,30 @@ class op_student(osv.Model):
             return True
         else:
             raise osv.except_osv(_('Invalid Email'), _('Please enter a valid Email'))
+
+    def validate_last_name(self, cr, uid, ids, last_name):
+        print last_name
+        last_name_re = re.compile("^[a-zA-Z0-9.,/()-_]*$")
+        valid_last_name = False
+        if last_name is False:
+            return True
+        if last_name_re.match(last_name):
+            valid_last_name=True
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Last Name'), _('Please enter a valid Last Name'))
+
+    def validate_middle_name(self, cr, uid, ids, middle_name):
+        print middle_name
+        middle_name_re = re.compile("^[a-zA-Z0-9.,/()-_]*$")
+        valid_middle_name = False
+        if middle_name is False:
+            return True
+        if middle_name_re.match(middle_name):
+            valid_middle_name=True
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Middle Name'), _('Please enter a valid Middle Name'))
 
     def validate_NIC(self, cr, uid, ids, id_number):
         if id_number is None:
@@ -339,12 +351,7 @@ class op_student(osv.Model):
                 initls = vals['initials'].strip()
                 vals.update({'initials': initls})
 
-        # email validation on write
-        if 'email' in vals:
-            self.validate_email(cr, uid, [], vals['email'])
 
-        # if 'last_name' in vals:
-        #     self.validate_last_name(cr, uid, [], vals['last_name'])
 
         # phone number validation on create
         if 'phone' in vals:
@@ -419,6 +426,12 @@ class op_student(osv.Model):
         if 'email' in vals:
             self.validate_email(cr, uid, [], vals['email'])
 
+        if 'last_name' in vals:
+            self.validate_last_name(cr, uid, [], vals['last_name'])
+
+        if 'middle_name' in vals:
+            self.validate_middle_name(cr, uid, [], vals['middle_name'])
+
         # NIC validation on create
         if 'id_number' in vals:
             self.validate_NIC(cr, uid, [], vals['id_number'])
@@ -490,8 +503,11 @@ class op_student(osv.Model):
         if 'email' in values:
             self.validate_email(cr, uid, ids, values['email'])
 
-        # if 'last_name' in values:
-        #     self.validate_last_name(cr, uid, ids, values['last_name'])
+        if 'last_name' in values:
+            self.validate_last_name(cr, uid, ids, values['last_name'])
+
+        if 'middle_name' in values:
+            self.validate_middle_name(cr, uid, ids, values['middle_name'])
 
         # # NIC validation on write
         if 'id_number' in values:
