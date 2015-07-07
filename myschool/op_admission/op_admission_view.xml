@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <openerp>
 	<data>
 		<record id="view_op_admission_tree" model="ir.ui.view">
@@ -24,7 +23,6 @@
 				</tree>
 			</field>
 		</record>
-
 		<record id="view_op_admission_form" model="ir.ui.view">
 			<field name="name">op.admission.form</field>
 			<field name="model">op.admission</field>
@@ -96,7 +94,7 @@
 									<newline />
 									<field name="gr_no" />
 									<field name="gr_no_old" attrs="{'invisible':[('gr_no','!=',True)]}" />
-									<field name="gr_no_new" attrs="{'invisible':[('gr_no','!=',False)]}" />
+									<field name="gr_no_new" attrs="{'invisible':[('gr_no','!=',False)]}" />		
 								</group>
 							</page>
 							<page string="Personal Detail">
@@ -110,7 +108,7 @@
 											<!--placeholder="State" style="width: 24%%" />-->
 										<!--<field name="zip" placeholder="ZIP" style="width: 34%%" />-->
 									</div>
-									<field name="country_id" placeholder="Country" options='{"no_open": True}' />
+									<!--<field name="country_id" placeholder="Country" options='{"no_open": True}' />-->
 									<field name="phone" placeholder="Phone" />
 									<field name="mobile" placeholder="Mobile" />
 									<field name="email" placeholder="Email" />
@@ -127,7 +125,6 @@
 				</form>
 			</field>
 		</record>
-
 		<record id="view_op_admission_search" model="ir.ui.view">
 			<field name="name">op.admission.search</field>
 			<field name="model">op.admission</field>

@@ -1,14 +1,30 @@
+# -*- coding: utf-8 -*-
+#/#############################################################################
+#
+#    Tech-Receptives Solutions Pvt. Ltd.
+#    Copyright (C) 2004-TODAY Tech-Receptives(<http://www.tech-receptives.com>).
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as
+#    published by the Free Software Foundation, either version 3 of the
+#    License, or (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+#/#############################################################################
 from openerp.osv import osv, fields
 import time
 from openerp import netsvc
 
-class op_admission(osv.Model):
+class op_admission(osv.osv):
     _name = 'op.admission'
     _rec_name = 'application_number'
-
-    def close_bdate(self, cr, uid, id, context=None):
-
-        return
 
     def copy(self, cr, uid, id, default=None, context=None):
         if not default:
@@ -36,7 +52,9 @@ class op_admission(osv.Model):
             'mobile': fields.char(size=16, string='Mobile', states={'done': [('readonly', True)]}),
             'email': fields.char(size=256, string='Email', states={'done': [('readonly', True)]}),
             'city': fields.char(size=64, string='City', states={'done': [('readonly', True)]}),
-            'country_id': fields.many2one('res.country', string='Country', states={'done': [('readonly', True)]}),
+            'zip': fields.char(size=8, string='Zip', states={'done': [('readonly', True)]}),
+            # 'state_id': fields.many2one('res.country.state', string='States', states={'done': [('readonly', True)]}),
+            # 'country_id': fields.many2one('res.country', string='Country', states={'done': [('readonly', True)]}),
             'fees': fields.float(string='Fees', states={'done': [('readonly', True)]}),
             'photo': fields.binary(string='Photo', states={'done': [('readonly', True)]}),
             'state': fields.selection([('d','Draft'),('i','Confirm'),('s','Enroll'), ('done','Done') ,('r','Rejected'),('p','Pending'),('c','Cancel')],readonly=True,select=True, string='State'),
@@ -46,13 +64,17 @@ class op_admission(osv.Model):
             'prev_result': fields.char(size=256, string='Previous Result', states={'done': [('readonly', True)]}),
             'family_business': fields.char(size=256, string='Family Business', states={'done': [('readonly', True)]}),
             'family_income': fields.float(string='Family Income', states={'done': [('readonly', True)]}),
+            # 'religion_id': fields.many2one('op.religion', string='Religion', states={'done': [('readonly', True)]}),
+            # 'category_id': fields.many2one('op.category', string='Category', required=True, states={'done': [('readonly', True)]}),
             'gender': fields.selection([('m','Male'),('f','Female'),('o','Other')], string='Gender', required=True, states={'done': [('readonly', True)]}),
             'standard_id': fields.many2one('op.standard', string='Standard', required=True, states={'done': [('readonly', True)]}),
+            'division_id': fields.many2one('op.division', string='Division', states={'done': [('readonly', True)]}),
             'student_id': fields.many2one('op.student', string='Student', states={'done': [('readonly', True)]}),
             'nbr': fields.integer('# of Admission', readonly=True),
             'gr_no': fields.boolean('Old Student??'),
             'gr_no_old': fields.char(string="GR Number old", size=10),
             'gr_no_new': fields.char(string="GR Number new", size=10),
+            
     }
 
     _defaults = {
@@ -86,43 +108,49 @@ class op_admission(osv.Model):
                     'last_name': field.last_name,
                     'birth_date':field.birth_date,
                     'gender': field.gender,
-                    'course_id': field.course_id and field.course_id.id or False,
-                    'batch_id': field.batch_id and field.batch_id.id or False,
-                    'standard_id': field.standard_id and field.standard_id.id or False,
+                    # 'category': field.category_id and field.category_id.id or False,
+                    'def_course': field.course_id and field.course_id.id or False,
+                    'def_batch': field.batch_id and field.batch_id.id or False,
+                    'def_standard': field.standard_id and field.standard_id.id or False,
+                    # 'religion': field.religion_id and field.religion_id.id or False,
                     'photo': field.photo or False,
-                    # 'gr': gr,
+                    'gr': gr,
                     'address':[(0,0,{
                                      'name': field.name or False,
                                      'type': 'invoice',
                                      'title': field.title and field.title.id or False,
                                      'street': field.street or False,
                                      'street2': field.street2 or False,
+                                     'phone': field.phone or False,
+                                     'mobile': field.mobile or False,
+                                     # 'zip': field.zip or False,
                                      'city': field.city or False,
-                                     'country_id': field.country_id and field.country_id.id or False,
+                                     # 'country_id': field.country_id and field.country_id.id or False,
+                                     # 'state_id': field.state_id and field.state_id.id or False,
                                      })]
                     }
         new_student = student_pool.create(cr, uid, vals, context=context)
-        self.write(cr,uid,ids,{'state': 's', 'student_id': new_student, 'nbr': 1})
+        self.write(cr,uid,ids,{'state':'s', 'student_id': new_student, 'nbr': 1})
         return True
 
     def confirm_rejected(self, cr, uid, ids, context=None):
-        self.write(cr,uid,ids,{'state': 'r'})
+        self.write(cr,uid,ids,{'state':'r'})
         return True
 
     def confirm_pending(self, cr, uid, ids, context=None):
-        self.write(cr,uid,ids,{'state': 'p'})
+        self.write(cr,uid,ids,{'state':'p'})
         return True
 
     def confirm_to_draft(self, cr, uid, ids, context=None):
         wf_service = netsvc.LocalService("workflow")
-        self.write(cr,uid,ids,{'state': 'd'})
+        self.write(cr,uid,ids,{'state':'d'})
         for inv_id in ids:
             wf_service.trg_delete(uid, 'op.admission', inv_id, cr)
             wf_service.trg_create(uid, 'op.admission', inv_id, cr)
         return True
 
     def confirm_cancel(self, cr, uid, ids, context=None):
-        self.write(cr,uid,ids,{'state': 'c'})
+        self.write(cr,uid,ids,{'state':'c'})
         return True
 
     def open_student(self, cr, uid, ids,context={}):
@@ -130,8 +158,8 @@ class op_admission(osv.Model):
         this_obj = self.browse(cr, uid, ids[0], context)
         student = self.pool.get('op.student').browse(cr, uid, this_obj.student_id.id, context)
         models_data = self.pool.get('ir.model.data')
-        form_view = models_data.get_object_reference(cr, uid, 'openeducat_erp', 'view_op_student_form')
-        tree_view = models_data.get_object_reference(cr, uid, 'openeducat_erp', 'view_op_student_tree')
+        form_view = models_data.get_object_reference(cr, uid, 'myschool', 'act_open_op_student_view_form')
+        tree_view = models_data.get_object_reference(cr, uid, 'myschool', 'act_open_op_student_view_tree')
         value = {
                 'domain': str([('id', '=', student.id)]),
                 'view_type': 'form',
@@ -149,3 +177,5 @@ class op_admission(osv.Model):
         return value
 
 op_admission()
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+
