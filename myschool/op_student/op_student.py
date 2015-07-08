@@ -143,11 +143,6 @@ class op_student(osv.Model):
         'parent_name': fields.char(string='Parent Name', size=60),
         'contact_no': fields.char(string='Contact Number', size=12),
 
-        #------ Course details ------
-        'def_batch': fields.many2one('op.batch', string='Batch', readonly=True),
-        'def_course': fields.many2one('op.course', 'Course', readonly=True),
-        'def_standard': fields.many2one('op.standard', 'Standard', readonly=True),
-
         #------ Map many Courses ------
         'batch_ids': fields.one2many('op.student.batch.mapping', 'student_id', string='Registered Courses'),
 
@@ -257,7 +252,6 @@ class op_student(osv.Model):
             raise osv.except_osv(_('Invalid Email'), _('Please enter a valid Email'))
 
     def validate_last_name(self, cr, uid, ids, last_name):
-        print last_name
         last_name_re = re.compile("^[a-zA-Z0-9.,/()-_]*$")
         valid_last_name = False
         if last_name is False:
@@ -269,7 +263,6 @@ class op_student(osv.Model):
             raise osv.except_osv(_('Invalid Last Name'), _('Please enter a valid Last Name'))
 
     def validate_middle_name(self, cr, uid, ids, middle_name):
-        print middle_name
         middle_name_re = re.compile("^[a-zA-Z0-9.,/()-_]*$")
         valid_middle_name = False
         if middle_name is False:
@@ -321,12 +314,6 @@ class op_student(osv.Model):
             self.write(cr, uid, ids, {'stu_reg_number': id}, context=context)
 
         return {}
-
-    # def search(self, cr, uid, ids, context=None):
-    #     ss = self.pool.get('op.student.batch.mapping')
-    #     te = ss.browse(cr, uid, [], context=context)
-    #     print te
-    #     return
 
     def create(self, cr, uid, vals, context=None):
         if 'first_name' in vals:
@@ -437,29 +424,9 @@ class op_student(osv.Model):
             self.validate_NIC(cr, uid, [], vals['id_number'])
 
         # Save student and get record id
-        stu_id = super(op_student, self).create(cr, uid, vals, context=context)
-
-        # Many to Many course logic
-        course_map_ref = self.pool.get('op.student.batch.mapping')  # get reference to object
-        # Validate Course mandatory
-        course_count = course_map_ref.search(cr, uid, [('student_id', '=', stu_id)], count=True, context=context)
-        if course_count < 1:
-            raise osv.except_osv(_(u'Error'), _(u'Course is mandatory'))
-            return
-
-        # Assign default course
-        def_course_id = course_map_ref.search(cr, uid,
-                                              ['&', ('student_id', '=', stu_id),
-                                               ('default_course', '=', True)],
-                                              context=context)
-        def_course = course_map_ref.browse(cr, uid, def_course_id, context=context)
+        # stu_id = super(op_student, self).create(cr, uid, vals, context=context)
 
 
-
-        # vals.update({'course_id': def_course[0].course_id.id})
-        self.write(cr, uid, [stu_id], {'def_course': def_course[0].course_id.id,
-                                       'def_batch': def_course[0].batch_id.id,
-                                       'def_standard': def_course[0].standard_id.id, }, context=context)
 
         if 'is_company' in vals:
             if vals['is_company'] == True:
@@ -472,7 +439,8 @@ class op_student(osv.Model):
                 #     if vals ['id_number'] == False or vals ['id_number'] == None:
                 #         raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a NIC..!!')
 
-        return stu_id
+        # return stu_id
+        super(op_student, self).create(cr, uid, vals, context=context)
 
 
 
@@ -503,11 +471,8 @@ class op_student(osv.Model):
         if 'email' in values:
             self.validate_email(cr, uid, ids, values['email'])
 
-        if 'last_name' in values:
-            self.validate_last_name(cr, uid, ids, values['last_name'])
-
-        if 'middle_name' in values:
-            self.validate_middle_name(cr, uid, ids, values['middle_name'])
+        # if 'last_name' in values:
+        #     self.validate_last_name(cr, uid, ids, values['last_name'])
 
         # # NIC validation on write
         if 'id_number' in values:
