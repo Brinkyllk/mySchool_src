@@ -12,4 +12,5 @@ import utils
 import op_payment_schedule
 import op_payment_schedule_line
 import op_admission
+import op_study_programme
 

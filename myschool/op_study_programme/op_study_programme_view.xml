@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <record id="view_op_study_programme_form" model="ir.ui.view">
+            <field name="name">op.study.programme.form</field>
+            <field name="model">op.study.programme</field>
+            <field name="arch" type="xml">
+                <form string="Study Programme" version="7.0">
+                    <sheet>
+                        <separator string="Study Programme" colspan="4" />
+                        <group>
+                            <field name="code" />
+                            <field name="name"/>
+                            <field name="res_person"/>
+                            <field name="parent"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_op_study_programme_tree" model="ir.ui.view">
+            <field name="name">op.study.programme.tree</field>
+            <field name="model">op.study.programme</field>
+            <field name="arch" type="xml">
+                <tree string="Study Programme" version="7.0">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="res_person"/>
+                    <field name="parent"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_op_study_programme_search" model="ir.ui.view">
+			<field name="name">op.study.programme.search</field>
+			<field name="model">op.study.programme</field>
+			<field name="priority" eval="8" />
+			<field name="arch" type="xml">
+				<search string="Study Programme">
+					<field name="code" />
+					<field name="name" />
+					<field name="res_person" />
+                    <field name="parent" />
+					<newline />
+				</search>
+			</field>
+		</record>
+
+        <record model="ir.actions.act_window" id="act_open_op_study_programme_view">
+			<field name="name">Study Programme</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">op.study.programme</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<!--<field name="search_view_id" ref="view_op_batch_search" />-->
+			<field name="domain">[]</field>
+			<field name="context">{}</field>
+		</record>
+
+    </data>
+</openerp>
