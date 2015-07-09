@@ -22,8 +22,8 @@ class op_subject(osv.Model):
         'code': fields.char(size=8, string='Code', required=True),
         # 'type': fields.selection([('t', 'Theory'), ('p', 'Practical'),  ('pt','Both'), ('o', 'Other')], string='Type'),
         'type': fields.selection([('core', 'Core'), ('elective', 'Elective')], string='Type'),
-        'standard_id': fields.many2one('op.standard', 'Standard', select=True, required=True),
-        'rel_subjects': fields.many2one('op.student.batch.mapping', 'subject_id', select=True)
+        # 'standard_id': fields.many2one('op.standard', 'Standard', select=True, required=True),
+        # 'rel_subjects': fields.many2one('op.student.batch.mapping', 'subject_id', select=True)
     }
 
     #.... check passing nul values..#

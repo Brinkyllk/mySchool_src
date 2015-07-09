@@ -97,48 +97,48 @@ class timetable_postponed(osv.osv_memory):
         return True
 
     #.................Standard Conflict....................#
-    def _standard_conflict(self, cr, uid, ids, context=None):
-        #.. Capture standard id ..#
-        standard_id_info = self.pool.get('op.timetable').read(cr, uid, timetable_map, ['standard_id'])
-        standard_id = standard_id_info.get('standard_id')
-        standard_id_new = standard_id[0]
-
-        #.. capture the input values ..#
-        self_object = self.browse(cr, uid, ids, context=None)
-        classroom_id = self_object.classroom_id.id
-        period_id = self_object.period_id.id
-        date_info = self_object.date
-
-        #.. getting the day of th date..#
-        st_date = dateutil.parser.parse(date_info).date()
-        day = calendar.day_name[st_date.weekday()]
-
-        #..getting the start and end times of the period..#
-        period_info = self.pool.get('op.period').read(cr, uid, period_id, ['start_time', 'end_time'])
-        per_start = period_info.get('start_time')
-        per_end = period_info.get('end_time')
-
-        #..Cpature the ids that contain same standard ir..#
-        obj = self.pool.get('op.timetable').search(cr, uid, [('standard_id', '=', standard_id_new), ], order=None)
-        if obj:
-            for record_id in obj:
-                details = self.pool.get('op.timetable').read(cr, uid, record_id,
-                                                             ['type', 'start_datetime', 'period_id'])
-                period_get = details.get('period_id')
-                period_get_id = period_get[0]
-                period_info = self.pool.get('op.period').read(cr, uid, period_get_id, ['start_time', 'end_time'])
-                period_info_start = period_info.get('start_time')
-                period_info_end = period_info.get('end_time')
-                day_type = str(details.get('type'))
-                if day_type == day:
-                    asn_date = dateutil.parser.parse(details.get('start_datetime')).date()
-                    if st_date <= asn_date:
-                        if per_start <= period_info_start < per_end or per_start < period_info_end < per_end:
-                            return False
-
-        else:
-            return True
-        return True
+    # def _standard_conflict(self, cr, uid, ids, context=None):
+    #     #.. Capture standard id ..#
+    #     standard_id_info = self.pool.get('op.timetable').read(cr, uid, timetable_map, ['standard_id'])
+    #     standard_id = standard_id_info.get('standard_id')
+    #     standard_id_new = standard_id[0]
+    #
+    #     #.. capture the input values ..#
+    #     self_object = self.browse(cr, uid, ids, context=None)
+    #     classroom_id = self_object.classroom_id.id
+    #     period_id = self_object.period_id.id
+    #     date_info = self_object.date
+    #
+    #     #.. getting the day of th date..#
+    #     st_date = dateutil.parser.parse(date_info).date()
+    #     day = calendar.day_name[st_date.weekday()]
+    #
+    #     #..getting the start and end times of the period..#
+    #     period_info = self.pool.get('op.period').read(cr, uid, period_id, ['start_time', 'end_time'])
+    #     per_start = period_info.get('start_time')
+    #     per_end = period_info.get('end_time')
+    #
+    #     #..Cpature the ids that contain same standard ir..#
+    #     obj = self.pool.get('op.timetable').search(cr, uid, [('standard_id', '=', standard_id_new), ], order=None)
+    #     if obj:
+    #         for record_id in obj:
+    #             details = self.pool.get('op.timetable').read(cr, uid, record_id,
+    #                                                          ['type', 'start_datetime', 'period_id'])
+    #             period_get = details.get('period_id')
+    #             period_get_id = period_get[0]
+    #             period_info = self.pool.get('op.period').read(cr, uid, period_get_id, ['start_time', 'end_time'])
+    #             period_info_start = period_info.get('start_time')
+    #             period_info_end = period_info.get('end_time')
+    #             day_type = str(details.get('type'))
+    #             if day_type == day:
+    #                 asn_date = dateutil.parser.parse(details.get('start_datetime')).date()
+    #                 if st_date <= asn_date:
+    #                     if per_start <= period_info_start < per_end or per_start < period_info_end < per_end:
+    #                         return False
+    #
+    #     else:
+    #         return True
+    #     return True
 
     def _validate_backdate(self, cr, uid, ids, context=None):
         now = datetime.datetime.today()
@@ -193,7 +193,7 @@ class timetable_postponed(osv.osv_memory):
     _constraints = [
         (_lecturer_conflict, 'Lecturer not available!!', ['period_id', 'classroom_id', 'date']),
         (_classroom_conflict, 'Classroom not available', ['classroom_id', 'period_id', 'date']),
-        (_standard_conflict, 'Standard not available', ['classroom_id', 'date', 'period_id']),
+        # (_standard_conflict, 'Standard not available', ['classroom_id', 'date', 'period_id']),
         (_validate_backdate, 'You cannot backdate records!', ['start_datetime']),
     ]
 

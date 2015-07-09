@@ -59,13 +59,13 @@
                 <xpath  expr="//group[@string='Misc']" position="inside">
                     <field name="inquiry_date"/>
                 </xpath>
-                <xpath expr="//group[@string='Marketing']" position="replace">
-                    <group string="Marketing">
-                        <field name="campaign_id"/>
-                        <field name="source_id"/>
-                        <field name="medium_id"/>
-                    </group>
-                </xpath>
+                <!--<xpath expr="//group[@string='Marketing']" position="replace">-->
+                    <!--<group string="Marketing">-->
+                        <!--<field name="campaign_id"/>-->
+                        <!--<field name="source_id"/>-->
+                        <!--<field name="medium_id"/>-->
+                    <!--</group>-->
+                <!--</xpath>-->
                 </data>
             </field>
         </record>
@@ -120,6 +120,16 @@
             </field>
         </record>
 
+        <record id="crm_oppor_form_view_leads_extended" model="ir.ui.view">
+            <field name="name">crm.lead.oppor.form.inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+            <field name="arch" type="xml">
+                <xpath expr='//form[@string="Opportunities"]' position='attributes'>
+                    <attribute name="create">false</attribute>
+                </xpath>
+            </field>
+        </record>
         <!--<record id="crm_oppor_form_view_leads_extended" model="ir.ui.view">-->
         <!--<field name="name">crm.lead.oppor.form.inherit</field>-->
         <!--<field name="model">crm.lead</field>-->
@@ -129,6 +139,15 @@
         <!--</field>-->
         <!--</record>-->
 
+        <!--<record id="crm_case_kanban_view_leads_extended" model="ir.ui.view">-->
+            <!--<field name="name">crm.lead.kanban.inherit</field>-->
+            <!--<field name="model">crm.lead</field>-->
+            <!--<field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<xpath expr='//kanban[@string="Opportunities"]' position='attributes'>-->
+                    <!--<attribute name="create">false</attribute>-->
+                <!--</xpath>-->
+            <!--</field>-->
         <!--<record id="crm_case_form_view_leads_extendeds" model="ir.ui.view">-->
         <!--<field name="name">crm.lead.form.inherit</field>-->
         <!--<field name="model">crm.lead</field>-->
@@ -154,22 +173,25 @@
         <!--</field>-->
         <!--</record>-->
 
-        <record id="crm_case_form_view_leads_extended" model="ir.ui.view">
-            <field name="name">crm.form.form.inherit</field>
-            <field name="model">crm.lead</field>
-            <field name="inherit_id" ref="marketing_crm.view_crm_lead_form"/>
-            <field name="arch" type="xml">
-                <data>
-                <xpath expr="//group[@string='Marketing']" position="replace">
-                    <group string="Marketing">
-                        <field name="campaign_id"/>
-                        <field name="source_id"/>
-                        <field name="medium_id"/>
-                    </group>
-                </xpath>
-                </data>
-            </field>
-        </record>
+        <!--<record id="crm_case_form_view_leads_extended" model="ir.ui.view">-->
+            <!--<field name="name">crm.form.form.inherit</field>-->
+            <!--<field name="model">crm.lead</field>-->
+            <!--<field name="inherit_id" ref="marketing_crm.view_crm_lead_form"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--&lt;!&ndash;<xpath expr='//tree[@string="Opportunities"]' position='attributes'>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<attribute name="create">false</attribute>&ndash;&gt;-->
+                <!--&lt;!&ndash;</xpath>&ndash;&gt;-->
+                <!--<data>-->
+                <!--<xpath expr="//group[@string='Marketing']" position="replace">-->
+                    <!--<group string="Marketing">-->
+                        <!--<field name="campaign_id"/>-->
+                        <!--<field name="source_id"/>-->
+                        <!--<field name="medium_id"/>-->
+                    <!--</group>-->
+                <!--</xpath>-->
+                <!--</data>-->
+            <!--</field>-->
+        <!--</record>-->
 
         <!--<record id="crm_lead2opportunity_partner_inherit" model="ir.ui.view">-->
             <!--<field name="name">crm.lead2opportunity.partner.inherit</field>-->
@@ -187,10 +209,10 @@
         <record id="time_frame_tree" model="ir.ui.view">
             <field name="name">time.frame.tree</field>
             <field name="model">time.frame</field>
-            <field name="priority" eval="8" />
+            <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <tree string="Time Frames">
-                    <field name="name" />
+                    <field name="name"/>
                 </tree>
             </field>
         </record>

@@ -13,7 +13,7 @@
                             <field name="code" on_change='onchange_case(code)'/>
                             <field name="name"/>
                             <field name="type"/>
-                            <field name="standard_id" />
+                            <!--<field name="standard_id" />-->
                          </group>
                     </sheet>
                 </form>
@@ -29,7 +29,7 @@
                     <field name="code"/>
                     <field name="name"/>
                     <field name="type"/>
-                    <field name="standard_id" />
+                    <!--<field name="standard_id" />-->
                 </tree>
             </field>
         </record>
@@ -44,11 +44,11 @@
 					<field name="code" />
                     <field name="name" />
 					<field name="type" />
-                    <field name="standard_id" />
+                    <!--<field name="standard_id" />-->
 					<newline />
 					<group expand="0" string="Group By...">
 						<filter string="Type" domain="[]" context="{'group_by':'type'}" />
-                        <filter string="Standard" domain="[]" context="{'group_by':'standard_id'}" />
+                        <!--<filter string="Standard" domain="[]" context="{'group_by':'standard_id'}" />-->
 					</group>
 				</search>
 			</field>

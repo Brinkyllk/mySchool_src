@@ -98,9 +98,9 @@
                             <group>
                                 <field name="course_id" />
                                 <field name="batch_id"  />
-                                <field name="standard_id"/>
+                                <!--<field name="standard_id"/>-->
                                 <field name="default_course"/>
-                                <field name="subject_id" domain="[('standard_id', '=', standard_id)]" widget="many2many_checkboxes"/>
+                                <!--<field name="subject_id" domain="[('standard_id', '=', standard_id)]" widget="many2many_checkboxes"/>-->
                                <!--<field name="result_id" widget="many2many_checkboxes"/>-->
                             </group>
                         <!--</group>-->
@@ -124,7 +124,7 @@
                     <field name="student_id" invisible="True"/>
                     <field name="course_id" />
                     <field name="batch_id"  />
-                    <field name="standard_id"/>
+                    <!--<field name="standard_id"/>-->
                     <field name="default_course"/>
                     <button name="view_details" string="Create a payment term for this product" type="object" icon="STOCK_ADD"/>
                     <button name="view_schedule_line" type="object" string="View schedule lines" icon="gtk-redo"/>

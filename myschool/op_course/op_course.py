@@ -30,8 +30,8 @@ class op_course(osv.Model):
         'price': fields.related('product_id', 'list_price', string='Price', type='float'),
         'subject_ids': fields.one2many('op.subject', 'name', string='Subject(s)', options="{'create_edit': False}",
                                        readonly=True),
-        'standard_id': fields.one2many('op.standard', 'course_id', string='Standard(s)',
-                                       options="{'create_edit': False}", readonly=True),
+        # 'standard_id': fields.one2many('op.standard', 'course_id', string='Standard(s)',
+        #                                options="{'create_edit': False}", readonly=True),
         'saved': fields.boolean('Saved', readonly=True),
 
 

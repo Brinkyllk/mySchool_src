@@ -158,7 +158,7 @@ class op_timetable(osv.osv):
         'start_datetime': fields.datetime('Start', required=True, readonly=True),
         'end_datetime': fields.datetime('End', required=True, readonly=True),
         'lecturer_id': fields.many2one('op.lecturer', 'Lecturer', required=True, readonly=True),
-        'standard_id': fields.many2one('op.standard', 'Standard', required=True, readonly=True),
+        # 'standard_id': fields.many2one('op.standard', 'Standard', required=True, readonly=True),
         'classroom_id': fields.many2one('op.classroom', 'Classroom', required=True, readonly=True),
         'subject_id': fields.many2one('op.subject', 'Subject', required=True, readonly=True),
         'color': fields.integer('Color Index'),

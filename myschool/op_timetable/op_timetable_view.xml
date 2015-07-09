@@ -97,7 +97,7 @@
 			<field name="arch" type="xml">
 				<tree string="Time Table">
 					<field name="lecturer_id"/>
-					<field name="standard_id" />
+					<!--<field name="standard_id" />-->
 					<field name="period_id" />
 					<field name="subject_id" />
                     <field name="classroom_id" />
@@ -126,7 +126,7 @@
 						<separator colspan="4" string="Time Table" />
 						<group colspan="4" col="4">
 							<field name="lecturer_id"/>
-							<field name="standard_id" />
+							<!--<field name="standard_id" />-->
 							<field name="period_id" />
 							<field name="subject_id" />
                             <field name="classroom_id" />
@@ -146,7 +146,7 @@
 			<field name="arch" type="xml">
 				<search string="Time Table">
 					<field name="lecturer_id" select="True" />
-					<field name="standard_id" select="True" />
+					<!--<field name="standard_id" select="True" />-->
 					<field name="period_id" select="True" />
 					<field name="subject_id" select="True" />
                     <field name="classroom_id" select="True"/>
@@ -157,8 +157,8 @@
 					<group expand="0" string="Group By...">
 						<filter string="Lecturer" domain="[]"
 							context="{'group_by':'lecturer_id'}" />
-						<filter string="Standard" domain="[]"
-							context="{'group_by':'standard_id'}" />
+						<!--<filter string="Standard" domain="[]"-->
+							<!--context="{'group_by':'standard_id'}" />-->
 						<filter string="period" domain="[]"
 							context="{'group_by':'period_id'}" />
 						<filter string="Subject" domain="[]"
@@ -219,10 +219,10 @@
 										Subject:
 										<field name="subject_id"/>
 									</li>
-									<li t-if="record.standard_id.raw_value">
-										Standard:
-										<field name="standard_id"/>
-									</li>
+									<!--<li t-if="record.standard_id.raw_value">-->
+										<!--Standard:-->
+										<!--<field name="standard_id"/>-->
+									<!--</li>-->
                                     <li t-if="record.classroom_id.raw_value">
 										Classroom:
 										<field name="classroom_id"/>

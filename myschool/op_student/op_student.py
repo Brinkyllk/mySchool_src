@@ -600,8 +600,7 @@ class op_student(osv.Model):
                 setmap = course_map_ref.browse(cr, uid, coursemaps[0], context=context)
                 course_map_ref.write(cr, uid, setmap.id, {'default_course': True}, context=context)
                 super(op_student, self).write(cr, uid, ids, {'def_course': setmap.course_id.id,
-                                                             'def_batch': setmap.batch_id.id,
-                                                             'def_standard': setmap.standard_id.id,}, context=context)
+                                                             'def_batch': setmap.batch_id.id,}, context=context)
                 return True
 
         if 'is_company' in values:

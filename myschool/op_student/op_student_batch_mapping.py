@@ -10,8 +10,8 @@ class op_student_batch_mapping(osv.Model):
         'course_id': fields.many2one('op.course', 'Course', required=True),
         'batch_id': fields.many2one('op.batch', string='Batch', domain="[('course_id', '=', course_id)]",
                                     required=True, options="{'create_edit': False }"),
-        'standard_id': fields.many2one('op.standard', string='Standard', domain="[('course_id', '=', course_id)]",
-                                       required=True, options="{'create_edit': False }"),
+        # 'standard_id': fields.many2one('op.standard', string='Standard', domain="[('course_id', '=', course_id)]",
+        #                                required=True, options="{'create_edit': False }"),
         # 'standard_id': fields.many2many('op.standard', domain="[('course_id', '=', course_id)]", string='Standards'),
         # 'subject_id': fields.one2many('op.subject', domain="[('standard_id', '=', standard_id)]", string='Subjects'),
         'subject_id': fields.many2many('op.subject', string='Subjects(s)'),
@@ -29,6 +29,7 @@ class op_student_batch_mapping(osv.Model):
         # 'product_id': fields.related('product_id', 'name', string='Related Product', type='char', readonly=True),
     }
     #Check same Course
+
     def _checkSameCourse(self, cr, uid, ids, context=None):
         browse = self.browse(cr, uid, ids, context=context)
 
@@ -41,10 +42,10 @@ class op_student_batch_mapping(osv.Model):
         courseId=[browse.course_id.id]
         newCourseId = courseId[0]
 
-        standardId=[browse.standard_id.id]
-        newStandardId = standardId[0]
+        # standardId=[browse.standard_id.id]
+        # newStandardId = standardId[0]
 
-        object = self.search(cr,uid, ['&',('student_id', '=', newstudentId),('course_id', '=', newCourseId),('batch_id', '=', newBatchId), ('standard_id', '=', newStandardId)])
+        object = self.search(cr,uid, ['&',('student_id', '=', newstudentId),('course_id', '=', newCourseId),('batch_id', '=', newBatchId),])
 
         if len(object)>= 2:
             return False

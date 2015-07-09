@@ -19,7 +19,7 @@
 					<field name="batch_id" />
 					<field name="state" />
 					<!--<field name="category_id" />-->
-					<field name="standard_id" />
+					<!--<field name="standard_id" />-->
 				</tree>
 			</field>
 		</record>
@@ -76,7 +76,7 @@
 									<field name="application_date" />
 									<field name="course_id" />
 									<field name="batch_id" domain="[('course_id', '=', course_id)]" />
-									<field name="standard_id" domain="[('course_id', '=', course_id)]" />
+									<!--<field name="standard_id" domain="[('course_id', '=', course_id)]" />-->
 									<field name="fees" />
 									<!--<field name="category_id" />-->
 									<field name="due_date" />
@@ -141,7 +141,7 @@
 					<field name="course_id" />
 					<field name="batch_id" />
 					<!--<field name="category_id" />-->
-					<field name="standard_id" />
+					<!--<field name="standard_id" />-->
 					<newline />
 					<group expand="0" string="Group By...">
 						<filter string="Last Name" domain="[]"
@@ -157,8 +157,8 @@
 						<filter string="Status" domain="[]" context="{'group_by':'state'}" />
 						<!--<filter string="Category" domain="[]"-->
 							<!--context="{'group_by':'category_id'}" />-->
-						<filter string="Standard" domain="[]"
-							context="{'group_by':'standard_id'}" />
+						<!--<filter string="Standard" domain="[]"-->
+							<!--context="{'group_by':'standard_id'}" />-->
 					</group>
 				</search>
 			</field>

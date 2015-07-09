@@ -17,27 +17,27 @@
 
         <!--sub menus-->
         <menuitem id="menu_myschool_config_course_mng" name="Course Management" parent="menu_myschool_conf"/>
-        <menuitem id="menu_myschool_config_standard_mng" name="Standard Management" parent="menu_myschool_conf"/>
+        <!--<menuitem id="menu_myschool_config_standard_mng" name="Standard Management" parent="menu_myschool_conf"/>-->
         <menuitem id="menu_myschool_config_subject_mng" name="Subject(s) Management" parent="menu_myschool_conf"/>
         <menuitem id="menu_myschool_config_timetable_mng" name="Timetable Management" parent="menu_myschool_conf"/>
 
         <!--semester action-->
-        <record model="ir.actions.act_window" id="act_open_op_semester_view">
-            <field name="name">Academic Term</field>
-            <field name="res_model">op.semester</field>
-            <field name="view_type">form</field>
-            <field name="view_model">tree,form</field>
-            <field name="view_id" ref="view_semester_tree"/>
-        </record>
+        <!--<record model="ir.actions.act_window" id="act_open_op_semester_view">-->
+            <!--<field name="name">Academic Term</field>-->
+            <!--<field name="res_model">op.semester</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="view_model">tree,form</field>-->
+            <!--<field name="view_id" ref="view_semester_tree"/>-->
+        <!--</record>-->
 
         <!--standard action-->
-        <record model="ir.actions.act_window" id="act_open_op_standard_view">
-            <field name="name">Standard</field>
-            <field name="res_model">op.standard</field>
-            <field name="view_type">form</field>
-            <field name="view_model">tree,form</field>
-            <field name="view_id" ref="view_standard_tree"/>
-        </record>
+        <!--<record model="ir.actions.act_window" id="act_open_op_standard_view">-->
+            <!--<field name="name">Standard</field>-->
+            <!--<field name="res_model">op.standard</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="view_model">tree,form</field>-->
+            <!--<field name="view_id" ref="view_standard_tree"/>-->
+        <!--</record>-->
 
         <!--subject action-->
         <record model="ir.actions.act_window" id="action_subject">
@@ -175,8 +175,8 @@
 
         <menuitem id="menu_course" name="Courses" parent="menu_myschool_config_course_mng" action="action_course"/>
         <menuitem id="menu_batch" name="Batches" parent="menu_myschool_config_course_mng" action="action_batch"/>
-        <menuitem id="menu_semester" name="Academic Term" parent="menu_myschool_config_standard_mng" action="act_open_op_semester_view" sequence="1"/>
-        <menuitem id="menu_standard" name="Standard" parent="menu_myschool_config_standard_mng" action="act_open_op_standard_view" sequence="2"/>
+        <!--<menuitem id="menu_semester" name="Academic Term" parent="menu_myschool_config_standard_mng" action="act_open_op_semester_view" sequence="1"/>-->
+        <!--<menuitem id="menu_standard" name="Standard" parent="menu_myschool_config_standard_mng" action="act_open_op_standard_view" sequence="2"/>-->
         <menuitem id="menu_subject" name="Subjects" parent="menu_myschool_config_subject_mng" action="action_subject"/>
 
         <menuitem id="menu_timetable" name="Timetable" parent="menu_myschool_timetable" action="act_open_op_timetable_view"/>

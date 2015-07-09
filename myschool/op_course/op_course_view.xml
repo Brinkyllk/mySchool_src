@@ -17,11 +17,11 @@
                             <!--<field name="search_course"/>-->
                         </group>
                         <notebook>
-                            <page string="Standards">
-                                <separator colspan="4" string="Standards"/>
-                                    <field name="standard_id"/>
-                                <!--<field name= "level" string= "Share it... :" widget= "test" />-->
-                            </page>
+                            <!--<page string="Standards">-->
+                                <!--<separator colspan="4" string="Standards"/>-->
+                                    <!--<field name="standard_id"/>-->
+                                <!--&lt;!&ndash;<field name= "level" string= "Share it... :" widget= "test" />&ndash;&gt;-->
+                            <!--</page>-->
                             <page string="Product">
                                 <separator colspan="4" string="Product Details"/>
                                 <group>

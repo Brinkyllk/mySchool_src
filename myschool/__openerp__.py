@@ -17,7 +17,6 @@
     'depends': ['product', 'web', 'base','account', 'crm'],
     'data': [
         'crm_lead/crm_lead_view.xml',
-        'op_standard/op_standard_view.xml',
         'op_subject/op_subject_view.xml',
         'op_course/op_course_view.xml',
         'op_batch/op_batch_view.xml',

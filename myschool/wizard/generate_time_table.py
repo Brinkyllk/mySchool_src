@@ -22,10 +22,10 @@ week_number = {'Mon': 1,
 class generate_time_table(osv.osv_memory):
     _name = 'generate.time.table'
     _description = 'Generate Time Table'
-    _rec_name = 'standard_id'
+    # _rec_name = 'name'
 
     _columns = {
-        'standard_id': fields.many2one('op.standard', 'Standard', required=True),
+        # 'standard_id': fields.many2one('op.standard', 'Standard', required=True),
         'classroom_id': fields.many2one('op.classroom', 'Classroom', required=True),
         'time_table_lines': fields.one2many('gen.time.table.line', 'gen_time_table', 'Time Table Lines', required=True),
         'time_table_lines_1': fields.one2many('gen.time.table.line', 'gen_time_table', 'Time Table Lines',
@@ -333,9 +333,5 @@ class generate_time_table_line(osv.osv_memory):
 
     # def create(self, cr, uid, vals, context=None):
     #     return super(generate_time_table_line, self).create(cr, uid, vals, context=context)
-
-
-
-
 
 generate_time_table_line()
