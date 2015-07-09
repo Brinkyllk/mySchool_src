@@ -100,3 +100,45 @@ class crm_tracking_source(osv.Model):
         'channel_id': fields.many2one('crm.tracking.medium', 'Channel'),
     }
 
+# class crm_partner_binding(osv.osv_memory):
+#     _inherit = 'crm.partner.binding'
+#     _description = "editing fields in convert to opportunities"
+#     _columns ={
+#         'action': fields.selection([
+#                 ('exist', 'Link to an existing customer'),
+#                 ('create', 'Create a new customer'),
+#                 ('nothing', 'Do not link to a customer')
+#             ], 'Related Customer', required=True),
+#     }
+
+# class crm_lead2opportunity_partner(osv.osv_memory):
+#     _name = 'crm.lead2opportunity.partner'
+#     _description = 'Lead To Opportunity Partner'
+#     _inherit = 'crm.partner.binding'
+#
+#     _columns = {
+#         'name': fields.selection([
+#                 ('convert', 'Convert to opportunity'),
+#                 ('merge', 'Merge with existing opportunities')
+#             ], 'Conversion Action', required=True),
+#         'opportunity_ids': fields.many2many('crm.lead', string='Opportunities'),
+#         'user_id': fields.many2one('res.users', 'Salesperson', select=True),
+#         'section_id': fields.many2one('crm.case.section', 'Sales Team', select=True),
+#     }
+
+# class crm_lead2opportunity_mass_convert(osv.osv_memory):
+#     _name = 'crm.lead2opportunity.partner.mass'
+#     _description = 'Mass Lead To Opportunity Partner'
+#     _inherit = 'crm.lead2opportunity.partner'
+#
+#     _columns = {
+#         # 'user_ids':  fields.many2many('res.users', string='Salesmen'),
+#         # 'section_id': fields.many2one('crm.case.section', 'Sales Team'),
+#         # 'deduplicate': fields.boolean('Apply deduplication', help='Merge with existing leads/opportunities of each partner'),
+#         'action': fields.selection([
+#                 ('each_exist_or_create', 'Use existing partner or create'),
+#                 ('nothing', 'Do not link to a customer')
+#             ], 'Related Customer', required=True),
+#         # 'force_assignation': fields.boolean('Force assignation', help='If unchecked, this will leave the salesman of duplicated opportunities'),
+#     }
+
