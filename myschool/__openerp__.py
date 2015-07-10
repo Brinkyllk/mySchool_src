@@ -31,9 +31,9 @@
         'op_classroom/op_classroom_view.xml',
         'wizard/generate_time_table_view.xml',
         'op_payment_schedule_line/op_payment_schedule_line_view.xml',
-        'op_admission/op_admission_view.xml',
-        'op_admission/op_admission_sequence.xml',
-        'op_admission/op_admission_workflow_view.xml',
+        'op_registration/op_registration_view.xml',
+        'op_registration/op_registration_sequence.xml',
+        'op_registration/op_registration_workflow_view.xml',
         'op_study_programme/op_study_programme_view.xml',
         'myschool_view.xml'
     ],

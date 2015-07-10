@@ -23,8 +23,8 @@ import time
 from openerp import netsvc
 
 
-class op_admission(osv.osv):
-    _name = 'op.admission'
+class op_registration(osv.osv):
+    _name = 'op.registration'
     _rec_name = 'application_number'
 
     def copy(self, cr, uid, id, default=None, context=None):
@@ -32,9 +32,9 @@ class op_admission(osv.osv):
             default = {}
         default.update({
             'state': 'd',
-            'application_number': self.pool.get('ir.sequence').get(cr, uid, 'op.admission'),
+            'application_number': self.pool.get('ir.sequence').get(cr, uid, 'op.registration'),
         })
-        return super(op_admission, self).copy(cr, uid, id, default, context=context)
+        return super(op_registration, self).copy(cr, uid, id, default, context=context)
 
     _columns = {
         'name': fields.char(size=128, string='First Name', required=True, states={'done': [('readonly', True)]}),
@@ -44,7 +44,7 @@ class op_admission(osv.osv):
         'title': fields.many2one('res.partner.title', 'Title', states={'done': [('readonly', True)]}),
         'application_number': fields.char(size=16, string='Application Number', required=True,
                                           states={'done': [('readonly', True)]}),
-        'admission_date': fields.date(string='Admission Date', required=True, states={'done': [('readonly', True)]}),
+        'registration_date': fields.date(string='Registration Date', required=True, states={'done': [('readonly', True)]}),
         'application_date': fields.datetime(string='Application Date', required=True,
                                             states={'done': [('readonly', True)]}),
         'birth_date': fields.date(string='Birth Date', required=True, states={'done': [('readonly', True)]}),
@@ -66,9 +66,9 @@ class op_admission(osv.osv):
             [('d', 'Draft'), ('i', 'Confirm'), ('s', 'Enroll'), ('done', 'Done'), ('r', 'Rejected'), ('p', 'Pending'),
              ('c', 'Cancel')], readonly=True, select=True, string='State'),
         'due_date': fields.date(string='Due Date', states={'done': [('readonly', True)]}),
-        'prev_institute': fields.char(size=256, string='Previous Institute', states={'done': [('readonly', True)]}),
-        'prev_course': fields.char(size=256, string='Previous Course', states={'done': [('readonly', True)]}),
-        'prev_result': fields.char(size=256, string='Previous Result', states={'done': [('readonly', True)]}),
+        # 'prev_institute': fields.char(size=256, string='Previous Institute', states={'done': [('readonly', True)]}),
+        # 'prev_course': fields.char(size=256, string='Previous Course', states={'done': [('readonly', True)]}),
+        # 'prev_result': fields.char(size=256, string='Previous Result', states={'done': [('readonly', True)]}),
         'family_business': fields.char(size=256, string='Family Business', states={'done': [('readonly', True)]}),
         'family_income': fields.float(string='Family Income', states={'done': [('readonly', True)]}),
         # 'religion_id': fields.many2one('op.religion', string='Religion', states={'done': [('readonly', True)]}),
@@ -79,7 +79,7 @@ class op_admission(osv.osv):
         #                                states={'done': [('readonly', True)]}),
         'division_id': fields.many2one('op.division', string='Division', states={'done': [('readonly', True)]}),
         'student_id': fields.many2one('op.student', string='Student', states={'done': [('readonly', True)]}),
-        'nbr': fields.integer('# of Admission', readonly=True),
+        'nbr': fields.integer('# of Registration', readonly=True),
         'gr_no': fields.boolean('Old Student??'),
         'gr_no_old': fields.char(string="GR Number old", size=10),
         'gr_no_new': fields.char(string="GR Number new", size=10),
@@ -87,9 +87,9 @@ class op_admission(osv.osv):
     }
 
     _defaults = {
-        'application_number': lambda obj, cr, uid, context: obj.pool.get('ir.sequence').get(cr, uid, 'op.admission'),
+        'application_number': lambda obj, cr, uid, context: obj.pool.get('ir.sequence').get(cr, uid, 'op.registration'),
         'state': 'd',
-        'admission_date': time.strftime('%Y-%m-%d'),
+        'registration_date': time.strftime('%Y-%m-%d'),
         'application_date': time.strftime('%Y-%m-%d %H:%M:%S'),
     }
 
@@ -116,10 +116,8 @@ class op_admission(osv.osv):
                 'last_name': field.last_name,
                 'birth_date': field.birth_date,
                 'gender': field.gender,
-                # 'category': field.category_id and field.category_id.id or False,
-                # 'religion': field.religion_id and field.religion_id.id or False,
                 'photo': field.photo or False,
-                'gr': gr,
+                'stu_reg_number': gr,
                 'address': [(0, 0, {
                     'name': field.name or False,
                     'type': 'invoice',
@@ -127,11 +125,7 @@ class op_admission(osv.osv):
                     'address_line1': field.street or False,
                     'address_line2': field.street2 or False,
                     'phone': field.phone or False,
-                    # 'mobile': field.mobile or False,
-                    # 'zip': field.zip or False,
                     'town': field.city or False,
-                    # 'country_id': field.country_id and field.country_id.id or False,
-                    # 'state_id': field.state_id and field.state_id.id or False,
                 })]
             }
         new_student = student_pool.create(cr, uid, vals, context=context)
@@ -150,8 +144,8 @@ class op_admission(osv.osv):
         wf_service = netsvc.LocalService("workflow")
         self.write(cr, uid, ids, {'state': 'd'})
         for inv_id in ids:
-            wf_service.trg_delete(uid, 'op.admission', inv_id, cr)
-            wf_service.trg_create(uid, 'op.admission', inv_id, cr)
+            wf_service.trg_delete(uid, 'op.registration', inv_id, cr)
+            wf_service.trg_create(uid, 'op.registration', inv_id, cr)
         return True
 
     def confirm_cancel(self, cr, uid, ids, context=None):
@@ -182,6 +176,6 @@ class op_admission(osv.osv):
         return value
 
 
-op_admission()
+op_registration()
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 
