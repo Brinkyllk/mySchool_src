@@ -38,7 +38,7 @@ class op_registration(osv.osv):
 
     _columns = {
         'name': fields.char(size=128, string='First Name', required=True, states={'done': [('readonly', True)]}),
-        'middle_name': fields.char(size=128, string='Middle Name', required=True,
+        'middle_name': fields.char(size=128, string='Middle Name',
                                    states={'done': [('readonly', True)]}),
         'last_name': fields.char(size=128, string='Last Name', required=True, states={'done': [('readonly', True)]}),
         'title': fields.many2one('res.partner.title', 'Title', states={'done': [('readonly', True)]}),
@@ -48,9 +48,9 @@ class op_registration(osv.osv):
         'application_date': fields.datetime(string='Application Date', required=True,
                                             states={'done': [('readonly', True)]}),
         'birth_date': fields.date(string='Birth Date', required=True, states={'done': [('readonly', True)]}),
-        'course_id': fields.many2one('op.course', string='Course', required=True,
-                                     states={'done': [('readonly', True)]}),
-        'batch_id': fields.many2one('op.batch', string='Batch', required=True, states={'done': [('readonly', True)]}),
+        # 'course_id': fields.many2one('op.course', string='Course', required=True,
+        #                              states={'done': [('readonly', True)]}),
+        # 'batch_id': fields.many2one('op.batch', string='Batch', required=True, states={'done': [('readonly', True)]}),
         'street': fields.char(size=256, string='Street', states={'done': [('readonly', True)]}),
         'street2': fields.char(size=256, string='Street2', states={'done': [('readonly', True)]}),
         'phone': fields.char(size=16, string='Phone', states={'done': [('readonly', True)]}),

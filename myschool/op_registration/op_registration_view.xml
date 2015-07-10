@@ -74,8 +74,8 @@
 									<field name="application_number" />
 									<field name="registration_date" />
 									<field name="application_date" />
-									<field name="course_id" />
-									<field name="batch_id" domain="[('course_id', '=', course_id)]" />
+									<!--<field name="course_id" />-->
+									<!--<field name="batch_id" domain="[('course_id', '=', course_id)]" />-->
 									<!--<field name="standard_id" domain="[('course_id', '=', course_id)]" />-->
 									<field name="fees" />
 									<!--<field name="category_id" />-->
@@ -124,8 +124,8 @@
 					<field name="registration_date" />
 					<field name="application_date" />
 					<field name="birth_date" />
-					<field name="course_id" />
-					<field name="batch_id" />
+					<!--<field name="course_id" />-->
+					<!--<field name="batch_id" />-->
 					<!--<field name="category_id" />-->
 					<!--<field name="standard_id" />-->
 					<newline />
@@ -138,8 +138,8 @@
 							context="{'group_by':'registration_date'}" />
 						<filter string="Application Date" domain="[]"
 							context="{'group_by':'application_date'}" />
-						<filter string="Course" domain="[]" context="{'group_by':'course_id'}" />
-						<filter string="Batch" domain="[]" context="{'group_by':'batch_id'}" />
+						<!--<filter string="Course" domain="[]" context="{'group_by':'course_id'}" />-->
+						<!--<filter string="Batch" domain="[]" context="{'group_by':'batch_id'}" />-->
 						<filter string="Status" domain="[]" context="{'group_by':'state'}" />
 						<!--<filter string="Category" domain="[]"-->
 							<!--context="{'group_by':'category_id'}" />-->
