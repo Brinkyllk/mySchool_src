@@ -15,8 +15,8 @@
 					<field name="registration_date" />
 					<field name="application_date" />
 					<field name="birth_date" />
-					<field name="course_id" />
-					<field name="batch_id" />
+					<!--<field name="course_id" />-->
+					<!--<field name="batch_id" />-->
 					<field name="state" />
 					<!--<field name="category_id" />-->
 					<!--<field name="standard_id" />-->
@@ -147,17 +147,6 @@
 							<!--context="{'group_by':'standard_id'}" />-->
 					</group>
 				</search>
-			</field>
-		</record>
-
-		<record model="ir.ui.view" id="view_op_registration_graph">
-			<field name="name">op.registration.graph</field>
-			<field name="model">op.registration</field>
-			<field name="arch" type="xml">
-				<graph string="Course By Registration" type="pie">
-					<field name="course_id" />
-					<field name="nbr" operator="+" />
-				</graph>
 			</field>
 		</record>
 
