@@ -20,10 +20,10 @@ class op_batch(osv.Model):
 
     _name = 'op.batch'
     _columns = {
-        'batch_code': fields.char(size=8, string='Code', select=True, required=True),
+        'batch_code': fields.char(string='Code', select=True, readonly=True),
         'name': fields.char(size=25, string='Name', required=True),
-        'study_prog_code': fields.many2one('op.study.programme', string="Study Programme"),
-        'batch_no': fields.char(size=8, string='Batch No', select=True, required=True),
+        'study_prog_code': fields.many2one('op.study.programme', string="Study Programme", required=True),
+        'batch_no': fields.char(size=8, string='Batch No', required=True),
         'start_date': fields.date(size=15, string='Start Date', required=True),
         'end_date': fields.date(size=15, string='End Date', required=True,),
         'price': fields.float(string='Price'),
@@ -31,6 +31,49 @@ class op_batch(osv.Model):
             [('planned', 'Planned'), ('running', 'Running'), ('cancel', 'Cancel'), ('finished', 'finished')],
             string='State'),
     }
+
+    def create(self, cr, uid, vals, context=None):
+
+        programme = self.pool.get('op.study.programme').browse(cr, uid, vals['study_prog_code'])
+        batch = vals['batch_no']
+        programme_code = str(programme.code)
+        btch = programme_code + ' ' + batch
+        vals.update({'batch_code': btch})
+
+        res = super(op_batch, self).create(cr, uid, vals, context=context)
+        return res
+
+    def write(self, cr, uid, ids,  values, context=None):
+
+        programme_obj = self.browse(cr, uid, ids, context=context)
+        # modification of study programme
+        if ('study_prog_code' in values):
+            programme = self.pool.get('op.study.programme').browse(cr, uid, values['study_prog_code'])
+            programme_code = programme.code
+            batch_code = programme_obj.batch_no
+            btch = programme_code + ' ' + batch_code
+            values.update({'batch_code': btch})
+
+        #..modification of batch number
+        if ('batch_no' in values):
+            batch_number = values['batch_no']
+            programme_id = programme_obj.study_prog_code
+            programme = self.pool.get('op.study.programme').browse(cr, uid, programme_id.id)
+            programme_code = programme.code
+            batch = programme_code + ' ' + batch_number
+            values.update({'batch_code': batch})
+
+        #..modification of both study programme and batch number
+        if ('study_prog_code' in values) and ('batch_no' in values):
+            programme = self.pool.get('op.study.programme').browse(cr, uid, values['study_prog_code'])
+            programme_code = programme.code
+            batch_number = values['batch_no']
+            batch = programme_code + ' ' + batch_number
+            values.update({'batch_code': batch})
+
+        res = super(op_batch, self).write(cr, uid, ids,  values, context=context)
+        return res
+
 
     #.... check passing nul values..#
     # def _check_invalid_data(self, cr, uid, ids, context=None):
