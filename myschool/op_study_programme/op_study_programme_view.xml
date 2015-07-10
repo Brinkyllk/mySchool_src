@@ -10,7 +10,7 @@
                     <sheet>
                         <separator string="Study Programme" colspan="4" />
                         <group>
-                            <field name="code" />
+                            <field name="code" on_change='onchange_case(code)'/>
                             <field name="name"/>
                             <field name="res_person"/>
                             <field name="parent"/>
