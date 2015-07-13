@@ -111,7 +111,9 @@ class op_student(osv.Model):
 
     _name = 'op.student'
     _description = 'Student'
-    _inherits = {'res.partner': 'partner_id'}
+
+    _inherits = {'res.partner': 'partner_id',}
+
     _columns = {
         #------ personal details ------
         'partner_id': fields.many2one('res.partner', 'Partner', required=True, ondelete="restrict", readonly=True),
@@ -129,9 +131,9 @@ class op_student(osv.Model):
         'email': fields.char(string='Email', size=128),
         'phone': fields.char(string='Phone Number', size=256),
 
-        'address_line1': fields.char('address line1', size=20, required=True),
-        'address_line2': fields.char('address line2', size=25, required=True),
-        'town': fields.char('town', size=25, required=True),
+        'address_line1': fields.char('address line1', size=20),
+        'address_line2': fields.char('address line2', size=25),
+        'town': fields.char('town', size=25),
         'province': fields.char('province', size=20),
         'nation': fields.char('nation', size=20),
 
@@ -144,7 +146,8 @@ class op_student(osv.Model):
         'contact_no': fields.char(string='Contact Number', size=12),
 
         #------ Map many Courses ------
-        'batch_ids': fields.one2many('op.student.batch.mapping', 'student_id', string='Registered Courses'),
+        # 'batch_ids': fields.one2many('op.student.batch.mapping', 'student_id', string='Registered Courses'),
+        'enrollment_ids': fields.one2many('op.enrollment', 'student_id', string='Registered Courses'),
 
         #payment schedule
         'payment_schedule_id': fields.one2many('op.payment.schedule', 'student_id', 'Payment Schedules')
@@ -440,7 +443,7 @@ class op_student(osv.Model):
                 #         raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a NIC..!!')
 
         # return stu_id
-        super(op_student, self).create(cr, uid, vals, context=context)
+        return super(op_student, self).create(cr, uid, vals, context=context)
 
 
 

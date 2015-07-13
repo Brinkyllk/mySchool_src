@@ -111,6 +111,15 @@
             <field name="view_id" ref="view_op_study_programme_tree"/>
         </record>
 
+        <!--Study Programme action-->
+        <record model="ir.actions.act_window" id="act_op_enrollment_view">
+            <field name="name">Student Enrollment</field>
+            <field name="res_model">op.enrollment</field>
+            <field name="view_type">form</field>
+            <field name="view_model">tree,form</field>
+            <field name="view_id" ref="view_op_enrollment_tree"/>
+        </record>
+
         <!--lecture action-->
         <record model="ir.actions.act_window" id="act_open_op_lecturer_view">
 			<field name="name">Lecturer</field>
@@ -185,6 +194,7 @@
         <menuitem id="menu_study_programme" name="Study Programmes" parent="menu_myschool_config_course_mng" action="act_op_study_programme_view"/>
         <menuitem id="menu_course" name="Courses" parent="menu_myschool_config_course_mng" action="action_course"/>
         <menuitem id="menu_batch" name="Batches" parent="menu_myschool_config_course_mng" action="action_batch"/>
+        <menuitem id="menu_student_enrollment" name="Student Enrollment" parent="menu_myschool_config_course_mng" action="act_open_op_enrollment_view"/>
         <!--<menuitem id="menu_semester" name="Academic Term" parent="menu_myschool_config_standard_mng" action="act_open_op_semester_view" sequence="1"/>-->
         <!--<menuitem id="menu_standard" name="Standard" parent="menu_myschool_config_standard_mng" action="act_open_op_standard_view" sequence="2"/>-->
         <menuitem id="menu_subject" name="Subjects" parent="menu_myschool_config_subject_mng" action="action_subject"/>

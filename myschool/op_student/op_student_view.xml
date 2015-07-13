@@ -150,12 +150,12 @@
                                 </group>
                             </page>
 
-                            <page string="Course/Result Details">
-                                <separator colspan="4" string="Course Details"/>
+                            <page string="Enrolled Courses">
+                                <separator colspan="4" string="Student Enrollment"/>
                                 <tree>
-                                    <field name="batch_ids"/>
+                                    <!--<field name="batch_ids"/>-->
+                                    <field name="enrollment_ids"/>
                                 </tree>
-                                <!--<field name="batch_ids"/>-->
                             </page>
 
                             <!--<page string="Subjects">-->
