@@ -10,28 +10,16 @@
                     <sheet>
                         <separator string="Course" colspan="4" />
                         <group>
-                            <field name='course_code' />
                             <field name="batch_code"/>
                             <field name="subject_code"/>
-                            <field name="price" />
-                            <!--<field name="search_course"/>-->
+                            <field name='course_code' />
                         </group>
-                        <!--<notebook>-->
-                            <!--&lt;!&ndash;<page string="Standards">&ndash;&gt;-->
-                                <!--&lt;!&ndash;<separator colspan="4" string="Standards"/>&ndash;&gt;-->
-                                    <!--&lt;!&ndash;<field name="standard_id"/>&ndash;&gt;-->
-                                <!--&lt;!&ndash;&lt;!&ndash;<field name= "level" string= "Share it... :" widget= "test" />&ndash;&gt;&ndash;&gt;-->
-                            <!--&lt;!&ndash;</page>&ndash;&gt;-->
-                            <!--<page string="Product">-->
-                                <!--<separator colspan="4" string="Product Details"/>-->
-                                <!--<group>-->
-                                    <!--<field name="product_id"/>-->
-                                    <!--<field name="price"/>-->
-                                    <!--&lt;!&ndash;<field name="category"/>&ndash;&gt;-->
-                                    <!--&lt;!&ndash;<field name="state"/>&ndash;&gt;-->
-                                <!--</group>-->
-                            <!--</page>-->
-                        <!--</notebook>-->
+                        <group>
+                            <newline/>
+                            <h3>Price Details</h3>
+                            <newline/>
+                            <field name="price" />
+                        </group>
                     </sheet>
                 </form>
             </field>
@@ -42,33 +30,13 @@
             <field name="model">op.course</field>
             <field name="arch" type="xml">
                 <tree string="MySchool" version="7.0">
-                    <field name="course_code"/>
                     <field name="batch_code"/>
                     <field name="subject_code"/>
+                    <field name="course_code"/>
                     <field name="price"/>
-                    <!--<field name="subject_ids"/>-->
                 </tree>
             </field>
         </record>
-
-        <!--<record id="view_op_course_search" model="ir.ui.view">-->
-			<!--<field name="name">op.course.search</field>-->
-			<!--<field name="model">op.course</field>-->
-			<!--<field name="priority" eval="8" />-->
-			<!--<field name="arch" type="xml">-->
-				<!--<search string="Course">-->
-					<!--<field name="code" />-->
-					<!--<field name="name" />-->
-					<!--<field name="level" />-->
-                    <!--<field name="subject_ids"/>-->
-					<!--<newline />-->
-					<!--<group expand="0" string="Group By...">-->
-						<!--<filter string="Course Level" domain="[]" context="{'group_by':'level'}" />-->
-
-					<!--</group>-->
-				<!--</search>-->
-			<!--</field>-->
-		<!--</record>-->
 
         <record model="ir.actions.act_window" id="act_open_op_course_view">
 			<field name="name">Course</field>
@@ -77,8 +45,6 @@
 			<field name="view_type">form</field>
 			<field name="view_mode">tree,form</field>
 			<field name="search_view_id" ref="view_course_tree" />
-			<!--<field name="domain">[]</field>-->
-			<!--<field name="context">{}</field>-->
 		</record>
 
     </data>

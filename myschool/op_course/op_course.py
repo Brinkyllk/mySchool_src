@@ -1,43 +1,79 @@
 from openerp.osv import osv, fields
 import re
 from openerp import api
-# from tools.translate import _
-
 
 class op_course(osv.Model):
 
-    # #--Code change to upper case---
-    # @api.onchange('code')
-    # def onchange_case(self, cr, uid, ids, code):
-    #     if code != False:
-    #         result = {'value': {
-    #             'code': str(code).upper()
-    #         }
-    #         }
-    #         return result
-    #     else:
-    #         return True
-
     _name = 'op.course'
-    # to do (Related Field)
+    _rec_name = 'course_code'
 
     _columns = {
-        'course_code': fields.char(size=8, string='Code', select=True,required=True),
+        'course_code': fields.char(string='Code', readonly=True),
         'batch_code': fields.many2one('op.batch', string='Batch', required=True),
         'subject_code': fields.many2one('op.subject', string='Subject', required=True),
         'price':fields.float(string='Price')
-        # 'product_id': fields.many2one('product.product', 'Product', ondelete='restrict', readonly=True),
-        # 'price': fields.related('product_id', 'list_price', string='Price', type='float'),
-        # 'subject_ids': fields.one2many('op.subject', 'name', string='Subject(s)', options="{'create_edit': False}",
-        #                                readonly=True),
-        # # 'standard_id': fields.one2many('op.standard', 'course_id', string='Standard(s)',
-        # #                                options="{'create_edit': False}", readonly=True),
-        # 'saved': fields.boolean('Saved', readonly=True),
-
-
-        # ----------- test ----------
-        # 'course_id': fields.many2one('op.standard', 'Course'),
     }
+    _sql_constraints = [('course_code', 'UNIQUE (course_code)', 'The CODE of the COURSE must be unique!')]
+
+
+
+    #.. Override the create method to generate the course code..#
+    def create(self, cr, uid, vals, context=None):
+        batch = self.pool.get('op.batch').browse(cr, uid, vals['batch_code'])
+        subject = self.pool.get('op.subject').browse(cr, uid, vals['subject_code'])
+        batch_code = batch.batch_code
+        subject_code = subject.code
+
+        course_code = batch_code + ' ' + subject_code
+        vals.update({'course_code':course_code})
+
+        res = super(op_course, self).create(cr, uid, vals, context=context)
+        return res
+
+    #.. Override the write method to generate the course code ..#
+    def write(self, cr, uid, ids, vals, context=None):
+        course_obj = self.browse(cr, uid, ids, context=context)
+
+        #.. if subject and batch modified..#
+        if ('subject_code' in vals) and ('batch_code' in vals):
+            batch = self.pool.get('op.batch').browse(cr, uid, vals['batch_code'])
+            batch_code = batch.batch_code
+            subject = self.pool.get('op.subject').browse(cr, uid, vals['subject_code'])
+            subject_code = subject.code
+            course_code = batch_code + ' ' + subject_code
+            vals.update({'course_code':course_code})
+
+        #..if batch modified..#
+        elif ('batch_code' in vals):
+            batch = self.pool.get('op.batch').browse(cr, uid, vals['batch_code'])
+            batch_code = batch.batch_code
+            subject_id = course_obj.subject_code
+            subject = self.pool.get('op.subject').browse(cr, uid, subject_id.id)
+            subject_code = subject.code
+            course_code = batch_code + ' ' + subject_code
+            vals.update({'course_code': course_code})
+
+        #..if subject modified..#
+        elif ('subject_code' in vals):
+            subject = self.pool.get('op.subject').browse(cr, uid, vals['subject_code'])
+            subject_code = subject.code
+            batch_id = course_obj.batch_code
+            batch = self.pool.get('op.batch').browse(cr, uid, batch_id.id)
+            batch_code = batch.batch_code
+            course_code = batch_code + ' ' + subject_code
+            vals.update({'course_code':course_code})
+        
+
+        res = super(op_course, self).write(cr, uid, ids,  vals, context=context)
+        return res
+
+
+
+
+
+
+
+
 
     # #.... check passing nul values..#
     # def _check_invalid_data(self, cr, uid, ids, context=None):
@@ -61,7 +97,7 @@ class op_course(osv.Model):
     #                 (_check_invalid_data, 'Entered Invalid Data!!', ['name', 'code']),
     # ]
     #
-    # _sql_constraints = [('code', 'UNIQUE (code)', 'The CODE of the COURSE must be unique!')]
+    #
     #
     # def create(self, cr, uid, vals, context=None):
     #     vals.update({'saved': True})
