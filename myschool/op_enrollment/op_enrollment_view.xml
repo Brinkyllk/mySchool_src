@@ -11,7 +11,6 @@
                         <group>
                             <field name="student_id" />
                             <field name="batch_code"/>
-                            <field name="registration_no"/>
                             <field name="lead_id"/>
                             <field name="payment_term"/>
                             <field name="template_price"/>
@@ -29,7 +28,6 @@
                 <tree string="Student Enrollment" version="7.0">
                     <field name="student_id" />
                     <field name="batch_code"/>
-                    <field name="registration_no"/>
                     <field name="lead_id"/>
                     <field name="payment_term"/>
                     <field name="template_price"/>
