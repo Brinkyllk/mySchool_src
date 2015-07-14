@@ -106,6 +106,13 @@
                                     <field name="nbr" invisible="1"/>
                                 </group>
                             </page>
+                            <page string="Enrolled Courses">
+                                <separator colspan="4" string="Student Enrollment"/>
+                                <tree>
+                                    <!--<field name="batch_ids"/>-->
+                                    <field name="enrollment_ids"/>
+                                </tree>
+                            </page>
                         </notebook>
                     </sheet>
                 </form>

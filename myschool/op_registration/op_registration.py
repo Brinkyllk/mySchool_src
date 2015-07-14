@@ -68,6 +68,7 @@ class op_registration(osv.osv):
         'division_id': fields.many2one('op.division', string='Division', states={'done': [('readonly', True)]}),
         'student_id': fields.many2one('op.student', string='Student', states={'done': [('readonly', True)]}),
         'nbr': fields.integer('# of Registration', readonly=True),
+        'enrollment_ids': fields.one2many('op.enrollment', 'student_id', string='Registered Courses'),
     }
 
     _defaults = {
@@ -143,7 +144,7 @@ class op_registration(osv.osv):
                       (tree_view and tree_view[1] or False, 'tree')],
             'type': 'ir.actions.act_window',
             'res_id': student.id,
-            'target': 'new',
+            'target': 'current',
             'nodestroy': True,
         }
         self.write(cr, uid, ids, {'state': 'done'})

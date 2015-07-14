@@ -147,7 +147,7 @@ class op_student(osv.Model):
 
         #------ Map many Courses ------
         # 'batch_ids': fields.one2many('op.student.batch.mapping', 'student_id', string='Registered Courses'),
-        'enrollment_ids': fields.one2many('op.enrollment', 'student_id', string='Registered Courses'),
+        # 'enrollment_ids': fields.one2many('op.enrollment', 'student_id', string='Registered Courses'),
 
         #payment schedule
         'payment_schedule_id': fields.one2many('op.payment.schedule', 'student_id', 'Payment Schedules')

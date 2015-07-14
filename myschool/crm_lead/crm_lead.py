@@ -15,6 +15,8 @@ class crm_lead(osv.Model):
         'inquiry_date': fields.date(string='Inquiry Date'),
     }
 
+    '''==========When the opportunity won the student is already in the system load the student form with the details
+                else load the load the registration form============'''
     def case_mark_won(self, cr, uid, ids, context=None):
         """ Mark the case as won: state=done and probability=100
         """
@@ -49,29 +51,37 @@ class crm_lead(osv.Model):
         newIsStudent = isStudent.get('is_student')
 
         newStudent_id = studentRef.search(cr, uid, [('partner_id', '=', newPartner_id)])
-        domain = [('id', '=', newStudent_id)]
+        student = newStudent_id[0]
+
+        models_data = self.pool.get('ir.model.data')
+        form_view = models_data.get_object_reference(cr, uid, 'myschool', 'view_student_form')
+        tree_view = models_data.get_object_reference(cr, uid, 'myschool', 'view_student_tree')
 
         if newIsStudent == False:
             value = {
                 'name': 'Student',
                 'view_mode': 'form',
                 'view_type': 'form',
-                'res_model': 'op.student',
+                'res_model': 'op.registration',
                 'type': 'ir.actions.act_window',
                 'nodestroy': True,
                 'target': 'current',
             }
             return value
         else:
+
             value = {
-                'name': 'Student',
-                'view_mode': 'tree',
-                'view_type': 'tree',
+                'domain': str([('id', '=', newStudent_id)]),
+                'view_type': 'form',
+                'view_mode': 'tree, form',
                 'res_model': 'op.student',
+                'view_id': False,
+                'views': [(form_view and form_view[1] or False, 'form'),
+                          (tree_view and tree_view[1] or False, 'tree')],
                 'type': 'ir.actions.act_window',
-                'nodestroy': True,
+                'res_id': student,
                 'target': 'current',
-                'domain': domain,
+                'nodestroy': True
             }
             return value
         return True
