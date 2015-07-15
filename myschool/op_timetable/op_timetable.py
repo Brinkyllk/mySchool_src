@@ -5,6 +5,7 @@ from openerp import netsvc
 import time
 import datetime
 import dateutil
+import math
 from datetime import date
 import calendar
 from dateutil import parser
@@ -27,12 +28,31 @@ class op_period(osv.osv):
                                     ('30', '30'), ('45', '45'),
                                    ], 'Minute', required=True),
 
-        'duration': fields.float('Duration', required=True),
+        'duration': fields.float('Duration'),
         'am_pm': fields.selection([('am', 'AM'), ('pm', 'PM')], 'AM/PM', required=True),
         'sequence': fields.integer('Sequence'),
-        'start_time': fields.float('Start Time'),
-        'end_time': fields.float('End Time')
+        'start_time':fields.float(string='Start time'),
+        'end_time':fields.float(string='End Time'),
+        'end_hour': fields.char(compute='calculate_end_time', string="Hour"),
+        'end_minute':fields.char(compute='calculate_end_time', string="Minutes"),
+        'end_am_pm':fields.selection([('am', 'AM'), ('pm', 'PM')], 'AM/PM', readonly= True ),
     }
+
+    #....Generate the end time of the period..#
+    @api.depends('hour','minute','duration')
+    def calculate_end_time(self):
+        for record in self:
+            end_hour = int(self.hour)
+            end_minutes = int(self.minute)
+            duration_info = str(self.duration)
+            du_hour =duration_info.split(".", 1)
+            # du_min = val[0]
+            self.end_hour = end_hour + 5
+            self.end_minute = end_minutes
+
+
+
+
     #.... check passing nul values..#
     def _check_invalid_data(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids, context=context)
@@ -65,6 +85,7 @@ class op_period(osv.osv):
         end_time = start_time + duration
         vals.update({'start_time': start_time, 'end_time': end_time})
         return super(op_period, self).create(cr, uid, vals, context=context)
+
 
     def write(self, cr, uid, ids,  values, context=None):
         if 'name' in values:
@@ -111,6 +132,7 @@ class op_period(osv.osv):
         values.update({'start_time': start_time, 'end_time': end_time})
         return super(op_period, self).write(cr, uid, ids,  values, context=context)
 
+    #..Validate the duration to can't be null..#
     def _check_duration(self, cr, uid, vals, context=None):
         for obj in self.browse(cr, uid, vals):
             time_duration = obj.duration
@@ -119,6 +141,7 @@ class op_period(osv.osv):
             else:
                 return True
 
+    #..Validate to periods can't be null..#
     def _check_period_time(self, cr, uid, vals, context=None):
         for obj in self.browse(cr, uid, vals):
             id_info = obj.id
@@ -158,9 +181,10 @@ class op_timetable(osv.osv):
         'start_datetime': fields.datetime('Start', required=True, readonly=True),
         'end_datetime': fields.datetime('End', required=True, readonly=True),
         'lecturer_id': fields.many2one('op.lecturer', 'Lecturer', required=True, readonly=True),
+        'batch_id' : fields.many2one('op.batch', 'Batch', required=True, readonly=True),
         # 'standard_id': fields.many2one('op.standard', 'Standard', required=True, readonly=True),
         'classroom_id': fields.many2one('op.classroom', 'Classroom', required=True, readonly=True),
-        'subject_id': fields.many2one('op.subject', 'Subject', required=True, readonly=True),
+        'course_id': fields.many2one('op.course', 'Course', required=True, readonly=True),
         'color': fields.integer('Color Index'),
         # 'type': fields.selection(
         #     [('Monday', 'Monday'), ('Tuesday', 'Tuesday'), ('Wednesday', 'Wednesday'), ('Thursday', 'Thursday'),
@@ -198,8 +222,16 @@ class op_timetable(osv.osv):
         return True
 
     def action_complete(self, cr, uid, ids, context=None):
-        self.write(cr, uid, ids, {'state': 'completed'})
-        return True
+        complete_info = self.browse(cr, uid, ids, context=None)
+        now = datetime.datetime.today()
+        new_date = now.strftime('%Y-%m-%d')
+        today = dateutil.parser.parse(new_date).date()
+        start_date = dateutil.parser.parse(complete_info.start_datetime).date()
+        if start_date <= today:
+            self.write(cr, uid, ids, {'state': 'completed'})
+            return True
+        else:
+            raise osv.except_osv(('Error'), ("Can't complete future time Slots"))
 
     def _validate_backdate(self, cr, uid, ids, context=None):
         now = datetime.datetime.today()

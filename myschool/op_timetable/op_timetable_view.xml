@@ -3,6 +3,7 @@
 	<data>
         <!--************* op.period ****************-->
 
+		<!--*****tree view*****-->
 		<record id="view_op_period_tree" model="ir.ui.view">
 			<field name="name">op.period.tree</field>
 			<field name="model">op.period</field>
@@ -19,6 +20,7 @@
 			</field>
 		</record>
 
+		<!--*****form view*****-->
 		<record id="view_op_period_form" model="ir.ui.view">
 			<field name="name">op.period.form</field>
 			<field name="model">op.period</field>
@@ -38,7 +40,7 @@
 							<field name="minute" />
 							<field name="am_pm" />
                             <newline/>
-                            <field name="duration" widget="float_time" />
+                            <field name="duration" widget="float_time"/>
 						</group>
 
 					</sheet>
@@ -89,6 +91,7 @@
 
         <!--************* op.timetable ****************-->
 
+		<!--*****tree view*****-->
         <record id="view_op_timetable_tree" model="ir.ui.view">
 			<field name="name">op.timetable.tree</field>
 			<field name="model">op.timetable</field>
@@ -99,7 +102,7 @@
 					<field name="lecturer_id"/>
 					<!--<field name="standard_id" />-->
 					<field name="period_id" />
-					<field name="subject_id" />
+					<field name="course_id"/>
                     <field name="classroom_id" />
 					<field name="start_datetime" onchange="onchange_weekday(start_datetime)" />
 					<field name="end_datetime" />
@@ -108,13 +111,14 @@
 			</field>
 		</record>
 
+		<!--*****form view*****-->
 		<record id="view_op_timetable_form" model="ir.ui.view">
 			<field name="name">op.timetable.form</field>
 			<field name="model">op.timetable</field>
 			<field name="priority" eval="8" />
             <field name="sequence" eval="4" />
 			<field name="arch" type="xml">
-				<form string="Time Table" version="7.0">
+				<form string="Time Table" version="7.0" create="false" edit="false">
                     <header>
                         <button string="Planned" type="object" name="action_planned" class="" icon="gtk-undo" states="postponed"/>
                         <button string="Complete" type="workflow" name="action_complete" class="" icon="gtk-apply" states="planned, postponed"/>
@@ -128,7 +132,7 @@
 							<field name="lecturer_id"/>
 							<!--<field name="standard_id" />-->
 							<field name="period_id" />
-							<field name="subject_id" />
+							<field name="course_id" />
                             <field name="classroom_id" />
 							<field name="start_datetime"/>
 							<field name="end_datetime" />
@@ -139,6 +143,7 @@
 			</field>
 		</record>
 
+		<!--*****search view*****-->
 		<record id="view_op_timetable_search" model="ir.ui.view">
 			<field name="name">op.timetable.search</field>
 			<field name="model">op.timetable</field>
@@ -148,7 +153,7 @@
 					<field name="lecturer_id" select="True" />
 					<!--<field name="standard_id" select="True" />-->
 					<field name="period_id" select="True" />
-					<field name="subject_id" select="True" />
+					<field name="course_id" select="True" />
                     <field name="classroom_id" select="True"/>
 					<field name="start_datetime" select="True" />
 					<field name="end_datetime" select="True" />
@@ -168,6 +173,7 @@
 			</field>
 		</record>
 
+		<!--*****calendar view*****-->
         <record id="view_op_timetable_calendar" model="ir.ui.view">
 			<field name="name">op.timetable.calendar</field>
 			<field name="model">op.timetable</field>
@@ -178,13 +184,14 @@
 					color="lecturer_id" date_stop="end_datetime" mode="week">
 					<field name="lecturer_id" />
 					<field name="period_id" />
-					<field name="subject_id" />
+					<field name="course_id" />
                     <field name="classroom_id" />
                     <field name="state" />
 				</calendar>
 			</field>
 		</record>
 
+		<!--*****Kanban View*****-->
         <record model="ir.ui.view" id="view_timetable_kanban">
             <field name="name">timetable.kanban</field>
             <field name="model">op.timetable</field>
@@ -215,9 +222,9 @@
 										Lecturer:
 										<field name="lecturer_id"/>
 									</li>
-		                           	<li t-if="record.subject_id.raw_value">
+		                           	<li t-if="record.course_id.raw_value">
 										Subject:
-										<field name="subject_id"/>
+										<field name="course_id"/>
 									</li>
 									<!--<li t-if="record.standard_id.raw_value">-->
 										<!--Standard:-->
