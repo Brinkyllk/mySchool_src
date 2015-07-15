@@ -33,8 +33,8 @@
                                     string="Confirm" icon="gtk-go-forward" />
                             <button name="confirm_selection" states="i" type="workflow"
                                     string="Enroll" icon="gtk-go-forward" />
-                            <button name="open_student" states="s,done" type="object"
-                                    string="Open Student Profile" icon="gtk-go-forward" />
+                            <!--<button name="open_student" states="s,done" type="object"-->
+                                    <!--string="Open Student Profile" icon="gtk-go-forward" />-->
                             <button name="confirm_rejected" states="d,i,p" string="Reject"
                                     type="workflow" icon="gtk-cancel" />
                             <button name="confirm_pending" states="i" string="Pending"
@@ -106,13 +106,13 @@
                                     <field name="nbr" invisible="1"/>
                                 </group>
                             </page>
-                            <page string="Enrolled Courses">
-                                <separator colspan="4" string="Student Enrollment"/>
-                                <tree>
-                                    <!--<field name="batch_ids"/>-->
-                                    <field name="enrollment_ids"/>
-                                </tree>
-                            </page>
+                            <!--<page string="Enrolled Courses">-->
+                                <!--<separator colspan="4" string="Student Enrollment"/>-->
+                                <!--<tree>-->
+                                    <!--&lt;!&ndash;<field name="batch_ids"/>&ndash;&gt;-->
+                                    <!--<field name="enrollment_ids"/>-->
+                                <!--</tree>-->
+                            <!--</page>-->
                         </notebook>
                     </sheet>
                 </form>

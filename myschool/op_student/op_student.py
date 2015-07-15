@@ -147,7 +147,7 @@ class op_student(osv.Model):
 
         #------ Map many Courses ------
         # 'batch_ids': fields.one2many('op.student.batch.mapping', 'student_id', string='Registered Courses'),
-        # 'enrollment_ids': fields.one2many('op.enrollment', 'student_id', string='Registered Courses'),
+        'enrollment_ids': fields.one2many('op.enrollment', 'student_id', string='Registered Courses'),
 
         #payment schedule
         'payment_schedule_id': fields.one2many('op.payment.schedule', 'student_id', 'Payment Schedules')
@@ -159,6 +159,28 @@ class op_student(osv.Model):
     }
 
     _sql_constraints = [('id_number', 'UNIQUE (id_number)', 'The NIC  of the Student  must be unique!')]
+
+    def default_get(self, cr, uid, fields, context=None):
+        data = super(op_student, self).default_get(cr, uid, fields, context=context)
+        activeId = context.get('active_id')
+
+        registrationRef = self.pool.get('op.registration')
+        registrationId = registrationRef.browse(cr, uid, activeId, context=context)
+
+        data['title'] = registrationId.title.id
+        data['first_name'] = registrationId.first_name
+        data['middle_name'] = registrationId.middle_name
+        data['last_name'] = registrationId.last_name
+        data['birth_date'] = registrationId.birth_date
+        data['gender'] = registrationId.gender
+        data['photo'] = registrationId.photo
+        data['address_line1'] = registrationId.address_line1
+        data['address_line2'] = registrationId.address_line2
+        data['town'] = registrationId.town
+        data['province'] = registrationId.province
+        data['nation'] = registrationId.nation
+
+        return data
 
     def _check_nic(self, nic):
         pass
