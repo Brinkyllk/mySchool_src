@@ -181,6 +181,7 @@ class timetable_postponed(osv.osv_memory):
             start_datetime_new = new_date + ' ' + start_time
             end_datetime_new = new_date + ' ' + end_time
             new_st_date = datetime.datetime.strptime(start_datetime_new, "%Y-%m-%d %H:%M:%S")
+            # new_st_date=fields.datetime.context_timestamp(cr, uid, datetime.start_datetime_new, context=context)
             new_en_date = datetime.datetime.strptime(end_datetime_new, "%Y-%m-%d %H:%M:%S")
             day = calendar.day_name[new_st_date.weekday()]
 
