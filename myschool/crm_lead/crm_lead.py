@@ -14,7 +14,7 @@ class crm_lead(osv.Model):
         'prospective_student': fields.integer(size=5, string='# Prospective Students'),
         'inquiry_date': fields.date(string='Inquiry Date'),
     }
-    #.. chamal mariyan..#
+
     '''==========When the opportunity won the student is already in the system load the student form with the details
                 else load the load the registration form============'''
     def case_mark_won(self, cr, uid, ids, context=None):
