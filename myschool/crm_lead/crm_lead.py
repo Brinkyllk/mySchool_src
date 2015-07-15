@@ -15,6 +15,7 @@ class crm_lead(osv.Model):
         'inquiry_date': fields.date(string='Inquiry Date'),
     }
 
+    # tyugygygyiuouhooi/u
     '''==========When the opportunity won the student is already in the system load the student form with the details
                 else load the load the registration form============'''
     def case_mark_won(self, cr, uid, ids, context=None):
@@ -43,15 +44,16 @@ class crm_lead(osv.Model):
         resPartnerRef = self.pool.get('res.partner')
         studentRef = self.pool.get('op.student')
 
-        crmId = crmRef.browse(cr, uid, ids, context=context)[0]
-        partnerId = crmRef.browse(cr, uid, crmId.partner_id.id, context=context)[0]
+        crmId = crmRef.browse(cr, uid, ids, context=context)
+        partnerId = crmRef.browse(cr, uid, crmId.partner_id.id, context=context)
         newPartner_id = partnerId.id
 
         isStudent = resPartnerRef.read(cr, uid, newPartner_id, ['is_student'])
         newIsStudent = isStudent.get('is_student')
 
-        newStudent_id = studentRef.search(cr, uid, [('partner_id', '=', newPartner_id)])
-        student = newStudent_id[0]
+        if newIsStudent != False:
+            newStudent_id = studentRef.search(cr, uid, [('partner_id', '=', newPartner_id)])
+            student = newStudent_id[0]
 
         models_data = self.pool.get('ir.model.data')
         form_view = models_data.get_object_reference(cr, uid, 'myschool', 'view_student_form')
