@@ -448,11 +448,6 @@ class op_student(osv.Model):
         if 'id_number' in vals:
             self.validate_NIC(cr, uid, [], vals['id_number'])
 
-        # Save student and get record id
-        # stu_id = super(op_student, self).create(cr, uid, vals, context=context)
-
-
-
         if 'is_company' in vals:
             if vals['is_company'] == True:
                 if vals['register_date'] == False or vals['register_date'] == None:
@@ -460,13 +455,17 @@ class op_student(osv.Model):
             else:
                 if vals['birth_date'] == False or vals['birth_date'] == None:
                     raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a Birth Date..!!')
-                # else:
-                #     if vals ['id_number'] == False or vals ['id_number'] == None:
-                #         raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a NIC..!!')
 
-        # return stu_id
-        return super(op_student, self).create(cr, uid, vals, context=context)
 
+        #-----Check whether enrollment has or not-------#
+        stu_id = super(op_student, self).create(cr, uid, vals, context=context)
+        enrollment_ref = self.pool.get('op.enrollment')
+        enrollment_count = enrollment_ref.search(cr, uid, [('student_id', '=', stu_id)], count=True, context=context)
+        if enrollment_count < 1:
+            raise osv.except_osv(_(u'Error'), _(u'Make an Enrollment'))
+            return
+
+        return stu_id
 
 
     def write(self, cr, uid, ids, values, context=None):
@@ -488,16 +487,9 @@ class op_student(osv.Model):
                 mi_name = values['middle_name'].strip()
                 values.update({'middle_name': mi_name})
 
-        # if 'last_name' in values:
-        #     lname = values['last_name'].strip()
-        #     values.update({'last_name': lname})
-
         # email validation on write
         if 'email' in values:
             self.validate_email(cr, uid, ids, values['email'])
-
-        # if 'last_name' in values:
-        #     self.validate_last_name(cr, uid, ids, values['last_name'])
 
         # # NIC validation on write
         if 'id_number' in values:
@@ -509,10 +501,6 @@ class op_student(osv.Model):
         if 'contact_no' in values:
             self.phoneNumberValidationParent(cr, uid, [], values['contact_no'])
 
-
-        # if 'id_number' in values:
-        #     values['id_number'] = values['id_number'].strip()
-
         #clean NIC
         if 'id_number' in values:
             try:
@@ -521,15 +509,6 @@ class op_student(osv.Model):
                     values['id_number'] = None
             except:
                 values['id_number'] = None
-
-        # exstu = self.browse(cr, uid, ids, context=None)
-        # # Rename the partner name
-        # initials = '' if not exstu.initials else exstu.initials
-        # first_nm = '' if not exstu.first_name else exstu.first_name
-        # last_nm = '' if not exstu.last_name else exstu.last_name
-        #
-        # full_name = initials + '  ' + first_nm + ' ' + last_nm
-        # values.update({'name': full_name})
 
         #-------- Update Partner record -------------
         exstu = self.browse(cr, uid, ids, context=context)
@@ -765,10 +744,6 @@ class op_student(osv.Model):
     ]
 
 
-    # def fnct_search(self, cr, uid, op_student_batch_mapping, name, args):
-    #     all_batches = self.pool.get('op.student.batch.mapping')
-    #     batch_ids = all_batches.browse(cr, uid, )
-    #     return
 
 
 
