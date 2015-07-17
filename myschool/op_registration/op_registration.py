@@ -139,7 +139,7 @@ class op_registration(osv.osv):
         value = {
             # 'domain': str([('id', '=', student.id)]),
             'view_type': 'form',
-            'view_mode': 'tree, form',
+            'view_mode': 'form, tree',
             'res_model': 'op.student',
             'view_id': False,
             'views': [(form_view and form_view[1] or False, 'form'),
