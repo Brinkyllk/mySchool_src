@@ -382,7 +382,7 @@ class op_student(osv.Model):
             except:
                 vals['id_number'] = None
 
-        # Fix initials if empty
+        # Fix initials if empty....
         try:
             initials = vals['initials'].strip()
         except Exception:
