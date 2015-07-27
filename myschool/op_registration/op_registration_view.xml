@@ -27,21 +27,21 @@
                 <form string="Registration" version="7.0">
                     <header>
                         <span groups="base.group_user">
-                            <field name="state" widget="statusbar" statusbar_visible="d,i,s,done"
+                            <field name="state" widget="statusbar" statusbar_visible="d,s,done"
                                    statusbar_colors='{"r":"red"}' />
-                            <button name="confirm_in_progress" states="d" type="workflow"
-                                    string="Confirm" icon="gtk-go-forward" />
-                            <button name="confirm_selection" states="i" type="workflow"
+                            <!--<button name="confirm_in_progress" states="d" type="workflow"-->
+                                    <!--string="Confirm" icon="gtk-go-forward" />-->
+                            <button name="confirm_selection" states="d" type="workflow"
                                     string="Enroll" icon="gtk-go-forward" />
                             <!--<button name="open_student" states="s,done" type="object"-->
                                     <!--string="Open Student Profile" icon="gtk-go-forward" />-->
-                            <button name="confirm_rejected" states="d,i,p" string="Reject"
+                            <button name="confirm_rejected" states="d" string="Reject"
                                     type="workflow" icon="gtk-cancel" />
-                            <button name="confirm_pending" states="i" string="Pending"
+                            <!--<button name="confirm_pending" states="i" string="Pending"-->
+                                    <!--type="workflow" icon="gtk-cancel" />-->
+                            <button name="confirm_cancel" states="d" string="Cancel"
                                     type="workflow" icon="gtk-cancel" />
-                            <button name="confirm_cancel" states="d,i" string="Cancel"
-                                    type="workflow" icon="gtk-cancel" />
-                            <button name="confirm_to_draft" states="c,p,r" string="Set to Draft"
+                            <button name="confirm_to_draft" states="c,r" string="Set to Draft"
                                     type="object" icon="gtk-convert" />
                         </span>
                     </header>
@@ -118,6 +118,23 @@
                 </form>
             </field>
         </record>
+
+        <!--<record id="op_student_form_view_extended" model="ir.ui.view">-->
+            <!--<field name="name">op.student.form.view.extended</field>-->
+            <!--<field name="model">op.student</field>-->
+            <!--<field name="inherit_id" ref="myschool.view_student_form"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<form string="Student" version="7.0">-->
+                    <!--<footer>-->
+                        <!--<span>-->
+                            <!--<button name="create" string="Save"-->
+                            <!--type="object" icon="gtk-apply"/>-->
+                        <!--</span>-->
+                    <!--</footer>-->
+                <!--</form>-->
+            <!--</field>-->
+        <!--</record>-->
+
         <record id="view_op_registration_search" model="ir.ui.view">
             <field name="name">op.registration.search</field>
             <field name="model">op.registration</field>
