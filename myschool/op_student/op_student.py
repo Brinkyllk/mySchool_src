@@ -163,22 +163,23 @@ class op_student(osv.Model):
     def default_get(self, cr, uid, fields, context=None):
         data = super(op_student, self).default_get(cr, uid, fields, context=context)
         activeId = context.get('active_id')
+        if activeId:
 
-        registrationRef = self.pool.get('op.registration')
-        registrationId = registrationRef.browse(cr, uid, activeId, context=context)
+            registrationRef = self.pool.get('op.registration')
+            registrationId = registrationRef.browse(cr, uid, activeId, context=context)
 
-        data['title'] = registrationId.title.id
-        data['first_name'] = registrationId.first_name
-        data['middle_name'] = registrationId.middle_name
-        data['last_name'] = registrationId.last_name
-        data['birth_date'] = registrationId.birth_date
-        data['gender'] = registrationId.gender
-        data['photo'] = registrationId.photo
-        data['address_line1'] = registrationId.address_line1
-        data['address_line2'] = registrationId.address_line2
-        data['town'] = registrationId.town
-        data['province'] = registrationId.province
-        data['nation'] = registrationId.nation
+            data['title'] = registrationId.title.id
+            data['first_name'] = registrationId.first_name
+            data['middle_name'] = registrationId.middle_name
+            data['last_name'] = registrationId.last_name
+            data['birth_date'] = registrationId.birth_date
+            data['gender'] = registrationId.gender
+            data['photo'] = registrationId.photo
+            data['address_line1'] = registrationId.address_line1
+            data['address_line2'] = registrationId.address_line2
+            data['town'] = registrationId.town
+            data['province'] = registrationId.province
+            data['nation'] = registrationId.nation
 
         return data
 
@@ -341,6 +342,7 @@ class op_student(osv.Model):
         return {}
 
     def create(self, cr, uid, vals, context=None):
+        # vals = self.browse(cr, uid, ids, context=context)
         if 'first_name' in vals:
             fname = vals['first_name'].strip()
             vals.update({'first_name': fname})
@@ -387,11 +389,12 @@ class op_student(osv.Model):
             initials = ''
             pass
 
-        if initials == '':
-            full_name = vals['first_name'].strip() + ' ' + vals['last_name'].strip()
-        else:
-            full_name = vals['initials'] + ' ' + vals['first_name'].strip() + ' ' + vals['last_name'].strip()
-        vals.update({'name': full_name})  # Update Partner record
+        if 'first_name' in vals:
+            if initials == '':
+                full_name = vals['first_name'].strip() + ' ' + vals['last_name'].strip()
+            else:
+                full_name = vals['initials'] + ' ' + vals['first_name'].strip() + ' ' + vals['last_name'].strip()
+            vals.update({'name': full_name})  # Update Partner record
 
         # Address lines and update res.partner
         if 'address_line1' in vals:
@@ -430,8 +433,8 @@ class op_student(osv.Model):
                 vals.update({'nation': cntry})
 
         # Get student ID
-        vals['stu_reg_number'] = self.pool.get('ir.sequence').get(cr, uid, 'myschool.op_student') or '/'
-        vals.update({'is_student': True})  # Partner type is student
+        # vals['stu_reg_number'] = self.pool.get('ir.sequence').get(cr, uid, 'myschool.op_student') or '/'
+        # vals.update({'is_student': True})  # Partner type is student
         # vals.update({'stu_reg_id': vals['stu_reg_number']})  # Support backwards compatible
 
         # email validation on create
@@ -466,6 +469,7 @@ class op_student(osv.Model):
             return
 
         return stu_id
+
 
 
     def write(self, cr, uid, ids, values, context=None):
