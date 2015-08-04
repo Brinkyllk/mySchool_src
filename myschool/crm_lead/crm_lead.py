@@ -2,12 +2,15 @@ from openerp.osv import osv, fields
 from openerp.tools.translate import _
 
 
+
 class crm_lead(osv.Model):
     _inherit = 'crm.lead'
     _description = "adding fields to crm.lead"
     _columns = {
-        'courses_interested': fields.many2many('op.course', 'course_crm_lead_rel', 'crm_id', 'name',
-                                               'Course(s) Interested'),
+        'partner_id': fields.many2one('res.partner', 'Partner', ondelete='set null', track_visibility='onchange',
+            select=True, help="Linked student (optional). Usually created when converting the lead.", domain="[('is_student', '=', True)]"),
+        'courses_interested': fields.many2many('op.study.programme', 'study_programme_lead_rel', 'crm_id', 'name',
+                                               'Study programme(s) Interested'),
         'weekday': fields.many2many('time.frame', 'weekday_time_frame', 'weekday', 'name', 'Weekday'),
         'saturday': fields.many2many('time.frame', 'saturday_time_frame', 'saturday', 'name', 'Saturday'),
         'sunday': fields.many2many('time.frame', 'sunday_time_frame', 'sunday', 'name', 'Sunday'),
@@ -15,7 +18,6 @@ class crm_lead(osv.Model):
         'inquiry_date': fields.date(string='Inquiry Date'),
     }
 
-    # tyugygygyiuouhooi/u
     '''==========When the opportunity won the student is already in the system load the student form with the details
                 else load the load the registration form============'''
     def case_mark_won(self, cr, uid, ids, context=None):
@@ -39,7 +41,7 @@ class crm_lead(osv.Model):
         for stage_id, lead_ids in stages_leads.items():
             self.write(cr, uid, lead_ids, {'stage_id': stage_id}, context=context)
 
-        #open student profile
+        #open student profile or registrtion form
         crmRef = self.pool.get('crm.lead')
         resPartnerRef = self.pool.get('res.partner')
         studentRef = self.pool.get('op.student')
@@ -49,17 +51,44 @@ class crm_lead(osv.Model):
         newPartner_id = partnerId.id
 
         isStudent = resPartnerRef.read(cr, uid, newPartner_id, ['is_student'])
-        newIsStudent = isStudent.get('is_student')
+        if isStudent:
+            newIsStudent = isStudent.get('is_student')
 
-        if newIsStudent != False:
-            newStudent_id = studentRef.search(cr, uid, [('partner_id', '=', newPartner_id)])
-            student = newStudent_id[0]
+            if newIsStudent != False:
+                newStudent_id = studentRef.search(cr, uid, [('partner_id', '=', newPartner_id)])
+                student = newStudent_id[0]
 
-        models_data = self.pool.get('ir.model.data')
-        form_view = models_data.get_object_reference(cr, uid, 'myschool', 'view_student_form')
-        tree_view = models_data.get_object_reference(cr, uid, 'myschool', 'view_student_tree')
+            models_data = self.pool.get('ir.model.data')
+            form_view = models_data.get_object_reference(cr, uid, 'myschool', 'view_op_enrollment_form')
+            tree_view = models_data.get_object_reference(cr, uid, 'myschool', 'view_op_enrollment_tree')
 
-        if newIsStudent == False:
+            if newIsStudent == False:
+                value = {
+                    'name': 'Student',
+                    'view_mode': 'form',
+                    'view_type': 'form',
+                    'res_model': 'op.registration',
+                    'type': 'ir.actions.act_window',
+                    'nodestroy': True,
+                    'target': 'current',
+                    }
+                return value
+            else:
+                value = {
+                    'domain': str([('id', '=', newStudent_id)]),
+                    'view_type': 'form',
+                    'view_mode': 'tree, form',
+                    'res_model': 'op.enrollment',
+                    'view_id': 'False',
+                    'views': [(form_view and form_view[1] or False, 'form'),
+                              (tree_view and tree_view[1] or False, 'tree')],
+                    'type': 'ir.actions.act_window',
+                    'flags': {'action_buttons': True},
+                    'target': 'new',
+                    'nodestroy': True
+                }
+            return value
+        else:
             value = {
                 'name': 'Student',
                 'view_mode': 'form',
@@ -68,33 +97,15 @@ class crm_lead(osv.Model):
                 'type': 'ir.actions.act_window',
                 'nodestroy': True,
                 'target': 'current',
-            }
-            return value
-        else:
-
-            value = {
-                'domain': str([('id', '=', newStudent_id)]),
-                'view_type': 'form',
-                'view_mode': 'tree, form',
-                'res_model': 'op.student',
-                'view_id': False,
-                'views': [(form_view and form_view[1] or False, 'form'),
-                          (tree_view and tree_view[1] or False, 'tree')],
-                'type': 'ir.actions.act_window',
-                'res_id': student,
-                'target': 'current',
-                'nodestroy': True
-            }
+                }
             return value
         return True
-
 
 class time_frame(osv.Model):
     _name = 'time.frame'
     _columns = {
         'name': fields.char('Time Frame')
     }
-
 
 class crm_tracking_campaign(osv.Model):
     _inherit = 'crm.tracking.campaign'
@@ -104,7 +115,6 @@ class crm_tracking_campaign(osv.Model):
                                       'Source(s)'),
     }
 
-
 class crm_tracking_source(osv.Model):
     _inherit = 'crm.tracking.source'
     _description = "adding fields to crm.lead"
@@ -113,44 +123,23 @@ class crm_tracking_source(osv.Model):
     }
 
 
-class op_crm_partner_binding(osv.osv_memory):
-    _name = 'op.crm.partner.binding'
-    _inherit = 'crm.partner.binding'
-    _columns = {
-        'action': fields.selection([
-                ('exist', 'Link to an existing student'),
-                ('nothing', 'Do not link to a customer')
-            ], 'Related Customer', required=True),
-        'partner_id': fields.many2one('res.partner', 'Customer'),
-    }
+class calendar_event(osv.Model):
+    _inherit = 'calendar.event'
 
-class op_crm_lead2opportunity_partner(osv.osv_memory):
-    _name = 'op.crm.lead2opportunity.partner'
-    _inherit = ['crm.lead2opportunity.partner', 'op.crm.partner.binding']
-    _columns = {
-        # 'name': fields.selection([
-        #         ('convert', 'Convert to opportunity'),
-        #         ('merge', 'Merge with existing opportunities')
-        #     ], 'Conversion Action', required=True),
-        # 'opportunity_ids': fields.many2many('crm.lead', string='Opportunities'),
-        # 'user_id': fields.many2one('res.users', 'Salesperson', select=True),
-        # 'section_id': fields.many2one('crm.case.section', 'Sales Team', select=True),
-        'new': fields.char(string='New')
+    _columns ={
+        'type': fields.many2one('follow.up.type', 'Follow-up Type')
     }
 
 
-class op_crm_lead2opportunity_mass_convert(osv.osv_memory):
-    _name = 'op.crm.lead2opportunity.mass.convert'
-    _inherit = ['crm.lead2opportunity.partner.mass', 'op.crm.lead2opportunity.partner']
-
+class follow_up_type(osv.Model):
+    _name = 'follow.up.type'
     _columns = {
-        'user_ids':  fields.many2many('res.users', string='Salesmen'),
-        'section_id': fields.many2one('crm.case.section', 'Sales Team'),
-        'deduplicate': fields.boolean('Apply deduplication', help='Merge with existing leads/opportunities of each partner'),
-        'action': fields.selection([
-                ('each_exist_or_create', 'Use existing partner or create'),
-                ('nothing', 'Do not link to a customer')
-            ], 'Related Customer', required=True),
-        'force_assignation': fields.boolean('Force assignation', help='If unchecked, this will leave the salesman of duplicated opportunities'),
+        'code': fields.char('Code', required=True),
+        'name': fields.char('Name', required=True)
     }
 
+
+    # def create(self, cr, uid, vals, context=None):
+    #
+    #     ret = super(crm_phonecall, self).create(cr, uid, vals, context=context)
+    #     return ret
