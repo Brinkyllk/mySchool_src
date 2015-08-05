@@ -1,5 +1,21 @@
 from openerp.osv import osv, fields
 from openerp.tools.translate import _
+from openerp import api
+
+class crm_tags(osv.Model):
+    _name = "crm.tags"
+    _columns = {
+        'code': fields.char('Code', required=True),
+        'name': fields.char('Name', required=True)
+    }
+
+
+class modes(osv.Model):
+    _name = 'modes'
+    _columns = {
+        'code': fields.char('Code', required=True),
+        'name': fields.char('Name', required=True)
+    }
 
 
 class time_frame(osv.Model):
@@ -43,12 +59,20 @@ class follow_up_type(osv.Model):
 
 
 class crm_lead(osv.Model):
+
+    #onchange for is_new course
+    @api.multi
+    def onchange_new_course(self, is_new_course):
+        if is_new_course:
+            return True
+
     _inherit = 'crm.lead'
     _rec_name = 'name'
     _description = "adding fields to crm.lead"
     _columns = {
         'partner_id': fields.many2one('res.partner', 'Partner', ondelete='set null', track_visibility='onchange',
             select=True, help="Linked student (optional). Usually created when converting the lead.", domain="[('is_student', '=', True)]"),
+        'modes': fields.many2one('modes','Modes of Inquiries'),
         'courses_interested': fields.many2many('op.study.programme', 'study_programme_lead_rel', 'crm_id', 'name',
                                                'Study programme(s) Interested'),
         'anytime': fields.many2many('time.frame', 'anytime_time_frame', 'anytime', 'name', 'Anytime'),
@@ -57,6 +81,8 @@ class crm_lead(osv.Model):
         'evening': fields.many2many('time.frame', 'evening_time_frame', 'evening', 'name', 'Evening'),
         'prospective_student': fields.integer(size=5, string='# Prospective Students'),
         'inquiry_date': fields.date(string='Inquiry Date'),
+        'tags': fields.many2many('crm.tags', 'crm_lead_tags_rel', id1='partner_id', id2='code', string='Tags'),
+        'is_new_course': fields.boolean('New Course', help="Check if the course is not exist"),
     }
 
     '''==========When the opportunity won the student is already in the system load the student form with the details

@@ -225,12 +225,22 @@
             <field name="inherit_id" ref="crm.crm_case_form_view_leads"/>
             <field name="arch" type="xml">
                 <data>
+                    <xpath expr="//div[@class='oe_title']" position="inside">
+                        <label for="modes" class="oe_edit_only"/>
+                        <field name="modes"/>
+                    </xpath>
                     <xpath  expr="//notebook" position="inside">
                         <page string="Course(s) Info">
                             <separator colspan="4" string="Course Details"/>
+                            <field name="is_new_course"  on_change="onchange_new_course(is_new_course)" class="oe_inline"/><label for="is_new_course" string="Is a New Course ?"/>
                             <group col="4" colspan="4">
-                                <field name="courses_interested"  widget="many2many_tags" options="{'no_create_edit':'1'}"/>
-                                <field name="prospective_student"/>
+                                <group>
+                                    <field name="courses_interested" attrs="{'invisible': [('is_new_course','=', True)]}" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
+                                    <field name="tags" attrs="{'invisible': [('is_new_course','=',False)]}"  widget="many2many_tags"/>
+                                </group>
+                                <group>
+                                    <field name="prospective_student"/>
+                                </group>
                             </group>
                             <page string="Suitable Time Frame">
                                 <separator colspan="4" string="Suitable Time Frame"/>
