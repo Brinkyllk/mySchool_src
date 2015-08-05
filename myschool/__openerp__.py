@@ -42,7 +42,7 @@
     #          'test/new_admission.yml',
     # ],
     # 'images': ['images/Admission_Process.png','images/Student_Information.png'],
-
+    'test': 'static/files/csv_template.csv',
     'installable': True,
     'auto_install': False,
     'application': True,

@@ -2,6 +2,7 @@ from openerp.osv import fields
 from openerp.osv import osv
 from openerp import api
 
+
 class op_study_programme(osv.Model):
 
     #--Code change to upper case---
@@ -17,6 +18,7 @@ class op_study_programme(osv.Model):
             return True
 
     _name = 'op.study.programme'
+    _rec_name = 'name'
     _columns = {
         'code': fields.char('Code', required=True, size=20),
         'name': fields.char('Name',required=True, size=100),
