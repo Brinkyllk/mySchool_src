@@ -1,182 +1,7 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
-        <record id="crm_case_form_view_leads_extended" model="ir.ui.view">
-            <field name="name">crm.lead.form.inherit</field>
-            <field name="model">crm.lead</field>
-            <field name="inherit_id" ref="crm.crm_case_form_view_leads"/>
-            <field name="arch" type="xml">
-                <data>
-                    <xpath  expr="//notebook" position="inside">
-                        <page string="Course(s) Info">
-                            <separator colspan="4" string="Course Details"/>
-                            <group col="4" colspan="4">
-                                <field name="courses_interested"  widget="many2many_tags" options="{'no_create_edit':'1'}"/>
-                                <field name="prospective_student"/>
-                            </group>
-                            <page string="Suitable Time Frame">
-                                <separator colspan="4" string="Suitable Time Frame"/>
-                                <group col="4" colspan="4">
-                                    <field name="weekday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
-                                    <field name="saturday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
-                                    <field name="sunday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
-                                </group>
-                            </page>
-                        </page>
-                    </xpath>
-                    <xpath  expr="//notebook/page[@string='Extra Info']" position="inside">
-                        <group>
-                            <field name="inquiry_date"/>
-                        </group>
-                    </xpath>
-
-                    <xpath  expr="//div[@class='oe_right oe_button_box']" position="replace">
-                        <div class="oe_right oe_button_box" name="buttons">
-                            <button class="oe_inline oe_stat_button" type="action" context="{'default_opportunity_id': active_id, 'search_default_opportunity_id': active_id, 'default_partner_id': partner_id, 'default_duration': 1.0}" name="%(action_crm_followup)d" icon="fa-bell">
-                                <div>Schedule<br/>Follow-up</div>
-                            </button>
-                        </div>
-                    </xpath>
-                </data>
-            </field>
-        </record>
-
-        <record id="crm_case_tree_view_oppor" model="ir.ui.view">
-            <field name="name">crm.lead.oppor.form.inherit</field>
-            <field name="model">crm.lead</field>
-            <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
-            <field name="arch" type="xml">
-                <data>
-                    <xpath  expr="//notebook/page[@string='Lead']" position="inside">
-                        <page string="Course(s) Info">
-                            <separator colspan="4" string="Course Details"/>
-                            <group name="Suitable Time Frame">
-                                <field name="courses_interested"  widget="many2many_tags" options="{'no_create_edit':'1'}"/>
-                                <field name="prospective_student"/>
-                            </group>
-                            <page string="Suitable Time Frame">
-                                <separator colspan="4" string="Suitable Time Frame"/>
-                                <group col="4" colspan="4">
-                                    <field name="weekday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
-                                    <field name="saturday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
-                                    <field name="sunday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
-                                </group>
-                            </page>
-                        </page>
-                    </xpath>
-                    <xpath  expr="//group[@string='Misc']" position="inside">
-                        <field name="inquiry_date"/>
-                    </xpath>
-                    <xpath  expr="//div[@class='oe_right oe_button_box']" position="replace">
-                        <div class="oe_right oe_button_box" name="buttons">
-                            <button class="oe_inline oe_stat_button" type="action" context="{'default_opportunity_id': active_id, 'search_default_opportunity_id': active_id, 'default_partner_id': partner_id, 'default_duration': 1.0}" name="%(action_crm_followup)d" icon="fa-bell">
-                                <div>Schedule<br/>Follow-up</div>
-                            </button>
-                        </div>
-                    </xpath>
-                </data>
-            </field>
-        </record>
-
-        <record id="view_crm_tracking_form_inherit" model="ir.ui.view">
-            <field name="name">crm.tracking.form.inherit</field>
-            <field name="model">crm.tracking.campaign</field>
-            <field name="inherit_id" ref="crm.crm_tracking_campaign_form"/>
-            <field name="arch" type="xml">
-                <data>
-                    <field name="section_id" position="after">
-                        <field name="source_id"/>
-                    </field>
-                </data>
-            </field>
-        </record>
-
-        <record id="view_crm_source_form_inherit" model="ir.ui.view">
-            <field name="name">crm.source.form.inherit</field>
-            <field name="model">crm.tracking.source</field>
-            <field name="inherit_id" ref="crm.crm_tracking_source_view_form"/>
-            <field name="arch" type="xml">
-                <data>
-                    <field name="name" position="after">
-                        <field name="channel_id"/>
-                    </field>
-                </data>
-            </field>
-        </record>
-
-
-        <!--<record id="new_lead" model="ir.actions.act_window">-->
-        <!--<field name="name">Lead</field>-->
-        <!--<field name="res_model">crm.lead</field>-->
-        <!--<field name="view_type">form</field>-->
-        <!--<field name="view_mode">form</field>-->
-        <!--<field name="view_id" ref="crm_case_form_view_leads_extended"/>-->
-        <!--</record>-->
-
-        <record id="time_frame_form" model="ir.ui.view">
-            <field name="name">time.frame.form</field>
-            <field name="model">time.frame</field>
-            <field name="priority" eval="8" />
-            <field name="arch" type="xml">
-                <form string="Time Frames" version="7.0">
-                    <sheet>
-                        <separator string="Time Frames" colspan="4" />
-                        <group col="4">
-                            <field name="name" />
-                        </group>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-
-        <record id="view_crm_lead2opportunity_partner_inherit" model="ir.ui.view">
-            <field name="name">view.crm.lead2opportunity.partner.inherit</field>
-            <field name="model">crm.lead2opportunity.partner</field>
-            <field name="inherit_id" ref="crm.view_crm_lead2opportunity_partner"/>
-            <field name="arch" type="xml">
-                <data>
-                    <xpath  expr="//group[@name='action']" position="replace">
-                        <group name="action" attrs="{'invisible': [('name', '!=', 'convert')]}">
-                            <field name="action" on_change="onchange_action(action, context)" class="oe_inline"/>
-                            <field name="partner_id"
-                                   attrs="{'required': [('action', '=', 'exist')], 'invisible':[('action','!=','exist')]}"
-                                   class="oe_inline" domain="[('is_student', '=', True)]"/>
-                        </group>
-                    </xpath>
-                </data>
-            </field>
-        </record>
-
-        <record id="crm_oppor_form_view_leads_extended" model="ir.ui.view">
-            <field name="name">crm.lead.oppor.form.inherit</field>
-            <field name="model">crm.lead</field>
-            <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
-            <field name="arch" type="xml">
-                <xpath expr='//form[@string="Opportunities"]' position='attributes'>
-                    <attribute name="create">false</attribute>
-                </xpath>
-            </field>
-        </record>
-
-        <record id="time_frame_tree" model="ir.ui.view">
-            <field name="name">time.frame.tree</field>
-            <field name="model">time.frame</field>
-            <field name="priority" eval="8"/>
-            <field name="arch" type="xml">
-                <tree string="Time Frames">
-                    <field name="name"/>
-                </tree>
-            </field>
-        </record>
-
-        <record id="action_time_frame" model="ir.actions.act_window">
-            <field name="name">Time Frame</field>
-            <field name="res_model">time.frame</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-            <field name="view_id" ref="time_frame_tree"/>
-        </record>
-
+        <!--FollowUp Form-->
         <record id="crm_followup_form" model="ir.ui.view">
             <field name="name">crm.followup</field>
             <field name="model">calendar.event</field>
@@ -293,7 +118,6 @@
                                     </group>
                                 </group>
                             </page>
-
                             <page string="Invitations" groups="base.group_no_one">
                                 <button name="do_sendmail" type="object" string="Send mail" icon="terp-mail-message-new" class="oe_link"/>
                                 <field name="attendee_ids" widget="one2many" >
@@ -324,6 +148,7 @@
             </field>
         </record>
 
+        <!--FollowUp Tree-->
         <record model="ir.ui.view" id="crm_followup_tree">
             <field name="name">crm.followup</field>
             <field name="model">calendar.event</field>
@@ -345,6 +170,7 @@
             </field>
         </record>
 
+        <!--FollowUp_action-->
         <record id="action_crm_followup" model="ir.actions.act_window">
             <field name="name">Follow Up</field>
             <field name="res_model">calendar.event</field>
@@ -353,6 +179,171 @@
             <field name="view_id" ref="crm_followup_form"/>
         </record>
 
+        <!--Time Frame Form-->
+        <record id="time_frame_form" model="ir.ui.view">
+            <field name="name">time.frame.form</field>
+            <field name="model">time.frame</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <form string="Time Frames" version="7.0">
+                    <sheet>
+                        <separator string="Time Frames" colspan="4" />
+                        <group col="4">
+                            <field name="name" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--Time Frame Tree-->
+        <record id="time_frame_tree" model="ir.ui.view">
+            <field name="name">time.frame.tree</field>
+            <field name="model">time.frame</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="Time Frames">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--Time_frame_action-->
+        <record id="action_time_frame" model="ir.actions.act_window">
+            <field name="name">Time Frame</field>
+            <field name="res_model">time.frame</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="time_frame_tree"/>
+        </record>
+
+        <!--crm_lead_form_inherited-->
+        <record id="crm_case_form_view_leads_extended" model="ir.ui.view">
+            <field name="name">crm.lead.form.inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_form_view_leads"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath  expr="//notebook" position="inside">
+                        <page string="Course(s) Info">
+                            <separator colspan="4" string="Course Details"/>
+                            <group col="4" colspan="4">
+                                <field name="courses_interested"  widget="many2many_tags" options="{'no_create_edit':'1'}"/>
+                                <field name="prospective_student"/>
+                            </group>
+                            <page string="Suitable Time Frame">
+                                <separator colspan="4" string="Suitable Time Frame"/>
+                                <group col="4" colspan="4">
+                                    <field name="weekday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
+                                    <field name="saturday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
+                                    <field name="sunday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
+                                </group>
+                            </page>
+                        </page>
+                    </xpath>
+                    <xpath  expr="//notebook/page[@string='Extra Info']" position="inside">
+                        <group>
+                            <field name="inquiry_date"/>
+                        </group>
+                    </xpath>
+
+                    <xpath  expr="//div[@class='oe_right oe_button_box']" position="replace">
+                        <div class="oe_right oe_button_box" name="buttons">
+                            <button class="oe_inline oe_stat_button" type="action" context="{'default_opportunity_id': active_id, 'search_default_opportunity_id': active_id, 'default_partner_id': partner_id, 'default_duration': 1.0}" name="%(action_crm_followup)d" icon="fa-bell">
+                                <div>Schedule<br/>Follow-up</div>
+                            </button>
+                        </div>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <!--opportunity_inherited_form-->
+        <record id="crm_case_tree_view_oppor" model="ir.ui.view">
+            <field name="name">crm.lead.oppor.form.inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath  expr="//notebook/page[@string='Lead']" position="inside">
+                        <page string="Course(s) Info">
+                            <separator colspan="4" string="Course Details"/>
+                            <group name="Suitable Time Frame">
+                                <field name="courses_interested"  widget="many2many_tags" options="{'no_create_edit':'1'}"/>
+                                <field name="prospective_student"/>
+                            </group>
+                            <page string="Suitable Time Frame">
+                                <separator colspan="4" string="Suitable Time Frame"/>
+                                <group col="4" colspan="4">
+                                    <field name="weekday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
+                                    <field name="saturday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
+                                    <field name="sunday" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
+                                </group>
+                            </page>
+                        </page>
+                    </xpath>
+                    <xpath  expr="//group[@string='Misc']" position="inside">
+                        <field name="inquiry_date"/>
+                    </xpath>
+                    <xpath  expr="//div[@class='oe_right oe_button_box']" position="replace">
+                        <div class="oe_right oe_button_box" name="buttons">
+                            <button class="oe_inline oe_stat_button" type="action" context="{'default_opportunity_id': active_id, 'search_default_opportunity_id': active_id, 'default_partner_id': partner_id, 'default_duration': 1.0}" name="%(action_crm_followup)d" icon="fa-bell">
+                                <div>Schedule<br/>Follow-up</div>
+                            </button>
+                        </div>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <!--crm_traking_form_inherited -->
+        <record id="view_crm_tracking_form_inherit" model="ir.ui.view">
+            <field name="name">crm.tracking.form.inherit</field>
+            <field name="model">crm.tracking.campaign</field>
+            <field name="inherit_id" ref="crm.crm_tracking_campaign_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="section_id" position="after">
+                        <field name="source_id"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+        <!--crm_source_form_inherited -->
+        <record id="view_crm_source_form_inherit" model="ir.ui.view">
+            <field name="name">crm.source.form.inherit</field>
+            <field name="model">crm.tracking.source</field>
+            <field name="inherit_id" ref="crm.crm_tracking_source_view_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="name" position="after">
+                        <field name="channel_id"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+        <!--crm_lead2opportunity_inherited-->
+        <record id="view_crm_lead2opportunity_partner_inherit" model="ir.ui.view">
+            <field name="name">view.crm.lead2opportunity.partner.inherit</field>
+            <field name="model">crm.lead2opportunity.partner</field>
+            <field name="inherit_id" ref="crm.view_crm_lead2opportunity_partner"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath  expr="//group[@name='action']" position="replace">
+                        <group name="action" attrs="{'invisible': [('name', '!=', 'convert')]}">
+                            <field name="action" on_change="onchange_action(action, context)" class="oe_inline"/>
+                            <field name="partner_id"
+                                   attrs="{'required': [('action', '=', 'exist')], 'invisible':[('action','!=','exist')]}"
+                                   class="oe_inline" domain="[('is_student', '=', True)]"/>
+                        </group>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <!--FollowUp_tree_window-->
         <record model="ir.actions.act_window.view" id="action_view_crm_followup_tree">
             <field name="act_window_id" ref="action_crm_followup"/>
             <field name="sequence" eval="2"/>
@@ -360,6 +351,7 @@
             <field name="view_id" ref="crm_followup_tree"/>
         </record>
 
+        <!--FollowUp_orm_window-->
         <record model="ir.actions.act_window.view" id="action_view_crm_followup_form">
             <field name="act_window_id" ref="action_crm_followup"/>
             <field name="sequence" eval="3"/>
@@ -367,6 +359,7 @@
             <field name="view_id" ref="crm_followup_form"/>
         </record>
 
+        <!--menu_items-->
         <menuitem id="time_frame" name="Time Frames" parent="base.menu_base_config" action="action_time_frame"/>
         <menuitem id="folow_up" name="Follow up" parent="base.menu_base_config" action="action_crm_followup"/>
     </data>

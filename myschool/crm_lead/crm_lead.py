@@ -2,6 +2,45 @@ from openerp.osv import osv, fields
 from openerp.tools.translate import _
 
 
+class time_frame(osv.Model):
+    _name = 'time.frame'
+    _columns = {
+        'name': fields.char('Time Frame')
+    }
+
+
+class crm_tracking_campaign(osv.Model):
+    _inherit = 'crm.tracking.campaign'
+    _description = "adding fields to crm.lead"
+    _columns = {
+        'source_id': fields.many2many('crm.tracking.source', 'campaign_source_rel', 'campaign_id', 'source_id',
+                                      'Source(s)'),
+    }
+
+
+class crm_tracking_source(osv.Model):
+    _inherit = 'crm.tracking.source'
+    _description = "adding fields to crm.lead"
+    _columns = {
+        'channel_id': fields.many2one('crm.tracking.medium', 'Channel'),
+    }
+
+
+class calendar_event(osv.Model):
+    _inherit = 'calendar.event'
+
+    _columns ={
+        'type': fields.many2one('follow.up.type', 'Follow-up Type')
+    }
+
+
+class follow_up_type(osv.Model):
+    _name = 'follow.up.type'
+    _columns = {
+        'code': fields.char('Code', required=True),
+        'name': fields.char('Name', required=True)
+    }
+
 
 class crm_lead(osv.Model):
     _inherit = 'crm.lead'
@@ -17,6 +56,7 @@ class crm_lead(osv.Model):
         'prospective_student': fields.integer(size=5, string='# Prospective Students'),
         'inquiry_date': fields.date(string='Inquiry Date'),
     }
+
 
     '''==========When the opportunity won the student is already in the system load the student form with the details
                 else load the load the registration form============'''
@@ -41,7 +81,7 @@ class crm_lead(osv.Model):
         for stage_id, lead_ids in stages_leads.items():
             self.write(cr, uid, lead_ids, {'stage_id': stage_id}, context=context)
 
-        #open student profile or registrtion form
+        #open student profile or registration form
         crmRef = self.pool.get('crm.lead')
         resPartnerRef = self.pool.get('res.partner')
         studentRef = self.pool.get('op.student')
@@ -100,46 +140,3 @@ class crm_lead(osv.Model):
                 }
             return value
         return True
-
-class time_frame(osv.Model):
-    _name = 'time.frame'
-    _columns = {
-        'name': fields.char('Time Frame')
-    }
-
-class crm_tracking_campaign(osv.Model):
-    _inherit = 'crm.tracking.campaign'
-    _description = "adding fields to crm.lead"
-    _columns = {
-        'source_id': fields.many2many('crm.tracking.source', 'campaign_source_rel', 'campaign_id', 'source_id',
-                                      'Source(s)'),
-    }
-
-class crm_tracking_source(osv.Model):
-    _inherit = 'crm.tracking.source'
-    _description = "adding fields to crm.lead"
-    _columns = {
-        'channel_id': fields.many2one('crm.tracking.medium', 'Channel'),
-    }
-
-
-class calendar_event(osv.Model):
-    _inherit = 'calendar.event'
-
-    _columns ={
-        'type': fields.many2one('follow.up.type', 'Follow-up Type')
-    }
-
-
-class follow_up_type(osv.Model):
-    _name = 'follow.up.type'
-    _columns = {
-        'code': fields.char('Code', required=True),
-        'name': fields.char('Name', required=True)
-    }
-
-
-    # def create(self, cr, uid, vals, context=None):
-    #
-    #     ret = super(crm_phonecall, self).create(cr, uid, vals, context=context)
-    #     return ret
