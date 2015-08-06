@@ -230,6 +230,26 @@
                         <label for="modes" class="oe_edit_only"/>
                         <field name="modes"/>
                     </xpath>
+
+                    <xpath expr="//field[@name='street']" position="replace">
+                        <field name="address_line1" placeholder="Address line 1"/>
+                    </xpath>
+                    <xpath expr="//field[@name='street2']" position="replace">
+                        <field name="address_line2" placeholder="Address line 2"/>
+                    </xpath>
+                    <xpath expr="//div[@class='address_format']" position="replace">
+                        <div class="address_format">
+                            <field name="town" placeholder="City" style="width: 50%%"/>
+                            <field name="province"
+                                   placeholder="Province" style="width: 50%%" />
+                        </div>
+                    </xpath>
+                    <xpath expr="//field[@name='country_id']" position="replace">
+                         <field name="nation" class="oe_no_button" placeholder="Country" style="width: 100%%" options='{"no_open": True}'/>
+                    </xpath>
+
+
+
                     <xpath  expr="//notebook" position="inside">
                         <page string="Course(s) Info">
                             <separator colspan="4" string="Course Details"/>

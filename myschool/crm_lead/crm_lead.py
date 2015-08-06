@@ -84,7 +84,7 @@ class crm_lead(osv.Model):
     _columns = {
         'partner_id': fields.many2one('res.partner', 'Partner', ondelete='set null', track_visibility='onchange',
             select=True, help="Linked student (optional). Usually created when converting the lead.", domain="[('is_student', '=', True)]"),
-        'modes': fields.many2one('modes','Modes of Inquiries'),
+        'modes': fields.many2one('modes','Mode of Inquiry'),
         'courses_interested': fields.many2many('op.study.programme', 'study_programme_lead_rel', 'crm_id', 'name',
                                                'Study programme(s) Interested'),
         'anytime': fields.many2many('time.frame', 'anytime_time_frame', 'anytime', 'name', 'Anytime'),
@@ -95,6 +95,12 @@ class crm_lead(osv.Model):
         'inquiry_date': fields.date(string='Inquiry Date'),
         'tags': fields.many2many('crm.tags', 'crm_lead_tags_rel', id1='partner_id', id2='code', string='Tags'),
         'is_new_course': fields.boolean('New Course', help="Check if the course is not exist"),
+
+        'address_line1': fields.char('address line1', size=20),
+        'address_line2': fields.char('address line2', size=25),
+        'town': fields.char('town', size=25),
+        'province': fields.char('province', size=20),
+        'nation': fields.char('nation', size=20),
         'meeting_count': fields.function(_meeting_count, string='# Meetings', type='integer', store=True),
     }
 
@@ -180,6 +186,88 @@ class crm_lead(osv.Model):
                 }
             return value
         return True
+
+    #phone number validation for customer
+    def phoneNumberValidation(self, cr, uid, ids, phoneNumber):
+        phone_re = re.compile(ur'^(\+\d{1,1}[- ]?)?\d{10}$')
+        valid_phone = False
+        if phoneNumber is False:
+            return True
+        if phone_re.match(phoneNumber):
+            valid_phone=True
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Phone Number'), _('Please enter a valid Phone Number'))
+
+    #mobile number validation for customer
+    def mobileNumberValidation(self, cr, uid, ids, mobileNumber):
+        mobile_re = re.compile(ur'^(\+\d{1,1}[- ]?)?\d{10}$')
+        valid_mobile = False
+        if mobileNumber is False:
+            return True
+        if mobile_re.match(mobileNumber):
+            valid_mobile=True
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Mobile Number'), _('Please enter a valid Mobile Number'))
+
+    #fax number validation for customer
+    def faxNumberValidation(self, cr, uid, ids, faxNumber):
+        fax_re = re.compile(ur'^(\+\{1,1}[- ]?)?\d{10}$')
+        valid_fax = False
+        if faxNumber is False:
+            return True
+        if fax_re.match(faxNumber):
+            valid_fax = True
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Fax Number'), _('Please enter a valid Fax Number'))
+
+    # .... check passing nul values....#
+    def _check_invalid_data(self, cr, uid, ids, subjectName):
+        n_name = str(subjectName).replace(",", "")
+        n_name = n_name.replace(" ", "")
+        n_name = ''.join([i for i in n_name if not i.isdigit()])
+        #isalpha python inbuilt function Returns true if string
+            #has at least 1 character and all characters are alphabetic and false otherwise.
+        if n_name.isalpha() or n_name.isdigit():
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Subject Description'), _('Please insert valid information'))
+
+    #.......... Overriding the create method...........#
+    def create(self, cr, uid, vals, context=None):
+        # phone number validation on create
+        if 'phone' in vals:
+            self.phoneNumberValidation(cr, uid, [], vals['phone'])
+
+        if 'mobile' in vals:
+            self.mobileNumberValidation(cr, uid, [], vals['mobile'])
+
+        if 'fax' in vals:
+            self.faxNumberValidation(cr, uid, [], vals['fax'])
+
+        if 'name' in vals:
+            self._check_invalid_data(cr, uid, [], vals['name'])
+
+        return super(crm_lead, self).create(cr, uid, vals, context=context)
+
+    #.......... Overriding the wrtie method...........#
+    def write(self, cr, uid, ids, values, context=None):
+        # phone number validation on write
+        if 'phone' in values:
+            self.phoneNumberValidation(cr, uid, [], values['phone'])
+
+        if 'mobile' in values:
+            self.mobileNumberValidation(cr, uid, [], values['mobile'])
+
+        if 'fax' in values:
+            self.faxNumberValidation(cr, uid, [], values['fax'])
+
+        if 'name' in values:
+            self._check_invalid_data(cr, uid, [], values['name'])
+
+        return super(crm_lead, self).write(cr, uid, ids, values, context=context)
 
     # email validation........
     def validate_email(self, cr, uid, ids, email_from):
