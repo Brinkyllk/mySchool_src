@@ -2,6 +2,7 @@ from openerp.osv import osv, fields
 from openerp.tools.translate import _
 from openerp import api
 
+
 class crm_tags(osv.Model):
     _name = "crm.tags"
     _columns = {
@@ -42,14 +43,6 @@ class crm_tracking_source(osv.Model):
     }
 
 
-class calendar_event(osv.Model):
-    _inherit = 'calendar.event'
-
-    _columns ={
-        'type': fields.many2one('follow.up.type', 'Follow-up Type')
-    }
-
-
 class follow_up_type(osv.Model):
     _name = 'follow.up.type'
     _columns = {
@@ -69,6 +62,16 @@ class crm_lead(osv.Model):
     _inherit = 'crm.lead'
     _rec_name = 'name'
     _description = "adding fields to crm.lead"
+
+
+    def _meeting_count(self, cr, uid, ids, field_name, arg, context=None):
+        Event = self.pool['calendar.event']
+        return {
+            opp_id: Event.search_count(cr,uid, [('opportunity_id', '=', opp_id)], context=context)
+            for opp_id in ids
+        }
+
+
     _columns = {
         'partner_id': fields.many2one('res.partner', 'Partner', ondelete='set null', track_visibility='onchange',
             select=True, help="Linked student (optional). Usually created when converting the lead.", domain="[('is_student', '=', True)]"),
@@ -83,6 +86,7 @@ class crm_lead(osv.Model):
         'inquiry_date': fields.date(string='Inquiry Date'),
         'tags': fields.many2many('crm.tags', 'crm_lead_tags_rel', id1='partner_id', id2='code', string='Tags'),
         'is_new_course': fields.boolean('New Course', help="Check if the course is not exist"),
+        'meeting_count': fields.function(_meeting_count, string='# Meetings', type='integer', store=True),
     }
 
     '''==========When the opportunity won the student is already in the system load the student form with the details
@@ -169,6 +173,14 @@ class crm_lead(osv.Model):
         return True
 
 
+class calendar_event(osv.Model):
+    _inherit = 'calendar.event'
+    _columns = {
+        'type': fields.many2one('follow.up.type', 'Follow-up Type')
+    }
+calendar_event()
+
+
 class time_frame(osv.Model):
     _name = 'time.frame'
     _columns = {
@@ -195,10 +207,16 @@ class crm_tracking_source(osv.Model):
 
 class calendar_event(osv.Model):
     _inherit = 'calendar.event'
-
     _columns ={
         'type': fields.many2one('follow.up.type', 'Follow-up Type')
     }
+
+    def default_get(self, cr, uid, fields, context=None):
+        data = super(calendar_event, self).default_get(cr, uid, fields, context=context)
+        activeId = context.get('active_id')
+        if activeId:
+            data['opportunity_id'] = activeId
+        return data
 
 
 class follow_up_type(osv.Model):
@@ -207,9 +225,3 @@ class follow_up_type(osv.Model):
         'code': fields.char('Code', required=True),
         'name': fields.char('Name', required=True)
     }
-
-
-    # def create(self, cr, uid, vals, context=None):
-    #
-    #     ret = super(crm_phonecall, self).create(cr, uid, vals, context=context)
-    #     return ret

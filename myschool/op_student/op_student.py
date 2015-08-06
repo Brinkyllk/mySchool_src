@@ -433,9 +433,9 @@ class op_student(osv.Model):
                 vals.update({'nation': cntry})
 
         # Get student ID
-        # vals['stu_reg_number'] = self.pool.get('ir.sequence').get(cr, uid, 'myschool.op_student') or '/'
-        # vals.update({'is_student': True})  # Partner type is student
-        # vals.update({'stu_reg_id': vals['stu_reg_number']})  # Support backwards compatible
+        vals['stu_reg_number'] = self.pool.get('ir.sequence').get(cr, uid, 'myschool.op_student') or '/'
+        vals.update({'is_student': True})  # Partner type is student
+        vals.update({'stu_reg_id': vals['stu_reg_number']})  # Support backwards compatible
 
         # email validation on create
         if 'email' in vals:

@@ -5,9 +5,9 @@
             <field name="name">op.enrollment.form</field>
             <field name="model">op.enrollment</field>
             <field name="arch" type="xml">
-                <form string="Student Enrollment" version="7.0">
+                <form string="Course Enrollment" version="7.0">
                     <sheet>
-                        <separator string="Student Enrollment" colspan="4" />
+                        <separator string="Course Enrollment" colspan="4" />
                         <group>
                             <field name="student_id" />
                             <field name="batch_code"/>
@@ -25,7 +25,7 @@
             <field name="name">op.enrollment.tree</field>
             <field name="model">op.enrollment</field>
             <field name="arch" type="xml">
-                <tree string="Student Enrollment" version="7.0">
+                <tree string="Course Enrollment" version="7.0">
                     <field name="student_id" />
                     <field name="batch_code"/>
                     <field name="lead_id"/>
@@ -61,8 +61,6 @@
 			<field name="domain">[]</field>
 			<field name="context">{}</field>
 		</record>
-
-
 
     </data>
 </openerp>

@@ -171,9 +171,8 @@
 									<!--</tree>-->
 								<!--</field>-->
 							</page>
-
-							<page string="Subjects Detail">
-								<field name="lecturer_subject_ids" colspan="4" nolabel="1" />
+							<page string="Course Details">
+								<field name="lecturer_course_ids" colspan="4" nolabel="1" />
 							</page>
 						</notebook>
                     </sheet>
@@ -190,7 +189,7 @@
                     <field name="birth_date"/>
                     <field name="category"/>
                     <field name="language"/>
-                    <field name="lecturer_subject_ids"/>
+                    <field name="lecturer_course_ids"/>
                 </tree>
             </field>
         </record>
@@ -208,7 +207,7 @@
                     <field name="language"/>
                     <field name="bank"/>
                     <field name="bank_acc_num"/>
-                    <field name="lecturer_subject_ids"/>
+                    <field name="lecturer_course_ids"/>
                     <newline />
 					<group expand="0" string="Group By...">
 						<filter string="Category" domain="[]" context="{'group_by':'category'}" />

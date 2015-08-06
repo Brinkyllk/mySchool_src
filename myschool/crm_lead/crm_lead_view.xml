@@ -61,7 +61,6 @@
                                         <field name="alarm_ids" widget="many2many_tags" />
                                         <field name="location" string="new one"/>
                                     </group>
-
                                 </group>
                                 <label for="description"/>
                                 <field name="description"/>
@@ -177,6 +176,8 @@
             <field name="res_model">calendar.event</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
+            <!--<field name="context">{'default_opportunity_id': active_id,-->
+                            <!--'search_default_opportunity_id': active_id,}</field>-->
             <field name="view_id" ref="crm_followup_form"/>
         </record>
 
@@ -261,8 +262,20 @@
 
                     <xpath  expr="//div[@class='oe_right oe_button_box']" position="replace">
                         <div class="oe_right oe_button_box" name="buttons">
-                            <button class="oe_inline oe_stat_button" type="action" context="{'default_opportunity_id': active_id, 'search_default_opportunity_id': active_id, 'default_partner_id': partner_id, 'default_duration': 1.0}" name="%(action_crm_followup)d" icon="fa-bell">
-                                <div>Schedule<br/>Follow-up</div>
+                            <!--<button class="oe_inline oe_stat_button" type="object"-->
+                                    <!--context="{'default_opportunity_id': active_id,-->
+                            <!--'search_default_opportunity_id': active_id,-->
+                            <!--'default_partner_id': partner_id,-->
+                            <!--'default_duration': 1.0}"-->
+                                    <!--name="action_schedule_meeting"-->
+                                    <!--icon="fa-bell">-->
+                                <!--<div>Schedule<br/>Follow-up</div>-->
+                            <!--</button>-->
+                            <button class="oe_inline oe_stat_button" type="action"
+                                context="{'partner_id': partner_id}"
+                                name="%(action_crm_followup)d" icon="fa-bell">
+                                <!--<field string="Follow-up" name="meeting_count" widget="statinfo"/>-->
+                                <field string="Follow-up" name="meeting_count" widget="statinfo"/>
                             </button>
                         </div>
                     </xpath>
@@ -300,7 +313,7 @@
                     </xpath>
                     <xpath  expr="//div[@class='oe_right oe_button_box']" position="replace">
                         <div class="oe_right oe_button_box" name="buttons">
-                            <button class="oe_inline oe_stat_button" type="action" context="{'default_opportunity_id': active_id, 'search_default_opportunity_id': active_id, 'default_partner_id': partner_id, 'default_duration': 1.0}" name="%(action_crm_followup)d" icon="fa-bell">
+                            <button class="oe_inline oe_stat_button" type="object" context="{'default_opportunity_id': active_id, 'search_default_opportunity_id': active_id, 'default_partner_id': partner_id, 'default_duration': 1.0}" name="action_schedule_meeting" icon="fa-bell">
                                 <div>Schedule<br/>Follow-up</div>
                             </button>
                         </div>

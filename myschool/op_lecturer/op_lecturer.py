@@ -174,8 +174,8 @@ class op_lecturer(osv.Model):
         'province': fields.char('province', size=20),
         'nation': fields.char('nation', size=20),
 
-        'lecturer_subject_ids': fields.many2many('op.subject', 'lecturer_subject_rel', 'op_lecturer_id',
-                                                 'op_subject_id', string='Subjects'),
+        'lecturer_course_ids': fields.many2many('op.course', 'lecturer_course_rel', 'op_lecturer_id',
+                                                 'op_course_id', string='Courses'),
         'phone': fields.char(string='Phone Number', size=256),
         'id_number': fields.char(size=10, string='NIC'),
         # 'mobile_no': fields.char(size=15, string='Mobile Number', required=True),
