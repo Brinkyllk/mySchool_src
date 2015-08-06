@@ -548,7 +548,6 @@ class op_student(osv.Model):
             full_name = initial.strip() + ' ' + fName.strip() + ' ' + lName.strip()
         values.update({'name': full_name})
 
-
         #-------- Update Partner record -------------
         if 'address_line1' in values:
             if values['address_line1'] is False or None:
@@ -688,7 +687,6 @@ class op_student(osv.Model):
             'nodestroy': True,
             'domain': domain,
             }
-
 
     def create_invoice(self, cr, uid, ids, context={}):
         """ Create invoice for fee payment process of student """

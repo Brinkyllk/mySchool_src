@@ -1,6 +1,7 @@
 from openerp.osv import osv, fields
 from openerp.tools.translate import _
 from openerp import api
+import re
 
 
 class crm_tags(osv.Model):
@@ -52,6 +53,14 @@ class follow_up_type(osv.Model):
 
 
 class crm_lead(osv.Model):
+
+    #onchange for prospective_student limit
+    @api.onchange('prospective_student')
+    def onchange_pstudent(self, cr, uid, ids, prospective_student):
+        if prospective_student > 999:
+            raise osv.except_osv('Prospective Students', 'Limit exceeded !')
+        else:
+            return True
 
     #onchange for is_new course
     @api.multi
@@ -172,13 +181,41 @@ class crm_lead(osv.Model):
             return value
         return True
 
+    # email validation........
+    def validate_email(self, cr, uid, ids, email_from):
+        email_re = re.compile("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$")
+        valid_email = False
+        if email_from is False:
+            return True
+        if email_re.match(email_from):
+            valid_email=True
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Email'), _('Please enter a valid Email'))
 
-class calendar_event(osv.Model):
-    _inherit = 'calendar.event'
-    _columns = {
-        'type': fields.many2one('follow.up.type', 'Follow-up Type')
-    }
-calendar_event()
+    def create(self, cr, uid, vals, context=None):
+
+        # email validation on create
+        if 'email_from' in vals:
+            self.validate_email(cr, uid, [], vals['email_from'])
+
+        # prospective_student validation on create
+        if 'prospective_student' in vals:
+            self.onchange_pstudent(cr, uid, [], vals['prospective_student'])
+
+            return super(crm_lead, self).create(cr, uid, vals, context=context)
+
+    def write(self, cr, uid, ids, values, context=None):
+
+        # email validation on write
+        if 'email_from' in values:
+            self.validate_email(cr, uid, ids, values['email_from'])
+
+        # prospective_student validation on write
+        if 'prospective_student' in values:
+            self.onchange_pstudent(cr, uid, ids, values['prospective_student'])
+
+        return super(crm_lead, self).write(cr, uid, ids, values, context=context)
 
 
 class time_frame(osv.Model):
@@ -207,7 +244,7 @@ class crm_tracking_source(osv.Model):
 
 class calendar_event(osv.Model):
     _inherit = 'calendar.event'
-    _columns ={
+    _columns = {
         'type': fields.many2one('follow.up.type', 'Follow-up Type')
     }
 
@@ -217,6 +254,7 @@ class calendar_event(osv.Model):
         if activeId:
             data['opportunity_id'] = activeId
         return data
+calendar_event()
 
 
 class follow_up_type(osv.Model):

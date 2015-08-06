@@ -32,6 +32,8 @@ class op_batch(osv.Model):
             string='State'),
     }
 
+    _sql_constraints = [('batch_code', 'UNIQUE (batch_code)', 'The CODE of the Batch must be unique!')]
+
     def create(self, cr, uid, vals, context=None):
 
         programme = self.pool.get('op.study.programme').browse(cr, uid, vals['study_prog_code'])

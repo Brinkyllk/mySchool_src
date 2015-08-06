@@ -21,7 +21,9 @@ class op_study_programme(osv.Model):
     _rec_name = 'name'
     _columns = {
         'code': fields.char('Code', required=True, size=20),
-        'name': fields.char('Name',required=True, size=100),
+        'name': fields.char('Name', required=True, size=100),
         'res_person': fields.many2one('res.partner', 'Responsible Person'),
         'parent': fields.many2one('op.study.programme', 'Parent'),
     }
+
+    _sql_constraints = [('code', 'UNIQUE (code)', 'The CODE of the Study Programme must be unique!')]

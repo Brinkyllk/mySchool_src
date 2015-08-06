@@ -240,7 +240,7 @@
                                     <field name="tags" attrs="{'invisible': [('is_new_course','=',False)]}"  widget="many2many_tags"/>
                                 </group>
                                 <group>
-                                    <field name="prospective_student"/>
+                                    <field name="prospective_student" on_change="onchange_pstudent(prospective_student)"/>
                                 </group>
                             </group>
                             <page string="Suitable Time Frame">
