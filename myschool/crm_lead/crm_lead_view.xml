@@ -250,7 +250,6 @@
 
                     <xpath expr="//label[@for='contact_name']" position="replace">
                         <label for="first_name" string="Contact Name"/>
-
                     </xpath>
 
                     <xpath expr="//field[@name='contact_name']" position="replace">
@@ -355,6 +354,30 @@
                             </button>
                         </div>
                     </xpath>
+                    <xpath expr="//field[@name='street']" position="replace">
+                        <field name="address_line1" placeholder="Address line 1"/>
+                    </xpath>
+                    <xpath expr="//field[@name='street2']" position="replace">
+                        <field name="address_line2" placeholder="Address line 2"/>
+                    </xpath>
+                    <xpath expr="//div[@class='address_format']" position="replace">
+                        <div class="address_format">
+                            <field name="town" placeholder="City" style="width: 50%%"/>
+                            <field name="province"
+                                   placeholder="Province" style="width: 50%%" />
+                        </div>
+                    </xpath>
+                    <xpath expr="//field[@name='country_id']" position="replace">
+                         <field name="nation" class="oe_no_button" placeholder="Country" style="width: 100%%" options='{"no_open": True}'/>
+                    </xpath>
+                     <xpath expr="//field[@name='contact_name']" position="replace">
+                        <field name="first_name" placeholder="First name"/>
+                        <field name="last_name" placeholder="Last name"/>
+                    </xpath>
+                    <xpath expr="//label[@for='contact_name']" position="replace">
+                        <label for="first_name" string="Contact Name"/>
+                    </xpath>
+
                 </data>
             </field>
         </record>
