@@ -235,39 +235,39 @@ class crm_lead(osv.Model):
         else:
             raise osv.except_osv(_('Invalid Subject Description'), _('Please insert valid information'))
 
-    #.......... Overriding the create method...........#
-    def create(self, cr, uid, vals, context=None):
-        # phone number validation on create
-        if 'phone' in vals:
-            self.phoneNumberValidation(cr, uid, [], vals['phone'])
+    # #.......... Overriding the create method...........#
+    # def create(self, cr, uid, vals, context=None):
+    #     # phone number validation on create
+    #     if 'phone' in vals:
+    #         self.phoneNumberValidation(cr, uid, [], vals['phone'])
+    #
+    #     if 'mobile' in vals:
+    #         self.mobileNumberValidation(cr, uid, [], vals['mobile'])
+    #
+    #     if 'fax' in vals:
+    #         self.faxNumberValidation(cr, uid, [], vals['fax'])
+    #
+    #     if 'name' in vals:
+    #         self._check_invalid_data(cr, uid, [], vals['name'])
+    #
+    #     return super(crm_lead, self).create(cr, uid, vals, context=context)
 
-        if 'mobile' in vals:
-            self.mobileNumberValidation(cr, uid, [], vals['mobile'])
-
-        if 'fax' in vals:
-            self.faxNumberValidation(cr, uid, [], vals['fax'])
-
-        if 'name' in vals:
-            self._check_invalid_data(cr, uid, [], vals['name'])
-
-        return super(crm_lead, self).create(cr, uid, vals, context=context)
-
-    #.......... Overriding the wrtie method...........#
-    def write(self, cr, uid, ids, values, context=None):
-        # phone number validation on write
-        if 'phone' in values:
-            self.phoneNumberValidation(cr, uid, [], values['phone'])
-
-        if 'mobile' in values:
-            self.mobileNumberValidation(cr, uid, [], values['mobile'])
-
-        if 'fax' in values:
-            self.faxNumberValidation(cr, uid, [], values['fax'])
-
-        if 'name' in values:
-            self._check_invalid_data(cr, uid, [], values['name'])
-
-        return super(crm_lead, self).write(cr, uid, ids, values, context=context)
+    # #.......... Overriding the wrtie method...........#
+    # def write(self, cr, uid, ids, values, context=None):
+    #     # phone number validation on write
+    #     if 'phone' in values:
+    #         self.phoneNumberValidation(cr, uid, [], values['phone'])
+    #
+    #     if 'mobile' in values:
+    #         self.mobileNumberValidation(cr, uid, [], values['mobile'])
+    #
+    #     if 'fax' in values:
+    #         self.faxNumberValidation(cr, uid, [], values['fax'])
+    #
+    #     if 'name' in values:
+    #         self._check_invalid_data(cr, uid, [], values['name'])
+    #
+    #     return super(crm_lead, self).write(cr, uid, ids, values, context=context)
 
     # email validation........
     def validate_email(self, cr, uid, ids, email_from):
@@ -283,6 +283,19 @@ class crm_lead(osv.Model):
 
     def create(self, cr, uid, vals, context=None):
 
+         # phone number validation on create
+        if 'phone' in vals:
+            self.phoneNumberValidation(cr, uid, [], vals['phone'])
+
+        if 'mobile' in vals:
+            self.mobileNumberValidation(cr, uid, [], vals['mobile'])
+
+        if 'fax' in vals:
+            self.faxNumberValidation(cr, uid, [], vals['fax'])
+
+        if 'name' in vals:
+            self._check_invalid_data(cr, uid, [], vals['name'])
+
         # email validation on create
         if 'email_from' in vals:
             self.validate_email(cr, uid, [], vals['email_from'])
@@ -294,6 +307,19 @@ class crm_lead(osv.Model):
             return super(crm_lead, self).create(cr, uid, vals, context=context)
 
     def write(self, cr, uid, ids, values, context=None):
+
+        # phone number validation on write
+        if 'phone' in values:
+            self.phoneNumberValidation(cr, uid, [], values['phone'])
+
+        if 'mobile' in values:
+            self.mobileNumberValidation(cr, uid, [], values['mobile'])
+
+        if 'fax' in values:
+            self.faxNumberValidation(cr, uid, [], values['fax'])
+
+        if 'name' in values:
+            self._check_invalid_data(cr, uid, [], values['name'])
 
         # email validation on write
         if 'email_from' in values:
