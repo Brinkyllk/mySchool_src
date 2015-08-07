@@ -429,6 +429,14 @@
             </field>
         </record>
 
+        <!--Action for Lead -->
+        <!--<record model="ir.actions.act_window.view" id="action_lead_view">-->
+            <!--<field name="act_window_id" ref="action_view_crm_followup_form"/>-->
+            <!--<field name="sequence" eval="2"/>-->
+            <!--<field name="view_mode">tree</field>-->
+            <!--<field name="view_id" ref="crm_lead_tree"/>-->
+        <!--</record>-->
+
         <!--FollowUp_tree_window-->
         <record model="ir.actions.act_window.view" id="action_view_crm_followup_tree">
             <field name="act_window_id" ref="action_crm_followup"/>
@@ -452,9 +460,14 @@
         </record>
         
         <!--menu_items-->
+        <!--<menuitem id="lead" name="Lead" parent="base.menu_sales" action="action_lead_view"/>-->
+        <!--<menuitem id="lead_template" name="Time Frames" parent="base.menu_base_config" action="action_time_frame"/>-->
         <menuitem id="time_frame" name="Time Frames" parent="base.menu_base_config" action="action_time_frame"/>
         <!--<menuitem id="folow_up" name="Follow up" parent="base.menu_base_config" action="action_crm_followup"/>-->
-        <menuitem id="download_csv" name="Download Template" parent="crm.menu_crm_leads" action="action_download_csv"/>
+        <menuitem id="download_csv" name="Download Template" parent="base.menu_sales" action="action_download_csv"/>
+        <!--Delete source menu-item -->
+        <!--<delete model="ir.ui.menu" id="crm.crm_case_tree_view_leads" />-->
+        <delete model="ir.ui.menu" id="crm.crm_case_inbound_phone_tree_view"/>
     </data>
 </openerp>
 

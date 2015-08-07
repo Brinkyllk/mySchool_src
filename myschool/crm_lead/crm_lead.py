@@ -54,13 +54,12 @@ class follow_up_type(osv.Model):
 
 class crm_lead(osv.Model):
 
-    #onchange for prospective_student limit
-    # @api.multi
-    # def onchange_pstudent(self, prospective_student):
-    #     if prospective_student > 999:
-    #         raise osv.except_osv('Prospective Students', 'Limit exceeded !')
-    #     else:
-    #         return True
+    #check prospective_student limit
+    def _check_pstudent(self, cr, uid, ids, prospective_student):
+        if prospective_student > 999:
+            raise osv.except_osv('Prospective Students', 'Limit exceeded !')
+        else:
+            return True
 
     #..onchange for is_new course
     @api.multi
@@ -107,6 +106,52 @@ class crm_lead(osv.Model):
         'last_name': fields.char('Last Name', size=30),
 
     }
+
+    #------check spaces in address line one----#
+    def _check_add_l_one(self, cr, uid, ids, context=None):
+        obj = self.browse(cr, uid, ids, context=context)
+        value = str(obj.address_line1)
+        if not value:
+            return False
+        else:
+            return True
+
+    #------check spaces in address line two----#
+    def _check_add_l_two(self, cr, uid, ids, context=None):
+        obj = self.browse(cr, uid, ids, context=context)
+        value = str(obj.address_line2)
+        if not value:
+            return False
+        else:
+            return True
+
+    #-----check spaces in town-----------------#
+    def _check_town(self, cr, uid, ids, context=None):
+        obj = self.browse(cr, uid, ids, context=context)
+        value = str(obj.town)
+        if not value:
+            return False
+        else:
+            return True
+
+    #-----check spaces in province--------------#
+    def _check_province(self, cr, uid, ids, context=None):
+        obj = self.browse(cr, uid, ids, context=context)
+        value = str(obj.province)
+        if not value:
+            return False
+        else:
+            return True
+
+    #-----check spaces in country---------------#
+    def _check_nation(self, cr, uid, ids, context=None):
+        obj = self.browse(cr, uid, ids, context=context)
+        value = str(obj.nation)
+        new_value = value.replace(" ", "")
+        if not new_value or not new_value.isalpha():
+            return False
+        else:
+            return True
 
     '''==========When the opportunity won the student is already in the system load the student form with the details
                 else load the load the registration form============'''
@@ -305,8 +350,44 @@ class crm_lead(osv.Model):
             self.validate_email(cr, uid, [], vals['email_from'])
 
         # prospective_student validation on create
-        # if 'prospective_student' in vals:
-        #     self.onchange_pstudent(self, vals['prospective_student'])
+        if 'prospective_student' in vals:
+            self._check_pstudent(self, cr, uid, vals['prospective_student'])
+
+        # Address lines and update res.partner
+        if 'address_line1' in vals:
+            if vals['address_line1'] is False or None:
+                pass
+            else:
+                line1 = vals['address_line1'].strip()
+                vals.update({'street': line1, 'address_line1': line1})
+
+        if 'address_line2' in vals:
+            if vals['address_line2'] is False or None:
+                pass
+            else:
+                line2 = vals['address_line2'].strip()
+                vals.update({'street2': line2, 'address_line2': line2})
+
+        if 'town' in vals:
+            if vals['town'] is False or None:
+                pass
+            else:
+                twn = vals['town'].strip()
+                vals.update({'city': twn, 'town': twn})
+
+        if 'province' in vals:
+            if vals['province'] is False or None:
+                pass
+            else:
+                prvn = vals['province'].strip()
+                vals.update({'province': prvn})
+
+        if 'nation' in vals:
+            if vals['nation'] is False or None:
+                pass
+            else:
+                cntry = vals['nation'].strip()
+                vals.update({'nation': cntry})
 
             return super(crm_lead, self).create(cr, uid, vals, context=context)
 
@@ -330,10 +411,53 @@ class crm_lead(osv.Model):
             self.validate_email(cr, uid, ids, values['email_from'])
 
         # prospective_student validation on write
-        # if 'prospective_student' in values:
-        #     self.onchange_pstudent(self, values['prospective_student'])
+        if 'prospective_student' in values:
+            self._check_pstudent(self, cr, uid, values['prospective_student'])
+
+        if 'address_line1' in values:
+            if values['address_line1'] is False or None:
+                pass
+            else:
+                line1 = values['address_line1'].strip()
+                values.update({'street': line1, 'address_line1': line1})
+
+        if 'address_line2' in values:
+            if values['address_line2'] is False or None:
+                pass
+            else:
+                line2 = values['address_line2'].strip()
+                values.update({'street2': line2, 'address_line2': line2})
+
+        if 'town' in values:
+            if values['town'] is False or None:
+                pass
+            else:
+                twn = values['town'].strip()
+                values.update({'city': twn, 'town': twn})
+
+        if 'province' in values:
+            if values['province'] is False or None:
+                pass
+            else:
+                prvn = values['province'].strip()
+                values.update({'province': prvn})
+
+        if 'nation' in values:
+            if values['nation'] is False or None:
+                pass
+            else:
+                cntry = values['nation'].strip()
+                values.update({'nation': cntry})
 
         return super(crm_lead, self).write(cr, uid, ids, values, context=context)
+
+    _constraints = [
+        (_check_add_l_one, 'Entered Invalid Data in Address line1 !!', ['address_line1']),
+        (_check_add_l_two, 'Entered Invalid Data in Address line2 !!', ['address_line2']),
+        (_check_town, 'Entered Invalid Data in City !!', ['town']),
+        (_check_province, 'Entered Invalid Data in Province !!', ['province']),
+        (_check_nation, 'Entered Invalid Data in Country !!', ['nation']),
+    ]
 
 
 class time_frame(osv.Model):
