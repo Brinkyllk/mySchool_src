@@ -248,11 +248,21 @@
                          <field name="nation" class="oe_no_button" placeholder="Country" style="width: 100%%" options='{"no_open": True}'/>
                     </xpath>
 
+                    <xpath expr="//label[@for='contact_name']" position="replace">
+                        <label for="first_name" string="Contact Name"/>
+
+                    </xpath>
+
+                    <xpath expr="//field[@name='contact_name']" position="replace">
+                        <field name="first_name" placeholder="First name"/>
+                        <field name="last_name" placeholder="Last name"/>
+                    </xpath>
+
 
 
                     <xpath  expr="//notebook" position="inside">
                         <page string="Course(s) Info">
-                            <separator colspan="4" string="Course Details"/>
+                            <separator colspan="4" string="Study Programme Details"/>
                             <field name="is_new_course"  on_change="onchange_new_course(is_new_course)" class="oe_inline"/><label for="is_new_course" string="Is a New Course ?"/>
                             <group col="4" colspan="4">
                                 <group>
@@ -312,8 +322,8 @@
                 <data>
                     <xpath  expr="//notebook/page[@string='Lead']" position="inside">
                         <page string="Course(s) Info">
-                            <separator colspan="4" string="Course Details"/>
-                            <group name="Suitable Time Frame">
+                            <group>
+                            <separator colspan="4" string="Study Programme Details"/>
                                 <field name="courses_interested"  widget="many2many_tags" options="{'no_create_edit':'1'}"/>
                                 <field name="prospective_student"/>
                             </group>

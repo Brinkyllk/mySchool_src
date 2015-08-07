@@ -102,6 +102,10 @@ class crm_lead(osv.Model):
         'province': fields.char('province', size=20),
         'nation': fields.char('nation', size=20),
         'meeting_count': fields.function(_meeting_count, string='# Meetings', type='integer', store=True),
+
+        'first_name': fields.char('First name', size=30),
+        'last_name': fields.char('Last name', size=30),
+
     }
 
     '''==========When the opportunity won the student is already in the system load the student form with the details
