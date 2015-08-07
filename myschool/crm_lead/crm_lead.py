@@ -103,8 +103,8 @@ class crm_lead(osv.Model):
         'nation': fields.char('nation', size=20),
         'meeting_count': fields.function(_meeting_count, string='# Meetings', type='integer', store=True),
 
-        'first_name': fields.char('First name', size=30),
-        'last_name': fields.char('Last name', size=30),
+        'first_name': fields.char('First Name', size=30),
+        'last_name': fields.char('Last Name', size=30),
 
     }
 
