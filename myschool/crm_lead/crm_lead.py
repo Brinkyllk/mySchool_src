@@ -62,7 +62,7 @@ class crm_lead(osv.Model):
     #     else:
     #         return True
 
-    #onchange for is_new course
+    #..onchange for is_new course
     @api.multi
     def onchange_new_course(self, is_new_course):
         if is_new_course:
