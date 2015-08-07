@@ -55,12 +55,12 @@ class follow_up_type(osv.Model):
 class crm_lead(osv.Model):
 
     #onchange for prospective_student limit
-    @api.onchange('prospective_student')
-    def onchange_pstudent(self, cr, uid, ids, prospective_student):
-        if prospective_student > 999:
-            raise osv.except_osv('Prospective Students', 'Limit exceeded !')
-        else:
-            return True
+    # @api.multi
+    # def onchange_pstudent(self, prospective_student):
+    #     if prospective_student > 999:
+    #         raise osv.except_osv('Prospective Students', 'Limit exceeded !')
+    #     else:
+    #         return True
 
     #onchange for is_new course
     @api.multi
@@ -301,8 +301,8 @@ class crm_lead(osv.Model):
             self.validate_email(cr, uid, [], vals['email_from'])
 
         # prospective_student validation on create
-        if 'prospective_student' in vals:
-            self.onchange_pstudent(cr, uid, [], vals['prospective_student'])
+        # if 'prospective_student' in vals:
+        #     self.onchange_pstudent(self, vals['prospective_student'])
 
             return super(crm_lead, self).create(cr, uid, vals, context=context)
 
@@ -326,8 +326,8 @@ class crm_lead(osv.Model):
             self.validate_email(cr, uid, ids, values['email_from'])
 
         # prospective_student validation on write
-        if 'prospective_student' in values:
-            self.onchange_pstudent(cr, uid, ids, values['prospective_student'])
+        # if 'prospective_student' in values:
+        #     self.onchange_pstudent(self, values['prospective_student'])
 
         return super(crm_lead, self).write(cr, uid, ids, values, context=context)
 
