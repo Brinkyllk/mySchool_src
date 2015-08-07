@@ -20,10 +20,50 @@
 #/#############################################################################
 from openerp.osv import osv, fields
 import time
-from openerp import netsvc
-
+from openerp import netsvc, api
+from openerp.tools.translate import _
+from datetime import date, datetime
 
 class op_registration(osv.osv):
+
+    # --First name first letter capitalization--- #
+    @api.onchange('first_name')
+    def onchange_fname(self, cr, uid, ids, first_name):
+        if first_name != False:
+            result = {'value': {
+                'first_name': str(first_name).title()
+            }
+            }
+            return result
+        else:
+            return True
+
+    # --Middle name first letter capitalization--- #
+    @api.onchange('middle_name')
+    def onchange_mname(self, cr, uid, ids, middle_name):
+        if middle_name != False:
+            result = {'value': {
+                'middle_name': str(middle_name).title()
+            }
+            }
+            return result
+        else:
+            return True
+
+    # --Last name first letter capitalization--- #
+    @api.onchange('last_name')
+    def onchange_lname(self, cr, uid, ids, last_name):
+        if last_name != False:
+            result = {'value': {
+                'last_name': str(last_name).title()
+            }
+            }
+            return result
+        else:
+            return True
+
+
+
     _name = 'op.registration'
     _rec_name = 'application_number'
 
@@ -155,6 +195,78 @@ class op_registration(osv.osv):
         self.write(cr, uid, ids, {'state': 'done'})
         return value
 
+    # .... check first name....#
+    def _check_invalid_first_name(self, cr, uid, ids, firstName):
+        name = str(firstName)
+        name = ''.join([i for i in name if not i.isdigit()])
+        if name.isalpha():
+            return True
+        else:
+            raise osv.except_osv(_('Invalid first name'), _('Please insert valid name'))
+
+    # .... check middle name....#
+    def _check_invalid_middle_name(self, cr, uid, ids,middleName):
+        name = str(middleName)
+        name = ''.join([i for i in name if not i.isdigit()])
+        if name.isalpha():
+            return True
+        else:
+            raise osv.except_osv(_('Invalid middle name'), _('Please insert valid name'))
+
+    # .... check last name....#
+    def _check_invalid_last_name(self, cr, uid, ids, lastName):
+        name = str(lastName)
+        name = ''.join([i for i in name if not i.isdigit()])
+        if name.isalpha():
+            return True
+        else:
+            raise osv.except_osv(_('Invalid last name'), _('Please insert valid name'))
+
+    # ....birthday validation.... #
+    def _check_birthday(self, cr, uid, ids, birthDate):
+        date_today = date.today()
+        if birthDate and date_today:
+            datetime_format = "%Y-%m-%d"
+            bday = datetime.strptime(birthDate, datetime_format)
+            tday = datetime.strptime(date_today.strftime('%Y%m%d'), '%Y%m%d')
+            if tday < bday:
+                raise osv.except_osv(_('Invalid Birth Date'), _('Please insert valid Birth Date'))
+            else:
+                return True
+
+    def create(self, cr, uid, vals, context=None):
+
+         # phone number validation on create
+        if 'first_name' in vals:
+            self._check_invalid_first_name(cr, uid, [], vals['first_name'])
+
+        if 'middle_name' in vals:
+            self._check_invalid_middle_name(cr, uid, [], vals['middle_name'])
+
+        if 'last_name' in vals:
+            self._check_invalid_last_name(cr, uid, [], vals['last_name'])
+
+        if 'birth_date' in vals:
+            self._check_birthday(cr, uid, [], vals['birth_date'])
+
+        return super(op_registration, self).create(cr, uid, vals, context=context)
+
+    def write(self, cr, uid, ids, values, context=None):
+
+        # phone number validation on write
+        if 'first_name' in values:
+            self._check_invalid_first_name(cr, uid, [], values['first_name'])
+
+        if 'middle_name' in values:
+            self._check_invalid_middle_name(cr, uid, [], values['middle_name'])
+
+        if 'last_name' in values:
+            self._check_invalid_last_name(cr, uid, [], values['last_name'])
+
+        if 'birth_date' in values:
+            self._check_birthday(cr, uid, [], values['birth_date'])
+
+        return super(op_registration, self).write(cr, uid, ids, values, context=context)
 op_registration()
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 
