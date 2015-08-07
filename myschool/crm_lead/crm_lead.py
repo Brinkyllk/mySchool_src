@@ -231,7 +231,7 @@ class crm_lead(osv.Model):
                 'res_model': 'op.registration',
                 'type': 'ir.actions.act_window',
                 'nodestroy': True,
-                'target': 'current',
+                'target': 'new',
                 }
             return value
         return True

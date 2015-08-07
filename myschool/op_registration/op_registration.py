@@ -149,6 +149,20 @@ class op_registration(osv.osv):
     #     self.write(cr, uid, ids, {'state': 's', 'student_id': new_student, 'nbr': 1})
     #     return True
 
+    def default_get(self, cr, uid, fields, context=None):
+        data = super(op_registration, self).default_get(cr, uid, fields, context=context)
+        activeId = context.get('active_id')
+        if activeId:
+
+            registrationRef = self.pool.get('crm.lead')
+            registrationId = registrationRef.browse(cr, uid, activeId, context=context)
+
+            data['first_name'] = registrationId.first_name
+            data['last_name'] = registrationId.last_name
+
+
+        return data
+
     def confirm_rejected(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, {'state': 'r'})
         return True

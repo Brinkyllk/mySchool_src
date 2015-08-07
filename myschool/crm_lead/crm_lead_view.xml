@@ -354,6 +354,14 @@
                             </button>
                         </div>
                     </xpath>
+                    <xpath  expr="//button[@class='oe_inline oe_stat_button']" position="replace">
+                        <button class="oe_inline oe_stat_button" type="action"
+                                context="{'partner_id': partner_id}"
+                                name="%(action_crm_followup)d" icon="fa-bell">
+                                <!--<field string="Follow-up" name="meeting_count" widget="statinfo"/>-->
+                                <field string="Follow-up" name="meeting_count" widget="statinfo"/>
+                        </button>
+                    </xpath>
                     <xpath expr="//field[@name='street']" position="replace">
                         <field name="address_line1" placeholder="Address line 1"/>
                     </xpath>
@@ -429,14 +437,6 @@
             </field>
         </record>
 
-        <!--Action for Lead -->
-        <!--<record model="ir.actions.act_window.view" id="action_lead_view">-->
-            <!--<field name="act_window_id" ref="action_view_crm_followup_form"/>-->
-            <!--<field name="sequence" eval="2"/>-->
-            <!--<field name="view_mode">tree</field>-->
-            <!--<field name="view_id" ref="crm_lead_tree"/>-->
-        <!--</record>-->
-
         <!--FollowUp_tree_window-->
         <record model="ir.actions.act_window.view" id="action_view_crm_followup_tree">
             <field name="act_window_id" ref="action_crm_followup"/>
@@ -460,8 +460,6 @@
         </record>
         
         <!--menu_items-->
-        <!--<menuitem id="lead" name="Lead" parent="base.menu_sales" action="action_lead_view"/>-->
-        <!--<menuitem id="lead_template" name="Time Frames" parent="base.menu_base_config" action="action_time_frame"/>-->
         <menuitem id="time_frame" name="Time Frames" parent="base.menu_base_config" action="action_time_frame"/>
         <!--<menuitem id="folow_up" name="Follow up" parent="base.menu_base_config" action="action_crm_followup"/>-->
         <menuitem id="download_csv" name="Download Template" parent="base.menu_sales" action="action_download_csv"/>
