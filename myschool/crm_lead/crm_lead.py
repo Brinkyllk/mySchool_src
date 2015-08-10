@@ -54,14 +54,14 @@ class follow_up_type(osv.Model):
 
 class crm_lead(osv.Model):
 
-    #check prospective_student limit
+    # check prospective_student limit
     def _check_pstudent(self, cr, uid, ids, prospective_student):
         if prospective_student > 999:
             raise osv.except_osv('Prospective Students', 'Limit exceeded !')
         else:
             return True
 
-    #..onchange for is_new course
+    # ..onchange for is_new course
     @api.multi
     def onchange_new_course(self, is_new_course):
         if is_new_course:
@@ -71,14 +71,12 @@ class crm_lead(osv.Model):
     _rec_name = 'name'
     _description = "adding fields to crm.lead"
 
-
     def _meeting_count(self, cr, uid, ids, field_name, arg, context=None):
         Event = self.pool['calendar.event']
         return {
             opp_id: Event.search_count(cr,uid, [('opportunity_id', '=', opp_id)], context=context)
             for opp_id in ids
         }
-
 
     _columns = {
         'partner_id': fields.many2one('res.partner', 'Partner', ondelete='set null', track_visibility='onchange',
@@ -107,7 +105,7 @@ class crm_lead(osv.Model):
 
     }
 
-    #------check spaces in address line one----#
+    # ------check spaces in address line one----#
     def _check_add_l_one(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids, context=context)
         value = str(obj.address_line1)
@@ -116,7 +114,7 @@ class crm_lead(osv.Model):
         else:
             return True
 
-    #------check spaces in address line two----#
+    # ------check spaces in address line two----#
     def _check_add_l_two(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids, context=context)
         value = str(obj.address_line2)
@@ -125,7 +123,7 @@ class crm_lead(osv.Model):
         else:
             return True
 
-    #-----check spaces in town-----------------#
+    # -----check spaces in town-----------------#
     def _check_town(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids, context=context)
         value = str(obj.town)
@@ -134,7 +132,7 @@ class crm_lead(osv.Model):
         else:
             return True
 
-    #-----check spaces in province--------------#
+    # -----check spaces in province--------------#
     def _check_province(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids, context=context)
         value = str(obj.province)
@@ -143,7 +141,7 @@ class crm_lead(osv.Model):
         else:
             return True
 
-    #-----check spaces in country---------------#
+    # -----check spaces in country---------------#
     def _check_nation(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids, context=context)
         value = str(obj.nation)
@@ -176,7 +174,7 @@ class crm_lead(osv.Model):
         for stage_id, lead_ids in stages_leads.items():
             self.write(cr, uid, lead_ids, {'stage_id': stage_id}, context=context)
 
-        #open student profile or registrtion form
+        # open student profile or registrtion form
         crmRef = self.pool.get('crm.lead')
         resPartnerRef = self.pool.get('res.partner')
         studentRef = self.pool.get('op.student')
@@ -236,7 +234,7 @@ class crm_lead(osv.Model):
             return value
         return True
 
-    #phone number validation for customer
+    # phone number validation for customer
     def phoneNumberValidation(self, cr, uid, ids, phoneNumber):
         phone_re = re.compile(ur'^(\+\d{1,1}[- ]?)?\d{10}$')
         valid_phone = False
@@ -248,7 +246,7 @@ class crm_lead(osv.Model):
         else:
             raise osv.except_osv(_('Invalid Phone Number'), _('Please enter a valid Phone Number'))
 
-    #mobile number validation for customer
+    # mobile number validation for customer
     def mobileNumberValidation(self, cr, uid, ids, mobileNumber):
         mobile_re = re.compile(ur'^(\+\d{1,1}[- ]?)?\d{10}$')
         valid_mobile = False
@@ -260,7 +258,7 @@ class crm_lead(osv.Model):
         else:
             raise osv.except_osv(_('Invalid Mobile Number'), _('Please enter a valid Mobile Number'))
 
-    #fax number validation for customer
+    # fax number validation for customer
     def faxNumberValidation(self, cr, uid, ids, faxNumber):
         fax_re = re.compile(ur'^(\+\{1,1}[- ]?)?\d{10}$')
         valid_fax = False
@@ -277,83 +275,73 @@ class crm_lead(osv.Model):
         n_name = str(subjectName).replace(",", "")
         n_name = n_name.replace(" ", "")
         n_name = ''.join([i for i in n_name if not i.isdigit()])
-        #isalpha python inbuilt function Returns true if string
-            #has at least 1 character and all characters are alphabetic and false otherwise.
         if n_name.isalpha() or n_name.isdigit():
             return True
         else:
             raise osv.except_osv(_('Invalid Subject Description'), _('Please insert valid information'))
 
-    # #.......... Overriding the create method...........#
-    # def create(self, cr, uid, vals, context=None):
-    #     # phone number validation on create
-    #     if 'phone' in vals:
-    #         self.phoneNumberValidation(cr, uid, [], vals['phone'])
-    #
-    #     if 'mobile' in vals:
-    #         self.mobileNumberValidation(cr, uid, [], vals['mobile'])
-    #
-    #     if 'fax' in vals:
-    #         self.faxNumberValidation(cr, uid, [], vals['fax'])
-    #
-    #     if 'name' in vals:
-    #         self._check_invalid_data(cr, uid, [], vals['name'])
-    #
-    #     return super(crm_lead, self).create(cr, uid, vals, context=context)
-
-    # #.......... Overriding the wrtie method...........#
-    # def write(self, cr, uid, ids, values, context=None):
-    #     # phone number validation on write
-    #     if 'phone' in values:
-    #         self.phoneNumberValidation(cr, uid, [], values['phone'])
-    #
-    #     if 'mobile' in values:
-    #         self.mobileNumberValidation(cr, uid, [], values['mobile'])
-    #
-    #     if 'fax' in values:
-    #         self.faxNumberValidation(cr, uid, [], values['fax'])
-    #
-    #     if 'name' in values:
-    #         self._check_invalid_data(cr, uid, [], values['name'])
-    #
-    #     return super(crm_lead, self).write(cr, uid, ids, values, context=context)
-
-    # email validation........
+    # ..email validation....#
     def validate_email(self, cr, uid, ids, email_from):
-        email_re = re.compile("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$")
-        valid_email = False
+        email_re = re.compile("^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$")
         if email_from is False:
             return True
         if email_re.match(email_from):
-            valid_email=True
             return True
         else:
             raise osv.except_osv(_('Invalid Email'), _('Please enter a valid Email'))
 
+    # ---------Contact first name validation-------------- #
+    def first_name_validation(self, cr, uid, ids, first_name):
+        f_name = str(first_name).replace(" ", "")
+        f_name = ''.join([i for i in f_name if not i.isdigit()])
+        if f_name.isalpha():
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Contact Name'), _('Please enter a correct Contact name'))
+
+    # ---------Contact last name validation-------------- #
+    def last_name_validation(self, cr, uid, ids, last_name):
+        l_name = str(last_name).replace(" ", "")
+        l_name = ''.join([i for i in l_name if not i.isdigit()])
+        if l_name.isalpha():
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Contact Name'), _('Please enter a correct Contact name'))
+
     def create(self, cr, uid, vals, context=None):
 
-         # phone number validation on create
+        # ----------contact first name validation------------- #
+        if 'first_name' in vals:
+            self.first_name_validation(cr, uid, [], vals['first_name'])
+
+        # ----------contact last name validation-------------- #
+        if 'last_name' in vals:
+            self.last_name_validation(cr, uid, [], vals['last_name'])
+
+        # -----------phone number validation------------------ #
         if 'phone' in vals:
             self.phoneNumberValidation(cr, uid, [], vals['phone'])
 
+        # ---------- mobile number validation----------------- #
         if 'mobile' in vals:
             self.mobileNumberValidation(cr, uid, [], vals['mobile'])
 
+        # --------------fax number validation----------------- #
         if 'fax' in vals:
             self.faxNumberValidation(cr, uid, [], vals['fax'])
 
         if 'name' in vals:
             self._check_invalid_data(cr, uid, [], vals['name'])
 
-        # email validation on create
+        # ---------------email validation on create------------ #
         if 'email_from' in vals:
             self.validate_email(cr, uid, [], vals['email_from'])
 
-        # prospective_student validation on create
+        # ---------prospective_student validation on create---- #
         if 'prospective_student' in vals:
             self._check_pstudent(self, cr, uid, vals['prospective_student'])
 
-        # Address lines and update res.partner
+        # ----------Address lines and update res.partner------- #
         if 'address_line1' in vals:
             if vals['address_line1'] is False or None:
                 pass
@@ -393,24 +381,34 @@ class crm_lead(osv.Model):
 
     def write(self, cr, uid, ids, values, context=None):
 
-        # phone number validation on write
+        # ----contact first name validation function call----- #
+        if 'first_name' in values:
+            self.first_name_validation(cr, uid, [], values['first_name'])
+
+        # -----contact last name validation function call----- #
+        if 'last_name' in values:
+            self.last_name_validation(cr, uid, [], values['last_name'])
+
+        # -----phone number validation on write function call-- #
         if 'phone' in values:
             self.phoneNumberValidation(cr, uid, [], values['phone'])
 
+        # -----mobile number validation function call---------- #
         if 'mobile' in values:
             self.mobileNumberValidation(cr, uid, [], values['mobile'])
 
+        # -----fax number validation function call------------- #
         if 'fax' in values:
             self.faxNumberValidation(cr, uid, [], values['fax'])
 
         if 'name' in values:
             self._check_invalid_data(cr, uid, [], values['name'])
 
-        # email validation on write
+        # ------email validation on write---------------------- #
         if 'email_from' in values:
             self.validate_email(cr, uid, ids, values['email_from'])
 
-        # prospective_student validation on write
+        # ------prospective_student validation on write-------- #
         if 'prospective_student' in values:
             self._check_pstudent(self, cr, uid, values['prospective_student'])
 

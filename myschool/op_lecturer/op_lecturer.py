@@ -119,7 +119,7 @@ class op_lecturer(osv.Model):
 
     #Email validation
     def validate_email(self, cr, uid, ids, email):
-        email_re = re.compile("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$")
+        email_re = re.compile("^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$")
         valid_email = False
         if email is False:
             return True
