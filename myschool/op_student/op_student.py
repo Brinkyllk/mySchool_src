@@ -234,29 +234,35 @@ class op_student(osv.Model):
             return True
 
 
-    #..... check passing nul values....#
-    def _check_invalid_data(self, cr, uid, ids, context=None):
-        obj = self.browse(cr, uid, ids, context=context)
-        initials = str(obj.initials)
-        fnew_name = str(obj.first_name)
-        middle_name = str(obj.middle_name)
-        lnew_code = str(obj.last_name)
-        initials = initials.replace(" ","")
-        new_ini = initials.replace("." ,"")
-        fname = fnew_name.replace(" ", "")
-        mname = middle_name.replace(" ","")
-        lname = lnew_code.replace(" ", "")
-        #isalpha python inbuilt function Returns true if string
-            #has at least 1 character and all characters are alphabetic and false otherwise.
-        if fname or lname or new_ini or mname:
-            if fname.isalpha() and new_ini.isalpha():
-                return True
-            else:
-                return False
-        else:
-            return False
+    # #..... check passing nul values....#
+    # def _check_invalid_data(self, cr, uid, ids, context=None):
+    #     obj = self.browse(cr, uid, ids, context=context)
+    #     initials = str(obj.initials)
+    #     fnew_name = str(obj.first_name)
+    #     middle_name = str(obj.middle_name)
+    #     lnew_code = str(obj.last_name)
+    #     initials = initials.replace(" ","")
+    #     new_ini = initials.replace("." ,"")
+    #     fname = fnew_name.replace(" ", "")
+    #     mname = middle_name.replace(" ","")
+    #     lname = lnew_code.replace(" ", "")
+    #     #isalpha python inbuilt function Returns true if string
+    #         #has at least 1 character and all characters are alphabetic and false otherwise.
+    #     if fname :
+    #         if fname.isalpha():
+    #             return True
+    #             if mname.isalpha():
+    #                 return True
+    #                 if lname.isalpha():
+    #                     return True
+    #                     if new_ini.isalpha():
+    #                         return True
+    #         else:
+    #             return False
+    #     else:
+    #         return False
 
-    #Can not delete all the courses of the specific student
+    # Can not delete all the courses of the specific student
     def _canNotDeleteCourse(self, cr, uid, ids, context=None):
         studentBatchMapRef = self.pool.get('op.student.batch.mapping')
         batchMapId = studentBatchMapRef.search(cr,uid, [('student_id', 'in', ids)])
@@ -277,25 +283,35 @@ class op_student(osv.Model):
             return True
         else:
             raise osv.except_osv(_('Invalid Email'), _('Please enter a valid Email'))
-
-    def validate_last_name(self, cr, uid, ids, last_name):
-        last_name_re = re.compile("^[a-zA-Z0-9.,/()-_]*$")
-        valid_last_name = False
-        if last_name is False:
-            return True
-        if last_name_re.match(last_name):
-            valid_last_name=True
+    # ---initials validation written by s----- #
+    def validate_initials(self,cr, uid, ids, initials):
+        ini = str(initials).replace(" ", "")
+        ini = ini.replace(".", "")
+        if ini.isalpha():
             return True
         else:
-            raise osv.except_osv(_('Invalid Last Name'), _('Please enter a valid Last Name'))
+            raise osv.except_osv(_('Invalid Initials'), _('Enter Initials Correctly'))
 
-    def validate_middle_name(self, cr, uid, ids, middle_name):
-        middle_name_re = re.compile("^[a-zA-Z0-9.,/()-_]*$")
-        valid_middle_name = False
-        if middle_name is False:
+    # ----first name validation written by s--- #
+    def validate_first_name(self, cr, uid, ids, first_name):
+        f_name = str(first_name).replace(" ", '')
+        if f_name.isalpha():
             return True
-        if middle_name_re.match(middle_name):
-            valid_middle_name=True
+        else:
+            raise osv.except_osv(_('Invalid First Name'), _('Please enter valid First name'))
+
+    # ----last name validation written by s--- #
+    def validate_last_name(self, cr, uid, ids, last_name):
+        l_name = str(last_name).replace(" ", "")
+        if l_name.isalpha():
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Last Name'), _('Please enter valid Last name'))
+
+    # -----middle name validation written by s--- #
+    def validate_middle_name(self, cr, uid, ids, middle_name):
+        m_name = str(middle_name).replace(" ", "")
+        if m_name.isalpha():
             return True
         else:
             raise osv.except_osv(_('Invalid Middle Name'), _('Please enter a valid Middle Name'))
@@ -309,7 +325,7 @@ class op_student(osv.Model):
             raise osv.except_osv('Invalid NIC', 'Please enter a valid NIC')
         return True
 
-    #phone number validation for student
+    # phone number validation for student
     def phoneNumberValidation(self, cr, uid, ids, phoneNumber):
         phone_re = re.compile(ur'^(\+\d{1,1}[- ]?)?\d{10}$')
         valid_phone = False
@@ -321,7 +337,7 @@ class op_student(osv.Model):
         else:
             raise osv.except_osv(_('Invalid Phone Number'), _('Please enter a valid Phone Number'))
 
-    #phone number validation for parent
+    # phone number validation for parent
     def phoneNumberValidationParent(self, cr, uid, ids, phoneNumber):
         phone_re = re.compile(ur'^(\+\d{1,1}[- ]?)?\d{10}$')
         # valid_phone = False
@@ -365,8 +381,6 @@ class op_student(osv.Model):
             else:
                 initls = vals['initials'].strip()
                 vals.update({'initials': initls})
-
-
 
         # phone number validation on create
         if 'phone' in vals:
@@ -442,11 +456,21 @@ class op_student(osv.Model):
         if 'email' in vals:
             self.validate_email(cr, uid, [], vals['email'])
 
+        # ----validator caller written by s-- #
         if 'last_name' in vals:
             self.validate_last_name(cr, uid, [], vals['last_name'])
 
+        # ----validator caller written by s-- #
+        if 'first_name' in vals:
+            self.validate_first_name(cr, uid, [], vals['first_name'])
+
+        # ----validator caller written by s-- #
         if 'middle_name' in vals:
             self.validate_middle_name(cr, uid, [], vals['middle_name'])
+
+        # ----validator caller written by s-- #
+        if 'initials' in vals:
+            self.validate_initials(cr, uid, [], vals['initials'])
 
         # NIC validation on create
         if 'id_number' in vals:
@@ -474,8 +498,6 @@ class op_student(osv.Model):
         # registrationRef.write(cr, uid, { 'student_id': activeId})
 
         return super(op_student, self).create(cr, uid, vals, context=context)
-
-
 
     def write(self, cr, uid, ids, values, context=None):
         if 'initials' in values:
@@ -510,7 +532,23 @@ class op_student(osv.Model):
         if 'contact_no' in values:
             self.phoneNumberValidationParent(cr, uid, [], values['contact_no'])
 
-        #clean NIC
+        # ----validator caller written by s-- #
+        if 'initials' in values:
+            self.validate_initials(cr, uid, [], values['initials'])
+
+        # ----validator caller written by s-- #
+        if 'first_name' in values:
+            self.validate_first_name(cr, uid, [], values['first_name'])
+
+        # ----validator caller written by s-- #
+        if 'middle_name' in values:
+            self.validate_middle_name(cr, uid, [], values['middle_name'])
+
+        # ----validator caller written by s-- #
+        if 'last_name' in values:
+            self.validate_last_name(cr, uid, [], values['last_name'])
+
+        # clean NIC
         if 'id_number' in values:
             try:
                 values['id_number'] = values['id_number'].strip()
@@ -519,7 +557,7 @@ class op_student(osv.Model):
             except:
                 values['id_number'] = None
 
-        #-------- Update Partner record -------------
+        # -------- Update Partner record -------------
         exstu = self.browse(cr, uid, ids, context=context)
         ini = exstu.initials
         firstName = exstu.first_name
@@ -553,7 +591,7 @@ class op_student(osv.Model):
             full_name = initial.strip() + ' ' + fName.strip() + ' ' + lName.strip()
         values.update({'name': full_name})
 
-        #-------- Update Partner record -------------
+        # -------- Update Partner record -------------
         if 'address_line1' in values:
             if values['address_line1'] is False or None:
                 pass
@@ -735,12 +773,10 @@ class op_student(osv.Model):
             }
         return value
 
-
-
     _constraints = [
         (_check_registered_date, 'Registered Date cannot be future date!', ['register_date']),
         (_check_birthday, 'Birth Day cannot be future date!', ['birth_date']),
-        (_check_invalid_data, 'Entered Invalid Name Details!!', ['name']),
+        # (_check_invalid_data, 'Entered Invalid Name Details!!', ['first_name']),
         (_check_add_l_one, 'Entered Invalid Data in Address line1 !!', ['address_line1']),
         (_check_add_l_two, 'Entered Invalid Data in Address line2 !!', ['address_line2']),
         (_check_town, 'Entered Invalid Data in City !!', ['town']),

@@ -275,7 +275,7 @@ class crm_lead(osv.Model):
         n_name = str(subjectName).replace(",", "")
         n_name = n_name.replace(" ", "")
         n_name = ''.join([i for i in n_name if not i.isdigit()])
-        if n_name.isalpha() or n_name.isdigit():
+        if n_name.isalpha():
             return True
         else:
             raise osv.except_osv(_('Invalid Subject Description'), _('Please insert valid information'))
@@ -293,7 +293,6 @@ class crm_lead(osv.Model):
     # ---------Contact first name validation-------------- #
     def first_name_validation(self, cr, uid, ids, first_name):
         f_name = str(first_name).replace(" ", "")
-        f_name = ''.join([i for i in f_name if not i.isdigit()])
         if f_name.isalpha():
             return True
         else:
@@ -302,7 +301,6 @@ class crm_lead(osv.Model):
     # ---------Contact last name validation-------------- #
     def last_name_validation(self, cr, uid, ids, last_name):
         l_name = str(last_name).replace(" ", "")
-        l_name = ''.join([i for i in l_name if not i.isdigit()])
         if l_name.isalpha():
             return True
         else:
