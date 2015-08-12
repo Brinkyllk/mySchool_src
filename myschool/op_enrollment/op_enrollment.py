@@ -15,10 +15,10 @@ class op_enrollment(osv.Model):
         }
 
     #load the specific student of the selected customer
-    def default_get(self, cr, uid, fields, context=None):
-        student = self.pool.get(cr, uid, fields, context=context)
-        stu_id = student.id
-        print stu_id
+    # def default_get(self, cr, uid, fields, context=None):
+    #     student = self.pool.get(cr, uid, fields, context=context)
+    #     stu_id = student.id
+    #     print stu_id
         # data = super(op_enrollment, self).default_get(cr, uid, fields, context=context)
         # activeId = context.get('active_id')
         # if activeId:
