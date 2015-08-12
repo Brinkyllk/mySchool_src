@@ -236,7 +236,7 @@ class crm_lead(osv.Model):
 
     # phone number validation for customer
     def phoneNumberValidation(self, cr, uid, ids, phoneNumber):
-        phone_re = re.compile(ur'^(\+\d{1,1}[- ]?)?\d{10}$')
+        phone_re = re.compile(ur'^(\+\d{1,1}[- ]?)?\d{10}$|(\+\d{1,1}[- ]?)?\d{9}$')
         valid_phone = False
         if phoneNumber is False:
             return True
@@ -248,7 +248,7 @@ class crm_lead(osv.Model):
 
     # mobile number validation for customer
     def mobileNumberValidation(self, cr, uid, ids, mobileNumber):
-        mobile_re = re.compile(ur'^(\+\d{1,1}[- ]?)?\d{10}$')
+        mobile_re = re.compile(ur'^(\+\d{1,1}[- ]?)?\d{10}$|(\+\d{1,1}[- ]?)?\d{9}$')
         valid_mobile = False
         if mobileNumber is False:
             return True
@@ -377,7 +377,7 @@ class crm_lead(osv.Model):
                 cntry = vals['nation'].strip()
                 vals.update({'nation': cntry})
 
-            return super(crm_lead, self).create(cr, uid, vals, context=context)
+        return super(crm_lead, self).create(cr, uid, vals, context=context)
 
     def write(self, cr, uid, ids, values, context=None):
 

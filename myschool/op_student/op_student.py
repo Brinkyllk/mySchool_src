@@ -162,6 +162,7 @@ class op_student(osv.Model):
 
     def default_get(self, cr, uid, fields, context=None):
         data = super(op_student, self).default_get(cr, uid, fields, context=context)
+        global activeId
         activeId = context.get('active_id')
         if activeId:
 
@@ -461,14 +462,18 @@ class op_student(osv.Model):
 
 
         #-----Check whether enrollment has or not-------#
-        stu_id = super(op_student, self).create(cr, uid, vals, context=context)
-        enrollment_ref = self.pool.get('op.enrollment')
-        enrollment_count = enrollment_ref.search(cr, uid, [('student_id', '=', stu_id)], count=True, context=context)
-        if enrollment_count < 1:
-            raise osv.except_osv(_(u'Error'), _(u'Make an Enrollment'))
-            return
+        # stu_id = super(op_student, self).create(cr, uid, vals, context=context)
+        # enrollment_ref = self.pool.get('op.enrollment')
+        # enrollment_count = enrollment_ref.search(cr, uid, [('student_id', '=', stu_id)], count=True, context=context)
+        # if enrollment_count < 1:
+        #     raise osv.except_osv(_(u'Error'), _(u'Make an Enrollment'))
+        #     return
 
-        return stu_id
+        # # write to the registration form
+        # registrationRef = self.pool.get('op.registration')
+        # registrationRef.write(cr, uid, { 'student_id': activeId})
+
+        return super(op_student, self).create(cr, uid, vals, context=context)
 
 
 

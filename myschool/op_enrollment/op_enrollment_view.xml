@@ -9,12 +9,12 @@
                     <sheet>
                         <separator string="Course Enrollment" colspan="4" />
                         <group>
-                            <field name="student_id" />
                             <field name="batch_code"/>
                             <field name="lead_id"/>
                             <field name="payment_term"/>
                             <field name="template_price"/>
                             <field name="price"/>
+                            <field name="confirm"/>
                         </group>
                     </sheet>
                 </form>
@@ -26,12 +26,12 @@
             <field name="model">op.enrollment</field>
             <field name="arch" type="xml">
                 <tree string="Course Enrollment" version="7.0">
-                    <field name="student_id" />
                     <field name="batch_code"/>
                     <field name="lead_id"/>
                     <field name="payment_term"/>
                     <field name="template_price"/>
                     <field name="price"/>
+                    <field name="confirm"/>
                 </tree>
             </field>
         </record>

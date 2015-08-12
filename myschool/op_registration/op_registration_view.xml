@@ -86,6 +86,7 @@
                                     <field name="fees" />
                                     <field name="due_date" />
                                     <field name="student_id" invisible="1" />
+                                    <field name="lead_id" invisible="1" />
                                 </group>
                             </page>
                             <page string="Personal Detail">
@@ -106,13 +107,12 @@
                                     <field name="nbr" invisible="1"/>
                                 </group>
                             </page>
-                            <!--<page string="Enrolled Courses">-->
-                                <!--<separator colspan="4" string="Student Enrollment"/>-->
-                                <!--<tree>-->
-                                    <!--&lt;!&ndash;<field name="batch_ids"/>&ndash;&gt;-->
-                                    <!--<field name="enrollment_ids"/>-->
-                                <!--</tree>-->
-                            <!--</page>-->
+                            <page string="Enrolled Courses">
+                                <separator colspan="4" string="Course Enrollment"/>
+                                <tree>
+                                    <field name="enrollment_ids"/>
+                                </tree>
+                            </page>
                         </notebook>
                     </sheet>
                 </form>

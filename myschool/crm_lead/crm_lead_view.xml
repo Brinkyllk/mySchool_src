@@ -319,6 +319,33 @@
             </field>
         </record>
 
+        <!--crm_lead_tree_inherited-->
+        <record id="crm_case_tree_view_leads_extended" model="ir.ui.view">
+            <field name="name">crm.lead.tree.inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_tree_view_leads"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="contact_name" position="replace">
+                        <field name="first_name" />
+                        <field name="last_name"/>
+                    </field>
+                    <field name="country_id" position="replace">
+                        <field name="courses_interested" />
+                    </field>
+                    <field name="stage_id" position="before">
+                        <field name="anytime" />
+                        <field name="morning" />
+                        <field name="afternoon" />
+                        <field name="evening" />
+                    </field>
+                    <field name="create_date" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </field>
+                </data>
+            </field>
+        </record>
+
         <!--opportunity_inherited_form-->
         <record id="crm_case_tree_view_oppor" model="ir.ui.view">
             <field name="name">crm.lead.oppor.form.inherit</field>
@@ -378,7 +405,7 @@
                     <xpath expr="//field[@name='country_id']" position="replace">
                          <field name="nation" class="oe_no_button" placeholder="Country" style="width: 100%%" options='{"no_open": True}'/>
                     </xpath>
-                     <xpath expr="//field[@name='contact_name']" position="replace">
+                    <xpath expr="//field[@name='contact_name']" position="replace">
                         <field name="first_name" placeholder="First name"/>
                         <field name="last_name" placeholder="Last name"/>
                     </xpath>

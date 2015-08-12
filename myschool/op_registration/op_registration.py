@@ -108,7 +108,9 @@ class op_registration(osv.osv):
         'division_id': fields.many2one('op.division', string='Division', states={'done': [('readonly', True)]}),
         'student_id': fields.many2one('op.student', string='Student', states={'done': [('readonly', True)]}),
         'nbr': fields.integer('# of Registration', readonly=True),
-        # 'enrollment_ids': fields.one2many('op.enrollment', 'student_id', string='Registered Courses'),
+        'lead_id': fields.integer('Lead Id'),
+        #course enrollment for the specific registration
+        'enrollment_ids': fields.one2many('op.enrollment', 'reg_id', string='Registered Courses', required=True)
     }
 
     _defaults = {
@@ -159,7 +161,7 @@ class op_registration(osv.osv):
 
             data['first_name'] = registrationId.first_name
             data['last_name'] = registrationId.last_name
-
+            data['lead_id'] = activeId
 
         return data
 
@@ -190,6 +192,12 @@ class op_registration(osv.osv):
         form_view = models_data.get_object_reference(cr, uid, 'myschool', 'view_student_form')
         tree_view = models_data.get_object_reference(cr, uid, 'myschool', 'view_student_tree')
         field = self.browse(cr, uid, ids, context=context)
+
+        enrollmentRef = self.pool.get('op.enrollment')
+        id = ids[0]
+        enrollmentId = enrollmentRef.search(cr, uid, [('reg_id', '=', id)])
+        enrollmentRealId = enrollmentRef.browse(cr, uid, enrollmentId, context=context)
+
         value = {
             # 'domain': str([('id', '=', student.id)]),
             'name': 'Student Profile',
@@ -206,8 +214,17 @@ class op_registration(osv.osv):
             'flags': {'action_buttons': True},
             'context': context,
             }
+
         self.write(cr, uid, ids, {'state': 'done'})
-        return value
+
+        for x in enrollmentRealId:
+            courseEnrollmentId = x.id
+            isStudent = enrollmentRef.read(cr, uid, courseEnrollmentId, ['confirm'])
+            confirm = isStudent.get('confirm')
+            if confirm == True:
+                return value
+        else:
+            raise osv.except_osv(_(u'Error'), _(u'Please confirm a course to Enroll'))
 
     # .... check first name....#
     def _check_invalid_first_name(self, cr, uid, ids, firstName):
@@ -345,7 +362,16 @@ class op_registration(osv.osv):
                 cntry = vals['nation'].strip()
                 vals.update({'nation': cntry})
 
-        return super(op_registration, self).create(cr, uid, vals, context=context)
+        #return super(op_registration, self).create(cr, uid, vals, context=context)
+
+        #-----Check whether enrollment has or not-------#
+        reg_id = super(op_registration, self).create(cr, uid, vals, context=context)
+        enrollment_ref = self.pool.get('op.enrollment')
+        enrollment_count = enrollment_ref.search(cr, uid, [('reg_id', '=', reg_id)], count=True, context=context)
+        if enrollment_count < 1:
+            raise osv.except_osv(_(u'Error'), _(u'Make an Enrollment'))
+
+        return reg_id
 
     def write(self, cr, uid, ids, values, context=None):
 

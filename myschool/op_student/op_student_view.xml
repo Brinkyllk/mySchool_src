@@ -151,7 +151,7 @@
                             </page>
 
                             <page string="Enrolled Courses">
-                                <separator colspan="4" string="Student Enrollment"/>
+                                <separator colspan="4" string="Course Enrollment"/>
                                 <tree>
                                     <!--<field name="batch_ids"/>-->
                                     <field name="enrollment_ids"/>

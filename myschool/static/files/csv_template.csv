@@ -1,1 +1,3 @@
-External Id,Subject,Contact Name,Email,Phone,Study programme(s) Interested,Anytime,Morning,Afternoon,Evening
+Subject,First Name,Last Name,Email,Phone,Study programme(s) Interested,Anytime,Morning,Afternoon,Evening
+lead One,Rukshani,Kekulawala,rukshani@gmail.com,0710000000,"ibit,idsd",Sunday,Saturday,Weekday,Saturday
+lead Two,Lukshala,Thamali,lukshala@gmail.com,0710000000,ibit,"Sunday,Saturday",Saturday,Weekday,Saturday
