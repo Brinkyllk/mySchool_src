@@ -15,9 +15,66 @@ class crm_tags(osv.Model):
 class modes(osv.Model):
     _name = 'modes'
     _columns = {
-        'code': fields.char('Code', required=True),
-        'name': fields.char('Name', required=True)
+        'code': fields.char('Code', required=True, size=5),
+        'name': fields.char('Name', required=True, size=20)
     }
+
+    # ----------------Validations----------------------- s#
+    # ---------code validation------------- s#
+    def code_validation(self, cr, uid, ids, code):
+        if str(code).isspace():
+            raise osv.except_osv(_('Invalid Code !'), _('Only Spaces not allowed'))
+        elif str(code).isalpha() or str(code).isdigit():
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Code !'), _('Please Enter the code correctly'))
+
+    # -----------name validation----------- s#
+    def name_validation(self, cr, uid, ids, name):
+        mode_name = str(name).replace(" ", "")
+        if str(name).isspace():
+            raise osv.except_osv(_('Invalid Name !'), _('Only Spaces not allowed'))
+        elif mode_name.isalpha():
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Name !'), _('Please Enter a valid name'))
+
+    # ------------Override the create method----------- s#
+    def create(self, cr, uid, vals, context=None):
+        # ----------code validation caller------- s#
+        if 'code' in vals:
+            self.code_validation(cr, uid, [], vals['code'])
+
+        # ----------name validation caller------- s#
+        if 'name' in vals:
+            self.name_validation(cr, uid, [], vals['name'])
+
+        # --------removing white spaces---------- s#
+        code = vals['code'].strip()
+        name = vals['name'].strip()
+        vals.update({'code': code, 'name': name})
+
+        return super(modes, self).create(cr, uid, vals, context=context)
+
+    # -----------Override the write method-------------- s#
+    def write(self, cr, uid, ids, values, context=None):
+        # ----------code validation caller-------- s#
+        if 'code' in values:
+            self.code_validation(cr, uid, [], values['code'])
+
+        # -----------name validation caller------- s#
+        if 'name' in values:
+            self.name_validation(cr, uid, [], values['name'])
+
+        # ------ update the values after removing white spaces---- s#
+        if 'name' in values:
+            name = values['name'].strip()
+            values.update({'name': name})
+        if 'code' in values:
+            code = values['code'].strip()
+            values.update({'code': code})
+
+        return super(modes, self).write(cr, uid, ids, values, context=context)
 
 
 class time_frame(osv.Model):
@@ -79,6 +136,7 @@ class crm_lead(osv.Model):
         }
 
     _columns = {
+        'name': fields.char(string='Subject', size=57, select=1),
         'partner_id': fields.many2one('res.partner', 'Partner', ondelete='set null', track_visibility='onchange',
             select=True, help="Linked student (optional). Usually created when converting the lead.", domain="[('is_student', '=', True)]"),
         'modes': fields.many2one('modes','Mode of Inquiry'),
@@ -234,6 +292,17 @@ class crm_lead(osv.Model):
             return value
         return True
 
+    # Company name validator by s
+    def companyNameValidation(self, cr, uid, ids, companyName):
+        c_name = str(companyName).replace(" ", "")
+        if str(companyName).isspace():
+            raise osv.except_osv(_('Invalid Company Name'), _('Only spaces not allowed to save'))
+        elif c_name.isalpha():
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Company Name'), _('Please enter Company name correctly'))
+
+
     # phone number validation for customer
     def phoneNumberValidation(self, cr, uid, ids, phoneNumber):
         phone_re = re.compile(ur'^(\+\d{1,1}[- ]?)?\d{10}$|(\+\d{1,1}[- ]?)?\d{9}$')
@@ -275,7 +344,10 @@ class crm_lead(osv.Model):
         n_name = str(subjectName).replace(",", "")
         n_name = n_name.replace(" ", "")
         n_name = ''.join([i for i in n_name if not i.isdigit()])
-        if n_name.isalpha():
+        if str(subjectName).isspace():
+            raise osv.except_osv(_('Invalid Subject Description !'), _('Only spaces not allowed'))
+
+        elif n_name.isalpha() or n_name.isdigit():
             return True
         else:
             raise osv.except_osv(_('Invalid Subject Description'), _('Please insert valid information'))
@@ -307,24 +379,27 @@ class crm_lead(osv.Model):
             raise osv.except_osv(_('Invalid Contact Name'), _('Please enter a correct Contact name'))
 
     def create(self, cr, uid, vals, context=None):
+        # ----------company name validation caller by s------- #
+        if 'partner_name' in vals:
+            self.companyNameValidation(cr, uid, [], vals['partner_name'])
 
-        # ----------contact first name validation------------- #
+        # ----------contact first name validation caller by s------------- #
         if 'first_name' in vals:
             self.first_name_validation(cr, uid, [], vals['first_name'])
 
-        # ----------contact last name validation-------------- #
+        # ----------contact last name validation caller by s-------------- #
         if 'last_name' in vals:
             self.last_name_validation(cr, uid, [], vals['last_name'])
 
-        # -----------phone number validation------------------ #
+        # -----------phone number validation caller by s------------------ #
         if 'phone' in vals:
             self.phoneNumberValidation(cr, uid, [], vals['phone'])
 
-        # ---------- mobile number validation----------------- #
+        # ---------- mobile number validation caller by s----------------- #
         if 'mobile' in vals:
             self.mobileNumberValidation(cr, uid, [], vals['mobile'])
 
-        # --------------fax number validation----------------- #
+        # --------------fax number validation caller by s----------------- #
         if 'fax' in vals:
             self.faxNumberValidation(cr, uid, [], vals['fax'])
 
@@ -375,27 +450,57 @@ class crm_lead(osv.Model):
                 cntry = vals['nation'].strip()
                 vals.update({'nation': cntry})
 
+        # ------update name after strip------ s#
+        name = vals['name'].strip()
+        vals.update({'name': name})
+
+        # ------update company name after strip()---- s#
+        if vals['partner_name'] is not False:
+            partner_name = vals['partner_name'].strip()
+            vals.update({'partner_name': partner_name})
+        else:
+            pass
+
+        # ----------update contact name---------- s#
+        if vals['first_name'] is not False:
+            first_name = vals['first_name'].strip()
+            last_name = vals['last_name'].strip()
+            vals.update({'first_name': first_name, 'last_name': last_name})
+        else:
+            pass
+
+        # ----------update contact name---------- s#
+        if vals['first_name'] is not False:
+            first_name = vals['first_name'].strip()
+            last_name = vals['last_name'].strip()
+            vals.update({'first_name': first_name, 'last_name': last_name})
+        else:
+            pass
+
         return super(crm_lead, self).create(cr, uid, vals, context=context)
 
     def write(self, cr, uid, ids, values, context=None):
+        # ----------company name validation caller by s------- #
+        if 'partner_name' in values:
+            self.companyNameValidation(cr, uid, [], values['partner_name'])
 
-        # ----contact first name validation function call----- #
+        # ----contact first name validation function caller by s ----- #
         if 'first_name' in values:
             self.first_name_validation(cr, uid, [], values['first_name'])
 
-        # -----contact last name validation function call----- #
+        # -----contact last name validation function caller by s----- #
         if 'last_name' in values:
             self.last_name_validation(cr, uid, [], values['last_name'])
 
-        # -----phone number validation on write function call-- #
+        # -----phone number validation on write function caller by s-- #
         if 'phone' in values:
             self.phoneNumberValidation(cr, uid, [], values['phone'])
 
-        # -----mobile number validation function call---------- #
+        # -----mobile number validation function caller by s---------- #
         if 'mobile' in values:
             self.mobileNumberValidation(cr, uid, [], values['mobile'])
 
-        # -----fax number validation function call------------- #
+        # -----fax number validation function caller by s------------- #
         if 'fax' in values:
             self.faxNumberValidation(cr, uid, [], values['fax'])
 
@@ -444,6 +549,36 @@ class crm_lead(osv.Model):
             else:
                 cntry = values['nation'].strip()
                 values.update({'nation': cntry})
+
+        # -----------------Update Values--------------------- s#
+        # ------update name------ s#
+        if 'name' in values:
+            name = values['name'].strip()
+            values.update({'name': name})
+
+        # ------update company name----- s#
+        if 'partner_name' in values:
+            if values['partner_name'] is not False:
+                partner_name = values['partner_name'].strip()
+                values.update({'partner_name': partner_name})
+            else:
+                pass
+
+        # ----------update first name---------- s#
+        if 'first_name' in values:
+            if values['first_name'] is not False:
+                first_name = values['first_name'].strip()
+                values.update({'first_name': first_name})
+            else:
+                pass
+
+        # ---------update last name------------ s#
+        if 'last_name' in values:
+            if values['last_name'] is not False:
+                last_name = values['last_name'].strip()
+                values.update({'last_name': last_name})
+            else:
+                pass
 
         return super(crm_lead, self).write(cr, uid, ids, values, context=context)
 
