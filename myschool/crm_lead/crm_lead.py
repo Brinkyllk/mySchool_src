@@ -464,16 +464,14 @@ class crm_lead(osv.Model):
         # ----------update contact name---------- s#
         if vals['first_name'] is not False:
             first_name = vals['first_name'].strip()
-            last_name = vals['last_name'].strip()
-            vals.update({'first_name': first_name, 'last_name': last_name})
+            vals.update({'first_name': first_name})
         else:
             pass
 
         # ----------update contact name---------- s#
-        if vals['first_name'] is not False:
-            first_name = vals['first_name'].strip()
+        if vals['last_name'] is not False:
             last_name = vals['last_name'].strip()
-            vals.update({'first_name': first_name, 'last_name': last_name})
+            vals.update({'last_name': last_name})
         else:
             pass
 
