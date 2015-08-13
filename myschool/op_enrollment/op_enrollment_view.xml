@@ -12,7 +12,7 @@
                             <field name="batch_code"/>
                             <field name="lead_id"/>
                             <field name="payment_term"/>
-                            <field name="template_price"/>
+                            <field name="template_price" invisible="1"/>
                             <field name="price"/>
                             <field name="confirm"/>
                         </group>
@@ -29,7 +29,7 @@
                     <field name="batch_code"/>
                     <field name="lead_id"/>
                     <field name="payment_term"/>
-                    <field name="template_price"/>
+                    <field name="template_price" invisible="1"/>
                     <field name="price"/>
                     <field name="confirm"/>
                 </tree>

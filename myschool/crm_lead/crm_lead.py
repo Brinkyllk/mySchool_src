@@ -255,7 +255,7 @@ class crm_lead(osv.Model):
 
             if newIsStudent == False:
                 value = {
-                    'name': 'Student',
+                    'name': 'Student Registration',
                     'view_mode': 'form',
                     'view_type': 'form',
                     'res_model': 'op.registration',
@@ -281,7 +281,7 @@ class crm_lead(osv.Model):
             return value
         else:
             value = {
-                'name': 'Student',
+                'name': 'Student Registration',
                 'view_mode': 'form',
                 'view_type': 'form',
                 'res_model': 'op.registration',

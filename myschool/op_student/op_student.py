@@ -167,7 +167,9 @@ class op_student(osv.Model):
         if activeId:
 
             registrationRef = self.pool.get('op.registration')
+            enrollmentRef = self.pool.get('op.enrollment')
             registrationId = registrationRef.browse(cr, uid, activeId, context=context)
+            enrollmentId = enrollmentRef.search(cr, uid, [('reg_id', '=', activeId)])
 
             data['title'] = registrationId.title.id
             data['first_name'] = registrationId.first_name
@@ -181,6 +183,7 @@ class op_student(osv.Model):
             data['town'] = registrationId.town
             data['province'] = registrationId.province
             data['nation'] = registrationId.nation
+            data['enrollment_ids'] = enrollmentId
 
         return data
 

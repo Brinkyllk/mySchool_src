@@ -62,8 +62,6 @@ class op_registration(osv.osv):
         else:
             return True
 
-
-
     _name = 'op.registration'
     _rec_name = 'application_number'
 
@@ -121,35 +119,6 @@ class op_registration(osv.osv):
     }
 
     _order = "application_number desc"
-
-    # def confirm_in_progress(self, cr, uid, ids, context=None):
-    #     self.write(cr, uid, ids, {'state': 'i'})
-    #     return True
-
-    # def confirm_selection(self, cr, uid, ids, context=None):
-    #     if context is None:
-    #         context = {}
-    #     student_pool = self.pool.get('op.student')
-    #
-    #     for field in self.browse(cr, uid, ids, context=context):
-    #         vals = {
-    #             'title': field.title and field.title.id or False,
-    #             'first_name': field.first_name,
-    #             'middle_name': field.middle_name,
-    #             'last_name': field.last_name,
-    #             'birth_date': field.birth_date,
-    #             'gender': field.gender,
-    #             'photo': field.photo or False,
-    #             'address_line1': field.address_line1 or False,
-    #             'address_line2': field.address_line2 or False,
-    #             'town': field.town or False,
-    #             'province': field.province or False,
-    #             'nation': field.nation or False,
-    #         }
-    #
-    #     new_student = student_pool.create(cr, uid, vals, context=context)
-    #     self.write(cr, uid, ids, {'state': 's', 'student_id': new_student, 'nbr': 1})
-    #     return True
 
     def default_get(self, cr, uid, fields, context=None):
         data = super(op_registration, self).default_get(cr, uid, fields, context=context)
