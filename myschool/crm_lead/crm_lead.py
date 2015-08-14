@@ -309,7 +309,7 @@ class crm_lead(osv.Model):
         'town': fields.char('town', size=25),
         'province': fields.char('province', size=20),
         'nation': fields.char('nation', size=20),
-        'meeting_count': fields.function(_meeting_count, string='# Meetings', type='integer', store=True),
+        'meeting_count': fields.function(_meeting_count, string='Meeting Count', type='integer', store=True),
 
         'first_name': fields.char('First Name', size=30),
         'last_name': fields.char('Last Name', size=30),
