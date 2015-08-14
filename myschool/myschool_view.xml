@@ -18,7 +18,7 @@
         <!--sub menus-->
         <menuitem id="menu_myschool_config_course_mng" name="Course Management" parent="menu_myschool_conf"/>
         <!--<menuitem id="menu_myschool_config_standard_mng" name="Standard Management" parent="menu_myschool_conf"/>-->
-        <menuitem id="menu_myschool_config_subject_mng" name="Subject(s) Management" parent="menu_myschool_conf"/>
+        <!--<menuitem id="menu_myschool_config_subject_mng" name="Subject(s) Management" parent="menu_myschool_conf"/>-->
         <menuitem id="menu_myschool_config_timetable_mng" name="Timetable Management" parent="menu_myschool_conf"/>
 
         <!--semester action-->
@@ -185,19 +185,21 @@
 
         <!--action menus............. -->
         <menuitem id="menu_student" name="Student" parent="menu_myschool_student" action="act_open_op_student_view"/>
-        <menuitem id="menu_payment_schedule" name="Student Payment Details" parent="menu_myschool_student" action="payment_schedule_act"/>
-        <menuitem id="menu_student_search" name="Student Search" parent="menu_myschool_student" action="act_open_op_student_batch_mapping_view"/>
+        <!--<menuitem id="menu_payment_schedule" name="Student Payment Details" parent="menu_myschool_student" action="payment_schedule_act"/>-->
+        <!--<menuitem id="menu_student_search" name="Student Search" parent="menu_myschool_student" action="act_open_op_student_batch_mapping_view"/>-->
         <menuitem id="menu_student_registration" name="Registration" parent="menu_myschool_registration" action="act_open_op_registration_view"/>
         <menuitem id="menu_lecturer" name="Lecturer" parent="menu_myschool_lecturer" action="act_open_op_lecturer_view"/>
+        <menuitem id="menu_student_enrollment" name="Student Enrollments" parent="menu_myschool_student" action="act_open_op_enrollment_view"/>
 
 
-        <menuitem id="menu_study_programme" name="Study Programmes" parent="menu_myschool_config_course_mng" action="act_op_study_programme_view"/>
-        <menuitem id="menu_course" name="Courses" parent="menu_myschool_config_course_mng" action="action_course"/>
-        <menuitem id="menu_batch" name="Batches" parent="menu_myschool_config_course_mng" action="action_batch"/>
-        <menuitem id="menu_student_enrollment" name="Student Enrollment" parent="menu_myschool_config_course_mng" action="act_open_op_enrollment_view"/>
+        <menuitem id="menu_study_programme" name="Study Programmes" parent="menu_myschool_config_course_mng" action="act_op_study_programme_view" sequence="1"/>
+        <menuitem id="menu_batch" name="Batches" parent="menu_myschool_config_course_mng" action="action_batch" sequence="2"/>
+        <menuitem id="menu_subject" name="Subjects" parent="menu_myschool_config_course_mng" action="action_subject" sequence="3"/>
+        <menuitem id="menu_course" name="Courses" parent="menu_myschool_config_course_mng" action="action_course" sequence="4"/>
+
         <!--<menuitem id="menu_semester" name="Academic Term" parent="menu_myschool_config_standard_mng" action="act_open_op_semester_view" sequence="1"/>-->
         <!--<menuitem id="menu_standard" name="Standard" parent="menu_myschool_config_standard_mng" action="act_open_op_standard_view" sequence="2"/>-->
-        <menuitem id="menu_subject" name="Subjects" parent="menu_myschool_config_subject_mng" action="action_subject"/>
+
 
         <menuitem id="menu_timetable" name="Timetable" parent="menu_myschool_timetable" action="act_open_op_timetable_view"/>
         <menuitem id="menu_period" name="Period" parent="menu_myschool_config_timetable_mng" action="act_open_op_period_view"/>

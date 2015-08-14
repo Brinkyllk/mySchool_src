@@ -24,8 +24,10 @@ class op_batch(osv.Model):
         'name': fields.char(size=25, string='Name', required=True),
         'study_prog_code': fields.many2one('op.study.programme', string="Study Programme", required=True),
         'batch_no': fields.char(size=8, string='Batch No', required=True),
-        'start_date': fields.date(size=15, string='Start Date', required=True),
-        'end_date': fields.date(size=15, string='End Date', required=True,),
+        'planned_start_date': fields.date(size=15, string='Planned Start Date', required=True),
+        'planned_end_date': fields.date(size=15, string='Planned End Date', required=True,),
+        'actual_start_date': fields.date(size=15, string="Actual Start Date"),
+        'actual_end_date': fields.date(size=15, string="Actual End Date"),
         'price': fields.float(string='Price'),
         'state': fields.selection(
             [('planned', 'Planned'), ('running', 'Running'), ('cancel', 'Cancel'), ('finished', 'finished')],
