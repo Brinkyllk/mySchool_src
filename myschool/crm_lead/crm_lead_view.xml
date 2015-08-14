@@ -362,7 +362,7 @@
                         <field name="evening"/>
                     </xpath>
                     <xpath  expr="//field[@name='stage_id']" position="after">
-                        <field name="meeting_count"/>
+                        <field name="meeting_count" sum="Sum Followups"/>
                     </xpath>
                 </data>
             </field>
@@ -457,6 +457,19 @@
                     <field name="categ_ids" position="attributes">
                         <attribute name="invisible">1</attribute>
                     </field>
+                </data>
+            </field>
+        </record>
+
+         <record id="crm_case_tree_view_oppor_inherit" model="ir.ui.view">
+            <field name="name">crm.lead.oppor.tree.inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='user_id']" position="after">
+                        <field string="#Follow-ups" name="meeting_count" widget="statinfo" sum="Sum Expected"/>
+                    </xpath>
                 </data>
             </field>
         </record>
