@@ -14,7 +14,7 @@
     """,
     'author': 'OpenArc System Management Pvt. Ltd.',
     'website': 'http://www.openarc.lk',
-    'depends': ['product', 'web', 'base','account', 'crm', 'marketing_crm'],
+    'depends': ['product', 'web', 'base', 'crm', 'marketing_crm'],
     'data': [
         'op_subject/op_subject_view.xml',
         'op_course/op_course_view.xml',
