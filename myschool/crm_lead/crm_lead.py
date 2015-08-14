@@ -7,24 +7,84 @@ import re
 class crm_tags(osv.Model):
     _name = "crm.tags"
     _columns = {
-        'code': fields.char('Code', required=True),
-        'name': fields.char('Name', required=True)
-    }
-
-
-class modes(osv.Model):
-    _name = 'modes'
-    _columns = {
         'code': fields.char('Code', required=True, size=5),
-        'name': fields.char('Name', required=True, size=20)
+        'name': fields.char('Name', required=True, size=30)
     }
 
     # ----------------Validations----------------------- s#
     # ---------code validation------------- s#
     def code_validation(self, cr, uid, ids, code):
+        crm_tag_code = str(code).replace(" ", "")
+        crm_tag_code = ''.join([i for i in crm_tag_code if not i.isdigit()])
         if str(code).isspace():
             raise osv.except_osv(_('Invalid Code !'), _('Only Spaces not allowed'))
-        elif str(code).isalpha() or str(code).isdigit():
+        elif crm_tag_code.isalpha():
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Code !'), _('Please Enter the code correctly'))
+
+    # -----------name validation----------- s#
+    def name_validation(self, cr, uid, ids, name):
+        tag_name = str(name).replace(" ", "")
+        if str(name).isspace():
+            raise osv.except_osv(_('Invalid Name !'), _('Only Spaces not allowed'))
+        elif tag_name.isalpha():
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Name !'), _('Please Enter a valid name'))
+
+    # ------------Override the create method----------- s#
+    def create(self, cr, uid, vals, context=None):
+        # ----------code validation caller------- s#
+        if 'code' in vals:
+            self.code_validation(cr, uid, [], vals['code'])
+
+        # ----------name validation caller------- s#
+        if 'name' in vals:
+            self.name_validation(cr, uid, [], vals['name'])
+
+        # --------removing white spaces---------- s#
+        code = vals['code'].strip().upper().replace(" ", "")
+        name = vals['name'].strip().title()
+        vals.update({'code': code, 'name': name})
+
+        return super(crm_tags, self).create(cr, uid, vals, context=context)
+
+    # -----------Override the write method-------------- s#
+    def write(self, cr, uid, ids, values, context=None):
+        # ----------code validation caller-------- s#
+        if 'code' in values:
+            self.code_validation(cr, uid, [], values['code'])
+
+        # -----------name validation caller------- s#
+        if 'name' in values:
+            self.name_validation(cr, uid, [], values['name'])
+
+        # ------ update the values after removing white spaces---- s#
+        if 'name' in values:
+            name = values['name'].strip().title()
+            values.update({'name': name})
+        if 'code' in values:
+            code = values['code'].strip().upper().reaplace(" ", "")
+            values.update({'code': code})
+
+        return super(crm_tags, self).write(cr, uid, ids, values, context=context)
+
+class modes(osv.Model):
+    _name = 'modes'
+    _columns = {
+        'code': fields.char('Code', required=True, size=5),
+        'name': fields.char('Name', required=True, size=30)
+    }
+
+    # ----------------Validations----------------------- s#
+    # ---------code validation------------- s#
+    def code_validation(self, cr, uid, ids, code):
+        modes_code = str(code).replace(" ", "")
+        modes_code = ''.join([i for i in modes_code if not i.isdigit()])
+        if str(code).isspace():
+            raise osv.except_osv(_('Invalid Code !'), _('Only Spaces not allowed'))
+        elif str(modes_code).isalpha():
             return True
         else:
             raise osv.except_osv(_('Invalid Code !'), _('Please Enter the code correctly'))
@@ -50,8 +110,8 @@ class modes(osv.Model):
             self.name_validation(cr, uid, [], vals['name'])
 
         # --------removing white spaces---------- s#
-        code = vals['code'].strip()
-        name = vals['name'].strip()
+        code = vals['code'].strip().upper().replace(" ", "")
+        name = vals['name'].strip().title()
         vals.update({'code': code, 'name': name})
 
         return super(modes, self).create(cr, uid, vals, context=context)
@@ -68,10 +128,10 @@ class modes(osv.Model):
 
         # ------ update the values after removing white spaces---- s#
         if 'name' in values:
-            name = values['name'].strip()
+            name = values['name'].strip().title()
             values.update({'name': name})
         if 'code' in values:
-            code = values['code'].strip()
+            code = values['code'].strip().upper().replace(" ", "")
             values.update({'code': code})
 
         return super(modes, self).write(cr, uid, ids, values, context=context)
@@ -80,9 +140,44 @@ class modes(osv.Model):
 class time_frame(osv.Model):
     _name = 'time.frame'
     _columns = {
-        'name': fields.char('Time Frame')
+        'name': fields.char('Time Frame', size=30, required=True)
     }
 
+    # ----------------Validations----------------------- s#
+    # -----------name validation----------- s#
+    def name_validation(self, cr, uid, ids, name):
+        follow_up_type_name = str(name).replace(" ", "")
+        if str(name).isspace():
+            raise osv.except_osv(_('Invalid Name !'), _('Only Spaces not allowed'))
+        elif follow_up_type_name.isalpha():
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Name !'), _('Please Enter a valid name'))
+
+    # ------------Override the create method----------- s#
+    def create(self, cr, uid, vals, context=None):
+        # ----------name validation caller------- s#
+        if 'name' in vals:
+            self.name_validation(cr, uid, [], vals['name'])
+
+        # --------removing white spaces---------- s#
+        name = vals['name'].strip().title()
+        vals.update({'name': name})
+
+        return super(time_frame, self).create(cr, uid, vals, context=context)
+
+    # -----------Override the write method-------------- s#
+    def write(self, cr, uid, ids, values, context=None):
+        # -----------name validation caller------- s#
+        if 'name' in values:
+            self.name_validation(cr, uid, [], values['name'])
+
+        # ------ update the values after removing white spaces---- s#
+        if 'name' in values:
+            name = values['name'].strip().title()
+            values.update({'name': name})
+
+        return super(time_frame, self).write(cr, uid, ids, values, context=context)
 
 class crm_tracking_campaign(osv.Model):
     _inherit = 'crm.tracking.campaign'
@@ -104,10 +199,68 @@ class crm_tracking_source(osv.Model):
 class follow_up_type(osv.Model):
     _name = 'follow.up.type'
     _columns = {
-        'code': fields.char('Code', required=True),
-        'name': fields.char('Name', required=True)
+        'code': fields.char('Code', required=True, size=4),
+        'name': fields.char('Name', required=True, size=30)
     }
 
+    # ----------------Validations----------------------- s#
+    # ---------code validation------------- s#
+    def code_validation(self, cr, uid, ids, code):
+        follow_up_type_code = str(code).replace(" ", "")
+        follow_up_type_code = ''.join([i for i in follow_up_type_code if not i.isdigit()])
+        if str(code).isspace():
+            raise osv.except_osv(_('Invalid Code !'), _('Only Spaces not allowed'))
+        elif str(follow_up_type_code).isalpha():
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Code !'), _('Please Enter the code correctly'))
+
+    # -----------name validation----------- s#
+    def name_validation(self, cr, uid, ids, name):
+        follow_up_type_name = str(name).replace(" ", "")
+        if str(name).isspace():
+            raise osv.except_osv(_('Invalid Name !'), _('Only Spaces not allowed'))
+        elif follow_up_type_name.isalpha():
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Name !'), _('Please Enter a valid name'))
+
+    # ------------Override the create method----------- s#
+    def create(self, cr, uid, vals, context=None):
+        # ----------code validation caller------- s#
+        if 'code' in vals:
+            self.code_validation(cr, uid, [], vals['code'])
+
+        # ----------name validation caller------- s#
+        if 'name' in vals:
+            self.name_validation(cr, uid, [], vals['name'])
+
+        # --------removing white spaces---------- s#
+        code = vals['code'].strip().upper().replace(" ", "")
+        name = vals['name'].strip().title()
+        vals.update({'code': code, 'name': name})
+
+        return super(follow_up_type, self).create(cr, uid, vals, context=context)
+
+    # -----------Override the write method-------------- s#
+    def write(self, cr, uid, ids, values, context=None):
+        # ----------code validation caller-------- s#
+        if 'code' in values:
+            self.code_validation(cr, uid, [], values['code'])
+
+        # -----------name validation caller------- s#
+        if 'name' in values:
+            self.name_validation(cr, uid, [], values['name'])
+
+        # ------ update the values after removing white spaces---- s#
+        if 'name' in values:
+            name = values['name'].strip().title()
+            values.update({'name': name})
+        if 'code' in values:
+            code = values['code'].strip().upper().replace(" ", "")
+            values.update({'code': code})
+
+        return super(follow_up_type, self).write(cr, uid, ids, values, context=context)
 
 class crm_lead(osv.Model):
 
@@ -456,21 +609,21 @@ class crm_lead(osv.Model):
 
         # ------update company name after strip()---- s#
         if vals['partner_name'] is not False:
-            partner_name = vals['partner_name'].strip()
+            partner_name = vals['partner_name'].strip().title()
             vals.update({'partner_name': partner_name})
         else:
             pass
 
         # ----------update contact name---------- s#
         if vals['first_name'] is not False:
-            first_name = vals['first_name'].strip()
+            first_name = vals['first_name'].strip().title()
             vals.update({'first_name': first_name})
         else:
             pass
 
         # ----------update contact name---------- s#
         if vals['last_name'] is not False:
-            last_name = vals['last_name'].strip()
+            last_name = vals['last_name'].strip().title()
             vals.update({'last_name': last_name})
         else:
             pass
@@ -557,7 +710,7 @@ class crm_lead(osv.Model):
         # ------update company name----- s#
         if 'partner_name' in values:
             if values['partner_name'] is not False:
-                partner_name = values['partner_name'].strip()
+                partner_name = values['partner_name'].strip().title()
                 values.update({'partner_name': partner_name})
             else:
                 pass
@@ -565,7 +718,7 @@ class crm_lead(osv.Model):
         # ----------update first name---------- s#
         if 'first_name' in values:
             if values['first_name'] is not False:
-                first_name = values['first_name'].strip()
+                first_name = values['first_name'].strip().title()
                 values.update({'first_name': first_name})
             else:
                 pass
@@ -573,7 +726,7 @@ class crm_lead(osv.Model):
         # ---------update last name------------ s#
         if 'last_name' in values:
             if values['last_name'] is not False:
-                last_name = values['last_name'].strip()
+                last_name = values['last_name'].strip().title()
                 values.update({'last_name': last_name})
             else:
                 pass
@@ -589,30 +742,6 @@ class crm_lead(osv.Model):
     ]
 
 
-class time_frame(osv.Model):
-    _name = 'time.frame'
-    _columns = {
-        'name': fields.char('Time Frame')
-    }
-
-
-class crm_tracking_campaign(osv.Model):
-    _inherit = 'crm.tracking.campaign'
-    _description = "adding fields to crm.lead"
-    _columns = {
-        'source_id': fields.many2many('crm.tracking.source', 'campaign_source_rel', 'campaign_id', 'source_id',
-                                      'Source(s)'),
-    }
-
-
-class crm_tracking_source(osv.Model):
-    _inherit = 'crm.tracking.source'
-    _description = "adding fields to crm.lead"
-    _columns = {
-        'channel_id': fields.many2one('crm.tracking.medium', 'Channel'),
-    }
-
-
 class calendar_event(osv.Model):
     _inherit = 'calendar.event'
     _columns = {
@@ -626,11 +755,3 @@ class calendar_event(osv.Model):
             data['opportunity_id'] = activeId
         return data
 calendar_event()
-
-
-class follow_up_type(osv.Model):
-    _name = 'follow.up.type'
-    _columns = {
-        'code': fields.char('Code', required=True),
-        'name': fields.char('Name', required=True)
-    }
