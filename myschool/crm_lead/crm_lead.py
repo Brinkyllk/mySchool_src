@@ -2,6 +2,10 @@ from openerp.osv import osv, fields
 from openerp.tools.translate import _
 from openerp import api
 import re
+import datetime
+import dateutil
+from datetime import date
+from dateutil import parser
 
 
 class crm_tags(osv.Model):
@@ -69,6 +73,7 @@ class crm_tags(osv.Model):
             values.update({'code': code})
 
         return super(crm_tags, self).write(cr, uid, ids, values, context=context)
+
 
 class modes(osv.Model):
     _name = 'modes'
@@ -179,6 +184,7 @@ class time_frame(osv.Model):
 
         return super(time_frame, self).write(cr, uid, ids, values, context=context)
 
+
 class crm_tracking_campaign(osv.Model):
     _inherit = 'crm.tracking.campaign'
     _description = "adding fields to crm.lead"
@@ -262,6 +268,7 @@ class follow_up_type(osv.Model):
 
         return super(follow_up_type, self).write(cr, uid, ids, values, context=context)
 
+
 class crm_lead(osv.Model):
 
     # check prospective_student limit
@@ -287,6 +294,7 @@ class crm_lead(osv.Model):
             opp_id: Event.search_count(cr,uid, [('opportunity_id', '=', opp_id)], context=context)
             for opp_id in ids
         }
+
 
     _columns = {
         'name': fields.char(string='Subject', size=57, select=1),
@@ -531,6 +539,17 @@ class crm_lead(osv.Model):
         else:
             raise osv.except_osv(_('Invalid Contact Name'), _('Please enter a correct Contact name'))
 
+    # -------Expected date validation------------------- s#
+    def backdat_validation(self, cr, uid, ids, date):
+        now = datetime.datetime.today()
+        today = now.strftime('%Y-%m-%d')
+        date_today = dateutil.parser.parse(today).date()
+        assigned_date = dateutil.parser.parse(date).date()
+        if date_today < assigned_date:
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Expected Closing Date!'), _('Enter a Future Date..'))
+
     def create(self, cr, uid, vals, context=None):
         # ----------company name validation caller by s------- #
         if 'partner_name' in vals:
@@ -558,6 +577,10 @@ class crm_lead(osv.Model):
 
         if 'name' in vals:
             self._check_invalid_data(cr, uid, [], vals['name'])
+
+        # --------Expected date validation-------------------- s#
+        if 'date_deadline' in vals:
+            self.backdat_validation(cr, uid, [], vals['date_deadline'])
 
         # ---------------email validation on create------------ #
         if 'email_from' in vals:
@@ -654,6 +677,10 @@ class crm_lead(osv.Model):
         # -----fax number validation function caller by s------------- #
         if 'fax' in values:
             self.faxNumberValidation(cr, uid, [], values['fax'])
+
+        # --------Expected date validation-------------------- s#
+        if 'date_deadline' in values:
+            self.backdat_validation(cr, uid, [], values['date_deadline'])
 
         if 'name' in values:
             self._check_invalid_data(cr, uid, [], values['name'])
