@@ -233,9 +233,7 @@
                             <label for="modes" class="oe_edit_only"/>
                             <field name="modes"/>
                         </div>
-
                     </xpath>
-
                     <xpath expr="//field[@name='street']" position="replace">
                         <field name="address_line1" placeholder="Address line 1"/>
                     </xpath>
@@ -245,32 +243,25 @@
                     <xpath expr="//div[@class='address_format']" position="replace">
                         <div class="address_format">
                             <field name="town" placeholder="City" style="width: 50%%"/>
-                            <field name="province"
-                                   placeholder="Province" style="width: 50%%" />
+                            <field name="province" placeholder="Province" style="width: 50%%" />
                         </div>
                     </xpath>
                     <xpath expr="//field[@name='country_id']" position="replace">
                          <field name="nation" class="oe_no_button" placeholder="Country" style="width: 100%%" options='{"no_open": True}'/>
                     </xpath>
-
                     <xpath expr="//label[@for='contact_name']" position="replace">
                         <label for="first_name" string="Contact Name"/>
                     </xpath>
-
                     <xpath expr="//field[@name='contact_name']" position="replace">
                         <field name="first_name" placeholder="First name"/>
                         <field name="last_name" placeholder="Last name"/>
                     </xpath>
-
                     <xpath expr="//field[@name='partner_id']" position="replace">
                          <field name="partner_id" string="Customer"
                                 on_change="on_change_partner_id(partner_id)"
                                 options='{"create_name_field": "name"}'
                                 context="{'default_name': first_name, 'default_street': address_line1, 'default_city': town, 'default_state_id': province, 'default_country_id': nation, 'default_function': function, 'default_phone': phone, 'default_mobile': mobile, 'default_fax': fax, 'default_email': email_from, 'default_user_id': user_id, 'default_section_id': section_id}"/>
                     </xpath>
-
-
-
                     <xpath  expr="//notebook" position="inside">
                         <page string="Course(s) Info">
                             <separator colspan="4" string="Study Programme Details"/>
@@ -302,18 +293,8 @@
                             <field name="date_closed"/>
                         </group>
                     </xpath>
-
                     <xpath  expr="//div[@class='oe_right oe_button_box']" position="replace">
                         <div class="oe_right oe_button_box" name="buttons">
-                            <!--<button class="oe_inline oe_stat_button" type="object"-->
-                                    <!--context="{'default_opportunity_id': active_id,-->
-                            <!--'search_default_opportunity_id': active_id,-->
-                            <!--'default_partner_id': partner_id,-->
-                            <!--'default_duration': 1.0}"-->
-                                    <!--name="action_schedule_meeting"-->
-                                    <!--icon="fa-bell">-->
-                                <!--<div>Schedule<br/>Follow-up</div>-->
-                            <!--</button>-->
                             <button class="oe_inline oe_stat_button" type="action"
                                 context="{'partner_id': partner_id}"
                                 name="%(action_crm_followup)d" icon="fa-bell">
@@ -335,6 +316,9 @@
                         <attribute name="invisible">1</attribute>
                     </field>
                     <field name="date_closed" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </field>
+                    <field name="partner_id" position="attributes">
                         <attribute name="invisible">1</attribute>
                     </field>
                 </data>
