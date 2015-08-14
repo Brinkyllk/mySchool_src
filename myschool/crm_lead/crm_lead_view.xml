@@ -393,8 +393,14 @@
                             </page>
                         </page>
                     </xpath>
-                    <xpath  expr="//group[@string='Misc']" position="inside">
-                        <field name="inquiry_date"/>
+                    <xpath  expr="//group[@string='Misc']" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </xpath>
+                    <xpath  expr="//group[@string='Mailings']" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </xpath>
+                    <xpath  expr="//group[@string='References']" position="attributes">
+                        <attribute name="invisible">1</attribute>
                     </xpath>
                     <xpath  expr="//div[@class='oe_right oe_button_box']" position="replace">
                         <div class="oe_right oe_button_box" name="buttons">
@@ -425,7 +431,7 @@
                         </div>
                     </xpath>
                     <xpath expr="//field[@name='country_id']" position="replace">
-                         <field name="nation" class="oe_no_button" placeholder="Country" style="width: 100%%" options='{"no_open": True}'/>
+                        <field name="nation" class="oe_no_button" placeholder="Country" style="width: 100%%" options='{"no_open": True}'/>
                     </xpath>
                     <xpath expr="//field[@name='contact_name']" position="replace">
                         <field name="first_name" placeholder="First name"/>
@@ -441,6 +447,9 @@
                         <field name="priority" widget="priority"/>
                         <field name="categ_ids"/>
                         </group>
+                    </xpath>
+                    <xpath expr="//field[@name='fax']" position="after">
+                        <field name="inquiry_date"/>
                     </xpath>
                     <field name="title_action" position="attributes">
                         <attribute name="invisible">1</attribute>
