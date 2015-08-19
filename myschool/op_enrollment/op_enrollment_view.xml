@@ -1,6 +1,46 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
+
+        <!--kanban view-->
+        <record model="ir.ui.view" id="kanban_view_op_enrollment">
+			<field name="name">Student Enrollment Kanban</field>
+			<field name="model">op.enrollment</field>
+			<field name="arch" type="xml">
+				<kanban>
+					<templates create="False">
+						<t t-name="kanban-box">
+                                <div class="oe_kanban_vignette oe_semantic_html_override">
+                                    <div class="oe_kanban_image">
+                                        <a type="open">
+                                            <img t-att-src="kanban_image('op.student', 'image', record.id.value)"
+                                                class="oe_kanban_image" />
+                                        </a>
+                                    </div>
+                                    <div class="oe_kanban_details">
+                                        <h4>
+                                            <a type="open">
+                                                <field name="student_id" />
+                                            </a>
+                                        </h4>
+                                        <ul>
+                                            <li t-if="record.batch_code.raw_value"><field name="batch_code" /></li>
+                                            <li t-if="record.lead_id.raw_value"><field name="lead_id" /></li>
+                                            <li t-if="record.payment_term.raw_value"><field name="payment_term" /></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            <!--</div>-->
+							<script> $('.oe_employee_picture').load(function() {
+								if($(this).width() > $(this).height()) {
+								$(this).addClass('oe_employee_picture_wide') } });
+							</script>
+						</t>
+					</templates>
+				</kanban>
+			</field>
+		</record>
+
         <record id="view_op_enrollment_form" model="ir.ui.view">
             <field name="name">op.enrollment.form</field>
             <field name="model">op.enrollment</field>
@@ -56,10 +96,17 @@
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">op.enrollment</field>
 			<field name="view_type">form</field>
-			<field name="view_mode">tree,form</field>
+			<field name="view_mode">kanban,tree,form</field>
 			<!--<field name="search_view_id" ref="view_op_batch_search" />-->
 			<field name="domain">[]</field>
 			<field name="context">{}</field>
+		</record>
+
+        <record model="ir.actions.act_window.view" id="act_open_op_enrollment_view_kanban">
+			<field name="act_window_id" ref="act_open_op_enrollment_view" />
+			<field name="sequence" eval="6" />
+			<field name="view_mode">kanban</field>
+			<field name="view_id" ref="kanban_view_op_enrollment" />
 		</record>
 
     </data>
