@@ -359,7 +359,7 @@ class crm_lead(osv.Model):
         else:
             return True
 
-    # -----check spaces in country---------------#
+    # -----check spaces in country--------------#
     def _check_nation(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids, context=context)
         value = str(obj.nation)
