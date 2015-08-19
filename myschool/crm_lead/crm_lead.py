@@ -2,7 +2,6 @@ from openerp.osv import osv, fields
 from openerp.tools.translate import _
 from openerp import api
 import re
-import datetime
 import dateutil
 from dateutil import parser
 import datetime
@@ -360,7 +359,7 @@ class crm_lead(osv.Model):
         else:
             return True
 
-    # -----check spaces in country--------------#
+    # -----check spaces in country---------------#
     def _check_nation(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids, context=context)
         value = str(obj.nation)
@@ -657,7 +656,7 @@ class crm_lead(osv.Model):
         return super(crm_lead, self).create(cr, uid, vals, context=context)
 
     def write(self, cr, uid, ids, values, context=None):
-        # ----------company name validation caller by s------- #
+        # ----------company name validation caller by ------- s#
         if 'partner_name' in values:
             self.companyNameValidation(cr, uid, [], values['partner_name'])
 
