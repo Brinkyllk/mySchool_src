@@ -2,6 +2,7 @@ from openerp.osv import osv, fields
 from openerp.tools.translate import _
 from openerp import api
 import re
+import datetime
 import dateutil
 from dateutil import parser
 import datetime
@@ -630,23 +631,26 @@ class crm_lead(osv.Model):
         vals.update({'name': name})
 
         # ------update company name after strip()---- s#
-        if vals['partner_name'] in vals:
-            partner_name = vals['partner_name'].strip().title()
-            vals.update({'partner_name': partner_name})
+        if 'partner_name' in vals:
+            if vals['partner_name'] is not False:
+                partner_name = vals['partner_name'].strip().title()
+                vals.update({'partner_name': partner_name})
         else:
             pass
 
         # ----------update contact name---------- s#
-        if vals['first_name'] in vals:
-            first_name = vals['first_name'].strip().title()
-            vals.update({'first_name': first_name})
+        if 'first_name' in vals:
+            if vals['first_name'] is not False:
+                first_name = vals['first_name'].strip().title()
+                vals.update({'first_name': first_name})
         else:
             pass
 
         # ----------update contact name---------- s#
-        if vals['last_name'] in vals:
-            last_name = vals['last_name'].strip().title()
-            vals.update({'last_name': last_name})
+        if 'last_name' in vals:
+            if vals['last_name'] is not False:
+                last_name = vals['last_name'].strip().title()
+                vals.update({'last_name': last_name})
         else:
             pass
 
