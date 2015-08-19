@@ -3,8 +3,8 @@ from openerp.tools.translate import _
 from openerp import api
 import re
 import dateutil
-from datetime import date
 from dateutil import parser
+import datetime
 
 
 class crm_tags(osv.Model):
