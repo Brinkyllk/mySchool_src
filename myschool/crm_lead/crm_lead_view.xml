@@ -59,7 +59,7 @@
                                     <group>
                                         <field name="categ_ids" widget="many2many_tags" />
                                         <field name="alarm_ids" widget="many2many_tags" />
-                                        <field name="location" string="new one"/>
+                                        <!--<field name="location" string="new one"/>-->
                                     </group>
                                 </group>
                                 <label for="description"/>
