@@ -331,6 +331,16 @@ class op_registration(osv.osv):
                 cntry = vals['nation'].strip()
                 vals.update({'nation': cntry})
 
+        k = vals['lead_id']
+        print k
+        leadref = self.pool.get('crm.lead')
+        # leadref.write(cr, uid, k, {'stage_id': 6}, context=context)
+        leadref.write(cr, uid, [k],{ 'stage_id': 6})
+
+
+
+
+
         #return super(op_registration, self).create(cr, uid, vals, context=context)
 
         #-----Check whether enrollment has or not-------#
