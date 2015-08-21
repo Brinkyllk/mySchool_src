@@ -122,7 +122,7 @@ class op_student(osv.Model):
         'middle_name': fields.char(size=15, string='Middle Name'),
         'last_name': fields.char(size=20, string='Last Name', required=True, select=True),
         'gender': fields.selection([('m', 'Male'), ('f', 'Female'), ('o', 'Other')], string='Gender', required=True),
-        'birth_date': fields.date(string='Birth Date', required=True),
+        'birth_date': fields.date(string='Birth Date'),
         'register_date': fields.date(string='Registered Date'),
         'nationality': fields.many2one('res.country', string='Nationality test'),
         'language': fields.many2one('res.lang', string='Mother Tongue'),

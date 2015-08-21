@@ -389,8 +389,8 @@ class crm_lead(osv.Model):
                                          'To relieve your sales pipe and group all Won opportunities, configure one of your sales stage as follow:\n'
                                          'probability = 100 % and select "Change Probability Automatically".\n'
                                          'Create a specific stage or edit an existing one by editing columns of your opportunity pipe.'))
-        for stage_id, lead_ids in stages_leads.items():
-            self.write(cr, uid, lead_ids, {'stage_id': stage_id}, context=context)
+        # for stage_id, lead_ids in stages_leads.items():
+        #     self.write(cr, uid, lead_ids, {'stage_id': stage_id}, context=context)
 
         # open student profile or registrtion form
         crmRef = self.pool.get('crm.lead')
