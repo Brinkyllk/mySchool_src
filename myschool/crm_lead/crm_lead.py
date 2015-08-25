@@ -144,7 +144,7 @@ class op_lead_modes(osv.Model):
 class op_time_frame(osv.Model):
     _name = 'op.time.frame'
     _columns = {
-        'name': fields.char('Time Frame', size=30, required=True)
+        'name': fields.char('Time Frame', size=30, ondelete='no action', required=True)
     }
 
     # ----------------Validations----------------------- s#
@@ -188,8 +188,8 @@ class op_time_frame(osv.Model):
         crmLead = self.pool.get('crm.lead')
         for values in vals:
             k = [values]
-            cr.execute('SELECT lead_id FROM op_anytime_time_frame_rel '\
-                           'WHERE time_frame_id = %s ', (k))
+            cr.execute('SELECT lead_id FROM op_anytime_time_frame_rel ' \
+                       'WHERE time_frame_id = %s ', (k))
 
             op_anytime_time_frame_rel_id = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
             if op_anytime_time_frame_rel_id:
@@ -199,8 +199,8 @@ class op_time_frame(osv.Model):
             else:
                 anyTime = 0
 
-            cr.execute('SELECT lead_id FROM op_afternoon_time_frame_rel '\
-                           'WHERE time_frame_id = %s ', (k))
+            cr.execute('SELECT lead_id FROM op_afternoon_time_frame_rel ' \
+                       'WHERE time_frame_id = %s ', (k))
 
             op_afternoon_time_frame_rel_id = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
             if op_afternoon_time_frame_rel_id:
@@ -210,8 +210,8 @@ class op_time_frame(osv.Model):
             else:
                 afternoon = 0
 
-            cr.execute('SELECT lead_id FROM op_evening_time_frame_rel '\
-                           'WHERE time_frame_id = %s ', (k))
+            cr.execute('SELECT lead_id FROM op_evening_time_frame_rel ' \
+                       'WHERE time_frame_id = %s ', (k))
 
             op_evening_time_frame_rel_id = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
             if op_evening_time_frame_rel_id:
@@ -221,8 +221,8 @@ class op_time_frame(osv.Model):
             else:
                 evening = 0
 
-            cr.execute('SELECT lead_id FROM op_morning_time_frame_rel '\
-                           'WHERE time_frame_id = %s ', (k))
+            cr.execute('SELECT lead_id FROM op_morning_time_frame_rel ' \
+                       'WHERE time_frame_id = %s ', (k))
 
             op_morning_time_frame_rel_id = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
             if op_morning_time_frame_rel_id:
@@ -248,11 +248,7 @@ class op_time_frame(osv.Model):
                 # return super(op_time_frame, self).unlink(cr, uid, vals, context=context)
                 raise osv.except_osv('You can not delete this record', 'This Time Frame already referred in another location')
 
-
-
-
-        return super(calendar_event, self).unlink(cr, uid, vals, context=context)
-
+        return super(op_time_frame, self).unlink(cr, uid, vals, context=context)
 
 
 class crm_tracking_campaign(osv.Model):
@@ -261,7 +257,7 @@ class crm_tracking_campaign(osv.Model):
     _columns = {
         'source_id': fields.many2many('crm.tracking.source', 'campaign_source_rel', 'campaign_id', 'source_id',
                                       'Source(s)'),
-    }
+        }
 
 
 class crm_tracking_source(osv.Model):
@@ -269,7 +265,7 @@ class crm_tracking_source(osv.Model):
     _description = "adding fields to crm.lead"
     _columns = {
         'channel_id': fields.many2one('crm.tracking.medium', 'Channel'),
-    }
+        }
 
 
 class op_follow_up_type(osv.Model):
@@ -370,21 +366,17 @@ class crm_lead(osv.Model):
                                       select=True,
                                       help="Linked student (optional). Usually created when converting the lead.",
                                       domain="[('is_student', '=', True)]"),
-        'modes': fields.many2one('op_lead_modes', 'Mode of Inquiry'),
+        'modes': fields.many2one('op.lead.modes', 'Mode of Inquiry'),
         'courses_interested': fields.many2many('op.study.programme', 'op_study_programme_lead_rel', 'lead_id',
                                                'study_programme_id',
                                                'Study programme(s) Interested'),
-        'anytime': fields.many2many('op.time.frame', 'op_anytime_time_frame_rel', 'lead_id',
-                                    'time_frame_id',
+        'anytime': fields.many2many('op.time.frame', 'op_anytime_time_frame_rel', 'lead_id', 'time_frame_id',
                                     'Anytime'),
-        'morning': fields.many2many('op.time.frame', 'op_morning_time_frame_rel', 'lead_id',
-                                    'time_frame_id',
+        'morning': fields.many2many('op.time.frame', 'op_morning_time_frame_rel', 'lead_id', 'time_frame_id',
                                     'Morning'),
-        'afternoon': fields.many2many('op.time.frame', 'op_afternoon_time_frame_rel', 'lead_id',
-                                      'time_frame_id',
+        'afternoon': fields.many2many('op.time.frame', 'op_afternoon_time_frame_rel', 'lead_id', 'time_frame_id',
                                       'Afternoon'),
-        'evening': fields.many2many('op.time.frame', 'op_evening_time_frame_rel', 'lead_id',
-                                    'time_frame_id',
+        'evening': fields.many2many('op.time.frame', 'op_evening_time_frame_rel', 'lead_id', 'time_frame_id',
                                     'Evening'),
         'prospective_student': fields.integer(size=5, string='# Prospective Students'),
         'inquiry_date': fields.date(string='Inquiry Date'),
@@ -402,7 +394,7 @@ class crm_lead(osv.Model):
         'first_name': fields.char('First Name', size=30),
         'last_name': fields.char('Last Name', size=30),
 
-    }
+        }
 
     # ------check spaces in address line one---------#
     def _check_add_l_one(self, cr, uid, ids, context=None):
@@ -505,7 +497,7 @@ class crm_lead(osv.Model):
                     'type': 'ir.actions.act_window',
                     'nodestroy': True,
                     'target': 'current',
-                }
+                    }
                 return value
             else:
                 value = {
@@ -531,7 +523,7 @@ class crm_lead(osv.Model):
                 'type': 'ir.actions.act_window',
                 'nodestroy': True,
                 'target': 'new',
-            }
+                }
             return value
         return True
 
@@ -623,14 +615,17 @@ class crm_lead(osv.Model):
 
     # -------Expected date validation------------------- s#
     def backdat_validation(self, cr, uid, ids, date):
-        now = datetime.datetime.today()
-        today = now.strftime('%Y-%m-%d')
-        date_today = dateutil.parser.parse(today).date()
-        assigned_date = dateutil.parser.parse(date).date()
-        if date_today < assigned_date:
-            return True
+        if date:
+            now = datetime.datetime.today()
+            today = now.strftime('%Y-%m-%d')
+            date_today = dateutil.parser.parse(today).date()
+            assigned_date = dateutil.parser.parse(date).date()
+            if date_today < assigned_date:
+                return True
+            else:
+                raise osv.except_osv(_('Invalid Expected Closing Date!'), _('Enter a Future Date..'))
         else:
-            raise osv.except_osv(_('Invalid Expected Closing Date!'), _('Enter a Future Date..'))
+            pass
 
     def create(self, cr, uid, vals, context=None):
         # ----------company name validation caller by s------- #
@@ -851,14 +846,32 @@ class crm_lead(osv.Model):
         (_check_town, 'Entered Invalid Data in City !!', ['town']),
         (_check_province, 'Entered Invalid Data in Province !!', ['province']),
         (_check_nation, 'Entered Invalid Data in Country !!', ['nation']),
-    ]
+        ]
 
 
 class calendar_event(osv.Model):
     _inherit = 'calendar.event'
     _columns = {
-        'type': fields.many2one('follow.up.type', 'Follow-up Type')
+        'type': fields.many2one('op.follow.up.type', 'Follow-up Type')
     }
+
+    # ---------repetition validation------------- #
+    def _check_repetitions(self, cr, uid, ids, count):
+        if count == 0:
+            raise osv.except_osv('Number of repetitions', 'Invalid Value !')
+        elif count > 5:
+            raise osv.except_osv('Number of repetitions', 'Limit exceeded !')
+        else:
+            return True
+
+    # ---------repeat validation------------- #
+    def _check_repeat(self, cr, uid, ids, interval):
+        if interval == 0:
+            raise osv.except_osv('Number of repeats', 'Cannot enter Zero value !')
+        elif interval > 5:
+            raise osv.except_osv('Number of repeat', 'Limit exceeded !')
+        else:
+            return True
 
     def default_get(self, cr, uid, fields, context=None):
         data = super(calendar_event, self).default_get(cr, uid, fields, context=context)
@@ -883,6 +896,14 @@ class calendar_event(osv.Model):
         else:
             crmLead.write(cr, uid, [activeID], {'meeting_count': meetingCount})
 
+            # ------repetition validation on create---------------------- #
+        if 'count' in vals:
+            self._check_repetitions(self, cr, uid, vals['count'])
+
+        # ------repeat validation on create---------------------- #
+        if 'interval' in vals:
+            self._check_repeat(self, cr, uid, vals['interval'])
+
         return super(calendar_event, self).create(cr, uid, vals, context=context)
 
     def unlink(self, cr, uid, vals, context=None):
@@ -890,14 +911,14 @@ class calendar_event(osv.Model):
         crmLead = self.pool.get('crm.lead')
         for calenderventID in vals:
             listCalenderventID = [calenderventID]
-            cr.execute('SELECT opportunity_id FROM calendar_event '\
+            cr.execute('SELECT opportunity_id FROM calendar_event ' \
                        'WHERE id=%s ', (listCalenderventID))
 
             opportunityId = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
             intOpportunityId = int(opportunityId[0].id)
             listIntOpportunityId = [intOpportunityId]
 
-            cr.execute('SELECT meeting_count FROM crm_lead '\
+            cr.execute('SELECT meeting_count FROM crm_lead ' \
                        'WHERE id=%s ', (listIntOpportunityId))
 
             meetingCount = crmLead.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
@@ -917,6 +938,18 @@ class calendar_event(osv.Model):
             # updatedCount = realCount - 1
 
         return super(calendar_event, self).unlink(cr, uid, vals, context=context)
+
+    def write(self, cr, uid, ids, values, context=None):
+
+        # ------repetition validation on write---------------------- #
+        if 'count' in values:
+            self._check_repetitions(self, cr, uid, values['count'])
+
+        # ------repeat validation on write---------------------- #
+        if 'interval' in values:
+            self._check_repeat(self, cr, uid, values['interval'])
+
+        return super(calendar_event, self).write(cr, uid, ids, values, context=context)
 calendar_event()
 
 
@@ -927,8 +960,8 @@ class crm_case_stage(osv.Model):
         for calenderventID in vals:
             listCalenderventID = [calenderventID]
 
-            cr.execute('SELECT COUNT(id) FROM crm_lead '\
-                           'WHERE stage_id=%s ', (listCalenderventID))
+            cr.execute('SELECT COUNT(id) FROM crm_lead ' \
+                       'WHERE stage_id=%s ', (listCalenderventID))
 
             opportunityId = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
             intMeetingCount = int(opportunityId[0].id)
@@ -936,7 +969,5 @@ class crm_case_stage(osv.Model):
                 return super(crm_case_stage, self).unlink(cr, uid, vals, context=context)
             else:
                 raise osv.except_osv('You can not delete this record', 'This Stage already referred in another location')
-
-
 
 crm_case_stage()

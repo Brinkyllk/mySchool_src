@@ -13,7 +13,7 @@
                             <group>
                                 <field name="batch_code"/>
                                 <field name="name"/>
-                                <field name="study_prog_code"/>
+                                <field name="study_prog_code" options="{'no_open':True}"/>
                                 <field name="batch_no"/>
                                 <field name="price"/>
                             </group>

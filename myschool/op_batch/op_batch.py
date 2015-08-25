@@ -2,6 +2,7 @@ from openerp.osv import osv, fields
 import datetime
 from openerp import api
 import re
+from openerp.tools.translate import _
 
 
 
@@ -36,7 +37,26 @@ class op_batch(osv.Model):
 
     _sql_constraints = [('batch_code', 'UNIQUE (batch_code)', 'The CODE of the Batch must be unique!')]
 
+    # -----------name validation----------- s#
+    def name_validation(self, cr, uid, ids, name):
+        if str(name).isspace():
+            raise osv.except_osv(_('Invalid Name !'), _('Only Spaces not allowed'))
+        else:
+            return True
+
+    def batch_validation(self, cr, uid, ids, batch_no):
+        if str(batch_no).isspace():
+            raise osv.except_osv(_('Invalid batch no !'), _('Only Spaces not allowed'))
+        else:
+            return True
+
     def create(self, cr, uid, vals, context=None):
+
+        if 'name' in vals:
+            self.name_validation(cr, uid, [], vals['name'])
+
+        if 'batch_no' in vals:
+            self.batch_validation(cr, uid, [], vals['batch_no'])
 
         programme = self.pool.get('op.study.programme').browse(cr, uid, vals['study_prog_code'])
         batch = vals['batch_no']
@@ -48,6 +68,12 @@ class op_batch(osv.Model):
         return res
 
     def write(self, cr, uid, ids,  values, context=None):
+
+        if 'name' in values:
+            self.name_validation(cr, uid, [], values['name'])
+
+        if 'batch_no' in values:
+            self.batch_validation(cr, uid, [], values['batch_no'])
 
         programme_obj = self.browse(cr, uid, ids, context=context)
         # modification of study programme
