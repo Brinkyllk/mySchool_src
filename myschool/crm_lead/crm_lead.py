@@ -293,7 +293,6 @@ class crm_lead(osv.Model):
             for opp_id in ids
         }
 
-
     _columns = {
         'name': fields.char(string='Subject', size=57, select=1),
         'partner_id': fields.many2one('res.partner', 'Partner', ondelete='set null', track_visibility='onchange',
@@ -330,7 +329,7 @@ class crm_lead(osv.Model):
 
     }
 
-    # ------check spaces in address line one----#
+    # ------check spaces in address line one---------#
     def _check_add_l_one(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids, context=context)
         value = str(obj.address_line1)
@@ -376,8 +375,9 @@ class crm_lead(osv.Model):
         else:
             return True
 
-    '''==========When the opportunity won the student is already in the system load the student form with the details
-                else load the load the registration form============'''
+    '''=====When the opportunity won the student is already in the system
+    load the student form with the details
+                else load the load the registration form======='''
 
     def case_mark_won(self, cr, uid, ids, context=None):
         """ Mark the case as won: state=done and probability=100
