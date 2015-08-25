@@ -183,6 +183,77 @@ class op_time_frame(osv.Model):
 
         return super(op_time_frame, self).write(cr, uid, ids, values, context=context)
 
+    def unlink(self, cr, uid, vals, context=None):
+        #When delete followups update meeting count
+        crmLead = self.pool.get('crm.lead')
+        for values in vals:
+            k = [values]
+            cr.execute('SELECT lead_id FROM op_anytime_time_frame_rel '\
+                           'WHERE time_frame_id = %s ', (k))
+
+            op_anytime_time_frame_rel_id = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+            if op_anytime_time_frame_rel_id:
+                int_op_anytime_time_frame_rel_id = int(op_anytime_time_frame_rel_id[0].id)
+                list_int_op_anytime_time_frame_rel_id = [int_op_anytime_time_frame_rel_id]
+                anyTime = len(list_int_op_anytime_time_frame_rel_id)
+            else:
+                anyTime = 0
+
+            cr.execute('SELECT lead_id FROM op_afternoon_time_frame_rel '\
+                           'WHERE time_frame_id = %s ', (k))
+
+            op_afternoon_time_frame_rel_id = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+            if op_afternoon_time_frame_rel_id:
+                int_op_afternoon_time_frame_rel_id = int(op_afternoon_time_frame_rel_id[0].id)
+                list_int_op_afternoon_time_frame_rel_id = [int_op_afternoon_time_frame_rel_id]
+                afternoon = len(list_int_op_afternoon_time_frame_rel_id)
+            else:
+                afternoon = 0
+
+            cr.execute('SELECT lead_id FROM op_evening_time_frame_rel '\
+                           'WHERE time_frame_id = %s ', (k))
+
+            op_evening_time_frame_rel_id = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+            if op_evening_time_frame_rel_id:
+                int_op_evening_time_frame_rel_id = int(op_evening_time_frame_rel_id[0].id)
+                list_int_op_evening_time_frame_rel_id = [int_op_evening_time_frame_rel_id]
+                evening = len(list_int_op_evening_time_frame_rel_id)
+            else:
+                evening = 0
+
+            cr.execute('SELECT lead_id FROM op_morning_time_frame_rel '\
+                           'WHERE time_frame_id = %s ', (k))
+
+            op_morning_time_frame_rel_id = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+            if op_morning_time_frame_rel_id:
+                int_op_morning_time_frame_rel_id = int(op_morning_time_frame_rel_id[0].id)
+                list_int_op_morning_time_frame_rel_id = [int_op_morning_time_frame_rel_id]
+                morning = len(list_int_op_morning_time_frame_rel_id)
+            else:
+                morning = 0
+
+            if morning == 0 and anyTime == 0 and afternoon == 0 and evening == 0:
+                return super(op_time_frame, self).unlink(cr, uid, vals, context=context)
+                # raise osv.except_osv('Invalid Product Price', 'Please enter a valid price')
+            # elif anyTime <= 1:
+            #     # return super(op_time_frame, self).unlink(cr, uid, vals, context=context)
+            #     raise osv.except_osv('Invalid Product Price', 'Please enter a valid price')
+            # elif afternoon <= 1:
+            #     # return super(op_time_frame, self).unlink(cr, uid, vals, context=context)
+            #     raise osv.except_osv('Invalid Product Price', 'Please enter a valid price')
+            # elif evening <= 1:
+            #     # return super(op_time_frame, self).unlink(cr, uid, vals, context=context)
+            #     raise osv.except_osv('Invalid Product Price', 'Please enter a valid price')
+            else:
+                # return super(op_time_frame, self).unlink(cr, uid, vals, context=context)
+                raise osv.except_osv('You can not delete this record', 'This Time Frame already referred in another location')
+
+
+
+
+        return super(calendar_event, self).unlink(cr, uid, vals, context=context)
+
+
 
 class crm_tracking_campaign(osv.Model):
     _inherit = 'crm.tracking.campaign'
@@ -842,7 +913,26 @@ class calendar_event(osv.Model):
             # updatedCount = realCount - 1
 
         return super(calendar_event, self).unlink(cr, uid, vals, context=context)
-
-
-
 calendar_event()
+
+
+class crm_case_stage(osv.Model):
+    _inherit = 'crm.case.stage'
+
+    def unlink(self, cr, uid, vals, context=None):
+        for calenderventID in vals:
+            listCalenderventID = [calenderventID]
+
+            cr.execute('SELECT COUNT(id) FROM crm_lead '\
+                           'WHERE stage_id=%s ', (listCalenderventID))
+
+            opportunityId = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+            intMeetingCount = int(opportunityId[0].id)
+            if intMeetingCount == 0:
+                return super(crm_case_stage, self).unlink(cr, uid, vals, context=context)
+            else:
+                raise osv.except_osv('You can not delete this record', 'This Stage already referred in another location')
+
+
+
+crm_case_stage()
