@@ -3,12 +3,12 @@ from openerp.tools.translate import _
 from openerp import api
 import re
 import dateutil
-from dateutil import parser
 import datetime
+from dateutil import parser
 
 
-class crm_tags(osv.Model):
-    _name = "crm.tags"
+class op_course_tags(osv.Model):
+    _name = "op.course.tags"
     _columns = {
         'code': fields.char('Code', required=True, size=5),
         'name': fields.char('Name', required=True, size=30)
@@ -51,7 +51,7 @@ class crm_tags(osv.Model):
         name = vals['name'].strip().title()
         vals.update({'code': code, 'name': name})
 
-        return super(crm_tags, self).create(cr, uid, vals, context=context)
+        return super(op_course_tags, self).create(cr, uid, vals, context=context)
 
     # -----------Override the write method-------------- s#
     def write(self, cr, uid, ids, values, context=None):
@@ -71,11 +71,11 @@ class crm_tags(osv.Model):
             code = values['code'].strip().upper().reaplace(" ", "")
             values.update({'code': code})
 
-        return super(crm_tags, self).write(cr, uid, ids, values, context=context)
+        return super(op_course_tags, self).write(cr, uid, ids, values, context=context)
 
 
-class modes(osv.Model):
-    _name = 'modes'
+class op_lead_modes(osv.Model):
+    _name = 'op.lead.modes'
     _columns = {
         'code': fields.char('Code', required=True, size=5),
         'name': fields.char('Name', required=True, size=30)
@@ -118,7 +118,7 @@ class modes(osv.Model):
         name = vals['name'].strip().title()
         vals.update({'code': code, 'name': name})
 
-        return super(modes, self).create(cr, uid, vals, context=context)
+        return super(op_lead_modes, self).create(cr, uid, vals, context=context)
 
     # -----------Override the write method-------------- s#
     def write(self, cr, uid, ids, values, context=None):
@@ -138,11 +138,11 @@ class modes(osv.Model):
             code = values['code'].strip().upper().replace(" ", "")
             values.update({'code': code})
 
-        return super(modes, self).write(cr, uid, ids, values, context=context)
+        return super(op_lead_modes, self).write(cr, uid, ids, values, context=context)
 
 
-class time_frame(osv.Model):
-    _name = 'time.frame'
+class op_time_frame(osv.Model):
+    _name = 'op.time.frame'
     _columns = {
         'name': fields.char('Time Frame', size=30, required=True)
     }
@@ -168,7 +168,7 @@ class time_frame(osv.Model):
         name = vals['name'].strip().title()
         vals.update({'name': name})
 
-        return super(time_frame, self).create(cr, uid, vals, context=context)
+        return super(op_time_frame, self).create(cr, uid, vals, context=context)
 
     # -----------Override the write method-------------- s#
     def write(self, cr, uid, ids, values, context=None):
@@ -181,7 +181,7 @@ class time_frame(osv.Model):
             name = values['name'].strip().title()
             values.update({'name': name})
 
-        return super(time_frame, self).write(cr, uid, ids, values, context=context)
+        return super(op_time_frame, self).write(cr, uid, ids, values, context=context)
 
 
 class crm_tracking_campaign(osv.Model):
@@ -201,8 +201,8 @@ class crm_tracking_source(osv.Model):
     }
 
 
-class follow_up_type(osv.Model):
-    _name = 'follow.up.type'
+class op_follow_up_type(osv.Model):
+    _name = 'op.follow.up.type'
     _columns = {
         'code': fields.char('Code', required=True, size=4),
         'name': fields.char('Name', required=True, size=30)
@@ -245,7 +245,7 @@ class follow_up_type(osv.Model):
         name = vals['name'].strip().title()
         vals.update({'code': code, 'name': name})
 
-        return super(follow_up_type, self).create(cr, uid, vals, context=context)
+        return super(op_follow_up_type, self).create(cr, uid, vals, context=context)
 
     # -----------Override the write method-------------- s#
     def write(self, cr, uid, ids, values, context=None):
@@ -265,11 +265,10 @@ class follow_up_type(osv.Model):
             code = values['code'].strip().upper().replace(" ", "")
             values.update({'code': code})
 
-        return super(follow_up_type, self).write(cr, uid, ids, values, context=context)
+        return super(op_follow_up_type, self).write(cr, uid, ids, values, context=context)
 
 
 class crm_lead(osv.Model):
-
     # check prospective_student limit
     def _check_pstudent(self, cr, uid, ids, prospective_student):
         if prospective_student > 999:
@@ -290,7 +289,7 @@ class crm_lead(osv.Model):
     def _meeting_count(self, cr, uid, ids, field_name, arg, context=None):
         Event = self.pool['calendar.event']
         return {
-            opp_id: Event.search_count(cr,uid, [('opportunity_id', '=', opp_id)], context=context)
+            opp_id: Event.search_count(cr, uid, [('opportunity_id', '=', opp_id)], context=context)
             for opp_id in ids
         }
 
@@ -298,17 +297,24 @@ class crm_lead(osv.Model):
     _columns = {
         'name': fields.char(string='Subject', size=57, select=1),
         'partner_id': fields.many2one('res.partner', 'Partner', ondelete='set null', track_visibility='onchange',
-            select=True, help="Linked student (optional). Usually created when converting the lead.", domain="[('is_student', '=', True)]"),
-        'modes': fields.many2one('modes','Mode of Inquiry'),
-        'courses_interested': fields.many2many('op.study.programme', 'study_programme_lead_rel', 'crm_id', 'name',
+                                      select=True,
+                                      help="Linked student (optional). Usually created when converting the lead.",
+                                      domain="[('is_student', '=', True)]"),
+        'modes': fields.many2one('op_lead_modes', 'Mode of Inquiry'),
+        'courses_interested': fields.many2many('op.study.programme', 'op_study_programme_lead_rel', 'lead_id',
+                                               'study_programme_id',
                                                'Study programme(s) Interested'),
-        'anytime': fields.many2many('time.frame', 'anytime_time_frame', 'anytime', 'name', 'Anytime'),
-        'morning': fields.many2many('time.frame', 'morning_time_frame', 'morning', 'name', 'Morning'),
-        'afternoon': fields.many2many('time.frame', 'afternoon_time_frame', 'afternoon', 'name', 'Afternoon'),
-        'evening': fields.many2many('time.frame', 'evening_time_frame', 'evening', 'name', 'Evening'),
+        'anytime': fields.many2many('op.time.frame', 'op_anytime_time_frame_rel', 'lead_id', 'time_frame_id',
+                                    'Anytime'),
+        'morning': fields.many2many('op.time.frame', 'op_morning_time_frame_rel', 'lead_id', 'time_frame_id',
+                                    'Morning'),
+        'afternoon': fields.many2many('op.time.frame', 'op_afternoon_time_frame_rel', 'lead_id', 'time_frame_id',
+                                      'Afternoon'),
+        'evening': fields.many2many('op.time.frame', 'op_evening_time_frame_rel', 'lead_id', 'time_frame_id',
+                                    'Evening'),
         'prospective_student': fields.integer(size=5, string='# Prospective Students'),
         'inquiry_date': fields.date(string='Inquiry Date'),
-        'tags': fields.many2many('crm.tags', 'crm_lead_tags_rel', id1='partner_id', id2='code', string='Tags'),
+        'tags': fields.many2many('op.course.tags', 'op_crm_lead_tags_rel', 'lead_id', 'tag_id', 'Tags'),
         'is_new_course': fields.boolean('New Course', help="Check if the course is not exist"),
 
         'address_line1': fields.char('address line1', size=20),
@@ -316,7 +322,8 @@ class crm_lead(osv.Model):
         'town': fields.char('town', size=25),
         'province': fields.char('province', size=20),
         'nation': fields.char('nation', size=20),
-        'meeting_count': fields.function(_meeting_count, string='#Follow-ups', type='integer', store=True),
+        'meeting_count': fields.integer(string='No.Of Follow-ups'),
+        # 'meeting_count': fields.function(_meeting_count,type='integer', string='#Follow-ups', store=True),
 
         'first_name': fields.char('First Name', size=30),
         'last_name': fields.char('Last Name', size=30),
@@ -371,6 +378,7 @@ class crm_lead(osv.Model):
 
     '''==========When the opportunity won the student is already in the system load the student form with the details
                 else load the load the registration form============'''
+
     def case_mark_won(self, cr, uid, ids, context=None):
         """ Mark the case as won: state=done and probability=100
         """
@@ -422,7 +430,7 @@ class crm_lead(osv.Model):
                     'type': 'ir.actions.act_window',
                     'nodestroy': True,
                     'target': 'current',
-                    }
+                }
                 return value
             else:
                 value = {
@@ -448,7 +456,7 @@ class crm_lead(osv.Model):
                 'type': 'ir.actions.act_window',
                 'nodestroy': True,
                 'target': 'new',
-                }
+            }
             return value
         return True
 
@@ -470,7 +478,7 @@ class crm_lead(osv.Model):
         if phoneNumber is False:
             return True
         if phone_re.match(phoneNumber):
-            valid_phone=True
+            valid_phone = True
             return True
         else:
             raise osv.except_osv(_('Invalid Phone Number'), _('Please enter a valid Phone Number'))
@@ -482,7 +490,7 @@ class crm_lead(osv.Model):
         if mobileNumber is False:
             return True
         if mobile_re.match(mobileNumber):
-            valid_mobile=True
+            valid_mobile = True
             return True
         else:
             raise osv.except_osv(_('Invalid Mobile Number'), _('Please enter a valid Mobile Number'))
@@ -783,4 +791,62 @@ class calendar_event(osv.Model):
         if activeId:
             data['opportunity_id'] = activeId
         return data
+
+    def create(self, cr, uid, vals, context=None):
+        #When create a followup update the FollowUp counts in CRM Lead
+        activeID = context['active_id']
+
+        calenderEvent = self.pool.get('calendar.event')
+        crmLead = self.pool.get('crm.lead')
+
+        calenderEventId = calenderEvent.search(cr, uid, [('opportunity_id', '=', activeID)])
+        lengthCalenderEventId = len(calenderEventId)
+        meetingCount = lengthCalenderEventId + 1
+
+        if lengthCalenderEventId == 0:
+            crmLead.write(cr, uid, [activeID], {'meeting_count': meetingCount})
+        else:
+            crmLead.write(cr, uid, [activeID], {'meeting_count': meetingCount})
+
+        return super(calendar_event, self).create(cr, uid, vals, context=context)
+
+    def unlink(self, cr, uid, vals, context=None):
+        crmLead = self.pool.get('crm.lead')
+
+        for calenderventID in vals:
+
+            # calenderEventId = self.browse(cr, uid, x, context=context)
+            # opportunityId = self.browse(cr, uid, calenderEventId.opportunity_id, context=context)
+            # realOpportunityId = int(opportunityId[0].id)
+            #
+            # crmId = crmLead.browse(cr, uid, realOpportunityId, context=context)
+            # count = crmLead.browse(cr, uid, crmId.meeting_count, context=context)
+            # realCount = int(count[0].id)
+            #
+            # updatedCount = realCount - 1
+
+            listCalenderventID = [calenderventID]
+            cr.execute('SELECT opportunity_id FROM calendar_event '\
+                       'WHERE id=%s ', (listCalenderventID))
+
+            opportunityId = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+            intOpportunityId = int(opportunityId[0].id)
+            u = [product_id]
+
+            cr.execute('SELECT meeting_count FROM crm_lead '\
+                       'WHERE id=%s ', (u))
+
+            course_product1 = crmLead.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+            product_idss = int(course_product1[0].id)
+
+            x = product_idss - 1
+
+            crmLead.write(cr, uid, [intOpportunityId], {'meeting_count': x})
+
+
+
+        return super(calendar_event, self).unlink(cr, uid, vals, context=context)
+
+
+
 calendar_event()

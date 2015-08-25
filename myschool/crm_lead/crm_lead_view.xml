@@ -3,7 +3,7 @@
     <data>
         <!--FollowUp Form-->
         <record id="crm_followup_form" model="ir.ui.view">
-            <field name="name">crm.followup</field>
+            <field name="name">op.follow.up.type</field>
             <field name="model">calendar.event</field>
             <field name="priority" eval="8" />
             <field name="arch" type="xml">
@@ -184,7 +184,7 @@
         <!--Time Frame Form-->
         <record id="time_frame_form" model="ir.ui.view">
             <field name="name">time.frame.form</field>
-            <field name="model">time.frame</field>
+            <field name="model">op.time.frame</field>
             <field name="priority" eval="8" />
             <field name="arch" type="xml">
                 <form string="Time Frames" version="7.0">
@@ -201,7 +201,7 @@
         <!--Time Frame Tree-->
         <record id="time_frame_tree" model="ir.ui.view">
             <field name="name">time.frame.tree</field>
-            <field name="model">time.frame</field>
+            <field name="model">op.time.frame</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <tree string="Time Frames">
@@ -213,7 +213,7 @@
         <!--Time_frame_action-->
         <record id="action_time_frame" model="ir.actions.act_window">
             <field name="name">Time Frame</field>
-            <field name="res_model">time.frame</field>
+            <field name="res_model">op.time.frame</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="time_frame_tree"/>
@@ -344,6 +344,7 @@
                         <field name="morning"/>
                         <field name="afternoon"/>
                         <field name="evening"/>
+                        <field name="anytime"/>
                     </xpath>
                     <xpath  expr="//field[@name='stage_id']" position="after">
                         <field name="meeting_count" sum="Sum Followups"/>
@@ -398,7 +399,7 @@
                                 context="{'partner_id': partner_id}"
                                 name="%(action_crm_followup)d" icon="fa-bell">
                                 <!--<field string="Follow-up" name="meeting_count" widget="statinfo"/>-->
-                                <field string="Follow-up" name="meeting_count" widget="statinfo"/>
+                                <field string="Follow-up" name="meeting_count" widget="statinfo" icon="fa-bell"/>
                         </button>
                     </xpath>
                     <xpath expr="//field[@name='street']" position="replace">
