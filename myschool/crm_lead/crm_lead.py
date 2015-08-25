@@ -811,9 +811,25 @@ class calendar_event(osv.Model):
         return super(calendar_event, self).create(cr, uid, vals, context=context)
 
     def unlink(self, cr, uid, vals, context=None):
+        #When delete followups update meeting count
         crmLead = self.pool.get('crm.lead')
-
         for calenderventID in vals:
+            listCalenderventID = [calenderventID]
+            cr.execute('SELECT opportunity_id FROM calendar_event '\
+                       'WHERE id=%s ', (listCalenderventID))
+
+            opportunityId = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+            intOpportunityId = int(opportunityId[0].id)
+            listIntOpportunityId = [intOpportunityId]
+
+            cr.execute('SELECT meeting_count FROM crm_lead '\
+                       'WHERE id=%s ', (listIntOpportunityId))
+
+            meetingCount = crmLead.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+            intMeetingCount = int(meetingCount[0].id)
+
+            updateMeetingCount = intMeetingCount - 1
+            crmLead.write(cr, uid, [intOpportunityId], {'meeting_count': updateMeetingCount})
 
             # calenderEventId = self.browse(cr, uid, x, context=context)
             # opportunityId = self.browse(cr, uid, calenderEventId.opportunity_id, context=context)
@@ -824,26 +840,6 @@ class calendar_event(osv.Model):
             # realCount = int(count[0].id)
             #
             # updatedCount = realCount - 1
-
-            listCalenderventID = [calenderventID]
-            cr.execute('SELECT opportunity_id FROM calendar_event '\
-                       'WHERE id=%s ', (listCalenderventID))
-
-            opportunityId = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
-            intOpportunityId = int(opportunityId[0].id)
-            u = [product_id]
-
-            cr.execute('SELECT meeting_count FROM crm_lead '\
-                       'WHERE id=%s ', (u))
-
-            course_product1 = crmLead.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
-            product_idss = int(course_product1[0].id)
-
-            x = product_idss - 1
-
-            crmLead.write(cr, uid, [intOpportunityId], {'meeting_count': x})
-
-
 
         return super(calendar_event, self).unlink(cr, uid, vals, context=context)
 

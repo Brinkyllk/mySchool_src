@@ -51,7 +51,7 @@
                         <group>
                             <field name="batch_code"/>
                             <field name="lead_id"/>
-                            <field name="payment_term"/>
+                            <field name="payment_term" invisible="1"/>
                             <field name="template_price" invisible="1"/>
                             <field name="price"/>
                             <field name="confirm"/>
@@ -68,7 +68,7 @@
                 <tree string="Course Enrollment" version="7.0">
                     <field name="batch_code"/>
                     <field name="lead_id"/>
-                    <field name="payment_term"/>
+                    <field name="payment_term" invisible="1"/>
                     <field name="template_price" invisible="1"/>
                     <field name="price"/>
                     <field name="confirm"/>
