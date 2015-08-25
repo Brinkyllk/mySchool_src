@@ -450,6 +450,21 @@
                     <field name="categ_ids" position="attributes">
                         <attribute name="invisible">1</attribute>
                     </field>
+
+                </data>
+            </field>
+        </record>
+
+        <record id="calendar_event_view_inherit" model="ir.ui.view">
+            <field name="name">calendar.event.view.inherit</field>
+            <field name="model">calendar.event</field>
+
+            <field name="inherit_id" ref="myschool.crm_followup_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="categ_ids" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </field>
                 </data>
             </field>
         </record>

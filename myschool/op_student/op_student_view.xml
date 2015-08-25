@@ -31,8 +31,8 @@
                                         </a>
                                     </h4>
                                     <ul>
-                                        <li t-if="record.email.raw_value">
-                                            <field name="email" />
+                                        <li t-if="record.emails.raw_value">
+                                            <field name="emails" />
                                         </li>
                                     </ul>
                                 </div>
@@ -102,7 +102,7 @@
                             <field name="partner"/>
                             <field name="id_number" on_change='onchange_nic(id_number)' context="{'default_is_company': True}"
                                    attrs="{'invisible': [('is_company','=', True)]}"/>
-                            <field name="email"/>
+                            <field name="emails"/>
                             <field name="stu_reg_number"/>
                             <field name="user_id"/>
                             <!--<button name="genid" type="object" string="Get Number"/>-->
@@ -193,7 +193,7 @@
                     <field name="first_name"/>
                     <field name="last_name"/>
                     <field name="id_number"/>
-                    <field name="email"/>
+                    <field name="emails"/>
                     <field name="phone"/>
                 </tree>
             </field>

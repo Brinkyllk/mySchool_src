@@ -22,6 +22,7 @@ from openerp.osv import osv, fields
 from openerp.tools.translate import _
 # from openerp import _
 from openerp.exceptions import Warning
+import re
 
 
 class res_partner(osv.Model):
@@ -48,19 +49,47 @@ class res_partner(osv.Model):
         else:
             return False
 
-    # _constraints = [
-    #                 (_check_invalid_data, 'Entered Invalid Data!!', ['name']),
-    # ]
+    # email validation........
+    def validate_emails(self, cr, uid, ids, emails):
+        a = emails
+        email = re.compile("^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$")
+        valid_emails = False
+        if emails is False:
+            return True
+        if email.match(emails):
+            valid_emails=True
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Email'), _('Please enter a valid Email'))
+
+    # -- email duplication ---- s#
+    def _check_email(self, cr, uid, ids, email):
+        if email is False:
+            pass
+        else:
+            get_email = email
+            dup_val = self.pool.get("res.partner").search(cr, uid, [('email', '=', get_email)])
+            if len(dup_val) > 0:
+                raise Warning(_('This email already exist'))
+            else:
+                pass
 
     def create(self, cr, uid, vals, context=None):
-        # name = vals['name'].strip()
-        # vals.update({'name':name})
+
+        # ----------code validation caller------- s#
+        if 'email' in vals:
+            self._check_email(cr, uid, [], vals['email'])
+            self.validate_emails(cr, uid, [], vals['email'])
+
         return super(res_partner, self).create(cr, uid, vals, context=context)
 
     def write(self, cr, uid, ids,  values, context=None):
-        # if 'name' in values:
-        #     name = values['name'].strip()
-        #     values.update({'name': name})
+
+        # ----------code validation caller------- s#
+        if 'email' in values:
+            self._check_email(cr, uid, [], values['email'])
+            self.validate_emails(cr, uid, [], values['email'])
+
         return super(res_partner, self).write(cr, uid, ids,  values, context=context)
 
 

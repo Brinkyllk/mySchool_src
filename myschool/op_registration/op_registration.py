@@ -23,6 +23,8 @@ import time
 from openerp import netsvc, api
 from openerp.tools.translate import _
 from datetime import date, datetime
+import dateutil
+from dateutil import parser
 
 class op_registration(osv.osv):
 
@@ -80,8 +82,7 @@ class op_registration(osv.osv):
                                    states={'done': [('readonly', True)]}),
         'last_name': fields.char(size=20, string='Last Name', required=True, states={'done': [('readonly', True)]}),
         'title': fields.many2one('res.partner.title', 'Title', states={'done': [('readonly', True)]}),
-        'application_number': fields.char(size=16, string='Application Number', required=True,
-                                          states={'done': [('readonly', True)]}),
+        'application_number': fields.char(size=16, string='Application Number', required=True, readonly=True),
         'registration_date': fields.date(string='Registration Date', required=True, states={'done': [('readonly', True)]}),
         'application_date': fields.datetime(string='Application Date', required=True,
                                             states={'done': [('readonly', True)]}),
@@ -93,7 +94,7 @@ class op_registration(osv.osv):
         'province': fields.char('province', size=20, states={'done': [('readonly', True)]}),
         'nation': fields.char('nation', size=20, states={'done': [('readonly', True)]}),
 
-        'fees': fields.float(string='Fees', states={'done': [('readonly', True)]}),
+        'fees': fields.float(string='Fees', digits=(12, 6), states={'done': [('readonly', True)]}),
         'photo': fields.binary(string='Photo', states={'done': [('readonly', True)]}),
         'state': fields.selection(
             [('d', 'Draft'), ('done', 'Done'), ('r', 'Rejected'),
@@ -119,6 +120,20 @@ class op_registration(osv.osv):
     }
 
     _order = "application_number desc"
+
+
+    # def due_backdate_validation(self, cr, uid, ids, date):
+    #     if date:
+    #         now = datetime.datetime.today()
+    #         today = now.strftime('%Y-%m-%d')
+    #         date_today = dateutil.parser.parse(today).date()
+    #         assigned_date = dateutil.parser.parse(date).date()
+    #         if date_today <= assigned_date:
+    #             return True
+    #         else:
+    #             raise osv.except_osv(_('Invalid Expected Closing Date!'), _('Enter a Future Date..'))
+    #     else:
+    #         pass
 
     def default_get(self, cr, uid, fields, context=None):
         data = super(op_registration, self).default_get(cr, uid, fields, context=context)
@@ -234,7 +249,7 @@ class op_registration(osv.osv):
             else:
                 return True
 
-    #------check spaces in address line one----#
+    # ------check spaces in address line one----#
     def _check_add_l_one(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids, context=context)
         value = str(obj.address_line1)
@@ -243,7 +258,7 @@ class op_registration(osv.osv):
         else:
             return True
 
-    #------check spaces in address line two----#
+    # ------check spaces in address line two----#
     def _check_add_l_two(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids, context=context)
         value = str(obj.address_line2)
@@ -282,7 +297,7 @@ class op_registration(osv.osv):
 
     def create(self, cr, uid, vals, context=None):
 
-         # phone number validation on create
+        # phone number validation on create
         if 'first_name' in vals:
             self._check_invalid_first_name(cr, uid, [], vals['first_name'])
 
@@ -294,6 +309,18 @@ class op_registration(osv.osv):
 
         if 'birth_date' in vals:
             self._check_birthday(cr, uid, [], vals['birth_date'])
+
+        if 'due_date' in vals:
+            reg_date = vals['registration_date']
+            apl_date = vals['application_date']
+            due_date = vals['due_date']
+            reg_date = dateutil.parser.parse(reg_date).date()
+            apl_date = dateutil.parser.parse(apl_date).date()
+            due_date = dateutil.parser.parse(due_date).date()
+            if due_date > reg_date and due_date > apl_date:
+                pass
+            else:
+                raise osv.except_osv(_('Due Date Error'), _('Due date cannot be Registration date and Application date'))
 
         # Address lines and update res.partner
         if 'address_line1' in vals:
@@ -410,7 +437,7 @@ class op_registration(osv.osv):
         (_check_town, 'Entered Invalid Data in City !!', ['town']),
         (_check_province, 'Entered Invalid Data in Province !!', ['province']),
         (_check_nation, 'Entered Invalid Data in Country !!', ['nation']),
-    ]
+        ]
 op_registration()
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 

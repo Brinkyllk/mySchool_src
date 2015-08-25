@@ -128,7 +128,7 @@ class op_student(osv.Model):
         'language': fields.many2one('res.lang', string='Mother Tongue'),
         'id_number': fields.char(size=10, string='NIC'),
         #'photo': fields.related('partner_id', 'image', string='Photo', type='binary', readonly=True),
-        'email': fields.char(string='Email', size=128),
+        'emails': fields.char(string='Email', size=128),
         'phone': fields.char(string='Phone Number', size=256),
 
         'address_line1': fields.char('address line1', size=20),
@@ -276,16 +276,17 @@ class op_student(osv.Model):
             return True
 
     # email validation........
-    def validate_email(self, cr, uid, ids, email):
-        email_re = re.compile("^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$")
-        valid_email = False
-        if email is False:
+    def validate_emails(self, cr, uid, ids, emails):
+        email = re.compile("^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$")
+        valid_emails = False
+        if emails is False:
             return True
-        if email_re.match(email):
-            valid_email=True
+        if email.match(emails):
+            valid_emails=True
             return True
         else:
             raise osv.except_osv(_('Invalid Email'), _('Please enter a valid Email'))
+
     # ---initials validation written by s----- #
     def validate_initials(self,cr, uid, ids, initials):
         ini = str(initials).replace(" ", "")
@@ -456,8 +457,9 @@ class op_student(osv.Model):
         vals.update({'stu_reg_id': vals['stu_reg_number']})  # Support backwards compatible
 
         # email validation on create
-        if 'email' in vals:
-            self.validate_email(cr, uid, [], vals['email'])
+        if 'emails' in vals:
+            self.validate_emails(cr, uid, [], vals['emails'])
+            vals.update({'email': vals['emails']})
 
         # ----validator caller written by s-- #
         if 'last_name' in vals:
@@ -522,8 +524,9 @@ class op_student(osv.Model):
                 values.update({'middle_name': mi_name})
 
         # email validation on write
-        if 'email' in values:
-            self.validate_email(cr, uid, ids, values['email'])
+        if 'emails' in values:
+            self.validate_emails(cr, uid, ids, values['emails'])
+            values.update({'email': values['emails']})
 
         # # NIC validation on write
         if 'id_number' in values:
