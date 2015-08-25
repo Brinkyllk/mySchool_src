@@ -3,12 +3,12 @@ from openerp.tools.translate import _
 from openerp import api
 import re
 import dateutil
-from dateutil import parser
 import datetime
+from dateutil import parser
 
 
-class crm_tags(osv.Model):
-    _name = "crm.tags"
+class op_course_tags(osv.Model):
+    _name = "op.course.tags"
     _columns = {
         'code': fields.char('Code', required=True, size=5),
         'name': fields.char('Name', required=True, size=30)
@@ -51,7 +51,7 @@ class crm_tags(osv.Model):
         name = vals['name'].strip().title()
         vals.update({'code': code, 'name': name})
 
-        return super(crm_tags, self).create(cr, uid, vals, context=context)
+        return super(op_course_tags, self).create(cr, uid, vals, context=context)
 
     # -----------Override the write method-------------- s#
     def write(self, cr, uid, ids, values, context=None):
@@ -71,7 +71,76 @@ class crm_tags(osv.Model):
             code = values['code'].strip().upper().reaplace(" ", "")
             values.update({'code': code})
 
-        return super(crm_tags, self).write(cr, uid, ids, values, context=context)
+        return super(op_course_tags, self).write(cr, uid, ids, values, context=context)
+
+
+class op_lead_modes(osv.Model):
+    _name = 'op.lead.modes'
+    _columns = {
+        'code': fields.char('Code', required=True, size=5),
+        'name': fields.char('Name', required=True, size=30)
+    }
+
+    _sql_constraints = [('name', 'UNIQUE (name)', 'The Name of the Mode must be unique!')]
+
+    # ----------------Validations----------------------- s#
+    # ---------code validation------------- s#
+    def code_validation(self, cr, uid, ids, code):
+        modes_code = str(code).replace(" ", "")
+        modes_code = ''.join([i for i in modes_code if not i.isdigit()])
+        if str(code).isspace():
+            raise osv.except_osv(_('Invalid Code !'), _('Only Spaces not allowed'))
+        elif str(modes_code).isalpha():
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Code !'), _('Please Enter the code correctly'))
+
+    # -----------name validation----------- s#
+    def name_validation(self, cr, uid, ids, name):
+        mode_name = str(name).replace(" ", "")
+        if str(name).isspace():
+            raise osv.except_osv(_('Invalid Name !'), _('Only Spaces not allowed'))
+        elif mode_name.isalpha():
+            return True
+        else:
+            raise osv.except_osv(_('Invalid Name !'), _('Please Enter a valid name'))
+
+    # ------------Override the create method----------- s#
+    def create(self, cr, uid, vals, context=None):
+        # ----------code validation caller------- s#
+        if 'code' in vals:
+            self.code_validation(cr, uid, [], vals['code'])
+
+        # ----------name validation caller------- s#
+        if 'name' in vals:
+            self.name_validation(cr, uid, [], vals['name'])
+
+        # --------removing white spaces---------- s#
+        code = vals['code'].strip().upper().replace(" ", "")
+        name = vals['name'].strip().title()
+        vals.update({'code': code, 'name': name})
+
+        return super(op_lead_modes, self).create(cr, uid, vals, context=context)
+
+    # -----------Override the write method-------------- s#
+    def write(self, cr, uid, ids, values, context=None):
+        # ----------code validation caller-------- s#
+        if 'code' in values:
+            self.code_validation(cr, uid, [], values['code'])
+
+        # -----------name validation caller------- s#
+        if 'name' in values:
+            self.name_validation(cr, uid, [], values['name'])
+
+        # ------ update the values after removing white spaces---- s#
+        if 'name' in values:
+            name = values['name'].strip().title()
+            values.update({'name': name})
+        if 'code' in values:
+            code = values['code'].strip().upper().replace(" ", "")
+            values.update({'code': code})
+
+        return super(op_lead_modes, self).write(cr, uid, ids, values, context=context)
 
 
 class calendar_alarm(osv.Model):
@@ -120,165 +189,8 @@ class calendar_alarm(osv.Model):
 
         return super(calendar_alarm, self).create(cr, uid, vals, context=context)
 
-
-class modes(osv.Model):
-    _name = 'modes'
-    _columns = {
-        'code': fields.char('Code', required=True, size=5),
-        'name': fields.char('Name', required=True, size=30)
-    }
-
-    _sql_constraints = [('name', 'UNIQUE (name)', 'The Name of the Mode must be unique!')]
-
-    # ----------------Validations----------------------- s#
-    # ---------code validation------------- s#
-    def code_validation(self, cr, uid, ids, code):
-        modes_code = str(code).replace(" ", "")
-        modes_code = ''.join([i for i in modes_code if not i.isdigit()])
-        if str(code).isspace():
-            raise osv.except_osv(_('Invalid Code !'), _('Only Spaces not allowed'))
-        elif str(modes_code).isalpha():
-            return True
-        else:
-            raise osv.except_osv(_('Invalid Code !'), _('Please Enter the code correctly'))
-
-    # -----------name validation----------- s#
-    def name_validation(self, cr, uid, ids, name):
-        mode_name = str(name).replace(" ", "")
-        if str(name).isspace():
-            raise osv.except_osv(_('Invalid Name !'), _('Only Spaces not allowed'))
-        elif mode_name.isalpha():
-            return True
-        else:
-            raise osv.except_osv(_('Invalid Name !'), _('Please Enter a valid name'))
-
-    # ------------Override the create method----------- s#
-    def create(self, cr, uid, vals, context=None):
-        # ----------code validation caller------- s#
-        if 'code' in vals:
-            self.code_validation(cr, uid, [], vals['code'])
-
-        # ----------name validation caller------- s#
-        if 'name' in vals:
-            self.name_validation(cr, uid, [], vals['name'])
-
-        # --------removing white spaces---------- s#
-        code = vals['code'].strip().upper().replace(" ", "")
-        name = vals['name'].strip().title()
-        vals.update({'code': code, 'name': name})
-
-        return super(modes, self).create(cr, uid, vals, context=context)
-
-    # -----------Override the write method-------------- s#
-    def write(self, cr, uid, ids, values, context=None):
-        # ----------code validation caller-------- s#
-        if 'code' in values:
-            self.code_validation(cr, uid, [], values['code'])
-
-        # -----------name validation caller------- s#
-        if 'name' in values:
-            self.name_validation(cr, uid, [], values['name'])
-
-        # ------ update the values after removing white spaces---- s#
-        if 'name' in values:
-            name = values['name'].strip().title()
-            values.update({'name': name})
-        if 'code' in values:
-            code = values['code'].strip().upper().replace(" ", "")
-            values.update({'code': code})
-
-        return super(modes, self).write(cr, uid, ids, values, context=context)
-
-
-class crm_case_stage(osv.Model):
-    _inherit = 'crm.case.stage'
-
-    # ------------------Validations----------------------- s#
-    # ------------name validation--------------- s#
-    def name_validation(self, cr, uid, ids, name):
-        dup_name = str(name).strip().title()
-        name_val = str(name).replace(" ", "")
-        dup_val = self.pool.get("crm.case.stage").search(cr, uid, [('name', '=', dup_name)])
-        if str(name).isspace():
-            raise osv.except_osv(_('Name Field..'), _('Only Spaces not allowed..!'))
-        elif len(dup_val) > 0:
-            raise osv.except_osv(_('Data Duplication..!'), _('Name value already exists'))
-        elif not name_val.isalpha():
-            raise osv.except_osv(_('Name Field..'), _('Special Characters and Numbers not allowed'))
-        else:
-            pass
-
-    # ------------Override the create method----------- s#
-    def create(self, cr, uid, vals, context=None):
-        # ----------name validation caller------- s#
-        if 'name' in vals:
-            self.name_validation(cr, uid, [], vals['name'])
-
-        # --------removing white spaces---------- s#
-        name = vals['name'].strip().title()
-        vals.update({'name': name})
-
-        return super(crm_case_stage, self).create(cr, uid, vals, context=context)
-
-    # ------------Override the write method----------- s#
-    def write(self, cr, uid, values, context=None):
-        # ----------name validation caller------- s#
-        if 'name' in values:
-            self.name_validation(cr, uid, [], values['name'])
-
-        # --------removing white spaces---------- s#
-        name = values['name'].strip().title()
-        values.update({'name': name})
-
-        return super(crm_case_stage, self).write(cr, uid, ids,  values, context=context)
-
-
-class crm_case_categ(osv.Model):
-    _inherit = 'crm.case.categ'
-
-    # ------------------Validations----------------------- s#
-    # ------------name validation--------------- s#
-    def name_validation(self, cr, uid, ids, name):
-        dup_name = str(name).strip().title()
-        name_val = str(name).replace(" ", "")
-        dup_val = self.pool.get("crm.case.categ").search(cr, uid, [('name', '=', dup_name)])
-        if str(name).isspace():
-            raise osv.except_osv(_('Name Field..'), _('Only Spaces not allowed..!'))
-        elif len(dup_val) > 0:
-            raise osv.except_osv(_('Data Duplication..!'), _('Name value already exists'))
-        elif not name_val.isalpha():
-            raise osv.except_osv(_('Name Field..'), _('Special Characters or Numbers not allowed'))
-        else:
-            pass
-
-    # ------------Override the create method----------- s#
-    def create(self, cr, uid, vals, context=None):
-        # ----------name validation caller------- s#
-        if 'name' in vals:
-            self.name_validation(cr, uid, [], vals['name'])
-
-        # --------removing white spaces---------- s#
-        name = vals['name'].strip().title()
-        vals.update({'name': name})
-
-        return super(crm_case_categ, self).create(cr, uid, vals, context=context)
-
-    # ------------Override the write method----------- s#
-    def write(self, cr, uid, values, context=None):
-        # ----------name validation caller------- s#
-        if 'name' in values:
-            self.name_validation(cr, uid, [], values['name'])
-
-        # --------removing white spaces---------- s#
-        name = values['name'].strip().title()
-        values.update({'name': name})
-
-        return super(crm_case_categ, self).write(cr, uid, ids,  values, context=context)
-
-
-
-class time_frame(osv.Model):
-    _name = 'time.frame'
+class op_time_frame(osv.Model):
+    _name = 'op.time.frame'
     _columns = {
         'name': fields.char('Time Frame', size=30, required=True)
     }
@@ -306,7 +218,7 @@ class time_frame(osv.Model):
         name = vals['name'].strip().title()
         vals.update({'name': name})
 
-        return super(time_frame, self).create(cr, uid, vals, context=context)
+        return super(op_time_frame, self).create(cr, uid, vals, context=context)
 
     # -----------Override the write method-------------- s#
     def write(self, cr, uid, ids, values, context=None):
@@ -319,7 +231,75 @@ class time_frame(osv.Model):
             name = values['name'].strip().title()
             values.update({'name': name})
 
-        return super(time_frame, self).write(cr, uid, ids, values, context=context)
+        return super(op_time_frame, self).write(cr, uid, ids, values, context=context)
+
+    def unlink(self, cr, uid, vals, context=None):
+        #When delete followups update meeting count
+        crmLead = self.pool.get('crm.lead')
+        for values in vals:
+            k = [values]
+            cr.execute('SELECT lead_id FROM op_anytime_time_frame_rel '\
+                           'WHERE time_frame_id = %s ', (k))
+
+            op_anytime_time_frame_rel_id = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+            if op_anytime_time_frame_rel_id:
+                int_op_anytime_time_frame_rel_id = int(op_anytime_time_frame_rel_id[0].id)
+                list_int_op_anytime_time_frame_rel_id = [int_op_anytime_time_frame_rel_id]
+                anyTime = len(list_int_op_anytime_time_frame_rel_id)
+            else:
+                anyTime = 0
+
+            cr.execute('SELECT lead_id FROM op_afternoon_time_frame_rel '\
+                           'WHERE time_frame_id = %s ', (k))
+
+            op_afternoon_time_frame_rel_id = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+            if op_afternoon_time_frame_rel_id:
+                int_op_afternoon_time_frame_rel_id = int(op_afternoon_time_frame_rel_id[0].id)
+                list_int_op_afternoon_time_frame_rel_id = [int_op_afternoon_time_frame_rel_id]
+                afternoon = len(list_int_op_afternoon_time_frame_rel_id)
+            else:
+                afternoon = 0
+
+            cr.execute('SELECT lead_id FROM op_evening_time_frame_rel '\
+                           'WHERE time_frame_id = %s ', (k))
+
+            op_evening_time_frame_rel_id = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+            if op_evening_time_frame_rel_id:
+                int_op_evening_time_frame_rel_id = int(op_evening_time_frame_rel_id[0].id)
+                list_int_op_evening_time_frame_rel_id = [int_op_evening_time_frame_rel_id]
+                evening = len(list_int_op_evening_time_frame_rel_id)
+            else:
+                evening = 0
+
+            cr.execute('SELECT lead_id FROM op_morning_time_frame_rel '\
+                           'WHERE time_frame_id = %s ', (k))
+
+            op_morning_time_frame_rel_id = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+            if op_morning_time_frame_rel_id:
+                int_op_morning_time_frame_rel_id = int(op_morning_time_frame_rel_id[0].id)
+                list_int_op_morning_time_frame_rel_id = [int_op_morning_time_frame_rel_id]
+                morning = len(list_int_op_morning_time_frame_rel_id)
+            else:
+                morning = 0
+
+            if morning == 0 and anyTime == 0 and afternoon == 0 and evening == 0:
+                return super(op_time_frame, self).unlink(cr, uid, vals, context=context)
+                # raise osv.except_osv('Invalid Product Price', 'Please enter a valid price')
+            # elif anyTime <= 1:
+            #     # return super(op_time_frame, self).unlink(cr, uid, vals, context=context)
+            #     raise osv.except_osv('Invalid Product Price', 'Please enter a valid price')
+            # elif afternoon <= 1:
+            #     # return super(op_time_frame, self).unlink(cr, uid, vals, context=context)
+            #     raise osv.except_osv('Invalid Product Price', 'Please enter a valid price')
+            # elif evening <= 1:
+            #     # return super(op_time_frame, self).unlink(cr, uid, vals, context=context)
+            #     raise osv.except_osv('Invalid Product Price', 'Please enter a valid price')
+            else:
+                # return super(op_time_frame, self).unlink(cr, uid, vals, context=context)
+                raise osv.except_osv('You can not delete this record', 'This Time Frame already referred in another location')
+
+        return super(calendar_event, self).unlink(cr, uid, vals, context=context)
+
 
 
 class crm_tracking_campaign(osv.Model):
@@ -375,7 +355,7 @@ class crm_tracking_source(osv.Model):
             return True
         else:
             raise osv.except_osv(_('Invalid Source Name !'), _('Please Enter a valid name'))
-
+        
     # ------------Override the create method----------- s#
     def create(self, cr, uid, vals, context=None):
         # ----------name validation caller------- s#
@@ -391,8 +371,7 @@ class crm_tracking_source(osv.Model):
             self.name_validation(cr, uid, [], values['name'])
 
         return super(crm_tracking_source, self).write(cr, uid, ids, values, context=context)
-
-
+    
 class crm_tracking_medium(osv.Model):
     _inherit = 'crm.tracking.medium'
 
@@ -424,8 +403,11 @@ class crm_tracking_medium(osv.Model):
         return super(crm_tracking_medium, self).write(cr, uid, ids, values, context=context)
 
 
-class follow_up_type(osv.Model):
-    _name = 'follow.up.type'
+
+
+
+class op_follow_up_type(osv.Model):
+    _name = 'op.follow.up.type'
     _columns = {
         'code': fields.char('Code', required=True, size=4),
         'name': fields.char('Name', required=True, size=30)
@@ -453,9 +435,6 @@ class follow_up_type(osv.Model):
         else:
             raise osv.except_osv(_('Invalid Name !'), _('Please Enter a valid name'))
 
-    _sql_constraints = [('name ', 'UNIQUE (name)', 'The Name  must be unique!')]
-    _sql_constraints = [('code ', 'UNIQUE (code)', 'The CODE  must be unique!')]
-
     # ------------Override the create method----------- s#
     def create(self, cr, uid, vals, context=None):
         # ----------code validation caller------- s#
@@ -471,7 +450,7 @@ class follow_up_type(osv.Model):
         name = vals['name'].strip().title()
         vals.update({'code': code, 'name': name})
 
-        return super(follow_up_type, self).create(cr, uid, vals, context=context)
+        return super(op_follow_up_type, self).create(cr, uid, vals, context=context)
 
     # -----------Override the write method-------------- s#
     def write(self, cr, uid, ids, values, context=None):
@@ -491,11 +470,10 @@ class follow_up_type(osv.Model):
             code = values['code'].strip().upper().replace(" ", "")
             values.update({'code': code})
 
-        return super(follow_up_type, self).write(cr, uid, ids, values, context=context)
+        return super(op_follow_up_type, self).write(cr, uid, ids, values, context=context)
 
 
 class crm_lead(osv.Model):
-
     # check prospective_student limit
     def _check_pstudent(self, cr, uid, ids, prospective_student):
         if prospective_student > 999:
@@ -516,25 +494,35 @@ class crm_lead(osv.Model):
     def _meeting_count(self, cr, uid, ids, field_name, arg, context=None):
         Event = self.pool['calendar.event']
         return {
-            opp_id: Event.search_count(cr,uid, [('opportunity_id', '=', opp_id)], context=context)
+            opp_id: Event.search_count(cr, uid, [('opportunity_id', '=', opp_id)], context=context)
             for opp_id in ids
         }
-
 
     _columns = {
         'name': fields.char(string='Subject', size=57, select=1),
         'partner_id': fields.many2one('res.partner', 'Partner', ondelete='set null', track_visibility='onchange',
-            select=True, help="Linked student (optional). Usually created when converting the lead.", domain="[('is_student', '=', True)]"),
-        'modes': fields.many2one('modes','Mode of Inquiry'),
-        'courses_interested': fields.many2many('op.study.programme', 'study_programme_lead_rel', 'crm_id', 'name',
+                                      select=True,
+                                      help="Linked student (optional). Usually created when converting the lead.",
+                                      domain="[('is_student', '=', True)]"),
+        'modes': fields.many2one('op_lead_modes', 'Mode of Inquiry'),
+        'courses_interested': fields.many2many('op.study.programme', 'op_study_programme_lead_rel', 'lead_id',
+                                               'study_programme_id',
                                                'Study programme(s) Interested'),
-        'anytime': fields.many2many('time.frame', 'anytime_time_frame', 'anytime', 'name', 'Anytime'),
-        'morning': fields.many2many('time.frame', 'morning_time_frame', 'morning', 'name', 'Morning'),
-        'afternoon': fields.many2many('time.frame', 'afternoon_time_frame', 'afternoon', 'name', 'Afternoon'),
-        'evening': fields.many2many('time.frame', 'evening_time_frame', 'evening', 'name', 'Evening'),
+        'anytime': fields.many2many('op.time.frame', 'op_anytime_time_frame_rel', 'lead_id',
+                                    'time_frame_id',
+                                    'Anytime'),
+        'morning': fields.many2many('op.time.frame', 'op_morning_time_frame_rel', 'lead_id',
+                                    'time_frame_id',
+                                    'Morning'),
+        'afternoon': fields.many2many('op.time.frame', 'op_afternoon_time_frame_rel', 'lead_id',
+                                      'time_frame_id',
+                                      'Afternoon'),
+        'evening': fields.many2many('op.time.frame', 'op_evening_time_frame_rel', 'lead_id',
+                                    'time_frame_id',
+                                    'Evening'),
         'prospective_student': fields.integer(size=5, string='# Prospective Students'),
         'inquiry_date': fields.date(string='Inquiry Date'),
-        'tags': fields.many2many('crm.tags', 'crm_lead_tags_rel', id1='partner_id', id2='code', string='Tags'),
+        'tags': fields.many2many('op.course.tags', 'op_crm_lead_tags_rel', 'lead_id', 'tag_id', 'Tags'),
         'is_new_course': fields.boolean('New Course', help="Check if the course is not exist"),
 
         'address_line1': fields.char('address line1', size=20),
@@ -542,14 +530,15 @@ class crm_lead(osv.Model):
         'town': fields.char('town', size=25),
         'province': fields.char('province', size=20),
         'nation': fields.char('nation', size=20),
-        'meeting_count': fields.function(_meeting_count, string='#Follow-ups', type='integer', store=True),
+        'meeting_count': fields.integer(string='No.Of Follow-ups'),
+        # 'meeting_count': fields.function(_meeting_count,type='integer', string='#Follow-ups', store=True),
 
         'first_name': fields.char('First Name', size=30),
         'last_name': fields.char('Last Name', size=30),
 
     }
 
-    # ------check spaces in address line one----#
+    # ------check spaces in address line one---------#
     def _check_add_l_one(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids, context=context)
         value = str(obj.address_line1)
@@ -659,7 +648,7 @@ class crm_lead(osv.Model):
                     'type': 'ir.actions.act_window',
                     'nodestroy': True,
                     'target': 'current',
-                    }
+                }
                 return value
             else:
                 value = {
@@ -685,7 +674,7 @@ class crm_lead(osv.Model):
                 'type': 'ir.actions.act_window',
                 'nodestroy': True,
                 'target': 'new',
-                }
+            }
             return value
         return True
 
@@ -707,7 +696,7 @@ class crm_lead(osv.Model):
         if phoneNumber is False:
             return True
         if phone_re.match(phoneNumber):
-            valid_phone=True
+            valid_phone = True
             return True
         else:
             raise osv.except_osv(_('Invalid Phone Number'), _('Please enter a valid Phone Number'))
@@ -719,7 +708,7 @@ class crm_lead(osv.Model):
         if mobileNumber is False:
             return True
         if mobile_re.match(mobileNumber):
-            valid_mobile=True
+            valid_mobile = True
             return True
         else:
             raise osv.except_osv(_('Invalid Mobile Number'), _('Please enter a valid Mobile Number'))
@@ -1028,7 +1017,7 @@ class crm_lead(osv.Model):
 class calendar_event(osv.Model):
     _inherit = 'calendar.event'
     _columns = {
-        'type': fields.many2one('follow.up.type', 'Follow-up Type'),
+        'type': fields.many2one('op.follow.up.type', 'Follow-up Type')
     }
 
     def default_get(self, cr, uid, fields, context=None):
@@ -1037,7 +1026,7 @@ class calendar_event(osv.Model):
         if activeId:
             data['opportunity_id'] = activeId
         return data
-
+    
     # -----------name validation----------- s#
     def name_validation(self, cr, uid, ids, name):
         sub_name = str(name).replace(" ", "")
@@ -1049,7 +1038,7 @@ class calendar_event(osv.Model):
         else:
             raise osv.except_osv(_('Invalid Name !'), _('Please Enter a valid name'))
 
-    # ------------Override the create method----------- s#
+
     def create(self, cr, uid, vals, context=None):
         # ----------name validation caller------- s#
         if 'name' in vals:
@@ -1058,6 +1047,22 @@ class calendar_event(osv.Model):
         # --------removing white spaces---------- s#
         name = vals['name'].strip().title()
         vals.update({'name': name})
+
+        
+        #When create a followup update the FollowUp counts in CRM Lead
+        activeID = context['active_id']
+
+        calenderEvent = self.pool.get('calendar.event')
+        crmLead = self.pool.get('crm.lead')
+
+        calenderEventId = calenderEvent.search(cr, uid, [('opportunity_id', '=', activeID)])
+        lengthCalenderEventId = len(calenderEventId)
+        meetingCount = lengthCalenderEventId + 1
+
+        if lengthCalenderEventId == 0:
+            crmLead.write(cr, uid, [activeID], {'meeting_count': meetingCount})
+        else:
+            crmLead.write(cr, uid, [activeID], {'meeting_count': meetingCount})
 
         return super(calendar_event, self).create(cr, uid, vals, context=context)
 
@@ -1074,4 +1079,139 @@ class calendar_event(osv.Model):
 
         return super(calendar_event, self).write(cr, uid, ids, values, context=context)
 
+    def unlink(self, cr, uid, vals, context=None):
+        #When delete followups update meeting count
+        crmLead = self.pool.get('crm.lead')
+        for calenderventID in vals:
+            listCalenderventID = [calenderventID]
+            cr.execute('SELECT opportunity_id FROM calendar_event '\
+                       'WHERE id=%s ', (listCalenderventID))
+
+            opportunityId = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+            intOpportunityId = int(opportunityId[0].id)
+            listIntOpportunityId = [intOpportunityId]
+
+            cr.execute('SELECT meeting_count FROM crm_lead '\
+                       'WHERE id=%s ', (listIntOpportunityId))
+
+            meetingCount = crmLead.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+            intMeetingCount = int(meetingCount[0].id)
+
+            updateMeetingCount = intMeetingCount - 1
+            crmLead.write(cr, uid, [intOpportunityId], {'meeting_count': updateMeetingCount})
+
+            # calenderEventId = self.browse(cr, uid, x, context=context)
+            # opportunityId = self.browse(cr, uid, calenderEventId.opportunity_id, context=context)
+            # realOpportunityId = int(opportunityId[0].id)
+            #
+            # crmId = crmLead.browse(cr, uid, realOpportunityId, context=context)
+            # count = crmLead.browse(cr, uid, crmId.meeting_count, context=context)
+            # realCount = int(count[0].id)
+            #
+            # updatedCount = realCount - 1
+
+        return super(calendar_event, self).unlink(cr, uid, vals, context=context)
 calendar_event()
+
+
+class crm_case_stage(osv.Model):
+    _inherit = 'crm.case.stage'
+    
+        # ------------------Validations----------------------- s#
+    # ------------name validation--------------- s#
+    def name_validation(self, cr, uid, ids, name):
+        dup_name = str(name).strip().title()
+        name_val = str(name).replace(" ", "")
+        dup_val = self.pool.get("crm.case.stage").search(cr, uid, [('name', '=', dup_name)])
+        if str(name).isspace():
+            raise osv.except_osv(_('Name Field..'), _('Only Spaces not allowed..!'))
+        elif len(dup_val) > 0:
+            raise osv.except_osv(_('Data Duplication..!'), _('Name value already exists'))
+        elif not name_val.isalpha():
+            raise osv.except_osv(_('Name Field..'), _('Special Characters and Numbers not allowed'))
+        else:
+            pass
+        
+        # ------------Override the create method----------- s#
+    def create(self, cr, uid, vals, context=None):
+        # ----------name validation caller------- s#
+        if 'name' in vals:
+            self.name_validation(cr, uid, [], vals['name'])
+
+        # --------removing white spaces---------- s#
+        name = vals['name'].strip().title()
+        vals.update({'name': name})
+
+        return super(crm_case_stage, self).create(cr, uid, vals, context=context)
+
+    # ------------Override the write method----------- s#
+    def write(self, cr, uid, values, context=None):
+        # ----------name validation caller------- s#
+        if 'name' in values:
+            self.name_validation(cr, uid, [], values['name'])
+
+        # --------removing white spaces---------- s#
+        name = values['name'].strip().title()
+        values.update({'name': name})
+
+        return super(crm_case_stage, self).write(cr, uid, values,  values, context=context)
+
+    def unlink(self, cr, uid, vals, context=None):
+        for calenderventID in vals:
+            listCalenderventID = [calenderventID]
+
+            cr.execute('SELECT COUNT(id) FROM crm_lead '\
+                           'WHERE stage_id=%s ', (listCalenderventID))
+
+            opportunityId = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+            intMeetingCount = int(opportunityId[0].id)
+            if intMeetingCount == 0:
+                return super(crm_case_stage, self).unlink(cr, uid, vals, context=context)
+            else:
+                raise osv.except_osv('You can not delete this record', 'This Stage already referred in another location')
+
+crm_case_stage()
+
+class crm_case_categ(osv.Model):
+    _inherit = 'crm.case.categ'
+
+    # ------------------Validations----------------------- s#
+    # ------------name validation--------------- s#
+    def name_validation(self, cr, uid, ids, name):
+        dup_name = str(name).strip().title()
+        name_val = str(name).replace(" ", "")
+        dup_val = self.pool.get("crm.case.categ").search(cr, uid, [('name', '=', dup_name)])
+        if str(name).isspace():
+            raise osv.except_osv(_('Name Field..'), _('Only Spaces not allowed..!'))
+        elif len(dup_val) > 0:
+            raise osv.except_osv(_('Data Duplication..!'), _('Name value already exists'))
+        elif not name_val.isalpha():
+            raise osv.except_osv(_('Name Field..'), _('Special Characters or Numbers not allowed'))
+        else:
+            pass
+
+    # ------------Override the create method----------- s#
+    def create(self, cr, uid, vals, context=None):
+        # ----------name validation caller------- s#
+        if 'name' in vals:
+            self.name_validation(cr, uid, [], vals['name'])
+
+        # --------removing white spaces---------- s#
+        name = vals['name'].strip().title()
+        vals.update({'name': name})
+
+        return super(crm_case_categ, self).create(cr, uid, vals, context=context)
+
+    # ------------Override the write method----------- s#
+    def write(self, cr, uid, values, context=None):
+        # ----------name validation caller------- s#
+        if 'name' in values:
+            self.name_validation(cr, uid, [], values['name'])
+
+        # --------removing white spaces---------- s#
+        name = values['name'].strip().title()
+        values.update({'name': name})
+
+        return super(crm_case_categ, self).write(cr, uid, ids,  values, context=context)
+
+
