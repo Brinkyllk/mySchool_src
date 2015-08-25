@@ -177,7 +177,7 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <!--<field name="context">{'default_opportunity_id': active_id,-->
-                            <!--'search_default_opportunity_id': active_id,}</field>-->
+            <!--'search_default_opportunity_id': active_id,}</field>-->
             <field name="view_id" ref="crm_followup_form"/>
         </record>
 
@@ -247,7 +247,7 @@
                         </div>
                     </xpath>
                     <xpath expr="//field[@name='country_id']" position="replace">
-                         <field name="nation" class="oe_no_button" placeholder="Country" style="width: 100%%" options='{"no_open": True}'/>
+                        <field name="nation" class="oe_no_button" placeholder="Country" style="width: 100%%" options='{"no_open": True}'/>
                     </xpath>
                     <xpath expr="//label[@for='contact_name']" position="replace">
                         <label for="first_name" string="Contact Name"/>
@@ -257,10 +257,10 @@
                         <field name="last_name" placeholder="Last name"/>
                     </xpath>
                     <xpath expr="//field[@name='partner_id']" position="replace">
-                         <field name="partner_id" string="Customer"
-                                on_change="on_change_partner_id(partner_id)"
-                                options='{"create_name_field": "name"}'
-                                context="{'default_name': first_name, 'default_street': address_line1, 'default_city': town, 'default_state_id': province, 'default_country_id': nation, 'default_function': function, 'default_phone': phone, 'default_mobile': mobile, 'default_fax': fax, 'default_email': email_from, 'default_user_id': user_id, 'default_section_id': section_id}"/>
+                        <field name="partner_id" string="Customer"
+                               on_change="on_change_partner_id(partner_id)"
+                               options='{"create_name_field": "name"}'
+                               context="{'default_name': first_name, 'default_street': address_line1, 'default_city': town, 'default_state_id': province, 'default_country_id': nation, 'default_function': function, 'default_phone': phone, 'default_mobile': mobile, 'default_fax': fax, 'default_email': email_from, 'default_user_id': user_id, 'default_section_id': section_id}"/>
                     </xpath>
                     <xpath  expr="//notebook" position="inside">
                         <page string="Course(s) Info">
@@ -296,8 +296,8 @@
                     <xpath  expr="//div[@class='oe_right oe_button_box']" position="replace">
                         <div class="oe_right oe_button_box" name="buttons">
                             <button class="oe_inline oe_stat_button" type="action"
-                                context="{'partner_id': partner_id}"
-                                name="%(action_crm_followup)d" icon="fa-bell">
+                                    context="{'partner_id': partner_id}"
+                                    name="%(action_crm_followup)d" icon="fa-bell">
                                 <!--<field string="Follow-up" name="meeting_count" widget="statinfo"/>-->
                                 <field string="Follow-up" name="meeting_count" widget="statinfo"/>
                             </button>
@@ -363,7 +363,7 @@
                     <xpath  expr="//notebook/page[@string='Lead']" position="inside">
                         <page string="Course(s) Info">
                             <group>
-                            <separator colspan="4" string="Study Programme Details"/>
+                                <separator colspan="4" string="Study Programme Details"/>
                                 <field name="courses_interested"  widget="many2many_tags" options="{'no_create_edit':'1'}"/>
                                 <field name="prospective_student"/>
                             </group>
@@ -389,7 +389,8 @@
                     </xpath>
                     <xpath  expr="//div[@class='oe_right oe_button_box']" position="replace">
                         <div class="oe_right oe_button_box" name="buttons">
-                            <button class="oe_inline oe_stat_button" type="object" context="{'default_opportunity_id': active_id, 'search_default_opportunity_id': active_id, 'default_partner_id': partner_id, 'default_duration': 1.0}" name="action_schedule_meeting" icon="fa-bell">
+                            <button class="oe_inline oe_stat_button" type="object" context="{'default_opportunity_id': active_id,
+                        'search_default_opportunity_id': active_id, 'default_partner_id': partner_id, 'default_duration': 1.0}" name="action_schedule_meeting" icon="fa-bell">
                                 <div>Schedule<br/>Follow-up</div>
                             </button>
                         </div>
@@ -398,8 +399,8 @@
                         <button class="oe_inline oe_stat_button" type="action"
                                 context="{'partner_id': partner_id}"
                                 name="%(action_crm_followup)d" icon="fa-bell">
-                                <!--<field string="Follow-up" name="meeting_count" widget="statinfo"/>-->
-                                <field string="Follow-up" name="meeting_count" widget="statinfo" icon="fa-bell"/>
+                            <!--<field string="Follow-up" name="meeting_count" widget="statinfo"/>-->
+                            <field string="Follow-up" name="meeting_count" widget="statinfo" icon="fa-bell"/>
                         </button>
                     </xpath>
                     <xpath expr="//field[@name='street']" position="replace">
@@ -428,9 +429,9 @@
                     <xpath  expr="//label[@for='title_action']" position="replace">
                         <!--<attribute name="invisible">1</attribute>-->
                         <group >
-                        <field name="date_deadline"/>
-                        <field name="priority" widget="priority"/>
-                        <field name="categ_ids"/>
+                            <field name="date_deadline"/>
+                            <field name="priority" widget="priority"/>
+                            <field name="categ_ids"/>
                         </group>
                     </xpath>
                     <xpath expr="//field[@name='fax']" position="after">
@@ -451,11 +452,13 @@
                     <field name="categ_ids" position="attributes">
                         <attribute name="invisible">1</attribute>
                     </field>
-
+                    <field name="function" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </field>
                 </data>
             </field>
         </record>
-
+        
         <record id="calendar_event_view_inherit" model="ir.ui.view">
             <field name="name">calendar.event.view.inherit</field>
             <field name="model">calendar.event</field>
@@ -470,7 +473,8 @@
             </field>
         </record>
 
-         <record id="crm_case_tree_view_oppor_inherit" model="ir.ui.view">
+
+        <record id="crm_case_tree_view_oppor_inherit" model="ir.ui.view">
             <field name="name">crm.lead.oppor.tree.inherit</field>
             <field name="model">crm.lead</field>
             <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
@@ -509,7 +513,7 @@
                     <filter string="Unassign" name="new_filter" icon="terp-accessories-archiver-minus" domain="[NEW DOMAIN]"/>
                 </xpath>
             </field>
-            </record>
+        </record>
 
         <record id="crm.crm_normal_action_sell" model="ir.actions.act_window">
             <field name="name">Leads</field>
@@ -570,13 +574,13 @@
             <field name="view_mode">form</field>
             <field name="view_id" ref="crm_followup_form"/>
         </record>
-        
-         <record id="action_download_csv" model="ir.actions.act_url">
+
+        <record id="action_download_csv" model="ir.actions.act_url">
             <field name="name">Download CSV</field>
             <field name="url">/myschool/static/files/csv_template.csv</field>
-            <field name="target">new</field>        
+            <field name="target">new</field>
         </record>
-        
+
         <!--menu_items-->
         <menuitem id="time_frame" name="Time Frames" parent="base.menu_base_config" action="action_time_frame"/>
         <!--<menuitem id="folow_up" name="Follow up" parent="base.menu_base_config" action="action_crm_followup"/>-->
