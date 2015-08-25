@@ -80,3 +80,15 @@ class res_partner(osv.Model):
     #         raise Warning(_("Cannot Edit the Student."))
     #     else:
     #         return super(res_partner, self).write(cr, uid, ids, vals, context=context)
+
+class res_partner_title(osv.osv):
+    _inherit = 'res.partner.title'
+
+    def create(self, cr, uid, vals, context=None):
+        if 'name' in vals:
+            name = vals['name']
+            dup_val = self.pool.get('res.partner.title').search(cr, uid, [('name', '=', name)])
+            if len(dup_val) > 0:
+                raise Warning(_('Title already exist.'))
+            else:
+                pass

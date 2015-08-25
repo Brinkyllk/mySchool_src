@@ -482,6 +482,31 @@
             </field>
         </record>
 
+
+        <!--CRM Lead-Search Inherited-->
+        <record id="inherited_lead_search_form_view" model="ir.ui.view">
+            <field name="name">lead.search.form.inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="type">search</field>
+            <field name="inherit_id" ref="crm.view_crm_case_leads_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@string='Unassigned']" position= 'replace'><!--need to find the x-path -->
+                    <filter string="Unassign" name="new_filter" icon="terp-accessories-archiver-minus" domain="[NEW DOMAIN]"/>
+                </xpath>
+            </field>
+            </record>
+
+        <record id="crm.crm_normal_action_sell" model="ir.actions.act_window">
+            <field name="name">Leads</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">crm.lead</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="view_type">form</field>
+            <field name="context">{"search_default_new_filter":1}</field>
+            <field name="view_id" ref="crm_case_tree_view_leads_extended"/>
+            <field name="search_view_id" ref="crm.view_crm_case_leads_filter"/>
+        </record>
+
         <!--crm_source_form_inherited -->
         <record id="view_crm_source_form_inherit" model="ir.ui.view">
             <field name="name">crm.source.form.inherit</field>
