@@ -213,7 +213,6 @@ class op_registration(osv.osv):
     # .... check first name....#
     def _check_invalid_first_name(self, cr, uid, ids, firstName):
         name = str(firstName)
-        name = ''.join([i for i in name if not i.isdigit()])
         if name.isalpha():
             return True
         else:
@@ -222,7 +221,6 @@ class op_registration(osv.osv):
     # .... check middle name....#
     def _check_invalid_middle_name(self, cr, uid, ids,middleName):
         name = str(middleName)
-        name = ''.join([i for i in name if not i.isdigit()])
         if name.isalpha():
             return True
         else:
@@ -231,7 +229,6 @@ class op_registration(osv.osv):
     # .... check last name....#
     def _check_invalid_last_name(self, cr, uid, ids, lastName):
         name = str(lastName)
-        name = ''.join([i for i in name if not i.isdigit()])
         if name.isalpha():
             return True
         else:
