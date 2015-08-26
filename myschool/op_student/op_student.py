@@ -484,10 +484,10 @@ class op_student(osv.Model):
         if 'is_company' in vals:
             if vals['is_company'] == True:
                 if vals['register_date'] == False or vals['register_date'] == None:
-                    raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a Registered Date..!!')
+                    raise osv.except_osv('Error', 'Registered Date cannot be null..!!')
             else:
                 if vals['birth_date'] == False or vals['birth_date'] == None:
-                    raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a Birth Date..!!')
+                    raise osv.except_osv('Error', 'Birth Date cannot be null..!!')
 
 
         #-----Check whether enrollment has or not-------#
