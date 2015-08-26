@@ -29,6 +29,7 @@
         'op_timetable/op_timetable_workflow.xml',
         'op_classroom/op_classroom_view.xml',
         'wizard/generate_time_table_view.xml',
+        'wizard/op_crm_lead_analysis.xml',
         'op_payment_schedule_line/op_payment_schedule_line_view.xml',
         'op_registration/op_registration_view.xml',
         'op_registration/op_registration_sequence.xml',
@@ -37,7 +38,8 @@
         'op_enrollment/op_enrollment_view.xml',
         'crm_lead/crm_lead_view.xml',
         'report/op_crm_lead_analysis_report_view.xml',
-        'myschool_view.xml'
+        'myschool_view.xml',
+        'views/op_crm_lead_analysis_report_generate.xml'
     ],
     # 'test': [
     #          'test/new_admission.yml',

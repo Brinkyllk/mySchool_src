@@ -110,3 +110,10 @@ class op_crm_lead_analysis_report(osv.Model):
 
                 FROM op_study_programme as stpr
             )""")
+
+
+class op_crm_lead_analysis_report_generate(osv.AbstractModel):
+    _name = 'myschool.report.op_crm_lead_analysis_report_generate'
+    _inherit = 'report.abstract_report'
+    _template = 'myschool.op_crm_lead_analysis_report_generate'
+    _wrapped_report_class = op_crm_lead_analysis_report

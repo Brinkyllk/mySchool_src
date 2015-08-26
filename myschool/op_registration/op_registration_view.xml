@@ -169,7 +169,7 @@
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">op.registration</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree,form,graph</field>
+            <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="view_op_registration_search" />
             <field name="domain">[]</field>
             <field name="context">{}</field>

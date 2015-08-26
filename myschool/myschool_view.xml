@@ -20,6 +20,7 @@
         <!--<menuitem id="menu_myschool_config_standard_mng" name="Standard Management" parent="menu_myschool_conf"/>-->
         <!--<menuitem id="menu_myschool_config_subject_mng" name="Subject(s) Management" parent="menu_myschool_conf"/>-->
         <menuitem id="menu_myschool_config_timetable_mng" name="Timetable Management" parent="menu_myschool_conf"/>
+        <menuitem id="menu_crm_lead_report" name="Reports" parent="base.menu_sales"/>
 
         <!--semester action-->
         <!--<record model="ir.actions.act_window" id="act_open_op_semester_view">-->
@@ -215,6 +216,8 @@
         <menuitem id="menu_gen_timetable" name="Generate Timetable" parent="menu_myschool_config_timetable_mng" action="act_open_generate_time_table_view"/>
 
         <!--<menuitem name ="Lead" id = "menu_lis_lab" action="new_lead" parent = "menu_myschool_all" />-->
+        <menuitem name="Generate CRM Lead Analysis" id="generate_view_op_crm_lead_analysis_form"
+                 parent="menu_crm_lead_report" action="act_open_op_crm_lead_analysis_view"/>
 
     </data>
 </openerp>
