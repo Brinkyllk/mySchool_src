@@ -490,8 +490,8 @@ class crm_lead(osv.Model):
 
     # ..onchange for is_new course
     @api.multi
-    def onchange_new_course(self, is_new_course):
-        if is_new_course:
+    def onchange_new_course(self, is_new_sdy_pro):
+        if is_new_sdy_pro:
             return True
 
     _inherit = 'crm.lead'
@@ -523,10 +523,10 @@ class crm_lead(osv.Model):
                                       'Afternoon'),
         'evening': fields.many2many('op.time.frame', 'op_evening_time_frame_rel', 'lead_id', 'time_frame_id',
                                     'Evening'),
-        'prospective_student': fields.integer(size=5, string='# Prospective Students'),
+        'prospective_student': fields.integer(size=5, string='No.of Prospective Students'),
         'inquiry_date': fields.date(string='Inquiry Date'),
         'tags': fields.many2many('op.course.tags', 'op_crm_lead_tags_rel', 'lead_id', 'tag_id', 'Tags'),
-        'is_new_course': fields.boolean('New Course', help="Check if the course is not exist"),
+        'is_new_sdy_pro': fields.boolean('New Study Programme', help="Check if the course is not exist"),
 
         'address_line1': fields.char('address line1', size=20),
         'address_line2': fields.char('address line2', size=25),

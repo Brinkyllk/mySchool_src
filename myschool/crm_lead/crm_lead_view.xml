@@ -263,13 +263,13 @@
                                context="{'default_name': first_name, 'default_street': address_line1, 'default_city': town, 'default_state_id': province, 'default_country_id': nation, 'default_function': function, 'default_phone': phone, 'default_mobile': mobile, 'default_fax': fax, 'default_email': email_from, 'default_user_id': user_id, 'default_section_id': section_id}"/>
                     </xpath>
                     <xpath  expr="//notebook" position="inside">
-                        <page string="Course(s) Info">
+                        <page string="Study Programme(s) Info">
                             <separator colspan="4" string="Study Programme Details"/>
-                            <field name="is_new_course"  on_change="onchange_new_course(is_new_course)" class="oe_inline"/><label for="is_new_course" string="Is a New Course ?"/>
+                            <field name="is_new_sdy_pro"  on_change="onchange_new_course(is_new_sdy_pro)" class="oe_inline"/><label for="is_new_sdy_pro" string="Is a New Study Programme ?"/>
                             <group col="4" colspan="4">
                                 <group>
-                                    <field name="courses_interested" attrs="{'invisible': [('is_new_course','=', True)]}" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
-                                    <field name="tags" attrs="{'invisible': [('is_new_course','=',False)]}"  widget="many2many_tags"/>
+                                    <field name="courses_interested" attrs="{'invisible': [('is_new_sdy_pro','=', True)]}" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
+                                    <field name="tags" attrs="{'invisible': [('is_new_sdy_pro','=',False)]}"  widget="many2many_tags" string="Study Programme Tags"/>
                                 </group>
                                 <group>
                                     <field name="prospective_student" />

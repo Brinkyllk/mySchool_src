@@ -100,7 +100,7 @@ class op_registration(osv.osv):
             [('d', 'Draft'), ('done', 'Done'), ('r', 'Rejected'),
              ('c', 'Cancel')], readonly=True, select=True, string='State'),
         'due_date': fields.date(string='Due Date', states={'done': [('readonly', True)]}),
-        'family_business': fields.char(size=256, string='Family Business', states={'done': [('readonly', True)]}),
+        'family_business': fields.char(size=100, string='Family Business', states={'done': [('readonly', True)]}),
         'family_income': fields.float(string='Family Income', states={'done': [('readonly', True)]}),
         'gender': fields.selection([('m', 'Male'), ('f', 'Female'), ('o', 'Other')], string='Gender', required=True,
                                    states={'done': [('readonly', True)]}),
@@ -310,17 +310,18 @@ class op_registration(osv.osv):
         if 'birth_date' in vals:
             self._check_birthday(cr, uid, [], vals['birth_date'])
 
-        if 'due_date' in vals:
-            reg_date = vals['registration_date']
-            apl_date = vals['application_date']
-            due_date = vals['due_date']
-            reg_date = dateutil.parser.parse(reg_date).date()
-            apl_date = dateutil.parser.parse(apl_date).date()
-            due_date = dateutil.parser.parse(due_date).date()
-            if due_date > reg_date and due_date > apl_date:
-                pass
-            else:
-                raise osv.except_osv(_('Due Date Error'), _('Due date cannot be back date to Registration and Application dates'))
+        if vals['due_date'] != False:
+            if 'due_date' in vals:
+                reg_date = vals['registration_date']
+                apl_date = vals['application_date']
+                due_date = vals['due_date']
+                reg_date = dateutil.parser.parse(reg_date).date()
+                apl_date = dateutil.parser.parse(apl_date).date()
+                due_date = dateutil.parser.parse(due_date).date()
+                if due_date > reg_date and due_date > apl_date:
+                    pass
+                else:
+                    raise osv.except_osv(_('Due Date Error'), _('Due date cannot be back date to Registration and Application dates'))
 
         # Address lines and update res.partner
         if 'address_line1' in vals:
