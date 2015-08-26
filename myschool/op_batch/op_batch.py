@@ -58,6 +58,13 @@ class op_batch(osv.Model):
         if 'batch_no' in vals:
             self.batch_validation(cr, uid, [], vals['batch_no'])
 
+        if 'price' in vals:
+            price = vals['price']
+            if price >= 0:
+                pass
+            else:
+                raise osv.except_osv('Value Error', 'Minus values are not allowed')
+
         programme = self.pool.get('op.study.programme').browse(cr, uid, vals['study_prog_code'])
         batch = vals['batch_no']
         programme_code = str(programme.code)
@@ -74,6 +81,13 @@ class op_batch(osv.Model):
 
         if 'batch_no' in values:
             self.batch_validation(cr, uid, [], values['batch_no'])
+
+        if 'price' in values:
+            price = values['price']
+            if price >= 0:
+                pass
+            else:
+                raise osv.except_osv('Value Error', 'Minus values are not allowed')
 
         programme_obj = self.browse(cr, uid, ids, context=context)
         # modification of study programme
