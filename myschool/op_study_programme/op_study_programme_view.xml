@@ -14,10 +14,9 @@
 
                             <field name="id" invisible="1"/>
                             <field name="code" on_change='onchange_case(code)' attrs="{'readonly': [('id', '!=', False)]}"/>
-
                             <field name="name"/>
                             <field name="res_person"/>
-                            <field name="parent"/>
+                            <field name="parent" options="{'no_open':True,'no_create_edit':'1'}"/>
                         </group>
                     </sheet>
                 </form>
