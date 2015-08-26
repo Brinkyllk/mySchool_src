@@ -46,6 +46,28 @@ class op_enrollment(osv.Model):
 
     _constraints = [(_checkSameCourse, ("Course enrollments are duplicated"),['batch_code'])]
 
+    def create(self, cr, uid, vals, context=None):
+        #Minus values are not allowed for the price
+        if 'price' in vals:
+            price = vals['price']
+            if price >= 0:
+                pass
+            else:
+                raise osv.except_osv('Value Error', 'Minus values are not allowed for the Price')
+
+        return super(op_enrollment, self).create(cr, uid, vals, context=context)
+
+    def write(self, cr, uid, ids,  values, context=None):
+        #Minus values are not allowed for the price
+        if 'price' in values:
+            price = values['price']
+            if price >= 0:
+                pass
+            else:
+                raise osv.except_osv('Value Error', 'Minus values are not allowed for the Price')
+
+        return super(op_enrollment, self).write(cr, uid, ids,  values, context=context)
+
 
     #load the specific student of the selected customer
     # def default_get(self, cr, uid, fields, context=None):

@@ -356,6 +356,22 @@ class op_registration(osv.osv):
                 cntry = vals['nation'].strip()
                 vals.update({'nation': cntry})
 
+        #Minus values are not allowed for the fees
+        if 'fees' in vals:
+            fees = vals['fees']
+            if fees >= 0:
+                pass
+            else:
+                raise osv.except_osv('Value Error', 'Minus values are not allowed for the Fees')
+
+        #Minus values are not allowed for the family_income
+        if 'family_income' in vals:
+            familyIncome = vals['family_income']
+            if familyIncome >= 0:
+                pass
+            else:
+                raise osv.except_osv('Value Error', 'Minus values are not allowed for the Family Income')
+
         k = vals['lead_id']
         print k
         leadref = self.pool.get('crm.lead')
@@ -422,6 +438,22 @@ class op_registration(osv.osv):
             else:
                 cntry = values['nation'].strip()
                 values.update({'nation': cntry})
+
+        #Minus values are not allowed for the fees
+        if 'fees' in values:
+            fees = values['fees']
+            if fees >= 0:
+                pass
+            else:
+                raise osv.except_osv('Value Error', 'Minus values are not allowed for the Fees')
+
+        #Minus values are not allowed for the family_income
+        if 'family_income' in values:
+            familyIncome = values['family_income']
+            if familyIncome >= 0:
+                pass
+            else:
+                raise osv.except_osv('Value Error', 'Minus values are not allowed for the Family Income')
 
         return super(op_registration, self).write(cr, uid, ids, values, context=context)
 
