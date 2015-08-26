@@ -664,23 +664,23 @@ class op_student(osv.Model):
                 if 'register_date' in values:
                     pass
                 else:
-                    raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a Registered Date..!!')
+                    raise osv.except_osv('Error', ' Registered Date cannot be null..!!')
                     # if values['register_date'] == False or values['register_date'] == None:
                     #     raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a Registered Date..!!')
             else:
                 if 'birth_date' in values:
                     if values['birth_date'] == False or values['birth_date'] == None:
-                        raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a NIC..!!')
+                        raise osv.except_osv('Error', 'NIC cannot be null..!!')
                     else:
                         if values['birth_date'] == False or values['birth_date'] == None:
-                            raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a NIC..!!')
+                            raise osv.except_osv('Error', 'NIC cannot be null..!!')
                         return True
                 elif 'id_number' in values:
                     if values ['id_number'] == False or values ['id_number'] == None:
-                        raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a NIC..!!')
+                        raise osv.except_osv('Error', 'NIC cannot be null..!!')
                     else:
                         if values['id_number'] == False or values['birth_date'] == None:
-                            raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a NIC..!!')
+                            raise osv.except_osv('Error', 'NIC cannot be null..!!')
                         return True
 
         return super(op_student, self).write(cr, uid, ids, values, context=context)

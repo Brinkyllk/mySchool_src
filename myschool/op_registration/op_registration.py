@@ -94,7 +94,7 @@ class op_registration(osv.osv):
         'province': fields.char('province', size=20, states={'done': [('readonly', True)]}),
         'nation': fields.char('nation', size=20, states={'done': [('readonly', True)]}),
 
-        'fees': fields.float(string='Fees', digits=(12, 6), states={'done': [('readonly', True)]}),
+        'fees': fields.float(string='Fees', digits=(2, 2), states={'done': [('readonly', True)]}),
         'photo': fields.binary(string='Photo', states={'done': [('readonly', True)]}),
         'state': fields.selection(
             [('d', 'Draft'), ('done', 'Done'), ('r', 'Rejected'),
@@ -320,7 +320,7 @@ class op_registration(osv.osv):
             if due_date > reg_date and due_date > apl_date:
                 pass
             else:
-                raise osv.except_osv(_('Due Date Error'), _('Due date cannot be Registration date and Application date'))
+                raise osv.except_osv(_('Due Date Error'), _('Due date cannot be back date to Registration and Application dates'))
 
         # Address lines and update res.partner
         if 'address_line1' in vals:
@@ -364,13 +364,9 @@ class op_registration(osv.osv):
         # leadref.write(cr, uid, k, {'stage_id': 6}, context=context)
         leadref.write(cr, uid, [k],{ 'stage_id': 6})
 
+        # return super(op_registration, self).create(cr, uid, vals, context=context)
 
-
-
-
-        #return super(op_registration, self).create(cr, uid, vals, context=context)
-
-        #-----Check whether enrollment has or not-------#
+        # -----Check whether enrollment has or not------- #
         reg_id = super(op_registration, self).create(cr, uid, vals, context=context)
         enrollment_ref = self.pool.get('op.enrollment')
         enrollment_count = enrollment_ref.search(cr, uid, [('reg_id', '=', reg_id)], count=True, context=context)
