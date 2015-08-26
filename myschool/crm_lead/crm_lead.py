@@ -442,6 +442,12 @@ class op_follow_up_type(osv.Model):
 
         # ----------name validation caller------- s#
         if 'name' in vals:
+            name = vals['name']
+            s = self.pool.get('op.follow.up.type')  # get reference to object
+            # Validate Followups duplicating
+            get_name = s.search(cr, uid, [('name', '=', name)], count=True, context=context)
+            if get_name > 0:
+                raise osv.except_osv(_(u'Error'), _(u'Followup Type Already Exist!'))
             self.name_validation(cr, uid, [], vals['name'])
 
         # --------removing white spaces---------- s#
@@ -477,6 +483,8 @@ class crm_lead(osv.Model):
     def _check_pstudent(self, cr, uid, ids, prospective_student):
         if prospective_student > 999:
             raise osv.except_osv('Prospective Students', 'Limit exceeded !')
+        elif prospective_student < 1:
+            raise osv.except_osv('Prospective Students', 'Cannot be Zero !')
         else:
             return True
 
@@ -530,8 +538,9 @@ class crm_lead(osv.Model):
 
         'first_name': fields.char('First Name', size=30),
         'last_name': fields.char('Last Name', size=30),
+        'probability': fields.float(string='Probability', readonly=True),
 
-        }
+    }
 
     # ------check spaces in address line one---------#
     def _check_add_l_one(self, cr, uid, ids, context=None):
@@ -1051,7 +1060,6 @@ class calendar_event(osv.Model):
         else:
             raise osv.except_osv(_('Invalid Name !'), _('Please Enter a valid name'))
 
-
     def create(self, cr, uid, vals, context=None):
         # ----------name validation caller------- s#
         if 'name' in vals:
@@ -1227,6 +1235,14 @@ class crm_case_categ(osv.Model):
     def create(self, cr, uid, vals, context=None):
         # ----------name validation caller------- s#
         if 'name' in vals:
+            if 'name' in vals:
+                name = vals['name']
+                get_dul = self.pool.get('crm.case.stage').search(cr, uid, ['name', '=', name], context=context)
+                if len(get_dul) == 1:
+                    raise osv.except_osv(_(u'Error'), _(u'Same Stage Already exist.'))
+                return
+            else:
+                return True
             self.name_validation(cr, uid, [], vals['name'])
 
         # --------removing white spaces---------- s#
