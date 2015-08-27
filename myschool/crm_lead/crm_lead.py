@@ -542,6 +542,10 @@ class crm_lead(osv.Model):
 
     }
 
+    _defaults = {
+        'prospective_student': 1
+    }
+
     # ------check spaces in address line one---------#
     def _check_add_l_one(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids, context=context)
