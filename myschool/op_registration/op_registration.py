@@ -94,7 +94,7 @@ class op_registration(osv.osv):
         'province': fields.char('province', size=20, states={'done': [('readonly', True)]}),
         'nation': fields.char('nation', size=20, states={'done': [('readonly', True)]}),
 
-        'fees': fields.float(string='Fees', digits=(2, 2), states={'done': [('readonly', True)]}),
+        'fees': fields.float(string='Fees', digits=(0, 2), states={'done': [('readonly', True)]}),
         'photo': fields.binary(string='Photo', states={'done': [('readonly', True)]}),
         'state': fields.selection(
             [('d', 'Draft'), ('done', 'Done'), ('r', 'Rejected'),

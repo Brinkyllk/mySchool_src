@@ -9,7 +9,7 @@ class op_enrollment(osv.Model):
         'lead_id': fields.many2one('crm.lead', string="Lead No"),
         'payment_term': fields.many2one('account.payment.term', 'Payment Terms'),
         'template_price': fields.many2one('op.batch', 'Template Price'),
-        'price': fields.float(string='Price'),
+        'price': fields.float(string='Price', digits=(0, 2)),
         'confirm': fields.boolean(string='Confirmed'),
         'reg_id': fields.many2one('op.registration', invisible=True, string="Registration ID")
         }
