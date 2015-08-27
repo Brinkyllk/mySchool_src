@@ -466,6 +466,12 @@
             <field name="inherit_id" ref="myschool.crm_followup_form"/>
             <field name="arch" type="xml">
                 <data>
+                    <xpath expr="//field[@name='start_date']" position="attributes">
+                    <attribute name="string">Calculated Start</attribute>
+                    </xpath>
+                    <xpath expr="//field[@name='stop_date']" position="attributes">
+                    <attribute name="string">Calculated Stop</attribute>
+                    </xpath>
                     <field name="categ_ids" position="attributes">
                         <attribute name="invisible">1</attribute>
                     </field>

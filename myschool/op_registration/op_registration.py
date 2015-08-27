@@ -455,6 +455,14 @@ class op_registration(osv.osv):
             else:
                 raise osv.except_osv('Value Error', 'Minus values are not allowed for the Family Income')
 
+        if 'enrollment_ids' in values:
+            enrollmentIds = values['enrollment_ids']
+            lenEnrollmentIds = len(enrollmentIds)
+            if lenEnrollmentIds <= 1:
+                raise osv.except_osv('Course  Enrollment Error', 'No. of Course Enrollments cannot be None')
+            else:
+                pass
+
         return super(op_registration, self).write(cr, uid, ids, values, context=context)
 
     _constraints = [
