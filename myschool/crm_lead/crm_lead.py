@@ -174,7 +174,6 @@ class calendar_alarm(osv.Model):
 
     # ---------override create function---------- s#
     def create(self, cr, uid, vals, context=None):
-
         # ----------name validation caller------- s#
         if 'name' in vals:
             self.name_validation(cr, uid, [], vals['name'])
@@ -188,6 +187,7 @@ class calendar_alarm(osv.Model):
         vals.update({'name': name})
 
         return super(calendar_alarm, self).create(cr, uid, vals, context=context)
+
 
 class op_time_frame(osv.Model):
     _name = 'op.time.frame'
@@ -284,18 +284,7 @@ class op_time_frame(osv.Model):
 
             if morning == 0 and anyTime == 0 and afternoon == 0 and evening == 0:
                 return super(op_time_frame, self).unlink(cr, uid, vals, context=context)
-                # raise osv.except_osv('Invalid Product Price', 'Please enter a valid price')
-            # elif anyTime <= 1:
-            #     # return super(op_time_frame, self).unlink(cr, uid, vals, context=context)
-            #     raise osv.except_osv('Invalid Product Price', 'Please enter a valid price')
-            # elif afternoon <= 1:
-            #     # return super(op_time_frame, self).unlink(cr, uid, vals, context=context)
-            #     raise osv.except_osv('Invalid Product Price', 'Please enter a valid price')
-            # elif evening <= 1:
-            #     # return super(op_time_frame, self).unlink(cr, uid, vals, context=context)
-            #     raise osv.except_osv('Invalid Product Price', 'Please enter a valid price')
             else:
-                # return super(op_time_frame, self).unlink(cr, uid, vals, context=context)
                 raise osv.except_osv('You can not delete this record', 'This Time Frame already referred in another location')
 
         return super(op_time_frame, self).unlink(cr, uid, vals, context=context)
@@ -400,9 +389,6 @@ class crm_tracking_medium(osv.Model):
             self.name_validation(cr, uid, [], values['name'])
 
         return super(crm_tracking_medium, self).write(cr, uid, ids, values, context=context)
-
-
-
 
 
 class op_follow_up_type(osv.Model):
@@ -602,7 +588,6 @@ class crm_lead(osv.Model):
         else:
             raise osv.except_osv(_('Inquiry Date..!'), _('Cannot add a future date..'))
 
-
     '''==========When the opportunity won the student is already in the system load the student form with the details
                 else load the load the registration form============'''
     def case_mark_won(self, cr, uid, ids, context=None):
@@ -695,7 +680,6 @@ class crm_lead(osv.Model):
             return True
         else:
             raise osv.except_osv(_('Invalid Company Name'), _('Please enter Company name correctly'))
-
 
     # phone number validation for customer
     def phoneNumberValidation(self, cr, uid, ids, phoneNumber):
@@ -1073,7 +1057,6 @@ class calendar_event(osv.Model):
         name = vals['name'].strip().title()
         vals.update({'name': name})
 
-        
         #When create a followup update the FollowUp counts in CRM Lead
         activeID = context['active_id']
 
@@ -1132,16 +1115,6 @@ class calendar_event(osv.Model):
 
             updateMeetingCount = intMeetingCount - 1
             crmLead.write(cr, uid, [intOpportunityId], {'meeting_count': updateMeetingCount})
-
-            # calenderEventId = self.browse(cr, uid, x, context=context)
-            # opportunityId = self.browse(cr, uid, calenderEventId.opportunity_id, context=context)
-            # realOpportunityId = int(opportunityId[0].id)
-            #
-            # crmId = crmLead.browse(cr, uid, realOpportunityId, context=context)
-            # count = crmLead.browse(cr, uid, crmId.meeting_count, context=context)
-            # realCount = int(count[0].id)
-            #
-            # updatedCount = realCount - 1
 
         return super(calendar_event, self).unlink(cr, uid, vals, context=context)
 
@@ -1265,5 +1238,5 @@ class crm_case_categ(osv.Model):
         name = values['name'].strip().title()
         values.update({'name': name})
 
-        return super(crm_case_categ, self).write(cr, uid, ids,  values, context=context)
+        return super(crm_case_categ, self).write(cr, uid, values, context=context)
 
