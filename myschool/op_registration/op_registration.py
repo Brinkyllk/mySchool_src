@@ -101,7 +101,7 @@ class op_registration(osv.osv):
              ('c', 'Cancel')], readonly=True, select=True, string='State'),
         'due_date': fields.date(string='Due Date', states={'done': [('readonly', True)]}),
         'family_business': fields.char(size=100, string='Family Business', states={'done': [('readonly', True)]}),
-        'family_income': fields.float(string='Family Income', states={'done': [('readonly', True)]}),
+        'family_income': fields.float(string='Family Income', digit=(0, 2), states={'done': [('readonly', True)]}),
         'gender': fields.selection([('m', 'Male'), ('f', 'Female'), ('o', 'Other')], string='Gender', required=True,
                                    states={'done': [('readonly', True)]}),
         'division_id': fields.many2one('op.division', string='Division', states={'done': [('readonly', True)]}),
