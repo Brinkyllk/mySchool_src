@@ -172,6 +172,9 @@ class op_registration(osv.osv):
     def confirm_selection(self, cr, uid, ids, context={}):
         # this_obj = self.browse(cr, uid, ids[0], context)
         # student = self.pool.get('op.student').browse(cr, uid, this_obj.student_id.id, context)
+
+        # fields.update(name="enrollment_ids", readonly=True)
+
         models_data = self.pool.get('ir.model.data')
         form_view = models_data.get_object_reference(cr, uid, 'myschool', 'view_student_form')
         tree_view = models_data.get_object_reference(cr, uid, 'myschool', 'view_student_tree')
@@ -455,13 +458,13 @@ class op_registration(osv.osv):
             else:
                 raise osv.except_osv('Value Error', 'Minus values are not allowed for the Family Income')
 
-        if 'enrollment_ids' in values:
-            enrollmentIds = values['enrollment_ids']
-            lenEnrollmentIds = len(enrollmentIds)
-            if lenEnrollmentIds <= 1:
-                raise osv.except_osv('Course  Enrollment Error', 'No. of Course Enrollments cannot be None')
-            else:
-                pass
+        # if 'enrollment_ids' in values:
+        #     enrollmentIds = values['enrollment_ids']
+        #     lenEnrollmentIds = len(enrollmentIds)
+        #     if lenEnrollmentIds <= 1:
+        #         raise osv.except_osv('Course  Enrollment Error', 'No. of Course Enrollments cannot be None')
+        #     else:
+        #         pass
 
         return super(op_registration, self).write(cr, uid, ids, values, context=context)
 

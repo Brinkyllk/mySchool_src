@@ -3,7 +3,7 @@
 	<data>
 		<record id="view_op_crm_lead_analysis_form" model="ir.ui.view">
 			<field name="name">op.crm.lead.analysis.form</field>
-			<field name="model">op.crm.lead.analysis</field>
+			<field name="model">op.crm.lead.analysis.xls</field>
 			<field name="priority" eval="8" />
 			<field name="arch" type="xml">
 				<form string="Generate Lead Analysis Report" version="7.0">
@@ -11,8 +11,10 @@
 						<span groups="base.group_user">
 							<button special="cancel" string="Close" type="object"
 								icon="terp-dialog-close" />
-							<button string="Generate Lead Analysis Report" type="object"
-								name="gen_lead_analysis" />
+							<!--<button string="Generate Lead Analysis Report" type="object"-->
+								<!--name="gen_lead_analysis" />-->
+                            <button name="xls_export" string="Generate Lead Analysis Report" type="object"
+                            context="{'xls_export':1}"/>
 						</span>
 					</header>
 					<sheet>
@@ -21,9 +23,7 @@
 							<group colspan="4" cols="4">
 								<field name="start_date" />
 								<field name="end_date" />
-							</group>
-							<group col="4" colspan="4">
-								<field name="study_programme_id"/>
+                                <field name="study_programme_id"/>
 							</group>
 						</div>
 					</sheet>
@@ -34,7 +34,7 @@
 		<record model="ir.actions.act_window" id="act_open_op_crm_lead_analysis_view">
 			<field name="name">Generate Lead Analysis Report</field>
 			<field name="type">ir.actions.act_window</field>
-			<field name="res_model">op.crm.lead.analysis</field>
+			<field name="res_model">op.crm.lead.analysis.xls</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">form</field>
 			<field name="target">new</field>

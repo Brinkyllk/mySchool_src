@@ -37,7 +37,6 @@
         'op_study_programme/op_study_programme_view.xml',
         'op_enrollment/op_enrollment_view.xml',
         'crm_lead/crm_lead_view.xml',
-        'report/op_crm_lead_analysis_report_view.xml',
         'myschool_view.xml',
         'views/op_crm_lead_analysis_report_generate.xml'
     ],

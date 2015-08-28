@@ -1304,3 +1304,28 @@ class crm_case_categ(osv.Model):
 
         return super(crm_case_categ, self).write(cr, uid, values, context=context)
 
+
+# class crm_partner_binding(osv.osv_memory):
+#     _inherit = 'crm.partner.binding'
+#
+#     def create(self, cr, uid, vals, context=None):
+#         # ----------name validation caller------- s#
+#         if 'name' in vals:
+#             if 'name' in vals:
+#                 name = vals['name']
+#                 get_dul = self.pool.get('crm.case.stage').search(cr, uid, ['name', '=', name], context=context)
+#                 if len(get_dul) == 1:
+#                     raise osv.except_osv(_(u'Error'), _(u'Same Stage Already exist.'))
+#                 return
+#             else:
+#                 return True
+#             self.name_validation(cr, uid, [], vals['name'])
+#
+#         # --------removing white spaces---------- s#
+#         name = vals['name'].strip().title()
+#         vals.update({'name': name})
+#
+#         return super(crm_case_categ, self).create(cr, uid, vals, context=context)
+#
+# crm_partner_binding()
+
