@@ -328,6 +328,43 @@
             </field>
         </record>
 
+        <record id="view_op_study_programme_tags_form" model="ir.ui.view">
+            <field name="name">op.study.programme.tags.form</field>
+            <field name="model">op.course.tags</field>
+            <field name="arch" type="xml">
+                <form string="Tags for New Study Programmes" version="7.0">
+                    <sheet>
+                        <separator string="Tags for New Study Programmes" colspan="4" />
+                        <group>
+                            <field name="code" />
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_op_study_programme_tags_tree" model="ir.ui.view">
+            <field name="name">op.study.programme.tags.tree</field>
+            <field name="model">op.course.tags</field>
+            <field name="arch" type="xml">
+                <tree string="Tags for New Study Programmes" version="7.0">
+                    <field name="code"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_open_op_study_programme_tags_view">
+			<field name="name">Study Programme tags</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">op.course.tags</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[]</field>
+			<field name="context">{}</field>
+		</record>
+
         <!--crm_lead_tree_inherited-->
         <record id="crm_case_tree_view_leads_extended" model="ir.ui.view">
             <field name="name">crm.lead.tree.inherit</field>

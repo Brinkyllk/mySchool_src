@@ -73,6 +73,29 @@ class op_course_tags(osv.Model):
 
         return super(op_course_tags, self).write(cr, uid, ids, values, context=context)
 
+    def unlink(self, cr, uid, vals, context=None):
+        #When delete followups update meeting count
+        crmLead = self.pool.get('crm.lead')
+        for values in vals:
+            k = [values]
+            cr.execute('SELECT lead_id FROM op_crm_lead_tags_rel ' \
+                       'WHERE tag_id = %s ', (k))
+
+            op_crm_lead_tags_rel_id = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+            if op_crm_lead_tags_rel_id:
+                int_op_crm_lead_tags_rel_id = int(op_crm_lead_tags_rel_id[0].id)
+                list_int_op_crm_lead_tags_rel_id = [int_op_crm_lead_tags_rel_id]
+                morning = len(list_int_op_crm_lead_tags_rel_id)
+            else:
+                morning = 0
+
+            if morning == 0:
+                return super(op_course_tags, self).unlink(cr, uid, vals, context=context)
+            else:
+                raise osv.except_osv('You can not delete this record', 'This Tag already referred in another location')
+
+        return super(op_course_tags, self).unlink(cr, uid, vals, context=context)
+
 
 class op_lead_modes(osv.Model):
     _name = 'op.lead.modes'
