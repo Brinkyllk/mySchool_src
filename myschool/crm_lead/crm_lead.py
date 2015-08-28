@@ -474,12 +474,6 @@ class crm_lead(osv.Model):
         else:
             return True
 
-    # ..onchange for is_new course
-    @api.multi
-    def onchange_new_course(self, is_new_sdy_pro):
-        if is_new_sdy_pro:
-            return True
-
     _inherit = 'crm.lead'
     _rec_name = 'name'
     _description = "adding fields to crm.lead"
@@ -497,7 +491,7 @@ class crm_lead(osv.Model):
                                       select=True,
                                       help="Linked student (optional). Usually created when converting the lead.",
                                       domain="[('is_student', '=', True)]"),
-        'modes': fields.many2one('op.lead.modes', 'Mode of Inquiry'),
+        'modes': fields.many2one('op.lead.modes', 'Mode of Inquiry', required=True),
         'courses_interested': fields.many2many('op.study.programme', 'op_study_programme_lead_rel', 'lead_id',
                                                'study_programme_id',
                                                'Study programme(s) Interested'),
@@ -510,10 +504,8 @@ class crm_lead(osv.Model):
         'evening': fields.many2many('op.time.frame', 'op_evening_time_frame_rel', 'lead_id', 'time_frame_id',
                                     'Evening'),
         'prospective_student': fields.integer(size=5, string='No.of Prospective Students'),
-        'inquiry_date': fields.date(string='Inquiry Date'),
+        'inquiry_date': fields.date(string='Inquiry Date', required=True),
         'tags': fields.many2many('op.course.tags', 'op_crm_lead_tags_rel', 'lead_id', 'tag_id', 'Tags'),
-        'is_new_sdy_pro': fields.boolean('New Study Programme', help="Check if the course is not exist"),
-
         'address_line1': fields.char('address line1', size=20),
         'address_line2': fields.char('address line2', size=25),
         'town': fields.char('town', size=25),
@@ -719,16 +711,10 @@ class crm_lead(osv.Model):
 
     # .... check passing nul values....#
     def _check_invalid_data(self, cr, uid, ids, subjectName):
-        n_name = str(subjectName).replace(",", "")
-        n_name = n_name.replace(" ", "")
-        n_name = ''.join([i for i in n_name if not i.isdigit()])
         if str(subjectName).isspace():
             raise osv.except_osv(_('Invalid Subject Description !'), _('Only spaces not allowed'))
-
-        elif n_name.isalpha() or n_name.isdigit():
-            return True
         else:
-            raise osv.except_osv(_('Invalid Subject Description'), _('Please insert valid information'))
+            pass
 
     # ..email validation....#
     def validate_email(self, cr, uid, ids, email_from):
@@ -767,6 +753,15 @@ class crm_lead(osv.Model):
                 return True
             else:
                 raise osv.except_osv(_('Invalid Expected Closing Date!'), _('Enter a Future Date..'))
+        else:
+            pass
+
+    # ----------availability of programs and tags-------------- s#
+    def check_tags_pro(self, cr, uid, ids, pro, tags):
+        study_tags_len = len(tags[0][2])
+        study_pro_len = len(pro[0][2])
+        if study_pro_len < 1 and study_tags_len < 1:
+            raise osv.except_osv(_('Missing Required Information'), _('Required one Interested Study programme or one New Study Programme Tag in Study Prorgammes Info'))
         else:
             pass
 
@@ -880,6 +875,10 @@ class crm_lead(osv.Model):
                 self._check_date(cr, uid, [], vals['inquiry_date'])
         else:
             pass
+
+        # ---------Check availability of study programme or tags--------- s#
+        if 'courses_interested' in vals or 'tags' in vals:
+            self.check_tags_pro(cr, uid, [], vals['courses_interested'], vals['tags'])
 
         return super(crm_lead, self).create(cr, uid, vals, context=context)
 
@@ -995,6 +994,10 @@ class crm_lead(osv.Model):
             else:
                 pass
 
+        # ---------Check availability of study programme or tags--------- s#
+        if 'courses_interested' in values or 'tags' in values:
+            self.check_tags_pro(cr, uid, [], values['courses_interested'], values['tags'])
+
         return super(crm_lead, self).write(cr, uid, ids, values, context=context)
 
     _constraints = [
@@ -1009,7 +1012,7 @@ class crm_lead(osv.Model):
 class calendar_event(osv.Model):
     _inherit = 'calendar.event'
     _columns = {
-        'type': fields.many2one('op.follow.up.type', 'Follow-up Type')
+        'type': fields.many2one('op.follow.up.type', 'Follow-up Type', required=True)
     }
 
     # ---------repetition validation------------- #

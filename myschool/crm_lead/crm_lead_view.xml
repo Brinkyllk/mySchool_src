@@ -265,11 +265,11 @@
                     <xpath  expr="//notebook" position="inside">
                         <page string="Study Programme(s) Info">
                             <separator colspan="4" string="Study Programme Details"/>
-                            <field name="is_new_sdy_pro"  on_change="onchange_new_course(is_new_sdy_pro)" class="oe_inline"/><label for="is_new_sdy_pro" string="Is a New Study Programme ?"/>
+                            <!--<field name="is_new_sdy_pro"  on_change="onchange_new_course(is_new_sdy_pro)" class="oe_inline"/><label for="is_new_sdy_pro" string="Is a New Study Programme ?"/>-->
                             <group col="4" colspan="4">
                                 <group>
-                                    <field name="courses_interested" attrs="{'invisible': [('is_new_sdy_pro','=', True)]}" widget="many2many_tags" options="{'no_create_edit':'1'}"/>
-                                    <field name="tags" attrs="{'invisible': [('is_new_sdy_pro','=',False)]}"  widget="many2many_tags" string="Study Programme Tags"/>
+                                    <field name="courses_interested"  widget="many2many_tags" options="{'no_create_edit':'1'}"/>
+                                    <field name="tags" widget="many2many_tags" string="New Study Programme Tags"/>
                                 </group>
                                 <group>
                                     <field name="prospective_student" />
@@ -321,6 +321,9 @@
                     <field name="partner_id" position="attributes">
                         <attribute name="invisible">1</attribute>
                     </field>
+                    <field name="categ_ids" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </field>
                 </data>
             </field>
         </record>
@@ -365,6 +368,7 @@
                             <group>
                                 <separator colspan="4" string="Study Programme Details"/>
                                 <field name="courses_interested"  widget="many2many_tags" options="{'no_create_edit':'1'}"/>
+                                <field name="tags" widget="many2many_tags" string="New Study Programme Tags"/>
                                 <field name="prospective_student"/>
                             </group>
                             <page string="Suitable Time Frame">
@@ -431,7 +435,6 @@
                         <group >
                             <field name="date_deadline"/>
                             <field name="priority" widget="priority"/>
-                            <field name="categ_ids"/>
                         </group>
                     </xpath>
                     <xpath expr="//field[@name='fax']" position="after">
@@ -453,6 +456,9 @@
                         <attribute name="invisible">1</attribute>
                     </field>
                     <field name="function" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </field>
+                    <field name="partner_id" position="attributes">
                         <attribute name="invisible">1</attribute>
                     </field>
                 </data>
