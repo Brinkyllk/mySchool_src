@@ -903,6 +903,16 @@ class crm_lead(osv.Model):
         if 'courses_interested' in vals or 'tags' in vals:
             self.check_tags_pro(cr, uid, [], vals['courses_interested'], vals['tags'])
 
+        # Almost required a value from email or mobile or phone
+        if 'email_from' in vals or 'mobile' in vals or 'phone' in vals:
+            email = vals['email_from']
+            mobile = vals['mobile']
+            phone = vals['phone']
+            if email == False and mobile == False and phone == False:
+                raise osv.except_osv(_('Missing Required Information'), _('Required Email or Mobile or Phone to contact.!'))
+            else:
+                pass
+
         return super(crm_lead, self).create(cr, uid, vals, context=context)
 
     def write(self, cr, uid, ids, values, context=None):
@@ -1020,6 +1030,25 @@ class crm_lead(osv.Model):
         # ---------Check availability of study programme or tags--------- s#
         if 'courses_interested' in values or 'tags' in values:
             self.check_tags_pro(cr, uid, [], values['courses_interested'], values['tags'])
+
+        # # Almost required a value from email or mobile or phone
+        # if 'email_from' in values or 'mobile' in values or 'phone' in values:
+        #     email = False
+        #     mobile = False
+        #     phone = False
+        #     if 'email_from' in values:
+        #         email = values['email_from']
+        #
+        #     if 'phone' in values:
+        #         phone = values['phone']
+        #
+        #     if 'mobile' in values:
+        #         mobile = values['mobile']
+        #
+        #     if email == False and mobile == False and phone == False:
+        #         raise osv.except_osv(_('Missing Required Information'), _('Required Email or Mobile or Phone to contact.!'))
+        #     else:
+        #         pass
 
         return super(crm_lead, self).write(cr, uid, ids, values, context=context)
 
