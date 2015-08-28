@@ -39,15 +39,10 @@ class op_batch(osv.Model):
 
     # .... check passing nul values....#
     def batch_name_validation(self, cr, uid, ids, batch_name):
-        n_name = str(batch_name).replace(",", "")
-        n_name = n_name.replace(" ", "")
-        n_name = ''.join([i for i in n_name if not i.isdigit()])
         if str(batch_name).isspace():
             raise osv.except_osv(_('Invalid Batch Name !'), _('Only spaces not allowed'))
-        elif n_name.isalpha():
-            return True
         else:
-            raise osv.except_osv(_('Invalid Batch Name'), _('Please insert valid name..!'))
+            pass
 
     # ......Batch no validation........ s#
     def batch_no_validation(self,cr, uid, ids, batch_no):
