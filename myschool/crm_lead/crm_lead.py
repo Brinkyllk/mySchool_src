@@ -1029,26 +1029,35 @@ class crm_lead(osv.Model):
 
         # ---------Check availability of study programme or tags--------- s#
         if 'courses_interested' in values or 'tags' in values:
-            self.check_tags_pro(cr, uid, [], values['courses_interested'], values['tags'])
+            cr.execute('SELECT tag_id FROM op_crm_lead_tags_rel WHERE lead_id=%s ', ids)
+            tags_records = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+            tags_length = len(tags_records)
 
-        # # Almost required a value from email or mobile or phone
-        # if 'email_from' in values or 'mobile' in values or 'phone' in values:
-        #     email = False
-        #     mobile = False
-        #     phone = False
-        #     if 'email_from' in values:
-        #         email = values['email_from']
-        #
-        #     if 'phone' in values:
-        #         phone = values['phone']
-        #
-        #     if 'mobile' in values:
-        #         mobile = values['mobile']
-        #
-        #     if email == False and mobile == False and phone == False:
-        #         raise osv.except_osv(_('Missing Required Information'), _('Required Email or Mobile or Phone to contact.!'))
-        #     else:
-        #         pass
+            cr.execute('SELECT study_programme_id FROM op_study_programme_lead_rel WHERE lead_id=%s ', ids)
+            std_records = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+            stdy_length = len(std_records)
+
+            if 'courses_interested' in values and 'tags' in values:
+                if len(values['courses_interested'][0][2]) or len(values['tags'][0][2]):
+                    pass
+                else:
+                    raise osv.except_osv(_('Error'), _('no length'))
+
+            if 'courses_interested' in values and 'tags' not in values:
+                if len(values['courses_interested'][0][2]):
+                    pass
+                elif tags_length > 0:
+                    pass
+                else:
+                    raise osv.except_osv(_('Error'), _('no length'))
+
+            if 'courses_interested' not in values and 'tags' in values:
+                if len(values['tags'][0][2]):
+                    pass
+                elif stdy_length > 0:
+                    pass
+                else:
+                    raise osv.except_osv(_('Error'), _('no length'))
 
         return super(crm_lead, self).write(cr, uid, ids, values, context=context)
 
