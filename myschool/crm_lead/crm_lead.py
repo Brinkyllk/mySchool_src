@@ -537,8 +537,8 @@ class crm_lead(osv.Model):
         'meeting_count': fields.integer(string='No.Of Follow-ups'),
         # 'meeting_count': fields.function(_meeting_count,type='integer', string='#Follow-ups', store=True),
 
-        'first_name': fields.char('First Name', size=30),
-        'last_name': fields.char('Last Name', size=30),
+        'first_name': fields.char('First Name', size=30, required=True),
+        'last_name': fields.char('Last Name', size=30, required=True),
         'probability': fields.float(string='Probability', readonly=True),
 
     }
