@@ -41,14 +41,10 @@ class op_study_programme(osv.Model):
 
     # -----------name validation----------- s#
     def name_validation(self, cr, uid, ids, name):
-        std_name = str(name).replace(" ", "")
-        std_name = ''.join([i for i in std_name if not i.isdigit()])
         if str(name).isspace():
             raise osv.except_osv(_('Invalid Name !'), _('Only Spaces not allowed'))
-        elif std_name.isalpha():
-            return True
         else:
-            raise osv.except_osv(_('Invalid Name !'), _('Special Characters not allowed..!'))
+            pass
 
     # ------------Override the create method----------- s#
     def create(self, cr, uid, vals, context=None):
