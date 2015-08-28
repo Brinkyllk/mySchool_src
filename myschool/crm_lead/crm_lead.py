@@ -85,11 +85,11 @@ class op_course_tags(osv.Model):
             if op_crm_lead_tags_rel_id:
                 int_op_crm_lead_tags_rel_id = int(op_crm_lead_tags_rel_id[0].id)
                 list_int_op_crm_lead_tags_rel_id = [int_op_crm_lead_tags_rel_id]
-                morning = len(list_int_op_crm_lead_tags_rel_id)
+                tags = len(list_int_op_crm_lead_tags_rel_id)
             else:
-                morning = 0
+                tags = 0
 
-            if morning == 0:
+            if tags == 0:
                 return super(op_course_tags, self).unlink(cr, uid, vals, context=context)
             else:
                 raise osv.except_osv('You can not delete this record', 'This Tag already referred in another location')
