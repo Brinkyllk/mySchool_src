@@ -469,7 +469,13 @@
                     <xpath expr="//field[@name='start_date']" position="attributes">
                     <attribute name="string">Calculated Start</attribute>
                     </xpath>
+                    <xpath expr="//field[@name='start_datetime']" position="attributes">
+                    <attribute name="string">Calculated Start</attribute>
+                    </xpath>
                     <xpath expr="//field[@name='stop_date']" position="attributes">
+                    <attribute name="string">Calculated Stop</attribute>
+                    </xpath>
+                    <xpath expr="//field[@name='stop_datetime']" position="attributes">
                     <attribute name="string">Calculated Stop</attribute>
                     </xpath>
                     <field name="categ_ids" position="attributes">
