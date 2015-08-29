@@ -86,7 +86,7 @@ class op_registration(osv.osv):
         'registration_date': fields.date(string='Registration Date', required=True, states={'done': [('readonly', True)]}),
         'application_date': fields.datetime(string='Application Date', required=True,
                                             states={'done': [('readonly', True)]}),
-        'birth_date': fields.date(string='Birth Date', required=True, states={'done': [('readonly', True)]}),
+        'birth_date': fields.date(string='Birth Date', states={'done': [('readonly', True)]}),
 
         'address_line1': fields.char('address line1', size=20, states={'done': [('readonly', True)]}),
         'address_line2': fields.char('address line2', size=25, states={'done': [('readonly', True)]}),
