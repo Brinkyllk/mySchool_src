@@ -20,6 +20,7 @@ class op_crm_lead_analysis_xls(orm.TransientModel):
         data = self.browse(cr, uid, ids)[0]
 
         params = {'study_programme_id': 0, 'start_date': False, 'end_date': False}
+        params['study_programme_name'] = data.study_programme_id.name
         params['study_programme_id'] = data.study_programme_id.id
         params['start_date'] = data.start_date
         params['end_date'] = data.end_date
