@@ -55,36 +55,50 @@ class op_enrollment_analysis_xls(report_xls):
 
         #  Column Spec
         self.col_specs_template = {
-            'id': {
-                'header': [1, 8, 'text', _render("'ID'")],
-                'lines': [1, 0, 'number', _render("(line['id'] )")],
-                'totals': [1, 0, 'text', None]},
-            'code': {
-                'header': [1, 8, 'text', _render("'COURSE_CODE'")],
-                'lines': [1, 0, 'text', _render("(str(line['code']) or '-')")],
-                'totals': [1, 0, 'text', None]},
+            'batch_code': {
+                'header': [2, 8, 'text', _render("'Batch CODE'")],
+                'lines': [2, 0, 'text', _render("(str(line['batch_code']) or '-')")],
+                'totals': [2, 0, 'text', None]},
             'name': {
-                'header': [1, 8, 'text', _render("'COURSE_NAME'")],
-                'lines': [1, 0, 'text', _render("(str(line['name']) or '-')")],
-                'totals': [1, 0, 'text', None]},
-            'follow_ups': {
-                'header': [1, 8, 'text', _render("'NO.OF FOLLOW-UPS'")],
-                'lines': [1, 0, 'number', _render("(line['follow_ups'])")],
-                'totals': [1, 0, 'text', None]},
+                'header': [2, 8, 'text', _render("'Batch NAME'")],
+                'lines': [2, 0, 'text', _render("(str(line['name']) or '-')")],
+                'totals': [2, 0, 'text', None]},
+            'std_code': {
+                'header': [3, 8, 'text', _render("'Study Programme CODE'")],
+                'lines': [3, 0, 'text', _render("(str(line['std_code']) or '-')")],
+                'totals': [3, 0, 'text', None]},
+            'std_name': {
+                'header': [3, 8, 'text', _render("'Study Programme NAME'")],
+                'lines': [3, 0, 'text', _render("(str(line['std_name']) or '-')")],
+                'totals': [3, 0, 'text', None]},
             'enrollments': {
-                'header': [1, 8, 'text', _render("'ENROLLMENTS'")],
-                'lines': [1, 0, 'number', _render("(line['enrollments'])")],
-                'totals': [1, 0, 'text', None]},
-            'total': {
-                'header': [1, 8, 'text', _render("'TOTAL'")],
-                'lines': [1, 0, 'number', _render("(line['total'])")],
-                'totals': [1, 0, 'text', None]},
+                'header': [2, 8, 'text', _render("'Enrollments'")],
+                'lines': [2, 0, 'number', _render("(line['enrollments'])")],
+                'totals': [2, 0, 'text', None]},
         }
 
-        self.wanted_list = ['id', 'code', 'name', 'follow_ups', 'enrollments', 'total']
+        self.wanted_list = ['batch_code', 'name', 'std_code', 'std_name', 'enrollments']
 
     def get_data(self, params):
-        pass
+
+        sql = """
+            SELECT DISTINCT ba.batch_code, ba.name,
+
+	          (SELECT stpr.code FROM  op_study_programme as stpr
+	            WHERE (ba.study_prog_code = stpr.id)) as std_code,
+
+	          (SELECT stpr.name FROM  op_study_programme as stpr
+	            WHERE (ba.study_prog_code = stpr.id)) as std_name,
+
+	          (SELECT count(en.id) FROM op_enrollment as en
+	            WHERE (en.batch_code = ba.id))as enrollments
+
+            FROM op_batch as ba,op_enrollment as en  WHERE (ba.id = en.batch_code)
+        """
+
+        self.cr.execute(sql)
+        val = self.cr.dictfetchall()
+        return val
 
     def generate_xls_report(self, _p, _xs, data, objects, wb):
         # Initialize workbook 1
@@ -110,15 +124,33 @@ class op_enrollment_analysis_xls(report_xls):
             ws, row_pos, row_data, row_style=cell_style)
         row_pos += 1
 
-        # lines = self.get_data(params=data)
-        #
-        # for line in lines:
-        #     c_specs = map(
-        #         lambda x: self.render(x, self.col_specs_template,
-        #                               'lines'), self.wanted_list)
-        #     row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
-        #     row_pos = self.xls_write_row(
-        #         ws, row_pos, row_data, row_style=self.aml_cell_style)
+        # Report Info
+        c_specs = [
+            ('dt', 2, 0, 'text', "Date Range", None, self.rh_cell_style_right),
+            ('st_dt', 4, 0, 'text', (' From ' + data['start_date'] + ' To ' + data['end_date'])),
+        ]
+        row_data = self.xls_row_template(c_specs, ['st_pr', 'stpr_nm', 'dt', 'st_dt'])
+        row_pos = self.xls_write_row(
+            ws, row_pos, row_data, row_style=self.aml_cell_style)
+        row_pos += 1
+
+        # Column headers
+        c_specs = map(lambda x: self.render(
+            x, self.col_specs_template, 'header',),self.wanted_list)
+        row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
+        row_pos = self.xls_write_row(
+            ws, row_pos, row_data, row_style=self.rh_cell_style,
+            set_column_size=True)
+        ws.set_horz_split_pos(row_pos)
+
+        lines = self.get_data(params=data)
+        for line in lines:
+            c_specs = map(
+                lambda x: self.render(x, self.col_specs_template,
+                                      'lines'), self.wanted_list)
+            row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
+            row_pos = self.xls_write_row(
+                ws, row_pos, row_data, row_style=self.aml_cell_style)
 
 
 op_enrollment_analysis_xls('report.op.enrollment.analysis.xls', 'crm.lead',
