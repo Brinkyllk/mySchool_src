@@ -20,6 +20,7 @@ class op_crm_employee_performance_analysis_xls(orm.TransientModel):
         data = self.browse(cr, uid, ids)[0]
 
         params = {'partner_id': False, 'start_date': False, 'end_date': False}
+        params['partner_name'] = data.partner_id.name
         params['partner_id'] = data.partner_id.id
         params['start_date'] = data.start_date
         params['end_date'] = data.end_date

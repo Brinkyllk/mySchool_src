@@ -53,16 +53,16 @@ class op_crm_employee_performance_analysis_xls(report_xls):
             rt_cell_format + _xs['right'],
             num_format_str=report_xls.decimal_format)
 
-        # # Column Spec
-        # self.col_specs_template = {
-        #     'id': {
-        #         'header': [1, 8, 'text', _render("'ID'")],
-        #         'lines': [1, 0, 'number', _render("(line['id'] )")],
-        #         'totals': [1, 0, 'text', None]},
-        #     'code': {
-        #         'header': [1, 8, 'text', _render("'CODE'")],
-        #         'lines': [1, 0, 'text', _render("(str(line['code']) or '-')")],
-        #         'totals': [1, 0, 'text', None]},
+        # Column Spec
+        self.col_specs_template = {
+            'lead_count': {
+                'header': [2, 8, 'text', _render("'No.Of Leads'")],
+                'lines': [2, 0, 'number', _render("(line['lead_count'] )")],
+                'totals': [2, 0, 'text', None]},
+            'no_of_enrolled': {
+                'header': [2, 8, 'text', _render("'No.Of Enrolled'")],
+                'lines': [2, 0, 'text', _render("(str(line['no_of_enrolled']) or '-')")],
+                'totals': [2, 0, 'text', None]},
         #     'name': {
         #         'header': [1, 8, 'text', _render("'NAME'")],
         #         'lines': [1, 0, 'text', _render("(str(line['name']) or '-')")],
@@ -127,13 +127,26 @@ class op_crm_employee_performance_analysis_xls(report_xls):
         #         'header': [1, 8, 'text', _render("'ENROLLMENTS'")],
         #         'lines': [1, 0, 'number', _render("(line['enrollments'])")],
         #         'totals': [1, 0, 'text', None]},
-        # }
-        #
-        # self.wanted_list = ['id','code', 'name', 'sat_any', 'sun_any', 'wkd_any', 'sat_mor', 'sun_mor',
-        #                     'wkd_mor', 'sat_aft',
-        #                     'sun_aft', 'wkd_aft', 'sat_eve', 'sun_eve', 'wkd_eve',
-        #                     'total', 'follow_ups', 'enrollments'
-        # ]
+        }
+
+        self.wanted_list = ['lead_count', 'no_of_enrolled'
+        ]
+
+    def get_data(self, params):
+        sql ="""
+            SELECT
+            count(cl.id) as lead_count,
+
+              (SELECT count(cl.id)
+              FROM crm_lead as cl
+              WHERE (cl.stage_id=6) AND (cl.user_id=6))as no_of_enrolled
+
+        FROM crm_lead as cl
+        WHERE (cl.user_id=6)
+            """
+        self.cr.execute(sql)
+        val = self.cr.dictfetchall()
+        return val
 
     def generate_xls_report(self, _p, _xs, data, objects, wb):
         # Initialize workbook 1
@@ -158,6 +171,37 @@ class op_crm_employee_performance_analysis_xls(report_xls):
         row_pos = self.xls_write_row(
             ws, row_pos, row_data, row_style=cell_style)
         row_pos += 1
+
+        #Report Info
+        c_specs = [
+            ('st_pr', 2, 0, 'text', "Employee Name", None, self.rh_cell_style_right),
+            ('cl_nm', 2, 0, 'text', (data['partner_name'])),
+            ('dt', 2, 0, 'text', "Date Range", None, self.rh_cell_style_right),
+            ('st_dt', 4, 0, 'text', (' From ' + data['start_date'] + ' To ' + data['end_date'])),
+            ]
+        row_data = self.xls_row_template(c_specs, ['st_pr', 'cl_nm', 'dt', 'st_dt'])
+        row_pos = self.xls_write_row(
+            ws, row_pos, row_data, row_style=self.aml_cell_style)
+        row_pos += 1
+
+        # Column headers
+        c_specs = map(lambda x: self.render(
+            x, self.col_specs_template, 'header',),self.wanted_list)
+        row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
+        row_pos = self.xls_write_row(
+            ws, row_pos, row_data, row_style=self.rh_cell_style,
+            set_column_size=True)
+        ws.set_horz_split_pos(row_pos)
+
+        # Lines
+        lines = self.get_data(params=data)
+        for line in lines:
+            c_specs = map(
+                lambda x: self.render(x, self.col_specs_template,
+                                      'lines'), self.wanted_list)
+            row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
+            row_pos = self.xls_write_row(
+                ws, row_pos, row_data, row_style=self.aml_cell_style)
 
 op_crm_employee_performance_analysis_xls('report.op.crm.employee.performance.analysis.xls', 'crm.lead',
                          parser=op_crm_employee_performance_analysis_parser)

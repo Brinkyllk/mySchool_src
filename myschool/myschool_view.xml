@@ -223,5 +223,8 @@
         <menuitem name="Enrollment Analysis" id="generate_view_op_enrollment_analysis_form" sequence="2"
                  parent="menu_crm_lead_report" action="act_open_op_enrollment_analysis_view"/>
 
+        <menuitem name="Employee Performance Analysis" id="generate_view_op_crm_employee_performance_analysis_form" sequence="2"
+                 parent="menu_crm_lead_report" action="act_op_crm_employee_performance_analysis_view"/>
+
     </data>
 </openerp>
