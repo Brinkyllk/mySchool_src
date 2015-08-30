@@ -5,19 +5,7 @@ import re
 from openerp.tools.translate import _
 
 
-
 class op_batch(osv.Model):
-
-    # @api.onchange('code')
-    # def onchange_case(self, cr, uid, ids, code):
-    #     if code != False:
-    #         result = {'value': {
-    #             'code': str(code).upper()
-    #         }
-    #         }
-    #         return result
-    #     else:
-    #         return True
 
     _name = 'op.batch'
     _columns = {
@@ -63,8 +51,6 @@ class op_batch(osv.Model):
         if 'batch_no' in vals:
             self.batch_no_validation(cr, uid, [], vals['batch_no'])
 
-
-
         #Minus values are not allowed for the price
         if 'price' in vals:
             price = vals['price']
@@ -79,8 +65,7 @@ class op_batch(osv.Model):
         btch = programme_code + ' ' + batch
         vals.update({'batch_code': btch})
 
-        res = super(op_batch, self).create(cr, uid, vals, context=context)
-        return res
+        return super(op_batch, self).create(cr, uid, vals, context=context)
 
     def write(self, cr, uid, ids,  values, context=None):
 
@@ -126,35 +111,28 @@ class op_batch(osv.Model):
             batch = programme_code + ' ' + batch_number
             values.update({'batch_code': batch})
 
-        res = super(op_batch, self).write(cr, uid, ids,  values, context=context)
-        return res
+        return super(op_batch, self).write(cr, uid, ids,  values, context=context)
 
-
-    #.... check passing nul values..#
-    # def _check_invalid_data(self, cr, uid, ids, context=None):
-    #     obj = self.browse(cr, uid, ids, context=context)
-    #     new_name = str(obj.name)
-    #     new_code = str(obj.code)
-    #     new_name = re.sub('[/-]', '', new_name)
-    #     name = new_name.replace(" ", "")
-    #     code = new_code.replace(" ", "")
-    #     n_name = ''.join([i for i in name if not i.isdigit()])
-    #     n_code = ''.join([i for i in code if not i.isdigit()])
-    #     #isalpha python inbuilt function Returns true if string
-    #         #has at least 1 character and all characters are alphabetic and false otherwise.
-    #     if name or code:
-    #         if n_code.isalpha() or code.isdigit():
-    #             if n_name.isalpha() or name.isdigit():
-    #                 return True
-    #     else:
-    #         return False
-    #
-    # _sql_constraints = [('code', 'UNIQUE (code)', 'The CODE of the Batch must be unique!')]
-    #
-    def _check_date(self, cr, uid, vals, context=None):
+    #Check Backdate validation for actual start date and end date
+    def _check_actual_date(self, cr, uid, vals, context=None):
         for obj in self.browse(cr, uid, vals):
             start_date = obj.actual_start_date
             end_date = obj.actual_end_date
+            if start_date and end_date:
+                datetime_format = "%Y-%m-%d"
+                from_dt = datetime.datetime.strptime(start_date, datetime_format)
+                to_dt = datetime.datetime.strptime(end_date, datetime_format)
+                if to_dt < from_dt:
+                    return False
+                return True
+            else:
+                return True
+
+    #Check Backdate validation for planned start date and end date
+    def _check_planed_date(self, cr, uid, vals, context=None):
+        for obj in self.browse(cr, uid, vals):
+            start_date = obj.planned_start_date
+            end_date = obj.planned_end_date
             if start_date and end_date:
                 datetime_format = "%Y-%m-%d"
                 from_dt = datetime.datetime.strptime(start_date, datetime_format)
@@ -196,29 +174,8 @@ class op_batch(osv.Model):
         else:
             return True
 
-
-
-        #  (_check_invalid_data, 'Entered Invalid Data!!', ['name', 'code']),
     _constraints = [
         (_check_state, 'End date & Start date against State is wrong!!', ['state']),
-        (_check_date, 'End Date should be greater than Start Date!', ['actual_start_date', 'actual_end_date'])
-             ]
-    #
-    # _defaults = {
-    #     'state': 'planned',
-    # }
-    #
-    # def create(self, cr, uid, vals, context=None):
-    #     code = vals['code'].strip()
-    #     name = vals['name'].strip()
-    #     vals.update({'code':code, 'name':name})
-    #     return super(op_batch, self).create(cr, uid, vals, context=context)
-    #
-    # def write(self, cr, uid, ids,  values, context=None):
-    #     if 'name' in values:
-    #         name = values['name'].strip()
-    #         values.update({'name': name})
-    #     if 'code' in values:
-    #         code = values['code'].strip()
-    #         values.update({'code': code})
-    #     return super(op_batch, self).write(cr, uid, ids,  values, context=context)
+        (_check_actual_date, 'Actual End Date should be greater than Actual Start Date!', ['actual_start_date', 'actual_end_date']),
+        (_check_planed_date, 'Planned End Date should be greater than Planned Start Date!', ['planned_start_date', 'planned_end_date'])
+    ]

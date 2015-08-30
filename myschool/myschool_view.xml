@@ -198,7 +198,7 @@
         <!--<menuitem id="menu_student_search" name="Student Search" parent="menu_myschool_student" action="act_open_op_student_batch_mapping_view"/>-->
         <menuitem id="menu_student_registration" name="Registration" parent="menu_myschool_registration" action="act_open_op_registration_view"/>
         <menuitem id="menu_lecturer" name="Lecturer" parent="menu_myschool_lecturer" action="act_open_op_lecturer_view"/>
-        <menuitem id="menu_student_enrollment" name="Student Enrollments" parent="menu_myschool_student" action="act_open_op_enrollment_view"/>
+        <menuitem id="menu_student_enrollment" name="Student Enrollment Search" parent="menu_myschool_student" action="act_open_op_enrollment_view"/>
 
 
         <menuitem id="menu_study_programme" name="Study Programmes" parent="menu_myschool_config_course_mng" action="act_op_study_programme_view" sequence="1"/>
@@ -225,6 +225,9 @@
 
         <menuitem name="Employee Performance Analysis" id="generate_view_op_crm_employee_performance_analysis_form" sequence="2"
                  parent="menu_crm_lead_report" action="act_op_crm_employee_performance_analysis_view"/>
+
+        <menuitem name="Promotional Activity Analysis" id="generate_view_op_promotional_activity_analysis_form" sequence="2"
+                 parent="menu_crm_lead_report" action="act_op_promotional_activity_analysis_view"/>
 
     </data>
 </openerp>
