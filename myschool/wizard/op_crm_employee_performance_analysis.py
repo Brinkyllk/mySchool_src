@@ -7,7 +7,7 @@ class op_crm_employee_performance_analysis_xls(orm.TransientModel):
     _columns = {
         'start_date': fields.date('Start Date', required=True),
         'end_date': fields.date('End Date', required=True),
-        'partner_id': fields.many2one('res.partner', 'Employee'),
+        'user_id': fields.many2one('res.users', 'SalesPerson'),
     }
 
     def xls_export(self, cr, uid, ids, context=None):
@@ -19,9 +19,9 @@ class op_crm_employee_performance_analysis_xls(orm.TransientModel):
 
         data = self.browse(cr, uid, ids)[0]
 
-        params = {'partner_id': False, 'start_date': False, 'end_date': False}
-        params['partner_name'] = data.partner_id.name
-        params['partner_id'] = data.partner_id.id
+        params = {'user_id': False, 'start_date': False, 'end_date': False}
+        params['user_name'] = data.user_id.partner_id.name
+        params['user_id'] = data.user_id.id
         params['start_date'] = data.start_date
         params['end_date'] = data.end_date
 

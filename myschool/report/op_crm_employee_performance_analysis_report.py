@@ -55,26 +55,26 @@ class op_crm_employee_performance_analysis_xls(report_xls):
 
         # Column Spec
         self.col_specs_template = {
-            'lead_count': {
-                'header': [2, 8, 'text', _render("'No.Of Leads'")],
-                'lines': [2, 0, 'number', _render("(line['lead_count'] )")],
+            'id': {
+                'header': [1, 8, 'text', _render("'ID'")],
+                'lines': [1, 0, 'number', _render("(line['id'] )")],
+                'totals': [1, 0, 'text', None]},
+            'code': {
+                'header': [2, 8, 'text', _render("'Code'")],
+                'lines': [2, 0, 'text', _render("(str(line['code']) or '-')")],
                 'totals': [2, 0, 'text', None]},
-            'no_of_enrolled': {
+            'name': {
+                'header': [2, 8, 'text', _render("'Name'")],
+                'lines': [2, 0, 'text', _render("(str(line['name']) or '-')")],
+                'totals': [2, 0, 'text', None]},
+            'leads': {
+                'header': [2, 8, 'text', _render("'No.Of Inquiries'")],
+                'lines': [2, 0, 'number', _render("(line['leads'])")],
+                'totals': [2, 0, 'text', None]},
+            'enrollments': {
                 'header': [2, 8, 'text', _render("'No.Of Enrolled'")],
-                'lines': [2, 0, 'text', _render("(str(line['no_of_enrolled']) or '-')")],
+                'lines': [2, 0, 'number', _render("(line['enrollments'] )")],
                 'totals': [2, 0, 'text', None]},
-        #     'name': {
-        #         'header': [1, 8, 'text', _render("'NAME'")],
-        #         'lines': [1, 0, 'text', _render("(str(line['name']) or '-')")],
-        #         'totals': [1, 0, 'text', None]},
-        #     'sat_any': {
-        #         'header': [1, 8, 'text', _render("'SAT_ANY'")],
-        #         'lines': [1, 0, 'number', _render("(line['sat_any'])")],
-        #         'totals': [1, 0, 'text', None]},
-        #     'sun_any': {
-        #         'header': [1, 8, 'text', _render("'SUN_ANY'")],
-        #         'lines': [1, 0, 'number', _render("(line['sun_any'] )")],
-        #         'totals': [1, 0, 'text', None]},
         #     'wkd_any': {
         #         'header': [1, 8, 'text', _render("'WKD_ANY'")],
         #         'lines': [1, 0, 'number', _render("(line['wkd_any'])")],
@@ -129,20 +129,49 @@ class op_crm_employee_performance_analysis_xls(report_xls):
         #         'totals': [1, 0, 'text', None]},
         }
 
-        self.wanted_list = ['lead_count', 'no_of_enrolled'
+        self.wanted_list = ['id', 'code', 'name', 'leads', 'enrollments'
         ]
 
     def get_data(self, params):
-        sql ="""
-            SELECT
-            count(cl.id) as lead_count,
+        st = params['start_date']
+        end = params['end_date']
+        usr_id = params['user_id']
 
-              (SELECT count(cl.id)
-              FROM crm_lead as cl
-              WHERE (cl.stage_id=6) AND (cl.user_id=6))as no_of_enrolled
+        if usr_id != False:
+            sql ="""
+            SELECT DISTINCT
+            stpr.id,
+            stpr.code,
+            stpr.name,
 
-        FROM crm_lead as cl
-        WHERE (cl.user_id=6)
+            (select count(cl.id) from crm_lead as cl,op_study_programme_lead_rel as splr
+            where
+            (cl.user_id = '%(usr_id)d') and (cl.id = splr.lead_id) and (splr.study_programme_id = stpr.id)) as leads,
+
+            (select count(cl.id) from crm_lead as cl,op_study_programme_lead_rel as splr
+            where
+            (cl.user_id = '%(usr_id)d')and (cl.id = splr.lead_id) and (cl.stage_id = 6) and (splr.study_programme_id = stpr.id)) as enrollments
+
+            FROM op_study_programme as stpr, crm_lead as lead, op_study_programme_lead_rel as splr
+            WHERE (splr.lead_id = lead.id) AND (lead.user_id = '%(usr_id)d') AND (splr.study_programme_id = stpr.id)
+            """% ({'usr_id': usr_id})
+        else:
+            sql="""
+            SELECT DISTINCT
+            stpr.id,
+            stpr.code,
+            stpr.name,
+
+            (select count(cl.id) from crm_lead as cl,op_study_programme_lead_rel as splr
+            where
+            (cl.user_id = users.id) and (cl.id = splr.lead_id) and (splr.study_programme_id = stpr.id)) as leads,
+
+            (select count(cl.id) from crm_lead as cl,op_study_programme_lead_rel as splr
+            where
+            (cl.user_id = users.id)and (cl.id = splr.lead_id) and (cl.stage_id = 6) and (splr.study_programme_id = stpr.id)) as enrollments
+
+            FROM op_study_programme as stpr, crm_lead as lead, res_users as users, op_study_programme_lead_rel as splr
+            WHERE (splr.lead_id = lead.id) AND (lead.user_id = users.id) AND (splr.study_programme_id = stpr.id)
             """
         self.cr.execute(sql)
         val = self.cr.dictfetchall()
@@ -175,7 +204,7 @@ class op_crm_employee_performance_analysis_xls(report_xls):
         #Report Info
         c_specs = [
             ('st_pr', 2, 0, 'text', "Employee Name", None, self.rh_cell_style_right),
-            ('cl_nm', 2, 0, 'text', (data['partner_name'])),
+            ('cl_nm', 2, 0, 'text', (data['user_name'])),
             ('dt', 2, 0, 'text', "Date Range", None, self.rh_cell_style_right),
             ('st_dt', 4, 0, 'text', (' From ' + data['start_date'] + ' To ' + data['end_date'])),
             ]
@@ -189,7 +218,7 @@ class op_crm_employee_performance_analysis_xls(report_xls):
             x, self.col_specs_template, 'header',),self.wanted_list)
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_pos = self.xls_write_row(
-            ws, row_pos, row_data, row_style=self.rh_cell_style,
+            ws, row_pos, row_data, row_style=self.rh_cell_style_center,
             set_column_size=True)
         ws.set_horz_split_pos(row_pos)
 
