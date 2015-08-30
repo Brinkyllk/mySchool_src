@@ -60,11 +60,11 @@ class op_crm_lead_analysis_xls(report_xls):
                 'lines': [1, 0, 'number', _render("(line['id'] )")],
                 'totals': [1, 0, 'text', None]},
             'code': {
-                'header': [1, 8, 'text', _render("'CODE'")],
+                'header': [1, 10, 'text', _render("'CODE'")],
                 'lines': [1, 0, 'text', _render("(str(line['code']) or '-')")],
                 'totals': [1, 0, 'text', None]},
             'name': {
-                'header': [1, 8, 'text', _render("'NAME'")],
+                'header': [1, 10, 'text', _render("'NAME'")],
                 'lines': [1, 0, 'text', _render("(str(line['name']) or '-')")],
                 'totals': [1, 0, 'text', None]},
             'sat_any': {
@@ -352,7 +352,7 @@ class op_crm_lead_analysis_xls(report_xls):
         #Report Info
         c_specs = [
             ('st_pr', 2, 0, 'text', "Study Programme", None, self.rh_cell_style_right),
-            ('stpr_nm', 2, 0, 'text', (data['study_programme_name'])),
+            ('stpr_nm', 3, 0, 'text', (data['study_programme_name'])),
             ('dt', 2, 0, 'text', "Date Range", None, self.rh_cell_style_right),
             ('st_dt', 4, 0, 'text', (' From ' + data['start_date'] + ' To ' + data['end_date'])),
             ]

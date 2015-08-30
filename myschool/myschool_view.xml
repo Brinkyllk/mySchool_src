@@ -217,7 +217,7 @@
         <menuitem id="menu_gen_timetable" name="Generate Timetable" parent="menu_myschool_config_timetable_mng" action="act_open_generate_time_table_view"/>
 
         <!--<menuitem name ="Lead" id = "menu_lis_lab" action="new_lead" parent = "menu_myschool_all" />-->
-        <menuitem name="CRM Lead Analysis" id="generate_view_op_crm_lead_analysis_form" sequence="1"
+        <menuitem name="Lead Analysis" id="generate_view_op_crm_lead_analysis_form" sequence="1"
                  parent="menu_crm_lead_report" action="act_open_op_crm_lead_analysis_view"/>
 
         <menuitem name="Enrollment Analysis" id="generate_view_op_enrollment_analysis_form" sequence="2"
