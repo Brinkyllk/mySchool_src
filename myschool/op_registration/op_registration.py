@@ -147,6 +147,7 @@ class op_registration(osv.osv):
             data['last_name'] = registrationId.last_name
             data['lead_id'] = activeId
 
+        # return data
         return data
 
     def confirm_rejected(self, cr, uid, ids, context=None):
