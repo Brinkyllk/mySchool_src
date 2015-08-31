@@ -2,6 +2,24 @@ from openerp.osv import osv, fields
 
 
 class op_enrollment(osv.Model):
+
+        #load the specific student of the selected customer
+    # def default_get(self, cr, uid, fields, context=None):
+    #     # reg_ref = self.browse(cr, uid, ids, )
+    #     data = super(op_enrollment, self).default_get(cr, uid, fields, context=context)
+    #     registration_id = context.get('active_id', False)
+    #     if registration_id:
+    #         crmRef = self.pool.get('crm.lead')
+    #         studentRef = self.pool.get('op.student')
+    #
+    #         crmId = crmRef.browse(cr, uid, registration_id, context=context)
+    #         partnerId = crmRef.browse(cr, uid, crmId.partner_id, context=context)
+    #         id = partnerId.id.id
+    #         studentId = studentRef.search(cr, uid, [('partner_id', '=', id)])[0]
+    #
+    #         data['student_id'] = studentId
+    #     return data
+
     _name = 'op.enrollment'
     _columns = {
         'student_id': fields.many2one('op.student', string="Student Name", readonly=True, invisible=True),
@@ -68,22 +86,3 @@ class op_enrollment(osv.Model):
 
         return super(op_enrollment, self).write(cr, uid, ids,  values, context=context)
 
-
-    #load the specific student of the selected customer
-    # def default_get(self, cr, uid, fields, context=None):
-    #     # student = self.pool.get(cr, uid, fields, context=context)
-    #     # stu_id = student.id
-    #     # print stu_id
-    #     data = super(op_enrollment, self).default_get(cr, uid, fields, context=context)
-    #     activeId = context.get('active_id')
-    #     if activeId:
-    #         crmRef = self.pool.get('crm.lead')
-    #         studentRef = self.pool.get('op.student')
-    #
-    #         crmId = crmRef.browse(cr, uid, activeId, context=context)
-    #         partnerId = crmRef.browse(cr, uid, crmId.partner_id, context=context)
-    #         id = partnerId.id.id
-    #         studentId = studentRef.search(cr,uid, [('partner_id', '=', id)])[0]
-    #
-    #         data['student_id'] = studentId
-    #     return data

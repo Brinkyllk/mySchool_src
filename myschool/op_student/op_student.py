@@ -150,7 +150,8 @@ class op_student(osv.Model):
         'enrollment_ids': fields.one2many('op.enrollment', 'student_id', string='Registered Courses'),
 
         #payment schedule
-        'payment_schedule_id': fields.one2many('op.payment.schedule', 'student_id', 'Payment Schedules')
+        'payment_schedule_id': fields.one2many('op.payment.schedule', 'student_id', 'Payment Schedules'),
+        'registration_id': fields.integer('Registration Id'),
 
     }
 
@@ -184,6 +185,7 @@ class op_student(osv.Model):
             data['province'] = registrationId.province
             data['nation'] = registrationId.nation
             data['enrollment_ids'] = enrollmentId
+            data['registration_id'] = activeId
 
         return data
 
@@ -481,13 +483,13 @@ class op_student(osv.Model):
         if 'id_number' in vals:
             self.validate_NIC(cr, uid, [], vals['id_number'])
 
-        if 'is_company' in vals:
-            if vals['is_company'] == True:
-                if vals['register_date'] == False or vals['register_date'] == None:
-                    raise osv.except_osv('Error', 'Registered Date cannot be null..!!')
-            else:
-                if vals['birth_date'] == False or vals['birth_date'] == None:
-                    raise osv.except_osv('Error', 'Birth Date cannot be null..!!')
+        # if 'is_company' in vals:
+        #     if vals['is_company'] == True:
+        #         if vals['register_date'] == False or vals['register_date'] == None:
+        #             raise osv.except_osv('Error', 'Registered Date cannot be null..!!')
+        #     else:
+        #         if vals['birth_date'] == False or vals['birth_date'] == None:
+        #             raise osv.except_osv('Error', 'Birth Date cannot be null..!!')
 
 
         #-----Check whether enrollment has or not-------#
@@ -501,6 +503,11 @@ class op_student(osv.Model):
         # # write to the registration form
         # registrationRef = self.pool.get('op.registration')
         # registrationRef.write(cr, uid, { 'student_id': activeId})
+
+        if 'registration_id' in vals:
+            reg_id = vals['registration_id']
+            reg_ref = self.pool.get('op.registration')
+            reg_ref.write(cr, uid, [reg_id], {'state': 'done'})
 
         return super(op_student, self).create(cr, uid, vals, context=context)
 
@@ -659,29 +666,29 @@ class op_student(osv.Model):
                                                              'def_batch': setmap.batch_id.id,}, context=context)
                 return True
 
-        if 'is_company' in values:
-            if values['is_company'] == True:
-                if 'register_date' in values:
-                    pass
-                else:
-                    raise osv.except_osv('Error', ' Registered Date cannot be null..!!')
-                    # if values['register_date'] == False or values['register_date'] == None:
-                    #     raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a Registered Date..!!')
-            else:
-                if 'birth_date' in values:
-                    if values['birth_date'] == False or values['birth_date'] == None:
-                        raise osv.except_osv('Error', 'NIC cannot be null..!!')
-                    else:
-                        if values['birth_date'] == False or values['birth_date'] == None:
-                            raise osv.except_osv('Error', 'NIC cannot be null..!!')
-                        return True
-                elif 'id_number' in values:
-                    if values ['id_number'] == False or values ['id_number'] == None:
-                        raise osv.except_osv('Error', 'NIC cannot be null..!!')
-                    else:
-                        if values['id_number'] == False or values['birth_date'] == None:
-                            raise osv.except_osv('Error', 'NIC cannot be null..!!')
-                        return True
+        # if 'is_company' in values:
+        #     if values['is_company'] == True:
+        #         if 'register_date' in values:
+        #             pass
+        #         else:
+        #             raise osv.except_osv('Error', ' Registered Date cannot be null..!!')
+        #             # if values['register_date'] == False or values['register_date'] == None:
+        #             #     raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a Registered Date..!!')
+        #     else:
+        #         if 'birth_date' in values:
+        #             if values['birth_date'] == False or values['birth_date'] == None:
+        #                 raise osv.except_osv('Error', 'NIC cannot be null..!!')
+        #             else:
+        #                 if values['birth_date'] == False or values['birth_date'] == None:
+        #                     raise osv.except_osv('Error', 'NIC cannot be null..!!')
+        #                 return True
+        #         elif 'id_number' in values:
+        #             if values ['id_number'] == False or values ['id_number'] == None:
+        #                 raise osv.except_osv('Error', 'NIC cannot be null..!!')
+        #             else:
+        #                 if values['id_number'] == False or values['birth_date'] == None:
+        #                     raise osv.except_osv('Error', 'NIC cannot be null..!!')
+        #                 return True
 
         return super(op_student, self).write(cr, uid, ids, values, context=context)
 

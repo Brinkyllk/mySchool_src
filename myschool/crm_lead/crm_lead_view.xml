@@ -393,6 +393,22 @@
             </field>
         </record>
 
+        <!--&lt;!&ndash; CRM Lead Kanban View  &ndash;&gt;-->
+        <!--<record id="crm_case_kanban_view_leads_extended" model="ir.ui.view">-->
+            <!--<field name="name">crm.lead.kanban.inherit</field>-->
+            <!--<field name="model">crm.lead</field>-->
+            <!--<field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<data>-->
+                    <!--<xpath  expr="//kanban" position="inside">-->
+                        <!--<attribute name="edit">0</attribute>-->
+                    <!--</xpath>-->
+
+                <!--</data>-->
+            <!--</field>-->
+        <!--</record>-->
+
+
         <!--opportunity_inherited_form-->
         <record id="crm_case_tree_view_oppor" model="ir.ui.view">
             <field name="name">crm.lead.oppor.form.inherit</field>
@@ -496,6 +512,9 @@
                         <attribute name="invisible">1</attribute>
                     </field>
                     <field name="partner_id" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </field>
+                    <field name="partner_name" position="attributes">
                         <attribute name="invisible">1</attribute>
                     </field>
                 </data>

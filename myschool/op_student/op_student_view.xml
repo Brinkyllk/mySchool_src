@@ -115,6 +115,7 @@
                                 <group col="4" colspan="4">
                                     <field name="gender" attrs="{'readonly': [('is_company','=',True)]}"/>
                                     <field name="phone"/>
+                                    <field name="registration_id" invisible="1"/>
                                     <field name="birth_date" attrs="{'invisible': [('is_company','=', True)]}" on_change='onchange_nic(id_number)'/>
                                     <field name="register_date" attrs="{'invisible': [('is_company','=',False)]}"/>
                                 </group>

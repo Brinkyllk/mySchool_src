@@ -105,7 +105,7 @@ class op_registration(osv.osv):
         'gender': fields.selection([('m', 'Male'), ('f', 'Female'), ('o', 'Other')], string='Gender', required=True,
                                    states={'done': [('readonly', True)]}),
         'division_id': fields.many2one('op.division', string='Division', states={'done': [('readonly', True)]}),
-        'student_id': fields.many2one('op.student', string='Student', states={'done': [('readonly', True)]}),
+        # 'student_id': fields.many2one('op.student', string='Student', states={'done': [('readonly', True)]}),
         'nbr': fields.integer('# of Registration', readonly=True),
         'lead_id': fields.integer('Lead Id'),
         #course enrollment for the specific registration
@@ -118,9 +118,7 @@ class op_registration(osv.osv):
         'registration_date': time.strftime('%Y-%m-%d'),
         'application_date': time.strftime('%Y-%m-%d %H:%M:%S'),
     }
-
     _order = "application_number desc"
-
 
     # def due_backdate_validation(self, cr, uid, ids, date):
     #     if date:
@@ -134,7 +132,6 @@ class op_registration(osv.osv):
     #             raise osv.except_osv(_('Invalid Expected Closing Date!'), _('Enter a Future Date..'))
     #     else:
     #         pass
-
     def default_get(self, cr, uid, fields, context=None):
         data = super(op_registration, self).default_get(cr, uid, fields, context=context)
         activeId = context.get('active_id')
@@ -203,7 +200,7 @@ class op_registration(osv.osv):
             'context': context,
             }
 
-        self.write(cr, uid, ids, {'state': 'done'})
+        # self.write(cr, uid, ids, {'state': 'd'})
 
         for x in enrollmentRealId:
             courseEnrollmentId = x.id
@@ -376,11 +373,9 @@ class op_registration(osv.osv):
             else:
                 raise osv.except_osv('Value Error', 'Minus values are not allowed for the Family Income')
 
-        k = vals['lead_id']
-        print k
+        lead_id = vals['lead_id']
         leadref = self.pool.get('crm.lead')
-        # leadref.write(cr, uid, k, {'stage_id': 6}, context=context)
-        leadref.write(cr, uid, [k],{ 'stage_id': 6})
+        leadref.write(cr, uid, [lead_id], {'stage_id': 6})
 
         # return super(op_registration, self).create(cr, uid, vals, context=context)
 

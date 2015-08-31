@@ -89,6 +89,11 @@
 			<field name="act_to" ref="act_confirm_selection" />
 			<field name="signal">confirm_selection</field>
 		</record>
+        <!--<record id="trans_draft_confirm_to_draft" model="workflow.transition">-->
+			<!--<field name="act_f  rom" ref="act_draft" />-->
+			<!--<field name="act_to" ref="act_confirm_selection"/>-->
+			<!--<field name="signal">confirm_to_draft</field>-->
+		<!--</record>-->
 		<!--<record id="trans_draft_confirm_pending" model="workflow.transition">-->
 			<!--<field name="act_from" ref="act_draft" />-->
 			<!--<field name="act_to" ref="act_confirm_pending" />-->

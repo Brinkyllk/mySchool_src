@@ -29,6 +29,7 @@ class op_course_tags(osv.Model):
     # -----------name validation----------- s#
     def name_validation(self, cr, uid, ids, name):
         tag_name = str(name).replace(" ", "")
+        tag_name = ''.join([i for i in tag_name if not i.isdigit()])
         if str(name).isspace():
             raise osv.except_osv(_('Invalid Name !'), _('Only Spaces not allowed'))
         elif tag_name.isalpha():

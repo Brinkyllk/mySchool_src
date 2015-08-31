@@ -36,7 +36,6 @@
         'op_payment_schedule_line/op_payment_schedule_line_view.xml',
         'op_registration/op_registration_view.xml',
         'op_registration/op_registration_sequence.xml',
-        'op_registration/op_registration_workflow_view.xml',
         'op_study_programme/op_study_programme_view.xml',
         'op_enrollment/op_enrollment_view.xml',
         'crm_lead/crm_lead_view.xml',

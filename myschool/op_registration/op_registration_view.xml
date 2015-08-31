@@ -31,16 +31,16 @@
                                    statusbar_colors='{"r":"red"}' />
                             <!--<button name="confirm_in_progress" states="d" type="workflow"-->
                                     <!--string="Confirm" icon="gtk-go-forward" />-->
-                            <button name="confirm_selection" states="d" type="workflow"
+                            <button name="confirm_selection" states="d" type="object"
                                     string="Enroll" icon="gtk-go-forward" />
                             <!--<button name="open_student" states="s,done" type="object"-->
                                     <!--string="Open Student Profile" icon="gtk-go-forward" />-->
                             <button name="confirm_rejected" states="d" string="Reject"
-                                    type="workflow" icon="gtk-cancel" />
+                                    type="object" icon="gtk-cancel" />
                             <!--<button name="confirm_pending" states="i" string="Pending"-->
                                     <!--type="workflow" icon="gtk-cancel" />-->
                             <button name="confirm_cancel" states="d" string="Cancel"
-                                    type="workflow" icon="gtk-cancel" />
+                                    type="object" icon="gtk-cancel" />
                             <button name="confirm_to_draft" states="c,r" string="Set to Draft"
                                     type="object" icon="gtk-convert" />
                         </span>
@@ -85,8 +85,8 @@
                                     <field name="application_date" />
                                     <field name="fees" />
                                     <field name="due_date" />
-                                    <field name="student_id" invisible="1" />
-                                    <field name="lead_id" invisible="1" />
+                                    <!--<field name="student_id" invisible="1" />-->
+                                    <field name="lead_id" invisible="1"/>
                                 </group>
                             </page>
                             <page string="Personal Detail">
