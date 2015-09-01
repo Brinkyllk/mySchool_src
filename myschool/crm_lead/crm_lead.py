@@ -164,6 +164,29 @@ class op_lead_modes(osv.Model):
 
         return super(op_lead_modes, self).write(cr, uid, ids, values, context=context)
 
+    def unlink(self, cr, uid, vals, context=None):
+        #When delete followups update meeting count
+        crmLead = self.pool.get('crm.lead')
+        for values in vals:
+            k = [values]
+            cr.execute('SELECT id FROM crm_lead ' \
+                        'WHERE modes = %s ', (k))
+
+            crm_lead_id = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+            if crm_lead_id:
+                int_crm_lead_id = int(crm_lead_id[0].id)
+                list_int_crm_lead_id = [int_crm_lead_id]
+                tags = len(list_int_crm_lead_id)
+            else:
+                tags = 0
+
+            if tags == 0:
+                return super(op_lead_modes, self).unlink(cr, uid, vals, context=context)
+            else:
+                raise osv.except_osv('You can not delete this record', 'This Mode already referred in another location')
+
+        return super(op_lead_modes, self).unlink(cr, uid, vals, context=context)
+
 
 class calendar_alarm(osv.Model):
     _inherit = 'calendar.alarm'
@@ -307,7 +330,8 @@ class op_time_frame(osv.Model):
             if morning == 0 and anyTime == 0 and afternoon == 0 and evening == 0:
                 return super(op_time_frame, self).unlink(cr, uid, vals, context=context)
             else:
-                raise osv.except_osv('You can not delete this record', 'This Time Frame already referred in another location')
+                raise osv.except_osv('You can not delete this record',
+                                     'This Time Frame already referred in another location')
 
         return super(op_time_frame, self).unlink(cr, uid, vals, context=context)
 
@@ -318,7 +342,7 @@ class crm_tracking_campaign(osv.Model):
     _columns = {
         'source_id': fields.many2many('crm.tracking.source', 'campaign_source_rel', 'campaign_id', 'source_id',
                                       'Source(s)'),
-        }
+    }
 
     # ----------------Validations----------------------- s#
     # -----------name validation----------- s#
@@ -353,7 +377,7 @@ class crm_tracking_source(osv.Model):
     _description = "adding fields to crm.lead"
     _columns = {
         'channel_id': fields.many2one('crm.tracking.medium', 'Channel'),
-        }
+    }
 
     # ----------------Validations----------------------- s#
     # -----------name validation----------- s#
@@ -365,7 +389,7 @@ class crm_tracking_source(osv.Model):
             return True
         else:
             raise osv.except_osv(_('Invalid Source Name !'), _('Please Enter a valid name'))
-        
+
     # ------------Override the create method----------- s#
     def create(self, cr, uid, vals, context=None):
         # ----------name validation caller------- s#
@@ -381,7 +405,7 @@ class crm_tracking_source(osv.Model):
             self.name_validation(cr, uid, [], values['name'])
 
         return super(crm_tracking_source, self).write(cr, uid, ids, values, context=context)
-    
+
 class crm_tracking_medium(osv.Model):
     _inherit = 'crm.tracking.medium'
 
@@ -484,6 +508,29 @@ class op_follow_up_type(osv.Model):
             values.update({'code': code})
 
         return super(op_follow_up_type, self).write(cr, uid, ids, values, context=context)
+
+    def unlink(self, cr, uid, vals, context=None):
+        #When delete followups update meeting count
+        crmLead = self.pool.get('crm.lead')
+        for values in vals:
+            k = [values]
+            cr.execute('SELECT id FROM calendar_event ' \
+                        'WHERE type = %s ', (k))
+
+            calendar_event_id = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+            if calendar_event_id:
+                int_calendar_event_id = int(calendar_event_id[0].id)
+                list_int_calendar_event_id = [int_calendar_event_id]
+                tags = len(list_int_calendar_event_id)
+            else:
+                tags = 0
+
+            if tags == 0:
+                return super(op_follow_up_type, self).unlink(cr, uid, vals, context=context)
+            else:
+                raise osv.except_osv('You can not delete this record', 'This Type already referred in another location')
+
+        return super(op_follow_up_type, self).unlink(cr, uid, vals, context=context)
 
 
 class crm_lead(osv.Model):
@@ -593,7 +640,7 @@ class crm_lead(osv.Model):
             return True
 
     # ---------check inquiry date-------------- s#
-    def _check_date(self, cr, uid, vals, inquiry_date ):
+    def _check_date(self, cr, uid, vals, inquiry_date):
         inquiry_date = dateutil.parser.parse(inquiry_date).date()
         today_date = datetime.datetime.today().strftime('%Y-%m-%d')
         date_today = dateutil.parser.parse(today_date).date()
@@ -655,7 +702,7 @@ class crm_lead(osv.Model):
                     'type': 'ir.actions.act_window',
                     'nodestroy': True,
                     'target': 'current',
-                    }
+                }
                 return value
             else:
                 value = {
@@ -681,7 +728,7 @@ class crm_lead(osv.Model):
                 'type': 'ir.actions.act_window',
                 'nodestroy': True,
                 'target': 'new',
-                }
+            }
             return value
         return True
 
@@ -783,7 +830,8 @@ class crm_lead(osv.Model):
         study_tags_len = len(tags[0][2])
         study_pro_len = len(pro[0][2])
         if study_pro_len < 1 and study_tags_len < 1:
-            raise osv.except_osv(_('Missing Required Information'), _('Required one Interested Study programme or one New Study Programme Tag in Study Prorgammes Info'))
+            raise osv.except_osv(_('Missing Required Information'), _(
+                'Required one Interested Study programme or one New Study Programme Tag in Study Prorgammes Info'))
         else:
             pass
 
@@ -916,7 +964,8 @@ class crm_lead(osv.Model):
             mobile = vals['mobile']
             phone = vals['phone']
             if email == False and mobile == False and phone == False:
-                raise osv.except_osv(_('Missing Required Information'), _('Required Email or Mobile or Phone to contact.!'))
+                raise osv.except_osv(_('Missing Required Information'),
+                                     _('Required Email or Mobile or Phone to contact.!'))
             else:
                 pass
 
@@ -1074,7 +1123,7 @@ class crm_lead(osv.Model):
         (_check_town, 'Entered Invalid Data in City !!', ['town']),
         (_check_province, 'Entered Invalid Data in Province !!', ['province']),
         (_check_nation, 'Entered Invalid Data in Country !!', ['nation']),
-        ]
+    ]
 
 
 class calendar_event(osv.Model):
@@ -1107,7 +1156,7 @@ class calendar_event(osv.Model):
         if activeId:
             data['opportunity_id'] = activeId
         return data
-    
+
     # -----------name validation----------- s#
     def name_validation(self, cr, uid, ids, name):
         sub_name = str(name).replace(" ", "")
@@ -1205,8 +1254,8 @@ calendar_event()
 
 class crm_case_stage(osv.Model):
     _inherit = 'crm.case.stage'
-    
-        # ------------------Validations----------------------- s#
+
+    # ------------------Validations----------------------- s#
     # ------------name validation--------------- s#
     def name_validation(self, cr, uid, ids, name):
         dup_name = str(name).strip().title()
@@ -1220,8 +1269,8 @@ class crm_case_stage(osv.Model):
             raise osv.except_osv(_('Name Field..'), _('Special Characters and Numbers not allowed'))
         else:
             pass
-        
-        # ------------Override the create method----------- s#
+
+            # ------------Override the create method----------- s#
     def create(self, cr, uid, vals, context=None):
         # ----------name validation caller------- s#
         if 'name' in vals:
@@ -1243,7 +1292,7 @@ class crm_case_stage(osv.Model):
         name = values['name'].strip().title()
         values.update({'name': name})
 
-        return super(crm_case_stage, self).write(cr, uid, values,  values, context=context)
+        return super(crm_case_stage, self).write(cr, uid, values, values, context=context)
 
     def unlink(self, cr, uid, vals, context=None):
         for calenderventID in vals:
@@ -1257,7 +1306,8 @@ class crm_case_stage(osv.Model):
             if intMeetingCount == 0:
                 return super(crm_case_stage, self).unlink(cr, uid, vals, context=context)
             else:
-                raise osv.except_osv('You can not delete this record', 'This Stage already referred in another location')
+                raise osv.except_osv('You can not delete this record',
+                                     'This Stage already referred in another location')
 
 crm_case_stage()
 
