@@ -393,20 +393,42 @@
             </field>
         </record>
 
-        <!--&lt;!&ndash; CRM Lead Kanban View  &ndash;&gt;-->
-        <!--<record id="crm_case_kanban_view_leads_extended" model="ir.ui.view">-->
-            <!--<field name="name">crm.lead.kanban.inherit</field>-->
-            <!--<field name="model">crm.lead</field>-->
-            <!--<field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>-->
-            <!--<field name="arch" type="xml">-->
-                <!--<data>-->
-                    <!--<xpath  expr="//kanban" position="inside">-->
-                        <!--<attribute name="edit">0</attribute>-->
-                    <!--</xpath>-->
+        <!--CRM Lead Kanban View Edit False-->
+        <record model="ir.ui.view" id="crm_case_kanban_view_leads_inherit">
+            <field name="name">CRM - Leads Kanban Inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>
+            <field name="arch" type="xml">
+                <kanban position="attributes">
+                    <attribute name="edit">false</attribute>
+                    <attribute name="create">false</attribute>
+                </kanban>
+            </field>
+        </record>
 
-                <!--</data>-->
-            <!--</field>-->
-        <!--</record>-->
+        <!--CRM Lead Form View Edit False-->
+        <record model="ir.ui.view" id="crm_case_form_view_leads_inherit">
+            <field name="name">CRM - Leads Form Inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+            <field name="arch" type="xml">
+                <form position="attributes">
+                    <attribute name="create">false</attribute>
+                </form>
+            </field>
+        </record>
+
+        <!--CRM Lead Tree View Edit False-->
+        <record model="ir.ui.view" id="crm_case_tree_view_leads_inherit">
+            <field name="name">CRM - Leads Tree Inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
+            <field name="arch" type="xml">
+                <tree position="attributes">
+                    <attribute name="create">false</attribute>
+                </tree>
+            </field>
+        </record>
 
 
         <!--opportunity_inherited_form-->
