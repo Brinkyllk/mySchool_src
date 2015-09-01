@@ -67,7 +67,7 @@ class op_course_tags(osv.Model):
             name = values['name'].strip()
             values.update({'name': name})
         if 'code' in values:
-            code = values['code'].strip().upper().reaplace(" ", "")
+            code = values['code'].strip().upper().replace(" ", "")
             values.update({'code': code})
 
         return super(op_course_tags, self).write(cr, uid, ids, values, context=context)
