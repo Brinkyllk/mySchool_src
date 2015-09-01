@@ -1,3 +1,5 @@
-Subject,First Name,Last Name,Email,Phone,Study programme(s) Interested,Anytime,Morning,Afternoon,Evening
-lead One,Rukshani,Kekulawala,rukshani@gmail.com,0710000000,"Ibit,Idsd",Sunday,Saturday,Weekday,Saturday
-lead Two,Lukshala,Thamali,lukshala@gmail.com,0710000000,Ibit,"Sunday,Saturday",Saturday,Weekday,Saturday
+Subject,Mode of Inquiry,First Name,Last Name,Email,Phone,Mobile,Inquiry Date,Study programme(s) Interested,New Study Programme Tags,Anytime,Morning,Afternoon,Evening
+lead One,Newslatters,Rukshani,Kekulawala,,710000000,,2015-08-24,Ibit,Graphic Designing,Sunday,Saturday,Weekday,Saturday
+lead Two,Through Websites,Lukshala,Thamali,lukshala@gmail.com,,,2015-08-23,"Ibit,Idsd",,"Sunday,Saturday",Saturday,Weekday,Saturday
+lead Three,Through Phone Calls,Randika,Ariyasena,,,710000000,2015-08-22,Idsd,J2EE,"Sunday,Saturday",Saturday,Weekday,Saturday
+

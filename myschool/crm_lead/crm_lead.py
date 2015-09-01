@@ -32,10 +32,8 @@ class op_course_tags(osv.Model):
         tag_name = ''.join([i for i in tag_name if not i.isdigit()])
         if str(name).isspace():
             raise osv.except_osv(_('Invalid Name !'), _('Only Spaces not allowed'))
-        elif tag_name.isalpha():
-            return True
         else:
-            raise osv.except_osv(_('Invalid Name !'), _('Please Enter a valid name'))
+            pass
 
     # ------------Override the create method----------- s#
     def create(self, cr, uid, vals, context=None):
@@ -49,7 +47,7 @@ class op_course_tags(osv.Model):
 
         # --------removing white spaces---------- s#
         code = vals['code'].strip().upper().replace(" ", "")
-        name = vals['name'].strip().title()
+        name = vals['name'].strip()
         vals.update({'code': code, 'name': name})
 
         return super(op_course_tags, self).create(cr, uid, vals, context=context)
@@ -66,7 +64,7 @@ class op_course_tags(osv.Model):
 
         # ------ update the values after removing white spaces---- s#
         if 'name' in values:
-            name = values['name'].strip().title()
+            name = values['name'].strip()
             values.update({'name': name})
         if 'code' in values:
             code = values['code'].strip().upper().reaplace(" ", "")
