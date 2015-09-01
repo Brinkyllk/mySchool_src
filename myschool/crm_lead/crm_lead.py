@@ -529,7 +529,7 @@ class crm_lead(osv.Model):
                                     'Evening'),
         'prospective_student': fields.integer(size=5, string='No.of Prospective Students'),
         'inquiry_date': fields.date(string='Inquiry Date', required=True),
-        'tags': fields.many2many('op.course.tags', 'op_crm_lead_tags_rel', 'lead_id', 'tag_id', 'Tags'),
+        'tags': fields.many2many('op.course.tags', 'op_crm_lead_tags_rel', 'lead_id', 'tag_id', 'New Study Programme Tags'),
         'address_line1': fields.char('address line1', size=20),
         'address_line2': fields.char('address line2', size=25),
         'town': fields.char('town', size=25),
@@ -902,7 +902,15 @@ class crm_lead(osv.Model):
 
         # ---------Check availability of study programme or tags--------- s#
         if 'courses_interested' in vals or 'tags' in vals:
-            self.check_tags_pro(cr, uid, [], vals['courses_interested'], vals['tags'])
+            if vals['courses_interested'] is not False and vals['tags'] is False:
+                pass
+            elif vals['courses_interested'] is False and vals['tags'] is not False:
+                pass
+            elif vals['courses_interested'] is False and vals['tags'] is  False:
+                raise osv.except_osv(_('Missing Required Information'), _('Required one Interested Study programme or one New Study Programme Tag in Study Prorgammes Info'))
+            else:
+                self.check_tags_pro(cr, uid, [], vals['courses_interested'], vals['tags'])
+
 
         # Almost required a value from email or mobile or phone
         if 'email_from' in vals or 'mobile' in vals or 'phone' in vals:
