@@ -2,7 +2,7 @@ from openerp.tools.translate import _
 from openerp.osv import orm, fields
 import datetime
 
-
+# ..generate..#
 class op_followup_actions_detail_analysis_xls(orm.TransientModel):
     _name = 'op.followup.actions.detail.analysis.xls'
     _columns = {
