@@ -18,10 +18,10 @@ class op_course_tags(osv.Model):
     # ---------code validation------------- s#
     def code_validation(self, cr, uid, ids, code):
         crm_tag_code = str(code).replace(" ", "")
-        crm_tag_code = ''.join([i for i in crm_tag_code if not i.isdigit()])
+        crm_tag_new_code = ''.join([i for i in crm_tag_code if not i.isdigit()])
         if str(code).isspace():
             raise osv.except_osv(_('Invalid Code !'), _('Only Spaces not allowed'))
-        elif crm_tag_code.isalpha():
+        elif crm_tag_new_code.isalpha() or crm_tag_code.isdigit():
             return True
         else:
             raise osv.except_osv(_('Invalid Code !'), _('Please Enter the code correctly'))
@@ -109,7 +109,7 @@ class op_lead_modes(osv.Model):
     # ---------code validation------------- s#
     def code_validation(self, cr, uid, ids, code):
         modes_code = str(code).replace(" ", "")
-        modes_code = ''.join([i for i in modes_code if not i.isdigit()])
+        new_modes_code = ''.join([i for i in modes_code if not i.isdigit()])
         lengthModesCode = len(code)
         if lengthModesCode >= 2 and str(modes_code).isalpha():
             return True
@@ -119,7 +119,7 @@ class op_lead_modes(osv.Model):
             else:
                 if str(code).isspace():
                     raise osv.except_osv(_('Invalid Code !'), _('Only Spaces not allowed'))
-                elif str(modes_code).isalpha():
+                elif new_modes_code.isalpha() or modes_code.isdigit():
                     return True
                 else:
                     raise osv.except_osv(_('Invalid Code !'), _('Please Enter the code correctly'))
@@ -451,14 +451,16 @@ class op_follow_up_type(osv.Model):
         'name': fields.char('Name', required=True, size=30)
     }
 
+    _sql_constraints = [('name', 'UNIQUE (name)', 'The Name of the Type must be unique!')]
+
     # ----------------Validations----------------------- s#
     # ---------code validation------------- s#
     def code_validation(self, cr, uid, ids, code):
         follow_up_type_code = str(code).replace(" ", "")
-        follow_up_type_code = ''.join([i for i in follow_up_type_code if not i.isdigit()])
+        follow_type_code = ''.join([i for i in follow_up_type_code if not i.isdigit()])
         if str(code).isspace():
             raise osv.except_osv(_('Invalid Code !'), _('Only Spaces not allowed'))
-        elif str(follow_up_type_code).isalpha():
+        elif follow_type_code.isalpha() or follow_up_type_code.isdigit():
             return True
         else:
             raise osv.except_osv(_('Invalid Code !'), _('Please Enter the code correctly'))
