@@ -595,6 +595,10 @@ class crm_lead(osv.Model):
         'first_name': fields.char('First Name', size=30, required=True),
         'last_name': fields.char('Last Name', size=30, required=True),
         'probability': fields.float(string='Probability', readonly=True),
+        'campaign_id': fields.many2one('crm.tracking.campaign', 'Campaign',  # old domain ="['|',('section_id','=',section_id),('section_id','=',False)]"
+                                       help="This is a name that helps you keep track of your different campaign efforts Ex: Fall_Drive, Christmas_Special"),
+        'medium_id': fields.many2one('crm.tracking.medium', 'Channel', help="This is the method of delivery. Ex: Postcard, Email, or Banner Ad", oldname='channel_id'),
+        'source_id': fields.many2one('crm.tracking.source', 'Source', domain="[('channel_id', '=', medium_id)]")
 
     }
 
