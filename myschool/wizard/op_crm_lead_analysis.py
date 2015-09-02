@@ -1,5 +1,6 @@
 from openerp.tools.translate import _
 from openerp.osv import orm, fields
+import datetime
 
 
 class op_crm_lead_analysis_xls(orm.TransientModel):
@@ -9,6 +10,25 @@ class op_crm_lead_analysis_xls(orm.TransientModel):
         'end_date': fields.date('End Date', required=True),
         'study_programme_id': fields.many2one('op.study.programme', 'Study Programme'),
     }
+
+    #Check Backdate validation for planned start date and end date
+    def _check_filter_date(self, cr, uid, vals, context=None):
+        for obj in self.browse(cr, uid, vals):
+            start_date = obj.start_date
+            end_date = obj.end_date
+            if start_date and end_date:
+                datetime_format = "%Y-%m-%d"
+                from_dt = datetime.datetime.strptime(start_date, datetime_format)
+                to_dt = datetime.datetime.strptime(end_date, datetime_format)
+                if to_dt < from_dt:
+                    return False
+                return True
+            else:
+                return True
+
+    _constraints = [
+        (_check_filter_date, 'End Date should be greater than Start Date!', ['start_date', 'end_date'])
+    ]
 
     def xls_export(self, cr, uid, ids, context=None):
         return self.print_report(cr, uid, ids, context=context)
