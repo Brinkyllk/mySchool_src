@@ -99,7 +99,7 @@ class op_course_tags(osv.Model):
 class op_lead_modes(osv.Model):
     _name = 'op.lead.modes'
     _columns = {
-        'code': fields.char('Code', required=True, size=5),
+        'code': fields.char('Code', required=True, size=5,),
         'name': fields.char('Name', required=True, size=30)
     }
 
@@ -110,12 +110,19 @@ class op_lead_modes(osv.Model):
     def code_validation(self, cr, uid, ids, code):
         modes_code = str(code).replace(" ", "")
         modes_code = ''.join([i for i in modes_code if not i.isdigit()])
-        if str(code).isspace():
-            raise osv.except_osv(_('Invalid Code !'), _('Only Spaces not allowed'))
-        elif str(modes_code).isalpha():
+        lengthModesCode = len(code)
+        if lengthModesCode >= 2 and str(modes_code).isalpha():
             return True
         else:
-            raise osv.except_osv(_('Invalid Code !'), _('Please Enter the code correctly'))
+            if lengthModesCode <= 2:
+                raise osv.except_osv(_('Invalid Code !'), _('Minimum data length should be at least 2 characters'))
+            else:
+                if str(code).isspace():
+                    raise osv.except_osv(_('Invalid Code !'), _('Only Spaces not allowed'))
+                elif str(modes_code).isalpha():
+                    return True
+                else:
+                    raise osv.except_osv(_('Invalid Code !'), _('Please Enter the code correctly'))
 
     # -----------name validation----------- s#
     def name_validation(self, cr, uid, ids, name):
