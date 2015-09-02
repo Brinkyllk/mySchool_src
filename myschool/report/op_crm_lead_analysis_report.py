@@ -136,13 +136,14 @@ class op_crm_lead_analysis_xls(report_xls):
         ]
 
     def get_data(self, params):
-        # st = params['start_date']
-        # end = params['end_date']
+        st = params['start_date']
+        end = params['end_date']
         stpr_id = params['study_programme_id']
 
         if stpr_id != False:
             sql1 = """
             SELECT
+            DISTINCT
             stpr.id,
             stpr.code,
             stpr.name,
@@ -226,8 +227,9 @@ class op_crm_lead_analysis_xls(report_xls):
             where
             (cl.id = splr.lead_id) and (cl.stage_id = 6) and (splr.study_programme_id = stpr.id)) as enrollments
 
-                FROM op_study_programme as stpr WHERE (stpr.id = '%(stpr_id)d')
-            """ % ({'stpr_id': stpr_id})
+                FROM op_study_programme as stpr , crm_lead as lead
+                WHERE (stpr.id = '%(stpr_id)d') AND ((lead.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))
+            """ % ({'stpr_id': stpr_id, 'st': st, 'end': end})
             self.cr.execute(sql1)
             val = self.cr.dictfetchall()
             return val
@@ -235,6 +237,7 @@ class op_crm_lead_analysis_xls(report_xls):
         else:
             sql2 = """
             SELECT
+            DISTINCT
             stpr.id,
             stpr.code,
             stpr.name,
@@ -318,8 +321,9 @@ class op_crm_lead_analysis_xls(report_xls):
             where
             (cl.id = splr.lead_id) and (cl.stage_id = 6) and (splr.study_programme_id = stpr.id)) as enrollments
 
-                FROM op_study_programme as stpr
-            """
+                FROM op_study_programme as stpr, crm_lead as lead
+                WHERE (lead.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s')
+            """% ({'st':st, 'end':end})
             self.cr.execute(sql2)
             val = self.cr.dictfetchall()
             return val

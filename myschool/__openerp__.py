@@ -33,6 +33,8 @@
         'wizard/op_crm_lead_analysis.xml',
         'wizard/op_enrollment_analysis.xml',
         'wizard/op_promotional_activity_analysis.xml',
+        'wizard/op_followup_actions_detail_analysis.xml',
+        'wizard/op_inquiry_modes_analysis.xml',
         'op_payment_schedule_line/op_payment_schedule_line_view.xml',
         'op_registration/op_registration_view.xml',
         'op_registration/op_registration_sequence.xml',

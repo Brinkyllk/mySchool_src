@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<record id="view_op_inquiry_modes_analysis_form" model="ir.ui.view">
+			<field name="name">op.inquiry.modes.analysis.form</field>
+			<field name="model">op.inquiry.modes.analysis.xls</field>
+			<field name="priority" eval="8" />
+			<field name="arch" type="xml">
+				<form string="Inquiry Modes Analysis Report" version="7.0">
+					<header>
+						<span groups="base.group_user">
+							<button special="cancel" string="Close" type="object"
+								icon="terp-dialog-close" />
+							<!--<button string="Generate Lead Analysis Report" type="object"-->
+								<!--name="gen_lead_analysis" />-->
+                            <button name="xls_export" string="Generate inquiry Modes Analysis Report" type="object"
+                            context="{'xls_export':1}"/>
+						</span>
+					</header>
+					<sheet>
+						<separator string="Select Date Range" colspan="4" />
+						<div>
+							<group colspan="4" cols="4">
+								<field name="start_date" />
+								<field name="end_date"/>
+                                <field name="modes_of_inquiry"/>
+							</group>
+						</div>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="act_op_inquiry_modes_analysis_view">
+			<field name="name">inquiry Modes Analysis Report</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">op.inquiry.modes.analysis.xls</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+			<field name="domain">[]</field>
+			<field name="context">{}</field>
+		</record>
+
+		<record model="ir.actions.act_window.view" id="act_op_inquiry_modes_analysis_view_form">
+			<field name="act_window_id" ref="act_op_inquiry_modes_analysis_view" />
+			<field name="sequence" eval="20" />
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="view_op_inquiry_modes_analysis_form"/>
+		</record>
+
+	</data>
+</openerp>
