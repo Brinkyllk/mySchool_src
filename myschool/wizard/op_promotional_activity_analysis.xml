@@ -7,16 +7,6 @@
 			<field name="priority" eval="8" />
 			<field name="arch" type="xml">
 				<form string="Promotional Activity Analysis Report" version="7.0">
-					<header>
-						<span groups="base.group_user">
-							<button special="cancel" string="Close" type="object"
-								icon="terp-dialog-close" />
-							<!--<button string="Generate Lead Analysis Report" type="object"-->
-								<!--name="gen_lead_analysis" />-->
-                            <button name="xls_export" string="Generate Promotional Activity Analysis Report" type="object"
-                            context="{'xls_export':1}"/>
-						</span>
-					</header>
 					<sheet>
 						<separator string="Select Date Range" colspan="4" />
 						<div>
@@ -25,7 +15,12 @@
 								<field name="end_date" />
                                 <field name="study_programme_id"/>
 							</group>
+
 						</div>
+                            <button icon="gtk-execute" name="xls_export" string="Generate Report" type="object" class="oe_highlight"
+                            context="{'xls_export':1}"/>
+                        <button special="cancel" string="Close" type="object"
+								icon="terp-dialog-close" class="oe_highlight"/>
 					</sheet>
 				</form>
 			</field>

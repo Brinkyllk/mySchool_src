@@ -165,12 +165,13 @@ class op_student(osv.Model):
         data = super(op_student, self).default_get(cr, uid, fields, context=context)
         global activeId
         activeId = context.get('active_id')
+        regId = context.get('id')
         if activeId:
 
             registrationRef = self.pool.get('op.registration')
             enrollmentRef = self.pool.get('op.enrollment')
-            registrationId = registrationRef.browse(cr, uid, activeId, context=context)
-            enrollmentId = enrollmentRef.search(cr, uid, [('reg_id', '=', activeId)])
+            registrationId = registrationRef.browse(cr, uid, regId, context=context)
+            enrollmentId = enrollmentRef.search(cr, uid, [('reg_id', '=', regId)])
 
             data['title'] = registrationId.title.id
             data['first_name'] = registrationId.first_name

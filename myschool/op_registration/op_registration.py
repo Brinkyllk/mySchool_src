@@ -197,7 +197,7 @@ class op_registration(osv.osv):
             # 'res_id': student.id,
             'target': 'new',
             'flags': {'action_buttons': True},
-            'context': context,
+            'context': {'id': id},
             }
 
         # self.write(cr, uid, ids, {'state': 'd'})

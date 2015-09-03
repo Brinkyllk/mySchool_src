@@ -19,12 +19,19 @@ class op_course_tags(osv.Model):
     def code_validation(self, cr, uid, ids, code):
         crm_tag_code = str(code).replace(" ", "")
         crm_tag_new_code = ''.join([i for i in crm_tag_code if not i.isdigit()])
-        if str(code).isspace():
-            raise osv.except_osv(_('Invalid Code !'), _('Only Spaces not allowed'))
-        elif crm_tag_new_code.isalpha() or crm_tag_code.isdigit():
+        lengthTagsCode = len(code)
+        if lengthTagsCode >= 2 and crm_tag_new_code.isalpha() and crm_tag_code.isdigit():
             return True
         else:
-            raise osv.except_osv(_('Invalid Code !'), _('Please Enter the code correctly'))
+            if lengthTagsCode <= 2:
+                raise osv.except_osv(_('Invalid Code !'), _('Minimum data length should be at least 2 characters'))
+            else:
+                if str(code).isspace():
+                    raise osv.except_osv(_('Invalid Code !'), _('Only Spaces not allowed'))
+                elif crm_tag_new_code.isalpha() or crm_tag_code.isdigit():
+                    return True
+                else:
+                    raise osv.except_osv(_('Invalid Code !'), _('Please Enter the code correctly'))
 
     # -----------name validation----------- s#
     def name_validation(self, cr, uid, ids, name):

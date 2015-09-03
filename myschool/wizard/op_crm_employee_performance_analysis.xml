@@ -7,28 +7,22 @@
 			<field name="priority" eval="8" />
 			<field name="arch" type="xml">
 				<form string="Employee Performance Analysis Report" version="7.0">
-					<header>
-						<span groups="base.group_user">
-							<button special="cancel" string="Close" type="object"
-								icon="terp-dialog-close" />
-							<!--<button string="Generate Lead Analysis Report" type="object"-->
-								<!--name="gen_lead_analysis" />-->
-                            <button name="xls_export" string="Generate Employee Performance Analysis Report" type="object"
-                            context="{'xls_export':1}"/>
-						</span>
-					</header>
 					<sheet>
 						<separator string="Select Date Range" colspan="4" />
 						<div>
 							<group colspan="4" cols="4">
 								<field name="start_date" />
-								<field name="end_date" />
+                                <field name="end_date" />
                                 <field name="user_id"/>
-							</group>
-						</div>
-					</sheet>
-				</form>
-			</field>
+                            </group>
+                        </div>
+                        <button icon="gtk-execute" name="xls_export" string="Generate Report" type="object" class="oe_highlight"
+                                context="{'xls_export':1}"/>
+                        <button special="cancel" string="Close" type="object"
+                                icon="terp-dialog-close" class="oe_highlight"/>
+                    </sheet>
+                </form>
+            </field>
 		</record>
 
 		<record model="ir.actions.act_window" id="act_op_crm_employee_performance_analysis_view">
