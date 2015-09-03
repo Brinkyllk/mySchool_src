@@ -288,11 +288,11 @@
                     </xpath>
                     <xpath  expr="//notebook/page[@string='Extra Info']" position="inside">
                         <separator string="Marketingsss"/>
-                                <group>
-                                    <field name="campaign_id"/>
-                                    <field name="medium_id"/>
-                                    <field name="source_id"/>
-                                </group>
+                        <group>
+                            <field name="campaign_id"/>
+                            <field name="medium_id"/>
+                            <field name="source_id"/>
+                        </group>
                         <group>
                             <field name="inquiry_date"/>
                             <field name="date_open"/>
@@ -369,14 +369,14 @@
 
         <!--study_programme_tags_action-->
         <record model="ir.actions.act_window" id="act_open_op_study_programme_tags_view">
-			<field name="name">Study Programme tags</field>
-			<field name="type">ir.actions.act_window</field>
-			<field name="res_model">op.course.tags</field>
-			<field name="view_type">form</field>
-			<field name="view_mode">tree,form</field>
-			<field name="domain">[]</field>
-			<field name="context">{}</field>
-		</record>
+            <field name="name">Study Programme tags</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">op.course.tags</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
 
         <!--lead_modes_form-->
         <record id="view_op_lead_modes_form" model="ir.ui.view">
@@ -410,14 +410,14 @@
 
         <!--lead_modes_action-->
         <record model="ir.actions.act_window" id="act_open_op_lead_modes_view">
-			<field name="name">Modes of Inquiry</field>
-			<field name="type">ir.actions.act_window</field>
-			<field name="res_model">op.lead.modes</field>
-			<field name="view_type">form</field>
-			<field name="view_mode">tree,form</field>
-			<field name="domain">[]</field>
-			<field name="context">{}</field>
-		</record>
+            <field name="name">Modes of Inquiry</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">op.lead.modes</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
 
         <!--follow_up_types_form-->
         <record id="view_op_follow_up_types_form" model="ir.ui.view">
@@ -451,14 +451,14 @@
 
         <!--follow_up_types_action-->
         <record model="ir.actions.act_window" id="act_open_op_follow_up_types_view">
-			<field name="name">Followup Types</field>
-			<field name="type">ir.actions.act_window</field>
-			<field name="res_model">op.follow.up.type</field>
-			<field name="view_type">form</field>
-			<field name="view_mode">tree,form</field>
-			<field name="domain">[]</field>
-			<field name="context">{}</field>
-		</record>
+            <field name="name">Followup Types</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">op.follow.up.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
 
         <!--crm_lead_tree_inherited-->
         <record id="crm_case_tree_view_leads_extended" model="ir.ui.view">
@@ -646,16 +646,16 @@
             <field name="arch" type="xml">
                 <data>
                     <xpath expr="//field[@name='start_date']" position="attributes">
-                    <attribute name="string">Calculated Start</attribute>
+                        <attribute name="string">Calculated Start</attribute>
                     </xpath>
                     <xpath expr="//field[@name='start_datetime']" position="attributes">
-                    <attribute name="string">Calculated Start</attribute>
+                        <attribute name="string">Calculated Start</attribute>
                     </xpath>
                     <xpath expr="//field[@name='stop_date']" position="attributes">
-                    <attribute name="string">Calculated Stop</attribute>
+                        <attribute name="string">Calculated Stop</attribute>
                     </xpath>
                     <xpath expr="//field[@name='stop_datetime']" position="attributes">
-                    <attribute name="string">Calculated Stop</attribute>
+                        <attribute name="string">Calculated Stop</attribute>
                     </xpath>
                     <field name="categ_ids" position="attributes">
                         <attribute name="invisible">1</attribute>
@@ -783,5 +783,3 @@
         <delete model="ir.ui.menu" id="crm.crm_case_inbound_phone_tree_view"/>
     </data>
 </openerp>
-
-
