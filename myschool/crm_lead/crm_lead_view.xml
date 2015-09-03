@@ -346,7 +346,8 @@
                     <sheet>
                         <separator string="Tags for New Study Programmes" colspan="4" />
                         <group>
-                            <field name="code" />
+                            <field name="id" invisible="1"/>
+                            <field name="code" attrs="{'readonly': [('id', '!=', False)]}"/>
                             <field name="name"/>
                         </group>
                     </sheet>
@@ -386,7 +387,8 @@
                     <sheet>
                         <separator string="Mode of Inquiry" colspan="4" />
                         <group>
-                            <field name="code" />
+                            <field name="id" invisible="1"/>
+                            <field name="code" attrs="{'readonly': [('id', '!=', False)]}"/>
                             <field name="name"/>
                         </group>
                     </sheet>
@@ -426,7 +428,8 @@
                     <sheet>
                         <separator string="Follow-up Types" colspan="4" />
                         <group>
-                            <field name="code" />
+                            <field name="id" invisible="1"/>
+                            <field name="code" attrs="{'readonly': [('id', '!=', False)]}"/>
                             <field name="name"/>
                         </group>
                     </sheet>

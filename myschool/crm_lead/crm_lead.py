@@ -8,11 +8,14 @@ from dateutil import parser
 
 
 class op_course_tags(osv.Model):
+
     _name = "op.course.tags"
     _columns = {
         'code': fields.char('Code', required=True, size=5),
         'name': fields.char('Name', required=True, size=30)
     }
+
+    _sql_constraints = [('name', 'UNIQUE (name)', 'The Name of the Tags must be unique!')]
 
     # ----------------Validations----------------------- s#
     # ---------code validation------------- s#
@@ -104,6 +107,7 @@ class op_course_tags(osv.Model):
 
 
 class op_lead_modes(osv.Model):
+
     _name = 'op.lead.modes'
     _columns = {
         'code': fields.char('Code', required=True, size=5,),
@@ -249,6 +253,7 @@ class calendar_alarm(osv.Model):
 
 
 class op_time_frame(osv.Model):
+
     _name = 'op.time.frame'
     _columns = {
         'name': fields.char('Time Frame', size=30, ondelete='no action', required=True)
@@ -452,6 +457,7 @@ class crm_tracking_medium(osv.Model):
 
 
 class op_follow_up_type(osv.Model):
+
     _name = 'op.follow.up.type'
     _columns = {
         'code': fields.char('Code', required=True, size=4),
@@ -550,6 +556,7 @@ class op_follow_up_type(osv.Model):
 
 
 class crm_lead(osv.Model):
+
     # check prospective_student limit
     def _check_pstudent(self, cr, uid, ids, prospective_student):
         if prospective_student > 999:
