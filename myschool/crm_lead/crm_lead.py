@@ -1253,19 +1253,22 @@ class calendar_event(osv.Model):
         vals.update({'name': name})
 
         #When create a followup update the FollowUp counts in CRM Lead
-        activeID = context['active_id']
+        if len(context) != 0:
+            activeID = context['active_id']
 
-        calenderEvent = self.pool.get('calendar.event')
-        crmLead = self.pool.get('crm.lead')
+            calenderEvent = self.pool.get('calendar.event')
+            crmLead = self.pool.get('crm.lead')
 
-        calenderEventId = calenderEvent.search(cr, uid, [('opportunity_id', '=', activeID)])
-        lengthCalenderEventId = len(calenderEventId)
-        meetingCount = lengthCalenderEventId + 1
+            calenderEventId = calenderEvent.search(cr, uid, [('opportunity_id', '=', activeID)])
+            lengthCalenderEventId = len(calenderEventId)
+            meetingCount = lengthCalenderEventId + 1
 
-        if lengthCalenderEventId == 0:
-            crmLead.write(cr, uid, [activeID], {'meeting_count': meetingCount})
+            if lengthCalenderEventId == 0:
+                crmLead.write(cr, uid, [activeID], {'meeting_count': meetingCount})
+            else:
+                crmLead.write(cr, uid, [activeID], {'meeting_count': meetingCount})
         else:
-            crmLead.write(cr, uid, [activeID], {'meeting_count': meetingCount})
+            pass
 
             # ------repetition validation on create---------------------- #
         if 'count' in vals:
