@@ -32,12 +32,19 @@ class op_study_programme(osv.Model):
     def code_validation(self, cr, uid, ids, code):
         st_code = str(code).replace(" ", "")
         st_prm_code = ''.join([i for i in st_code if not i.isdigit()])
-        if str(code).isspace():
-            raise osv.except_osv(_('Invalid Code !'), _('Only Spaces not allowed'))
-        elif st_prm_code.isalpha() or st_code.isdigit():
+        lengthstprCode = len(code)
+        if lengthstprCode >= 2 and st_prm_code.isalpha() and st_code.isdigit():
             return True
         else:
-            raise osv.except_osv(_('Invalid Code !'), _('Please Enter the code correctly'))
+            if lengthstprCode <= 2:
+                raise osv.except_osv(_('Invalid Code !'), _('Minimum data length should be at least 2 characters'))
+            else:
+                if str(code).isspace():
+                    raise osv.except_osv(_('Invalid Code !'), _('Only Spaces not allowed'))
+                elif st_prm_code.isalpha() or st_code.isdigit():
+                    return True
+                else:
+                    raise osv.except_osv(_('Invalid Code !'), _('Please Enter the code correctly'))
 
     # -----------name validation----------- s#
     def name_validation(self, cr, uid, ids, name):

@@ -471,12 +471,36 @@ class op_follow_up_type(osv.Model):
     def code_validation(self, cr, uid, ids, code):
         follow_up_type_code = str(code).replace(" ", "")
         follow_type_code = ''.join([i for i in follow_up_type_code if not i.isdigit()])
-        if str(code).isspace():
-            raise osv.except_osv(_('Invalid Code !'), _('Only Spaces not allowed'))
-        elif follow_type_code.isalpha() or follow_up_type_code.isdigit():
+        lengthTypeCode = len(code)
+        if lengthTypeCode >= 2 and follow_type_code.isalpha() and follow_up_type_code.isdigit():
             return True
         else:
-            raise osv.except_osv(_('Invalid Code !'), _('Please Enter the code correctly'))
+            if lengthTypeCode <= 2:
+                raise osv.except_osv(_('Invalid Code !'), _('Minimum data length should be at least 2 characters'))
+            else:
+                if str(code).isspace():
+                    raise osv.except_osv(_('Invalid Code !'), _('Only Spaces not allowed'))
+                elif follow_type_code.isalpha() or follow_up_type_code.isdigit():
+                    return True
+                else:
+                    raise osv.except_osv(_('Invalid Code !'), _('Please Enter the code correctly'))
+
+    # def code_validation(self, cr, uid, ids, code):
+    #     crm_tag_code = str(code).replace(" ", "")
+    #     crm_tag_new_code = ''.join([i for i in crm_tag_code if not i.isdigit()])
+    #     lengthTagsCode = len(code)
+    #     if lengthTagsCode >= 2 and crm_tag_new_code.isalpha() and crm_tag_code.isdigit():
+    #         return True
+    #     else:
+    #         if lengthTagsCode <= 2:
+    #             raise osv.except_osv(_('Invalid Code !'), _('Minimum data length should be at least 2 characters'))
+    #         else:
+    #             if str(code).isspace():
+    #                 raise osv.except_osv(_('Invalid Code !'), _('Only Spaces not allowed'))
+    #             elif crm_tag_new_code.isalpha() or crm_tag_code.isdigit():
+    #                 return True
+    #             else:
+    #                 raise osv.except_osv(_('Invalid Code !'), _('Please Enter the code correctly'))
 
     # -----------name validation----------- s#
     def name_validation(self, cr, uid, ids, name):
@@ -562,7 +586,7 @@ class crm_lead(osv.Model):
         if prospective_student > 999:
             raise osv.except_osv('Prospective Students', 'Limit exceeded !')
         elif prospective_student < 1:
-            raise osv.except_osv('Prospective Students', 'Cannot be Zero !')
+            raise osv.except_osv('Prospective Students', 'Cannot be Less than 1   !')
         else:
             return True
 
@@ -863,6 +887,15 @@ class crm_lead(osv.Model):
             pass
 
     def create(self, cr, uid, vals, context=None):
+
+        #Minus values are not allowed for the planned_revenue
+        if 'planned_revenue' in vals:
+            price = vals['planned_revenue']
+            if price >= 0:
+                pass
+            else:
+                raise osv.except_osv('Value Error', 'Minus values are not allowed for the Expected Revenue')
+
         # ----------company name validation caller by s------- #
         if 'partner_name' in vals:
             self.companyNameValidation(cr, uid, [], vals['partner_name'])
@@ -950,6 +983,12 @@ class crm_lead(osv.Model):
         else:
             pass
 
+        if 'inquiry_date' in vals:
+            a = vals['inquiry_date']
+            pass_date = dateutil.parser.parse(a).date()
+            pass_date = pass_date.strftime('%Y-%m-%d')
+            vals.update({'inquiry_date': pass_date})
+
         # ----------update contact name---------- s#
         if 'first_name' in vals:
             if vals['first_name'] is not False:
@@ -999,6 +1038,15 @@ class crm_lead(osv.Model):
         return super(crm_lead, self).create(cr, uid, vals, context=context)
 
     def write(self, cr, uid, ids, values, context=None):
+
+        #Minus values are not allowed for the planned_revenue
+        if 'planned_revenue' in values:
+            price = values['planned_revenue']
+            if price >= 0:
+                pass
+            else:
+                raise osv.except_osv('Value Error', 'Minus values are not allowed for the Expected Revenue')
+
         # ----------company name validation caller by ------- s#
         if 'partner_name' in values:
             self.companyNameValidation(cr, uid, [], values['partner_name'])
@@ -1163,17 +1211,17 @@ class calendar_event(osv.Model):
     def _check_repetitions(self, cr, uid, ids, count):
         if count == 0:
             raise osv.except_osv('Number of repetitions', 'Invalid Value !')
-        elif count > 5:
-            raise osv.except_osv('Number of repetitions', 'Limit exceeded !')
+        elif count > 999:
+            raise osv.except_osv('Number of repetitions', 'Limit exceeded ( Maximum 3 digits )!')
         else:
             return True
 
     # ---------repeat validation------------- #
     def _check_repeat(self, cr, uid, ids, interval):
         if interval == 0:
-            raise osv.except_osv('Number of repeats', 'Cannot enter Zero value !')
-        elif interval > 5:
-            raise osv.except_osv('Number of repeat', 'Limit exceeded !')
+            raise osv.except_osv('Number of repeats', 'Invalid Value ! !')
+        elif interval > 999:
+            raise osv.except_osv('Number of repeat', 'Limit exceeded ( Maximum 3 digits )!')
         else:
             return True
 
@@ -1240,6 +1288,15 @@ class calendar_event(osv.Model):
             name = values['name'].strip().title()
             values.update({'name': name})
 
+         # ------repetition validation on write---------------------- #
+        if 'count' in values:
+            self._check_repetitions(self, cr, uid, values['count'])
+
+        # ------repeat validation on write---------------------- #
+        if 'interval' in values:
+            self._check_repeat(self, cr, uid, values['interval'])
+
+
         return super(calendar_event, self).write(cr, uid, ids, values, context=context)
 
     def unlink(self, cr, uid, vals, context=None):
@@ -1265,17 +1322,17 @@ class calendar_event(osv.Model):
 
         return super(calendar_event, self).unlink(cr, uid, vals, context=context)
 
-    def write(self, cr, uid, ids, values, context=None):
-
-        # ------repetition validation on write---------------------- #
-        if 'count' in values:
-            self._check_repetitions(self, cr, uid, values['count'])
-
-        # ------repeat validation on write---------------------- #
-        if 'interval' in values:
-            self._check_repeat(self, cr, uid, values['interval'])
-
-        return super(calendar_event, self).write(cr, uid, ids, values, context=context)
+    # def write(self, cr, uid, ids, values, context=None):
+    #
+    #     # ------repetition validation on write---------------------- #
+    #     if 'count' in values:
+    #         self._check_repetitions(self, cr, uid, values['count'])
+    #
+    #     # ------repeat validation on write---------------------- #
+    #     if 'interval' in values:
+    #         self._check_repeat(self, cr, uid, values['interval'])
+    #
+    #     return super(calendar_event, self).write(cr, uid, ids, values, context=context)
 calendar_event()
 
 
