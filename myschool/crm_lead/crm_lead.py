@@ -1328,17 +1328,6 @@ class calendar_event(osv.Model):
 
         return super(calendar_event, self).unlink(cr, uid, vals, context=context)
 
-    # def write(self, cr, uid, ids, values, context=None):
-    #
-    #     # ------repetition validation on write---------------------- #
-    #     if 'count' in values:
-    #         self._check_repetitions(self, cr, uid, values['count'])
-    #
-    #     # ------repeat validation on write---------------------- #
-    #     if 'interval' in values:
-    #         self._check_repeat(self, cr, uid, values['interval'])
-    #
-    #     return super(calendar_event, self).write(cr, uid, ids, values, context=context)
 calendar_event()
 
 

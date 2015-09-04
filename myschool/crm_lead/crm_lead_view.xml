@@ -657,6 +657,9 @@
                     <xpath expr="//field[@name='stop_datetime']" position="attributes">
                         <attribute name="string">Calculated Stop</attribute>
                     </xpath>
+                    <xpath expr="//page[@string='Options']" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </xpath>
                     <field name="categ_ids" position="attributes">
                         <attribute name="invisible">1</attribute>
                     </field>
