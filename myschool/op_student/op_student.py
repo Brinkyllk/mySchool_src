@@ -116,6 +116,7 @@ class op_student(osv.Model):
 
     _columns = {
         #------ personal details ------
+        'title': fields.many2one('res.partner.title', 'Title'),
         'partner_id': fields.many2one('res.partner', 'Partner', required=True, ondelete="restrict", readonly=True),
         'initials': fields.char(size=20, string='Initials'),
         'first_name': fields.char(size=15, string='First Name', required=True, select=True),
@@ -129,7 +130,7 @@ class op_student(osv.Model):
         'id_number': fields.char(size=10, string='NIC'),
         #'photo': fields.related('partner_id', 'image', string='Photo', type='binary', readonly=True),
         'emails': fields.char(string='Email', size=128),
-        'phone': fields.char(string='Phone Number', size=256),
+        'phone': fields.char(string='Phone Number', size=12),
 
         'address_line1': fields.char('address line1', size=20),
         'address_line2': fields.char('address line2', size=25),
@@ -163,17 +164,17 @@ class op_student(osv.Model):
 
     def default_get(self, cr, uid, fields, context=None):
         data = super(op_student, self).default_get(cr, uid, fields, context=context)
-        global activeId
-        activeId = context.get('active_id')
+        # global activeId
+        # activeId = context.get('active_id')
         regId = context.get('id')
-        if activeId:
+        if regId:
 
             registrationRef = self.pool.get('op.registration')
             enrollmentRef = self.pool.get('op.enrollment')
             registrationId = registrationRef.browse(cr, uid, regId, context=context)
             enrollmentId = enrollmentRef.search(cr, uid, [('reg_id', '=', regId)])
 
-            data['title'] = registrationId.title.id
+            data['initials'] = registrationId.initials
             data['first_name'] = registrationId.first_name
             data['middle_name'] = registrationId.middle_name
             data['last_name'] = registrationId.last_name
@@ -186,7 +187,7 @@ class op_student(osv.Model):
             data['province'] = registrationId.province
             data['nation'] = registrationId.nation
             data['enrollment_ids'] = enrollmentId
-            data['registration_id'] = activeId
+            data['registration_id'] = regId
 
         return data
 

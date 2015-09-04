@@ -1207,6 +1207,9 @@ class calendar_event(osv.Model):
         'type': fields.many2one('op.follow.up.type', 'Follow-up Type', required=True)
     }
 
+    def copy(self, cr, uid, id, default=None, context=None):
+        raise osv.except_osv(_('Forbbiden to duplicate'), _('Is not possible to duplicate the record, please create a new one.'))
+
     # ---------repetition validation------------- #
     def _check_repetitions(self, cr, uid, ids, count):
         if count == 0:

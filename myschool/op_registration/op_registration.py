@@ -28,6 +28,18 @@ from dateutil import parser
 
 class op_registration(osv.osv):
 
+    #--Code change to upper case---
+    @api.onchange('initials')
+    def onchange_case(self, cr, uid, ids, initials):
+        if initials != False:
+            result = {'value': {
+                'initials': str(initials).upper()
+            }
+            }
+            return result
+        else:
+            return True
+
     # --First name first letter capitalization--- #
     @api.onchange('first_name')
     def onchange_fname(self, cr, uid, ids, first_name):
@@ -64,6 +76,18 @@ class op_registration(osv.osv):
         else:
             return True
 
+    #onchange for is_company
+    # @api.multi
+    # def onchange_type(self, is_company):
+    #     value = {'title': False}
+    #     if is_company:
+    #         value['use_parent_address'] = False
+    #         domain = {'title': [('domain', '=', 'partner')]}
+    #         value['gender'] = 'o'
+    #     else:
+    #         domain = {'title': [('domain', '=', 'contact')]}
+    #     return {'value': value, 'domain': domain}
+
     _name = 'op.registration'
     _rec_name = 'application_number'
 
@@ -77,11 +101,12 @@ class op_registration(osv.osv):
         return super(op_registration, self).copy(cr, uid, id, default, context=context)
 
     _columns = {
+        'initials': fields.char(size=20, string='Initials'),
         'first_name': fields.char(size=15, string='First Name', required=True, states={'done': [('readonly', True)]}),
         'middle_name': fields.char(size=15, string='Middle Name',
                                    states={'done': [('readonly', True)]}),
         'last_name': fields.char(size=20, string='Last Name', required=True, states={'done': [('readonly', True)]}),
-        'title': fields.many2one('res.partner.title', 'Title', states={'done': [('readonly', True)]}),
+        # 'title': fields.many2one('res.partner.title', 'Title', states={'done': [('readonly', True)]}),
         'application_number': fields.char(size=16, string='Application Number', required=True, readonly=True),
         'registration_date': fields.date(string='Registration Date', required=True, states={'done': [('readonly', True)]}),
         'application_date': fields.datetime(string='Application Date', required=True,

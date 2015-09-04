@@ -113,7 +113,7 @@
                             <page string="Personal Details">
                                 <separator colspan="4" string="Personal Information"/>
                                 <group col="4" colspan="4">
-                                    <field name="gender" attrs="{'readonly': [('is_company','=',True)]}"/>
+                                    <field name="gender"/>
                                     <field name="phone"/>
                                     <field name="registration_id" invisible="1"/>
                                     <field name="birth_date" attrs="{'invisible': [('is_company','=', True)]}" on_change='onchange_nic(id_number)'/>
