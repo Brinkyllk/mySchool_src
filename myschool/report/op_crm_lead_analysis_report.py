@@ -153,82 +153,82 @@ class op_crm_lead_analysis_xls(report_xls):
             (select count(cl.id) from crm_lead as cl, op_anytime_time_frame_rel as attf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = attf.lead_id) AND (1 = attf.time_frame_id)) as sat_any,
+            (cl.id = splr.lead_id) AND (cl.id = attf.lead_id) AND (1 = attf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as sat_any,
 
             (select count(cl.id) from crm_lead as cl, op_anytime_time_frame_rel as attf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = attf.lead_id) AND (2 = attf.time_frame_id)) as sun_any,
+            (cl.id = splr.lead_id) AND (cl.id = attf.lead_id) AND (2 = attf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as sun_any,
 
             (select count(cl.id) from crm_lead as cl, op_anytime_time_frame_rel as attf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = attf.lead_id) AND (3= attf.time_frame_id)) as wkd_any,
+            (cl.id = splr.lead_id) AND (cl.id = attf.lead_id) AND (3= attf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as wkd_any,
 
 -- Morning Time Frames
 
             (select count(cl.id) from crm_lead as cl, op_morning_time_frame_rel as mtf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = mtf.lead_id) AND (1= mtf.time_frame_id)) as sat_mor,
+            (cl.id = splr.lead_id) AND (cl.id = mtf.lead_id) AND (1= mtf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as sat_mor,
 
             (select count(cl.id) from crm_lead as cl, op_morning_time_frame_rel as mtf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = mtf.lead_id) AND (2= mtf.time_frame_id)) as sun_mor,
+            (cl.id = splr.lead_id) AND (cl.id = mtf.lead_id) AND (2= mtf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as sun_mor,
 
             (select count(cl.id) from crm_lead as cl, op_morning_time_frame_rel as mtf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = mtf.lead_id) AND (3= mtf.time_frame_id)) as wkd_mor,
+            (cl.id = splr.lead_id) AND (cl.id = mtf.lead_id) AND (3= mtf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as wkd_mor,
 
 -- Afternoon Time Frames
 
             (select count(cl.id) from crm_lead as cl, op_afternoon_time_frame_rel as atf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = atf.lead_id)AND (1= atf.time_frame_id)) as sat_aft,
+            (cl.id = splr.lead_id) AND (cl.id = atf.lead_id)AND (1= atf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as sat_aft,
 
             (select count(cl.id) from crm_lead as cl, op_afternoon_time_frame_rel as atf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = atf.lead_id)AND (2= atf.time_frame_id)) as sun_aft,
+            (cl.id = splr.lead_id) AND (cl.id = atf.lead_id)AND (2= atf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as sun_aft,
 
             (select count(cl.id) from crm_lead as cl, op_afternoon_time_frame_rel as atf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = atf.lead_id)AND (3= atf.time_frame_id)) as wkd_aft,
+            (cl.id = splr.lead_id) AND (cl.id = atf.lead_id)AND (3= atf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as wkd_aft,
 
 -- Evening Time Frames
             (select count(cl.id) from crm_lead as cl, op_evening_time_frame_rel as etf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = etf.lead_id) AND (1= etf.time_frame_id)) as sat_eve,
+            (cl.id = splr.lead_id) AND (cl.id = etf.lead_id) AND (1= etf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as sat_eve,
 
             (select count(cl.id) from crm_lead as cl, op_evening_time_frame_rel as etf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = etf.lead_id) AND (2= etf.time_frame_id)) as sun_eve,
+            (cl.id = splr.lead_id) AND (cl.id = etf.lead_id) AND (2= etf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as sun_eve,
 
             (select count(cl.id) from crm_lead as cl, op_evening_time_frame_rel as etf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = etf.lead_id) AND (3= etf.time_frame_id)) as wkd_eve,
+            (cl.id = splr.lead_id) AND (cl.id = etf.lead_id) AND (3= etf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as wkd_eve,
 
             (select count(cl.id) from crm_lead as cl, op_study_programme_lead_rel as splr
             where
-            (splr.study_programme_id = stpr.id) AND (cl.id = splr.lead_id)) as total,
+            (splr.study_programme_id = stpr.id) AND (cl.id = splr.lead_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as total,
 
             (select sum (cl.meeting_count) from crm_lead as cl, op_study_programme_lead_rel as splr
             where
-            (splr.lead_id = cl.id) and (splr.study_programme_id = stpr.id)) as follow_ups,
+            (splr.lead_id = cl.id) and (splr.study_programme_id = stpr.id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as follow_ups,
 
             (select count(cl.id) from crm_lead as cl,op_study_programme_lead_rel as splr
             where
-            (cl.id = splr.lead_id) and (cl.stage_id = 6) and (splr.study_programme_id = stpr.id)) as enrollments
+            (cl.id = splr.lead_id) and (cl.stage_id = 6) and (splr.study_programme_id = stpr.id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as enrollments
 
-                FROM op_study_programme as stpr , crm_lead as lead
-                WHERE (stpr.id = '%(stpr_id)d') AND ((lead.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))
+            FROM op_study_programme as stpr , crm_lead as lead
+            WHERE (stpr.id = '%(stpr_id)d')
             """ % ({'stpr_id': stpr_id, 'st': st, 'end': end})
             self.cr.execute(sql1)
             val = self.cr.dictfetchall()
@@ -247,82 +247,81 @@ class op_crm_lead_analysis_xls(report_xls):
             (select count(cl.id) from crm_lead as cl, op_anytime_time_frame_rel as attf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = attf.lead_id) AND (1 = attf.time_frame_id)) as sat_any,
+            (cl.id = splr.lead_id) AND (cl.id = attf.lead_id) AND (1 = attf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as sat_any,
 
             (select count(cl.id) from crm_lead as cl, op_anytime_time_frame_rel as attf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = attf.lead_id) AND (2 = attf.time_frame_id)) as sun_any,
+            (cl.id = splr.lead_id) AND (cl.id = attf.lead_id) AND (2 = attf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as sun_any,
 
             (select count(cl.id) from crm_lead as cl, op_anytime_time_frame_rel as attf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = attf.lead_id) AND (3= attf.time_frame_id)) as wkd_any,
+            (cl.id = splr.lead_id) AND (cl.id = attf.lead_id) AND (3= attf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as wkd_any,
 
 -- Morning Time Frames
 
             (select count(cl.id) from crm_lead as cl, op_morning_time_frame_rel as mtf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = mtf.lead_id) AND (1= mtf.time_frame_id)) as sat_mor,
+            (cl.id = splr.lead_id) AND (cl.id = mtf.lead_id) AND (1= mtf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as sat_mor,
 
             (select count(cl.id) from crm_lead as cl, op_morning_time_frame_rel as mtf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = mtf.lead_id) AND (2= mtf.time_frame_id)) as sun_mor,
+            (cl.id = splr.lead_id) AND (cl.id = mtf.lead_id) AND (2= mtf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as sun_mor,
 
             (select count(cl.id) from crm_lead as cl, op_morning_time_frame_rel as mtf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = mtf.lead_id) AND (3= mtf.time_frame_id)) as wkd_mor,
+            (cl.id = splr.lead_id) AND (cl.id = mtf.lead_id) AND (3= mtf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as wkd_mor,
 
 -- Afternoon Time Frames
 
             (select count(cl.id) from crm_lead as cl, op_afternoon_time_frame_rel as atf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = atf.lead_id)AND (1= atf.time_frame_id)) as sat_aft,
+            (cl.id = splr.lead_id) AND (cl.id = atf.lead_id)AND (1= atf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as sat_aft,
 
             (select count(cl.id) from crm_lead as cl, op_afternoon_time_frame_rel as atf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = atf.lead_id)AND (2= atf.time_frame_id)) as sun_aft,
+            (cl.id = splr.lead_id) AND (cl.id = atf.lead_id)AND (2= atf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as sun_aft,
 
             (select count(cl.id) from crm_lead as cl, op_afternoon_time_frame_rel as atf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = atf.lead_id)AND (3= atf.time_frame_id)) as wkd_aft,
+            (cl.id = splr.lead_id) AND (cl.id = atf.lead_id)AND (3= atf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as wkd_aft,
 
 -- Evening Time Frames
             (select count(cl.id) from crm_lead as cl, op_evening_time_frame_rel as etf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = etf.lead_id) AND (1= etf.time_frame_id)) as sat_eve,
+            (cl.id = splr.lead_id) AND (cl.id = etf.lead_id) AND (1= etf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as sat_eve,
 
             (select count(cl.id) from crm_lead as cl, op_evening_time_frame_rel as etf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = etf.lead_id) AND (2= etf.time_frame_id)) as sun_eve,
+            (cl.id = splr.lead_id) AND (cl.id = etf.lead_id) AND (2= etf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as sun_eve,
 
             (select count(cl.id) from crm_lead as cl, op_evening_time_frame_rel as etf, op_study_programme_lead_rel as splr
             where
             (splr.study_programme_id = stpr.id) AND
-            (cl.id = splr.lead_id) AND (cl.id = etf.lead_id) AND (3= etf.time_frame_id)) as wkd_eve,
+            (cl.id = splr.lead_id) AND (cl.id = etf.lead_id) AND (3= etf.time_frame_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as wkd_eve,
 
             (select count(cl.id) from crm_lead as cl, op_study_programme_lead_rel as splr
             where
-            (splr.study_programme_id = stpr.id) AND (cl.id = splr.lead_id)) as total,
+            (splr.study_programme_id = stpr.id) AND (cl.id = splr.lead_id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as total,
 
             (select sum (cl.meeting_count) from crm_lead as cl, op_study_programme_lead_rel as splr
             where
-            (splr.lead_id = cl.id) and (splr.study_programme_id = stpr.id)) as follow_ups,
+            (splr.lead_id = cl.id) and (splr.study_programme_id = stpr.id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as follow_ups,
 
             (select count(cl.id) from crm_lead as cl,op_study_programme_lead_rel as splr
             where
-            (cl.id = splr.lead_id) and (cl.stage_id = 6) and (splr.study_programme_id = stpr.id)) as enrollments
+            (cl.id = splr.lead_id) and (cl.stage_id = 6) and (splr.study_programme_id = stpr.id) AND ((cl.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s'))) as enrollments
 
-                FROM op_study_programme as stpr, crm_lead as lead
-                WHERE (lead.inquiry_date) BETWEEN ('%(st)s')AND( '%(end)s')
+            FROM op_study_programme as stpr
             """% ({'st':st, 'end':end})
             self.cr.execute(sql2)
             val = self.cr.dictfetchall()
