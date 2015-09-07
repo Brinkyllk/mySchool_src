@@ -62,7 +62,7 @@ class op_enrollment(osv.Model):
             else:
                 return True
 
-    _constraints = [(_checkSameCourse, ("Course enrollments are duplicated"),['batch_code'])]
+    # _constraints = [(_checkSameCourse, ("Course enrollments are duplicated"),['batch_code'])]
 
     def create(self, cr, uid, vals, context=None):
         #Minus values are not allowed for the price
@@ -83,6 +83,10 @@ class op_enrollment(osv.Model):
                 pass
             else:
                 raise osv.except_osv('Value Error', 'Minus values are not allowed for the Price')
+
+        ss = self.pool.get('op.student')
+        sa = ss.browse(cr, uid, ids, context=context).id
+        print sa
 
         return super(op_enrollment, self).write(cr, uid, ids,  values, context=context)
 

@@ -666,8 +666,13 @@ class op_student(osv.Model):
 
 
 
-        # def create(cr, uid, ids, context=context):
-        #     return super(op_student, self).create(cr, uid, ids, values, context=context)
+        enroll_map_ref = self.pool.get('op.enrollment') # get reference to object
+            # Validate Course mandatory
+        sId = self.browse(cr, uid, ids, context).id
+        course_count = enroll_map_ref.search(cr, uid, [('student_id', '=', sId)], count=True, context=context)
+        if course_count > 0:
+            raise osv.except_osv(_(u'Error'), _(u'Course Enrollment can not be duplicated'))
+            return False
 
         return super(op_student, self).write(cr, uid, ids, values, context=context)
 
