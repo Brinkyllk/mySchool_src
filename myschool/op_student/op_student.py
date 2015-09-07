@@ -642,57 +642,35 @@ class op_student(osv.Model):
                 cntry = values['nation'].strip()
                 values.update({'nation': cntry})
 
-        if 'batch_ids' in values:
-            # Many to Many course logic
-            course_map_ref = self.pool.get('op.student.batch.mapping')  # get reference to object
-            # Validate Course mandatory
-            course_count = course_map_ref.search(cr, uid, [('student_id', '=', ids[0])], count=True, context=context)
-            if course_count < 1:
-                raise osv.except_osv(_(u'Error'), _(u'Course is mandatory'))
-                return False
 
-            # Assign default course
-            course_map_ref.clear_defaults(cr, uid, ids[0], context=context)
-            super(op_student, self).write(cr, uid, ids, values, context=context)
-            stdc = course_map_ref.student_default(cr, uid, ids[0], context=context)
+        if 'enrollment_ids' in values:
+            stu = self.browse(cr, uid, ids, context).ids
+            # ss = stu.ids[0]
+            se = self.pool.get('op.enrollment')
+            sa = se.search(cr, uid, [('student_id', '=', stu)], context=context)
+            if len(sa) > 0:
+                for id_no in sa:
+                    cr.execute('Delete from op_enrollment where student_id =%s' % (id_no))
 
-            if stdc:
-                super(op_student, self).write(cr, uid, ids, {'def_course': stdc.course_id.id,
-                                                             'def_batch': stdc.batch_id.id, }, context=context)
-                return True
-            else:
-                coursemaps = course_map_ref.search(cr, uid, [('student_id', '=', ids[0])], context=context)
-                setmap = course_map_ref.browse(cr, uid, coursemaps[0], context=context)
-                course_map_ref.write(cr, uid, setmap.id, {'default_course': True}, context=context)
-                super(op_student, self).write(cr, uid, ids, {'def_course': setmap.course_id.id,
-                                                             'def_batch': setmap.batch_id.id,}, context=context)
-                return True
+        if 'enrollment_ids' in values:
+            e =[]
+            a = values['enrollment_ids']
+            for b in a:
+                c = b[2]
+                if c is not False:
+                    d = c.get('batch_code')
+                    e.append(d)
+                    f = e.count(d)
+                    if f > 1:
+                        raise osv.except_osv (_('Course Enrollment Error'), _('Enrollments cannot be duplicated'))
 
-        # if 'is_company' in values:
-        #     if values['is_company'] == True:
-        #         if 'register_date' in values:
-        #             pass
-        #         else:
-        #             raise osv.except_osv('Error', ' Registered Date cannot be null..!!')
-        #             # if values['register_date'] == False or values['register_date'] == None:
-        #             #     raise osv.except_osv('Error', 'Mandatory fields are not set correctly, please enter a Registered Date..!!')
-        #     else:
-        #         if 'birth_date' in values:
-        #             if values['birth_date'] == False or values['birth_date'] == None:
-        #                 raise osv.except_osv('Error', 'NIC cannot be null..!!')
-        #             else:
-        #                 if values['birth_date'] == False or values['birth_date'] == None:
-        #                     raise osv.except_osv('Error', 'NIC cannot be null..!!')
-        #                 return True
-        #         elif 'id_number' in values:
-        #             if values ['id_number'] == False or values ['id_number'] == None:
-        #                 raise osv.except_osv('Error', 'NIC cannot be null..!!')
-        #             else:
-        #                 if values['id_number'] == False or values['birth_date'] == None:
-        #                     raise osv.except_osv('Error', 'NIC cannot be null..!!')
-        #                 return True
+
+
+        # def create(cr, uid, ids, context=context):
+        #     return super(op_student, self).create(cr, uid, ids, values, context=context)
 
         return super(op_student, self).write(cr, uid, ids, values, context=context)
+
 
     def _check_registered_date(self, cr, uid, vals, context=None):
         for obj in self.browse(cr, uid, vals):
