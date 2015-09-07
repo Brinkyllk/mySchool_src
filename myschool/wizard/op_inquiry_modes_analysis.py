@@ -39,11 +39,13 @@ class op_inquiry_modes_analysis_xls(orm.TransientModel):
 
         data = self.browse(cr, uid, ids)[0]
 
-        params = {'modes_of_inquiry': 0,'start_date': False, 'end_date': False}
+        params = {'modes_of_inquiry': 0,'start_date': False, 'end_date': False, 'uid':False}
         params['modes_of_inquiry_name'] = data.modes_of_inquiry.name
         params['modes_of_inquiry_id'] = data.modes_of_inquiry.id
         params['start_date'] = data.start_date
         params['end_date'] = data.end_date
+        partner_id = self.pool.get('res.users').read(cr, uid, uid, ['partner_id'])
+        params['uname'] = partner_id.get('partner_id')[1]
 
         if context.get('xls_export'):
             return {'type': 'ir.actions.report.xml',
