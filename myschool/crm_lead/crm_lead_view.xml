@@ -309,6 +309,10 @@
                             </button>
                         </div>
                     </xpath>
+                    <xpath  expr="//button[@name='%(crm.action_crm_lead2opportunity_partner)d']" position="replace">
+                            <button name="%(crm.action_crm_lead2opportunity_partner)d" string="Convert to Opportunity" type="action" attrs="{'invisible':[('stage_id', '=', 2)]}"
+                            help="Convert to Opportunity" class="oe_highlight"/>
+                    </xpath>
                     <xpath  expr="//group[@string='Mailings']" position="attributes">
                         <attribute name="invisible">1</attribute>
                     </xpath>
@@ -488,6 +492,22 @@
             </field>
         </record>
 
+        <!--crm_lead_graph_inherited-->
+        <record model="ir.ui.view" id="crm_case_graph_view_leads_inherit">
+            <field name="name">CRM - Leads Graph Inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_graph_view_leads"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath  expr="//graph [@string='Opportunities']" position="replace">
+                        <graph string="Opportunities" type="bar">
+                            <field name="stage_id" type="row"/>
+                        </graph>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
         <!--CRM Lead Kanban View Edit False-->
         <record model="ir.ui.view" id="crm_case_kanban_view_leads_inherit">
             <field name="name">CRM - Leads Kanban Inherit</field>
@@ -609,6 +629,9 @@
                     </xpath>
                     <xpath expr="//field[@name='fax']" position="after">
                         <field name="inquiry_date"/>
+                    </xpath>
+                    <xpath expr="//button[@name='case_mark_won']" position="replace">
+                        <button name="case_mark_won" string="Mark Won" type="object" class="oe_highlight" attrs="{'invisible':[('stage_id', '=', 6)]}"/>
                     </xpath>
                     <field name="title_action" position="attributes">
                         <attribute name="invisible">1</attribute>
