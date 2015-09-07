@@ -705,21 +705,21 @@ class crm_lead(osv.Model):
     def case_mark_won(self, cr, uid, ids, context=None):
         """ Mark the case as won: state=done and probability=100
         """
-        stages_leads = {}
-        for lead in self.browse(cr, uid, ids, context=context):
-            stage_id = self.stage_find(cr, uid, [lead], lead.section_id.id or False,
-                                       [('probability', '=', 100.0), ('fold', '=', True)], context=context)
-            if stage_id:
-                if stages_leads.get(stage_id):
-                    stages_leads[stage_id].append(lead.id)
-                else:
-                    stages_leads[stage_id] = [lead.id]
-            else:
-                raise osv.except_osv(_('Warning!'),
-                                     _(
-                                         'To relieve your sales pipe and group all Won opportunities, configure one of your sales stage as follow:\n'
-                                         'probability = 100 % and select "Change Probability Automatically".\n'
-                                         'Create a specific stage or edit an existing one by editing columns of your opportunity pipe.'))
+        # stages_leads = {}
+        # for lead in self.browse(cr, uid, ids, context=context):
+        #     stage_id = self.stage_find(cr, uid, [lead], lead.section_id.id or False,
+        #                                [('probability', '=', 100.0), ('fold', '=', True)], context=context)
+        #     if stage_id:
+        #         if stages_leads.get(stage_id):
+        #             stages_leads[stage_id].append(lead.id)
+        #         else:
+        #             stages_leads[stage_id] = [lead.id]
+        #     else:
+        #         raise osv.except_osv(_('Warning!'),
+        #                              _(
+        #                                  'To relieve your sales pipe and group all Won opportunities, configure one of your sales stage as follow:\n'
+        #                                  'probability = 100 % and select "Change Probability Automatically".\n'
+        #                                  'Create a specific stage or edit an existing one by editing columns of your opportunity pipe.'))
         # for stage_id, lead_ids in stages_leads.items():
         #     self.write(cr, uid, lead_ids, {'stage_id': stage_id}, context=context)
 
@@ -1331,114 +1331,114 @@ class calendar_event(osv.Model):
 calendar_event()
 
 
-class crm_case_stage(osv.Model):
-    _inherit = 'crm.case.stage'
-
-    # ------------------Validations----------------------- s#
-    # ------------name validation--------------- s#
-    def name_validation(self, cr, uid, ids, name):
-        dup_name = str(name).strip().title()
-        name_val = str(name).replace(" ", "")
-        dup_val = self.pool.get("crm.case.stage").search(cr, uid, [('name', '=', dup_name)])
-        if str(name).isspace():
-            raise osv.except_osv(_('Name Field..'), _('Only Spaces not allowed..!'))
-        elif len(dup_val) > 0:
-            raise osv.except_osv(_('Data Duplication..!'), _('Name value already exists'))
-        elif not name_val.isalpha():
-            raise osv.except_osv(_('Name Field..'), _('Special Characters and Numbers not allowed'))
-        else:
-            pass
-
-            # ------------Override the create method----------- s#
-    def create(self, cr, uid, vals, context=None):
-        # ----------name validation caller------- s#
-        if 'name' in vals:
-            self.name_validation(cr, uid, [], vals['name'])
-
-        # --------removing white spaces---------- s#
-        name = vals['name'].strip().title()
-        vals.update({'name': name})
-
-        return super(crm_case_stage, self).create(cr, uid, vals, context=context)
-
-    # ------------Override the write method----------- s#
-    def write(self, cr, uid, values, context=None):
-        # ----------name validation caller------- s#
-        if 'name' in values:
-            self.name_validation(cr, uid, [], values['name'])
-
-        # --------removing white spaces---------- s#
-        name = values['name'].strip().title()
-        values.update({'name': name})
-
-        return super(crm_case_stage, self).write(cr, uid, values, values, context=context)
-
-    def unlink(self, cr, uid, vals, context=None):
-        for calenderventID in vals:
-            listCalenderventID = [calenderventID]
-
-            cr.execute('SELECT COUNT(id) FROM crm_lead ' \
-                       'WHERE stage_id=%s ', (listCalenderventID))
-
-            opportunityId = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
-            intMeetingCount = int(opportunityId[0].id)
-            if intMeetingCount == 0:
-                return super(crm_case_stage, self).unlink(cr, uid, vals, context=context)
-            else:
-                raise osv.except_osv('You can not delete this record',
-                                     'This Stage already referred in another location')
-
-crm_case_stage()
-
-class crm_case_categ(osv.Model):
-    _inherit = 'crm.case.categ'
-
-    # ------------------Validations----------------------- s#
-    # ------------name validation--------------- s#
-    def name_validation(self, cr, uid, ids, name):
-        dup_name = str(name).strip().title()
-        name_val = str(name).replace(" ", "")
-        dup_val = self.pool.get("crm.case.categ").search(cr, uid, [('name', '=', dup_name)])
-        if str(name).isspace():
-            raise osv.except_osv(_('Name Field..'), _('Only Spaces not allowed..!'))
-        elif len(dup_val) > 0:
-            raise osv.except_osv(_('Data Duplication..!'), _('Name value already exists'))
-        elif not name_val.isalpha():
-            raise osv.except_osv(_('Name Field..'), _('Special Characters or Numbers not allowed'))
-        else:
-            pass
-
-    # ------------Override the create method----------- s#
-    def create(self, cr, uid, vals, context=None):
-        # ----------name validation caller------- s#
-        if 'name' in vals:
-            if 'name' in vals:
-                name = vals['name']
-                get_dul = self.pool.get('crm.case.stage').search(cr, uid, ['name', '=', name], context=context)
-                if len(get_dul) == 1:
-                    raise osv.except_osv(_(u'Error'), _(u'Same Stage Already exist.'))
-                return
-            else:
-                return True
-            self.name_validation(cr, uid, [], vals['name'])
-
-        # --------removing white spaces---------- s#
-        name = vals['name'].strip().title()
-        vals.update({'name': name})
-
-        return super(crm_case_categ, self).create(cr, uid, vals, context=context)
-
-    # ------------Override the write method----------- s#
-    def write(self, cr, uid, values, context=None):
-        # ----------name validation caller------- s#
-        if 'name' in values:
-            self.name_validation(cr, uid, [], values['name'])
-
-        # --------removing white spaces---------- s#
-        name = values['name'].strip().title()
-        values.update({'name': name})
-
-        return super(crm_case_categ, self).write(cr, uid, values, context=context)
+# class crm_case_stage(osv.Model):
+#     _inherit = 'crm.case.stage'
+#
+#     # ------------------Validations----------------------- s#
+#     # ------------name validation--------------- s#
+#     def name_validation(self, cr, uid, name):
+#         dup_name = str(name).strip().title()
+#         name_val = str(name).replace(" ", "")
+#         dup_val = self.pool.get("crm.case.stage").search(cr, uid, [('name', '=', dup_name)])
+#         if str(name).isspace():
+#             raise osv.except_osv(_('Name Field..'), _('Only Spaces not allowed..!'))
+#         elif len(dup_val) > 0:
+#             raise osv.except_osv(_('Data Duplication..!'), _('Name value already exists'))
+#         elif not name_val.isalpha():
+#             raise osv.except_osv(_('Name Field..'), _('Special Characters and Numbers not allowed'))
+#         else:
+#             pass
+#
+#             # ------------Override the create method----------- s#
+#     def create(self, cr, uid, vals, context=None):
+#         # ----------name validation caller------- s#
+#         if 'name' in vals:
+#             self.name_validation(cr, uid, [], vals['name'])
+#
+#         # --------removing white spaces---------- s#
+#         name = vals['name'].strip().title()
+#         vals.update({'name': name})
+#
+#         return super(crm_case_stage, self).create(cr, uid, vals, context=context)
+#
+#     # ------------Override the write method----------- s#
+#     def write(self, cr, uid, values, context=None):
+#         # ----------name validation caller------- s#
+#         if 'name' in values:
+#             self.name_validation(cr, uid, [], values['name'])
+#
+#         # --------removing white spaces---------- s#
+#         name = values['name'].strip().title()
+#         values.update({'name': name})
+#
+#         return super(crm_case_stage, self).write(cr, uid, values, values, context=context)
+#
+#     def unlink(self, cr, uid, vals, context=None):
+#         for calenderventID in vals:
+#             listCalenderventID = [calenderventID]
+#
+#             cr.execute('SELECT COUNT(id) FROM crm_lead ' \
+#                        'WHERE stage_id=%s ', (listCalenderventID))
+#
+#             opportunityId = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+#             intMeetingCount = int(opportunityId[0].id)
+#             if intMeetingCount == 0:
+#                 return super(crm_case_stage, self).unlink(cr, uid, vals, context=context)
+#             else:
+#                 raise osv.except_osv('You can not delete this record',
+#                                      'This Stage already referred in another location')
+#
+# crm_case_stage()
+#
+# class crm_case_categ(osv.Model):
+#     _inherit = 'crm.case.categ'
+#
+#     # ------------------Validations----------------------- s#
+#     # ------------name validation--------------- s#
+#     def name_validation(self, cr, uid, ids, name):
+#         dup_name = str(name).strip().title()
+#         name_val = str(name).replace(" ", "")
+#         dup_val = self.pool.get("crm.case.categ").search(cr, uid, [('name', '=', dup_name)])
+#         if str(name).isspace():
+#             raise osv.except_osv(_('Name Field..'), _('Only Spaces not allowed..!'))
+#         elif len(dup_val) > 0:
+#             raise osv.except_osv(_('Data Duplication..!'), _('Name value already exists'))
+#         elif not name_val.isalpha():
+#             raise osv.except_osv(_('Name Field..'), _('Special Characters or Numbers not allowed'))
+#         else:
+#             pass
+#
+#     # ------------Override the create method----------- s#
+#     def create(self, cr, uid, vals, context=None):
+#         # ----------name validation caller------- s#
+#         if 'name' in vals:
+#             if 'name' in vals:
+#                 name = vals['name']
+#                 get_dul = self.pool.get('crm.case.stage').search(cr, uid, ['name', '=', name], context=context)
+#                 if len(get_dul) == 1:
+#                     raise osv.except_osv(_(u'Error'), _(u'Same Stage Already exist.'))
+#                 return
+#             else:
+#                 return True
+#             self.name_validation(cr, uid, [], vals['name'])
+#
+#         # --------removing white spaces---------- s#
+#         name = vals['name'].strip().title()
+#         vals.update({'name': name})
+#
+#         return super(crm_case_categ, self).create(cr, uid, vals, context=context)
+#
+#     # ------------Override the write method----------- s#
+#     def write(self, cr, uid, values, context=None):
+#         # ----------name validation caller------- s#
+#         if 'name' in values:
+#             self.name_validation(cr, uid, [], values['name'])
+#
+#         # --------removing white spaces---------- s#
+#         name = values['name'].strip().title()
+#         values.update({'name': name})
+#
+#         return super(crm_case_categ, self).write(cr, uid, values, context=context)
 
 
 # class crm_partner_binding(osv.osv_memory):
