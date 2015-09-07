@@ -74,14 +74,14 @@ class report_xls(report_sxw):
         'underline': 'font: underline true;',
         'italic': 'font: italic true;',
         'fill': 'pattern: pattern solid, fore_color %s;' % _pfc,
-        'fill_blue': 'pattern: pattern solid, fore_color 27;',
+        'fill_light_blue': 'pattern: pattern solid, fore_color 22;',
+        'fill_blue': 'pattern: pattern solid, fore_color 40;',
         'fill_grey': 'pattern: pattern solid, fore_color 22;',
         'borders_all':
             'borders: '
             'left thin, right thin, top thin, bottom thin, '
-            'left_colour %s, right_colour %s, '
-            'top_colour %s, bottom_colour %s;'
-            % (_bc, _bc, _bc, _bc),
+            'left_colour 28, right_colour 28, '
+            'top_colour 28, bottom_colour 28;',
         'left': 'align: horz left;',
         'center': 'align: horz center;',
         'right': 'align: horz right;',

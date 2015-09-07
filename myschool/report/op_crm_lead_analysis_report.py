@@ -9,6 +9,10 @@ import logging
 
 _ir_translation_name = 'op.crm.lead.analysis.xls'
 
+# ... Get current date .... s#
+printed_date = datetime.today().now()
+printed_date = printed_date.strftime('%Y-%m-%d')
+
 
 class op_crm_lead_analysis_parser(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
@@ -29,8 +33,9 @@ class op_crm_lead_analysis_xls(report_xls):
         # Cell Styles
         _xs = self.xls_styles
         # header
-        rh_cell_format = _xs['bold'] + _xs['fill'] + _xs['borders_all']
+        rh_cell_format = _xs['bold'] + _xs['fill_grey'] + _xs['borders_all']
         self.rh_cell_style = xlwt.easyxf(rh_cell_format)
+        self.rh_cell_style_left = xlwt.easyxf(rh_cell_format + _xs['left'])
         self.rh_cell_style_center = xlwt.easyxf(rh_cell_format + _xs['center'])
         self.rh_cell_style_right = xlwt.easyxf(rh_cell_format + _xs['right'])
         # lines
@@ -329,6 +334,10 @@ class op_crm_lead_analysis_xls(report_xls):
 
     def generate_xls_report(self, _p, _xs, data, objects, wb):
 
+        new = data['study_programme_name']
+        if new == False:
+            new = 'All'
+
         # Initialize workbook 1
         report_name = _("Lead Analysis Report")
         ws = wb.add_sheet(report_name[18:])
@@ -343,39 +352,52 @@ class op_crm_lead_analysis_xls(report_xls):
         ws.footer_str = self.xls_footers['standard']
 
         # Title
-        cell_style = xlwt.easyxf(_xs['xls_title'])
+        cell_style = xlwt.easyxf(_xs['xls_title'] + _xs['center'])
         c_specs = [
-            ('report_name', 1, 0, 'text', report_name),
+            ('re_name', 2, 0, 'text', "Report", None, self.rh_cell_style_left),
+            ('report_name', 5, 0, 'text', report_name),
         ]
-        row_data = self.xls_row_template(c_specs, ['report_name'])
+        row_data = self.xls_row_template(c_specs, ['re_name', 'report_name'])
         row_pos = self.xls_write_row(
             ws, row_pos, row_data, row_style=cell_style)
         row_pos += 1
 
-        #Report Info
+        # Study Programme
+        cell_style = xlwt.easyxf(_xs['xls_title'] + _xs['center'])
         c_specs = [
-            ('st_pr', 2, 0, 'text', "Study Programme", None, self.rh_cell_style_right),
-            ('stpr_nm', 3, 0, 'text', (data['study_programme_name'])),
-            ('dt', 2, 0, 'text', "Date Range", None, self.rh_cell_style_right),
-            ('st_dt', 4, 0, 'text', (' From ' + data['start_date'] + ' To ' + data['end_date'])),
-            ]
-        row_data = self.xls_row_template(c_specs, ['st_pr', 'stpr_nm', 'dt', 'st_dt'])
+            ('st_pr', 2, 0, 'text', "Study Programme", None, self.rh_cell_style_left),
+            ('stpr_nm', 3, 0, 'text', new),
+        ]
+        row_data = self.xls_row_template(c_specs, ['st_pr', 'stpr_nm'])
         row_pos = self.xls_write_row(
-            ws, row_pos, row_data, row_style=self.aml_cell_style)
+            ws, row_pos, row_data, row_style=cell_style)
         row_pos += 1
 
-        #main Headers
+        # Report Info
         c_specs = [
-            ('stpr', 3, 0, 'text', "STUDY PROGRAMME", None, self.rh_cell_style_center),
-            ('any', 3, 0, 'text', "ANYTIME", None, self.rh_cell_style_center),
-            ('mor', 3, 0, 'text', "MORNING", None, self.rh_cell_style_center),
-            ('aft', 3, 0, 'text', "AFTERNOON", None, self.rh_cell_style_center),
-            ('eve', 3, 0, 'text', "EVENING", None, self.rh_cell_style_center),
-            ('total', 3, 0, 'text', "TOTALS", None, self.rh_cell_style_center),
+            ('from', 2, 0, 'text', "From", None, self.rh_cell_style_left),
+            ('st_dt', 3, 0, 'text', (data['start_date'])),
+            ('to', 2, 0, 'text', "To", None, self.rh_cell_style_left),
+            ('end_dt', 3, 0, 'text', (data['end_date'])),
+            ]
+        row_data = self.xls_row_template(c_specs, ['from', 'st_dt', 'to', 'end_dt'])
+        row_pos = self.xls_write_row(
+            ws, row_pos, row_data, row_style=self.aml_cell_style_center)
+        row_pos += 3
+
+        # main Headers
+        report_info_cell_style = xlwt.easyxf(_xs['borders_all'] + _xs['center'] + _xs['fill_grey'])
+        c_specs = [
+            ('stpr', 3, 0, 'text', "STUDY PROGRAMME", None),
+            ('any', 3, 0, 'text', "ANYTIME", None),
+            ('mor', 3, 0, 'text', "MORNING", None),
+            ('aft', 3, 0, 'text', "AFTERNOON", None),
+            ('eve', 3, 0, 'text', "EVENING", None),
+            ('total', 3, 0, 'text', "TOTALS", None),
             ]
         row_data = self.xls_row_template(c_specs, ['stpr', 'any', 'mor', 'aft', 'eve', 'total'])
         row_pos = self.xls_write_row(
-            ws, row_pos, row_data, row_style=self.aml_cell_style)
+            ws, row_pos, row_data, row_style=report_info_cell_style)
 
         # Column headers
 
@@ -383,7 +405,7 @@ class op_crm_lead_analysis_xls(report_xls):
             x, self.col_specs_template, 'header',),self.wanted_list)
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
         row_pos = self.xls_write_row(
-            ws, row_pos, row_data, row_style=self.rh_cell_style,
+            ws, row_pos, row_data, row_style=report_info_cell_style,
             set_column_size=True)
         ws.set_horz_split_pos(row_pos)
 
@@ -396,6 +418,17 @@ class op_crm_lead_analysis_xls(report_xls):
             row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
             row_pos = self.xls_write_row(
                 ws, row_pos, row_data, row_style=self.aml_cell_style)
+        row_pos += 1
+
+        # Report Creator
+        cell_style = xlwt.easyxf(_xs['left'])
+        c_specs = [
+            ('user', 5, 0, 'text', ("Generated By " + data['uname'] + ' on ' + printed_date))
+        ]
+        row_data = self.xls_row_template(c_specs, ['user'])
+        row_pos = self.xls_write_row(
+            ws, row_pos, row_data, row_style=cell_style)
+        row_pos += 1
 
 op_crm_lead_analysis_xls('report.op.crm.lead.analysis.xls', 'crm.lead',
                          parser=op_crm_lead_analysis_parser)

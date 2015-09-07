@@ -44,6 +44,8 @@ class op_followup_actions_detail_analysis_xls(orm.TransientModel):
         params['study_programme_id'] = data.study_programme_id.id
         params['start_date'] = data.start_date
         params['end_date'] = data.end_date
+        partner_id = self.pool.get('res.users').read(cr, uid, uid, ['partner_id'])
+        params['uname'] = partner_id.get('partner_id')[1]
 
         if context.get('xls_export'):
             return {'type': 'ir.actions.report.xml',

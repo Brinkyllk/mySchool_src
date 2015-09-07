@@ -226,11 +226,11 @@
         <menuitem name="Employee Performance Analysis" id="generate_view_op_crm_employee_performance_analysis_form" sequence="3"
                  parent="menu_crm_lead_report" action="act_op_crm_employee_performance_analysis_view"/>
 
-        <menuitem name="Promotional Activity Analysis" id="generate_view_op_promotional_activity_analysis_form" sequence="4"
-                 parent="menu_crm_lead_report" action="act_op_promotional_activity_analysis_view"/>
+        <!--<menuitem name="Promotional Activity Analysis" id="generate_view_op_promotional_activity_analysis_form" sequence="4"-->
+                 <!--parent="menu_crm_lead_report" action="act_op_promotional_activity_analysis_view"/>-->
 
-        <menuitem name="Follow-up Actions Detail Analysis" id="generate_view_op_followup_actions_detail_analysis_form" sequence="5"
-                 parent="menu_crm_lead_report" action="act_op_followup_actions_detail_analysis_view"/>
+        <!--<menuitem name="Follow-up Actions Detail Analysis" id="generate_view_op_followup_actions_detail_analysis_form" sequence="5"-->
+                 <!--parent="menu_crm_lead_report" action="act_op_followup_actions_detail_analysis_view"/>-->
 
         <menuitem name="Inquiry Modes Analysis" id="generate_view_op_inquiry_modes_analysis_form" sequence="6"
                  parent="menu_crm_lead_report" action="act_op_inquiry_modes_analysis_view"/>
