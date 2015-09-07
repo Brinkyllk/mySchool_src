@@ -664,17 +664,17 @@ class op_student(osv.Model):
                     if f > 1:
                         raise osv.except_osv (_('Course Enrollment Error'), _('Enrollments cannot be duplicated'))
 
+        er = super(op_student, self).write(cr, uid, ids, values, context=context)
 
-
-        enroll_map_ref = self.pool.get('op.enrollment') # get reference to object
+        if er:
+            enroll_map_ref = self.pool.get('op.enrollment') # get reference to object
             # Validate Course mandatory
-        sId = self.browse(cr, uid, ids, context).id
-        course_count = enroll_map_ref.search(cr, uid, [('student_id', '=', sId)], count=True, context=context)
-        if course_count > 0:
-            raise osv.except_osv(_(u'Error'), _(u'Course Enrollment can not be duplicated'))
-            return False
+            sId = self.browse(cr, uid, ids, context).id
+            course_count = enroll_map_ref.search(cr, uid, [('student_id', '=', sId)], count=True, context=context)
+            if course_count >= 2:
+                raise osv.except_osv(_(u'Error'), _(u'Course Enrollment can not be duplicated'))
+        return er
 
-        return super(op_student, self).write(cr, uid, ids, values, context=context)
 
 
     def _check_registered_date(self, cr, uid, vals, context=None):
