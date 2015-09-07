@@ -7,7 +7,7 @@
             <field name="name">Student Kanban</field>
             <field name="model">op.student</field>
             <field name="arch" type="xml">
-                <kanban>
+                <kanban create="false">
                     <templates>
                         <t t-name="kanban-box">
                             <div class="oe_kanban_vignette oe_semantic_html_override">
@@ -55,7 +55,7 @@
             <field name="name">op.student.form</field>
             <field name="model">op.student</field>
             <field name="arch" type="xml">
-                <form string="Student" version="7.0">
+                <form string="Student" version="7.0" create="false">
                     <!--<header>-->
                         <!--<span>-->
                             <!--<span groups="base.group_user">-->
@@ -187,7 +187,7 @@
             <field name="name">op.student.tree</field>
             <field name="model">op.student</field>
             <field name="arch" type="xml">
-                <tree string="Student">
+                <tree string="Student" create="false">
                     <!--	<field name="roll_number" />-->
                     <field name="stu_reg_number" readonly="1"/>
                     <field name="title"/>

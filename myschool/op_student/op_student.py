@@ -194,6 +194,16 @@ class op_student(osv.Model):
     def _check_nic(self, nic):
         pass
 
+    #Can not delete all the enrollments of the specific student
+    def _canNotDeleteEnrollments(self, cr, uid, ids, context=None):
+        studentEnrollmentMapRef = self.pool.get('op.enrollment')
+        enrollmentMapId = studentEnrollmentMapRef.search(cr,uid, [('student_id', 'in', ids)])
+        lenEnrollmentMapId = len(enrollmentMapId)
+        if lenEnrollmentMapId == 0:
+            return False
+        else:
+            return True
+
     #------check spaces in address line one----#
     def _check_add_l_one(self, cr, uid, ids, context=None):
         obj = self.browse(cr, uid, ids, context=context)
@@ -268,16 +278,6 @@ class op_student(osv.Model):
     #             return False
     #     else:
     #         return False
-
-    # Can not delete all the courses of the specific student
-    def _canNotDeleteCourse(self, cr, uid, ids, context=None):
-        studentBatchMapRef = self.pool.get('op.student.batch.mapping')
-        batchMapId = studentBatchMapRef.search(cr,uid, [('student_id', 'in', ids)])
-        lenBatchMapId = len(batchMapId)
-        if lenBatchMapId == 0:
-            return False
-        else:
-            return True
 
     # email validation........
     def validate_emails(self, cr, uid, ids, emails):
@@ -788,6 +788,8 @@ class op_student(osv.Model):
             }
         return value
 
+
+
     _constraints = [
         (_check_registered_date, 'Registered Date cannot be future date!', ['register_date']),
         (_check_birthday, 'Birth Day cannot be future date!', ['birth_date']),
@@ -797,7 +799,7 @@ class op_student(osv.Model):
         (_check_town, 'Entered Invalid Data in City !!', ['town']),
         (_check_province, 'Entered Invalid Data in Province !!', ['province']),
         (_check_nation, 'Entered Invalid Data in Country !!', ['nation']),
-        (_canNotDeleteCourse, 'Course is Mandatory !!', ['batch_ids']),
+        (_canNotDeleteEnrollments, 'Enrollments is Mandatory !!', ['enrollment_ids']),
 
     ]
 

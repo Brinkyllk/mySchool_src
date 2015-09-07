@@ -7,14 +7,14 @@
 			<field name="name">Student Enrollment Kanban</field>
 			<field name="model">op.enrollment</field>
 			<field name="arch" type="xml">
-				<kanban>
-					<templates create="False">
+				<kanban create="false">
+					<templates>
 						<t t-name="kanban-box">
                                 <div class="oe_kanban_vignette oe_semantic_html_override">
                                     <div class="oe_kanban_image">
                                         <a type="open">
                                             <img t-att-src="kanban_image('op.student', 'image', record.id.value)"
-                                                class="oe_kanban_image"/>
+                                                class="oe_kanban_image" />
                                         </a>
                                     </div>
                                     <div class="oe_kanban_details">
