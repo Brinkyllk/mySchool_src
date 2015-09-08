@@ -26,7 +26,7 @@ class op_course_tags(osv.Model):
         if lengthTagsCode >= 2 and crm_tag_new_code.isalpha() and crm_tag_code.isdigit():
             return True
         else:
-            if lengthTagsCode <= 2:
+            if lengthTagsCode < 2:
                 raise osv.except_osv(_('Invalid Code !'), _('Minimum data length should be at least 2 characters'))
             else:
                 if str(code).isspace():
@@ -475,7 +475,7 @@ class op_follow_up_type(osv.Model):
         if lengthTypeCode >= 2 and follow_type_code.isalpha() and follow_up_type_code.isdigit():
             return True
         else:
-            if lengthTypeCode <= 2:
+            if lengthTypeCode < 2:
                 raise osv.except_osv(_('Invalid Code !'), _('Minimum data length should be at least 2 characters'))
             else:
                 if str(code).isspace():

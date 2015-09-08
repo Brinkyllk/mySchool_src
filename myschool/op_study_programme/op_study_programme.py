@@ -36,7 +36,7 @@ class op_study_programme(osv.Model):
         if lengthstprCode >= 2 and st_prm_code.isalpha() and st_code.isdigit():
             return True
         else:
-            if lengthstprCode <= 2:
+            if lengthstprCode < 2:
                 raise osv.except_osv(_('Invalid Code !'), _('Minimum data length should be at least 2 characters'))
             else:
                 if str(code).isspace():
