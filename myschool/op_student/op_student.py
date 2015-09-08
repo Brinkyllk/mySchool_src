@@ -8,7 +8,23 @@ import time
 
 class op_student(osv.Model):
 
-    #--Code change to upper case---
+    @api.onchange('enrollment_ids')
+    def onchange_enroll(self, cr, uid, ids, enrollment_ids):
+        exist_ids = enrollment_ids[0][2]
+        len_list = len(enrollment_ids)-1
+        a = enrollment_ids[1:]
+        for i in a:
+            b = i[2].get('batch_code')
+            for x in exist_ids:
+                batch_code = self.pool.get('op.enrollment').read(cr, uid, x, ['batch_code']).get('batch_code')[0]
+                if b == batch_code:
+                    raise osv.except_osv(_('Error'), _('Please delete the duplicated Enrollments'))
+        return True
+
+
+
+
+    # --Code change to upper case---
     @api.onchange('initials')
     def onchange_case(self, cr, uid, ids, initials):
         if initials != False:
@@ -643,14 +659,14 @@ class op_student(osv.Model):
                 values.update({'nation': cntry})
 
 
-        if 'enrollment_ids' in values:
-            stu = self.browse(cr, uid, ids, context).ids
-            # ss = stu.ids[0]
-            se = self.pool.get('op.enrollment')
-            sa = se.search(cr, uid, [('student_id', '=', stu)], context=context)
-            if len(sa) > 0:
-                for id_no in sa:
-                    cr.execute('Delete from op_enrollment where student_id =%s' % (id_no))
+        # if 'enrollment_ids' in values:
+        #     stu = self.browse(cr, uid, ids, context).ids
+        #     # ss = stu.ids[0]
+        #     se = self.pool.get('op.enrollment')
+        #     sa = se.search(cr, uid, [('student_id', '=', stu)], context=context)
+        #     if len(sa) > 0:
+        #         for id_no in sa:
+        #             cr.execute('Delete from op_enrollment where student_id =%s' % (id_no))
 
         if 'enrollment_ids' in values:
             e =[]
@@ -663,19 +679,15 @@ class op_student(osv.Model):
                     f = e.count(d)
                     if f > 1:
                         raise osv.except_osv (_('Course Enrollment Error'), _('Enrollments cannot be duplicated'))
+                    elif f == 1:
+                        stu = self.browse(cr, uid, ids, context).ids
+                        se = self.pool.get('op.enrollment')
+                        sa = se.search(cr, uid, ['&', ('batch_code', '=', d), ('student_id', '=', stu)], context=context)
+                        if len(sa) == 1:
+                            # raise osv.except_osv(_('Error'), _('All ready Exist'))
+                            cr.execute('Delete from op_enrollment where id =%s' % sa[0])
 
-        er = super(op_student, self).write(cr, uid, ids, values, context=context)
-
-        if er:
-            enroll_map_ref = self.pool.get('op.enrollment') # get reference to object
-            # Validate Course mandatory
-            sId = self.browse(cr, uid, ids, context).id
-            course_count = enroll_map_ref.search(cr, uid, [('student_id', '=', sId)], count=True, context=context)
-            if course_count >= 2:
-                raise osv.except_osv(_(u'Error'), _(u'Course Enrollment can not be duplicated'))
-        return er
-
-
+        return super(op_student, self).write(cr, uid, ids, values, context=context)
 
     def _check_registered_date(self, cr, uid, vals, context=None):
         for obj in self.browse(cr, uid, vals):

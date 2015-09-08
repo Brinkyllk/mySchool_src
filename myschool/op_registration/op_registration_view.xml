@@ -118,7 +118,7 @@
                             <page string="Enrolled Courses">
                                 <separator colspan="4" string="Course Enrollment"/>
                                 <tree>
-                                    <field name="enrollment_ids"/>
+                                    <field name="enrollment_ids" on_change='onchange_enroll(enrollment_ids)'/>
                                 </tree>
                             </page>
                         </notebook>

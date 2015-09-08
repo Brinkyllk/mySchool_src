@@ -151,11 +151,11 @@
                                 </group>
                             </page>
 
-                            <page string="Enrolled Courses">
+                            <page string="Enrolled Courses" >
                                 <separator colspan="4" string="Course Enrollment"/>
                                 <tree>
                                     <!--<field name="batch_ids"/>-->
-                                    <field name="enrollment_ids"/>
+                                    <field name="enrollment_ids" on_change='onchange_enroll(enrollment_ids)'/>
                                 </tree>
                             </page>
 

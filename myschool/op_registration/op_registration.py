@@ -26,7 +26,22 @@ from datetime import date, datetime
 import dateutil
 from dateutil import parser
 
+
 class op_registration(osv.osv):
+
+    @api.onchange('enrollment_ids')
+    def onchange_enroll(self, cr, uid, ids, enrollment_ids):
+        e =[]
+        exist_ids = enrollment_ids[0][2]
+        len_list = len(enrollment_ids)-1
+        a = enrollment_ids[1:]
+        if exist_ids:
+            for i in a:
+                b = i[2].get('batch_code')
+                for x in exist_ids:
+                    batch_code = self.pool.get('op.enrollment').read(cr, uid, x, ['batch_code']).get('batch_code')[0]
+                    if b == batch_code:
+                        raise osv.except_osv(_('Error'), _('Please delete the duplicated Enrollments'))
 
     #--Code change to upper case---
     @api.onchange('initials')
@@ -382,6 +397,18 @@ class op_registration(osv.osv):
                 cntry = vals['nation'].strip()
                 vals.update({'nation': cntry})
 
+        if 'enrollment_ids' in vals:
+            e = []
+            a = vals['enrollment_ids']
+            for b in a:
+                c = b[2]
+                if c is not False:
+                    d = c.get('batch_code')
+                    e.append(d)
+                    f = e.count(d)
+                    if f > 1:
+                        raise osv.except_osv (_('Course Enrollment Error'), _('Enrollments cannot be duplicated'))
+
         #Minus values are not allowed for the fees
         if 'fees' in vals:
             fees = vals['fees']
@@ -479,13 +506,27 @@ class op_registration(osv.osv):
             else:
                 raise osv.except_osv('Value Error', 'Minus values are not allowed for the Family Income')
 
-        # if 'enrollment_ids' in values:
-        #     enrollmentIds = values['enrollment_ids']
-        #     lenEnrollmentIds = len(enrollmentIds)
-        #     if lenEnrollmentIds <= 1:
-        #         raise osv.except_osv('Course  Enrollment Error', 'No. of Course Enrollments cannot be None')
-        #     else:
-        #         pass
+        if 'enrollment_ids' in values:
+            e=[]
+            a=values['enrollment_ids']
+            for b in a:
+                c=b[2]
+                if c is not False:
+                    d=c.get('batch_code')
+                    if d:
+                        e.append(d)
+                        f=e.count(d)
+                        if f > 1:
+                            raise osv.except_osv (_('Course Enrollment Error'), _('Enrollments cannot be duplicated'))
+                        elif f == 1:
+                            reg=ids
+                            se=self.pool.get('op.enrollment')
+                            sa=se.search(cr, uid, ['&', ('batch_code', '=', d), ('reg_id', '=', reg)], context=context)
+                            if len(sa) == 1:
+                                # raise osv.except_osv(_('Error'), _('All ready Exist'))
+                                cr.execute('Delete from op_enrollment where id =%s' % sa[0])
+                    else:
+                        pass
 
         return super(op_registration, self).write(cr, uid, ids, values, context=context)
 
