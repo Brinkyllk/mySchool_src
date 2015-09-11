@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
     <data>
-
         <!--kanban view-->
         <record model="ir.ui.view" id="kanban_view_student">
             <field name="name">Student Kanban</field>
@@ -41,10 +40,6 @@
                                 if($(this).width() > $(this).height()) {
                                 $(this).addClass('oe_employee_picture_wide') } });
                             </script>
-                            <!--<script> $('.oe_kanban_picture').load(function() {-->
-                            <!--if($(this).width() > $(this).height()) {-->
-                            <!--$(this).addClass('oe_kanban_picture_wide') } });-->
-                            <!--</script>-->
                         </t>
                     </templates>
                 </kanban>
@@ -56,13 +51,6 @@
             <field name="model">op.student</field>
             <field name="arch" type="xml">
                 <form string="Student" version="7.0" create="false">
-                    <!--<header>-->
-                        <!--<span>-->
-                            <!--<span groups="base.group_user">-->
-                                <!--<button string="Save" type="object" name="create" />-->
-                            <!--</span>-->
-                        <!--</span>-->
-                    <!--</header>-->
                     <sheet>
                         <field name="image" widget="image" class="oe_left oe_avatar"/>
                         <div class="oe_edit_only">
@@ -71,7 +59,7 @@
                         </div>
                         <div class="oe_title">
                             <h2>
-                                <field name="title" placeholder="Title" style="width: 30%%" options="{'no_create_edit':'1'}"/>
+                                <field name="title" placeholder="Title" style="padding-right:10px; width: 150px;" options="{'no_create_edit':'1'}"/>
                             </h2>
                             <h2>
                                 <table>
@@ -96,7 +84,6 @@
                                 </table>
                             </h2>
                         </div>
-
                         <separator colspan="4" string="Basic Information"/>
                         <group col="4" colspan="4">
                             <field name="partner"/>
@@ -105,9 +92,6 @@
                             <field name="emails"/>
                             <field name="stu_reg_number"/>
                             <field name="user_id"/>
-                            <!--<button name="genid" type="object" string="Get Number"/>-->
-                            <!--groups="myschool.group_op_back_office_admin,myschool.group_op_back_office"-->
-                            <!--<field name="alumni_boolean"/>-->
                         </group>
                         <notebook colspan="4">
                             <page string="Personal Details">
@@ -121,10 +105,6 @@
                                 </group>
                                 <separator colspan="4" string="Address Details"/>
                                 <group>
-                                    <!--<label for="type"/>-->
-                                    <!--<div name="div_type">-->
-                                    <!--<field class="oe_inline" name="type"/>-->
-                                    <!--</div>-->
                                     <label for="street" string="Address"/>
                                     <div name="div_address">
                                         <field name="address_line1" placeholder="Address line1"/>
@@ -135,14 +115,10 @@
                                                    placeholder="Province" style="width: 30%%" />
                                             <field name="nation" class="oe_no_button"
                                                    placeholder="Country" style="width: 30%%" options='{"no_open": True}'/>
-                                            <!--<field name="zip" placeholder="ZIP" style="width: 20%%"/>-->
                                         </div>
-                                        <!--<field name="country_id" placeholder="Country" class="oe_no_button"-->
-                                        <!--options='{"no_open": True}'/>-->
                                     </div>
                                 </group>
                             </page>
-
                             <page string="Parent/Guardian Details">
                                 <separator string="Parent" colspan="4"/>
                                 <group>
@@ -150,7 +126,6 @@
                                     <field name="contact_no"/>
                                 </group>
                             </page>
-
                             <page string="Enrolled Courses" >
                                 <separator colspan="4" string="Course Enrollment"/>
                                 <tree>
@@ -158,12 +133,6 @@
                                     <field name="enrollment_ids" on_change='onchange_enroll(enrollment_ids)'/>
                                 </tree>
                             </page>
-
-                            <!--<page string="Subjects">-->
-                            <!--<separator colspan="4" string="Subjects"/>-->
-                            <!--<button name="genid" type="object" string="View Subject Results"/>-->
-                            <!--</page>-->
-
                             <!--Related to the Payment Schedule tab-->
                             <page string="Payment Schedule Details">
                                 <separator string="Payment Schedule Details" colspan="4" />
@@ -171,12 +140,6 @@
                                     <button name="show_payment_details" string="Show Payment Details" type="object"/>
                                 </group>
                             </page>
-                            <!--<page string="Subject Results">-->
-                            <!--<separator string="Subject Results" colspan="4"/>-->
-                            <!--<tree editable="True">-->
-                            <!--<field name="subject_ids"/>-->
-                            <!--</tree>-->
-                            <!--</page>-->
                         </notebook>
                     </sheet>
                 </form>
@@ -227,7 +190,5 @@
             <field name="view_mode">kanban</field>
             <field name="view_id" ref="kanban_view_student" />
         </record>
-
-
     </data>
 </openerp>

@@ -15,7 +15,9 @@ class op_course_tags(osv.Model):
         'name': fields.char('Name', required=True, size=30)
     }
 
-    _sql_constraints = [('name', 'UNIQUE (name)', 'The Name of the Tags must be unique!')]
+    _sql_constraints = [('name', 'UNIQUE (name)', 'The Name of the Tags must be unique!'),
+                        ('code', 'UNIQUE (code)', 'The Code of the Tags must be unique!')
+                        ]
 
     # ----------------Validations----------------------- s#
     # ---------code validation------------- s#
@@ -114,7 +116,8 @@ class op_lead_modes(osv.Model):
         'name': fields.char('Name', required=True, size=30)
     }
 
-    _sql_constraints = [('name', 'UNIQUE (name)', 'The Name of the Mode must be unique!')]
+    _sql_constraints = [('name', 'UNIQUE (name)', 'The Name of the Mode must be unique!'),
+                        ('code', 'UNIQUE (code)', 'The Code of the Mode must be unique!')]
 
     # ----------------Validations----------------------- s#
     # ---------code validation------------- s#
@@ -464,7 +467,8 @@ class op_follow_up_type(osv.Model):
         'name': fields.char('Name', required=True, size=30)
     }
 
-    _sql_constraints = [('name', 'UNIQUE (name)', 'The Name of the Type must be unique!')]
+    _sql_constraints = [('name', 'UNIQUE (name)', 'The Name of the Type must be unique!'),
+                        ('code', 'UNIQUE (code)', 'The Code of the Type must be unique!')]
 
     # ----------------Validations----------------------- s#
     # ---------code validation------------- s#
@@ -484,23 +488,6 @@ class op_follow_up_type(osv.Model):
                     return True
                 else:
                     raise osv.except_osv(_('Invalid Code !'), _('Please Enter the code correctly'))
-
-    # def code_validation(self, cr, uid, ids, code):
-    #     crm_tag_code = str(code).replace(" ", "")
-    #     crm_tag_new_code = ''.join([i for i in crm_tag_code if not i.isdigit()])
-    #     lengthTagsCode = len(code)
-    #     if lengthTagsCode >= 2 and crm_tag_new_code.isalpha() and crm_tag_code.isdigit():
-    #         return True
-    #     else:
-    #         if lengthTagsCode <= 2:
-    #             raise osv.except_osv(_('Invalid Code !'), _('Minimum data length should be at least 2 characters'))
-    #         else:
-    #             if str(code).isspace():
-    #                 raise osv.except_osv(_('Invalid Code !'), _('Only Spaces not allowed'))
-    #             elif crm_tag_new_code.isalpha() or crm_tag_code.isdigit():
-    #                 return True
-    #             else:
-    #                 raise osv.except_osv(_('Invalid Code !'), _('Please Enter the code correctly'))
 
     # -----------name validation----------- s#
     def name_validation(self, cr, uid, ids, name):
@@ -700,6 +687,28 @@ class crm_lead(osv.Model):
         else:
             raise osv.except_osv(_('Inquiry Date..!'), _('Cannot add a future date..'))
 
+
+    '''==========When the opportunity lost transer the lead to the Lost Stage============'''
+    def case_mark_lost(self, cr, uid, ids, context=None):
+        """ Mark the case as lost: state=cancel and probability=0
+        """
+        stages_leads = {}
+        for lead in self.browse(cr, uid, ids, context=context):
+            stage_id = self.stage_find(cr, uid, [lead], lead.section_id.id or False, [('probability', '=', 0.0), ('fold', '=', False), ('sequence', '>', 1)], context=context)
+            if stage_id:
+                if stages_leads.get(stage_id):
+                    stages_leads[stage_id].append(lead.id)
+                else:
+                    stages_leads[stage_id] = [lead.id]
+            else:
+                raise osv.except_osv(_('Warning!'),
+                    _('To relieve your sales pipe and group all Lost opportunities, configure one of your sales stage as follow:\n'
+                        'probability = 0 %, select "Change Probability Automatically".\n'
+                        'Create a specific stage or edit an existing one by editing columns of your opportunity pipe.'))
+        for stage_id, lead_ids in stages_leads.items():
+            self.write(cr, uid, lead_ids, {'stage_id': stage_id}, context=context)
+        return True
+
     '''==========When the opportunity won the student is already in the system load the student form with the details
                 else load the load the registration form============'''
     def case_mark_won(self, cr, uid, ids, context=None):
@@ -708,7 +717,7 @@ class crm_lead(osv.Model):
         # stages_leads = {}
         # for lead in self.browse(cr, uid, ids, context=context):
         #     stage_id = self.stage_find(cr, uid, [lead], lead.section_id.id or False,
-        #                                [('probability', '=', 100.0), ('fold', '=', True)], context=context)
+        #                                [('probability', '=', 100.0)], context=context)
         #     if stage_id:
         #         if stages_leads.get(stage_id):
         #             stages_leads[stage_id].append(lead.id)
@@ -1172,7 +1181,8 @@ class crm_lead(osv.Model):
                 if len(values['courses_interested'][0][2]) or len(values['tags'][0][2]):
                     pass
                 else:
-                    raise osv.except_osv(_('Error'), _('no length'))
+                    raise osv.except_osv(_('Missing Required Information'), _(
+                'Required one Interested Study programme or one New Study Programme Tag in Study Prorgammes Info'))
 
             if 'courses_interested' in values and 'tags' not in values:
                 if len(values['courses_interested'][0][2]):
@@ -1180,7 +1190,8 @@ class crm_lead(osv.Model):
                 elif tags_length > 0:
                     pass
                 else:
-                    raise osv.except_osv(_('Error'), _('no length'))
+                    raise osv.except_osv(_('Missing Required Information'), _(
+                'Required one Interested Study programme or one New Study Programme Tag in Study Prorgammes Info'))
 
             if 'courses_interested' not in values and 'tags' in values:
                 if len(values['tags'][0][2]):
@@ -1188,7 +1199,8 @@ class crm_lead(osv.Model):
                 elif stdy_length > 0:
                     pass
                 else:
-                    raise osv.except_osv(_('Error'), _('no length'))
+                    raise osv.except_osv(_('Missing Required Information'), _(
+                'Required one Interested Study programme or one New Study Programme Tag in Study Prorgammes Info'))
 
         return super(crm_lead, self).write(cr, uid, ids, values, context=context)
 
@@ -1331,65 +1343,27 @@ class calendar_event(osv.Model):
 calendar_event()
 
 
-# class crm_case_stage(osv.Model):
-#     _inherit = 'crm.case.stage'
-#
-#     # ------------------Validations----------------------- s#
-#     # ------------name validation--------------- s#
-#     def name_validation(self, cr, uid, name):
-#         dup_name = str(name).strip().title()
-#         name_val = str(name).replace(" ", "")
-#         dup_val = self.pool.get("crm.case.stage").search(cr, uid, [('name', '=', dup_name)])
-#         if str(name).isspace():
-#             raise osv.except_osv(_('Name Field..'), _('Only Spaces not allowed..!'))
-#         elif len(dup_val) > 0:
-#             raise osv.except_osv(_('Data Duplication..!'), _('Name value already exists'))
-#         elif not name_val.isalpha():
-#             raise osv.except_osv(_('Name Field..'), _('Special Characters and Numbers not allowed'))
-#         else:
-#             pass
-#
-#             # ------------Override the create method----------- s#
-#     def create(self, cr, uid, vals, context=None):
-#         # ----------name validation caller------- s#
-#         if 'name' in vals:
-#             self.name_validation(cr, uid, [], vals['name'])
-#
-#         # --------removing white spaces---------- s#
-#         name = vals['name'].strip().title()
-#         vals.update({'name': name})
-#
-#         return super(crm_case_stage, self).create(cr, uid, vals, context=context)
-#
-#     # ------------Override the write method----------- s#
-#     def write(self, cr, uid, values, context=None):
-#         # ----------name validation caller------- s#
-#         if 'name' in values:
-#             self.name_validation(cr, uid, [], values['name'])
-#
-#         # --------removing white spaces---------- s#
-#         name = values['name'].strip().title()
-#         values.update({'name': name})
-#
-#         return super(crm_case_stage, self).write(cr, uid, values, values, context=context)
-#
-#     def unlink(self, cr, uid, vals, context=None):
-#         for calenderventID in vals:
-#             listCalenderventID = [calenderventID]
-#
-#             cr.execute('SELECT COUNT(id) FROM crm_lead ' \
-#                        'WHERE stage_id=%s ', (listCalenderventID))
-#
-#             opportunityId = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
-#             intMeetingCount = int(opportunityId[0].id)
-#             if intMeetingCount == 0:
-#                 return super(crm_case_stage, self).unlink(cr, uid, vals, context=context)
-#             else:
-#                 raise osv.except_osv('You can not delete this record',
-#                                      'This Stage already referred in another location')
-#
-# crm_case_stage()
-#
+class crm_case_stage(osv.Model):
+    _inherit = 'crm.case.stage'
+
+    def unlink(self, cr, uid, vals, context=None):
+        raise osv.except_osv('Deleting Error', 'You can not delete this Stage')
+
+        # for calenderventID in vals:
+        #     listCalenderventID = [calenderventID]
+        #
+        #     cr.execute('SELECT COUNT(id) FROM crm_lead ' \
+        #                'WHERE stage_id=%s ', (listCalenderventID))
+        #
+        #     opportunityId = self.browse(cr, uid, map(lambda x: x[0], cr.fetchall()))
+        #     intMeetingCount = int(opportunityId[0].id)
+        #     if intMeetingCount == 0:
+        #         return super(crm_case_stage, self).unlink(cr, uid, vals, context=context)
+        #     else:
+        #         raise osv.except_osv('Deleting Error',
+        #                              'You can not delete this Stage')
+crm_case_stage()
+
 # class crm_case_categ(osv.Model):
 #     _inherit = 'crm.case.categ'
 #

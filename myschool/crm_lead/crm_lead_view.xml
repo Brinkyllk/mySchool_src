@@ -176,8 +176,6 @@
             <field name="res_model">calendar.event</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
-            <!--<field name="context">{'default_opportunity_id': active_id,-->
-            <!--'search_default_opportunity_id': active_id,}</field>-->
             <field name="view_id" ref="crm_followup_form"/>
         </record>
 
@@ -253,6 +251,7 @@
                         <label for="first_name" string="Contact Name"/>
                     </xpath>
                     <xpath expr="//field[@name='contact_name']" position="replace">
+                        <field name="title" placeholder="Title" domain="[('domain', '=', 'contact')]" options='{"no_open": True}' class="oe_inline"/>
                         <field name="first_name" placeholder="First name"/>
                         <field name="last_name" placeholder="Last name"/>
                     </xpath>
@@ -265,7 +264,6 @@
                     <xpath  expr="//notebook" position="inside">
                         <page string="Study Programme(s) Info">
                             <separator colspan="4" string="Study Programme Details"/>
-                            <!--<field name="is_new_sdy_pro"  on_change="onchange_new_course(is_new_sdy_pro)" class="oe_inline"/><label for="is_new_sdy_pro" string="Is a New Study Programme ?"/>-->
                             <group col="4" colspan="4">
                                 <group>
                                     <field name="courses_interested"  widget="many2many_tags" options="{'no_create_edit':'1'}"/>
@@ -304,7 +302,6 @@
                             <button class="oe_inline oe_stat_button" type="action"
                                     context="{'partner_id': partner_id}"
                                     name="%(action_crm_followup)d" icon="fa-bell">
-                                <!--<field string="Follow-up" name="meeting_count" widget="statinfo"/>-->
                                 <field string="Follow-up" name="meeting_count" widget="statinfo"/>
                             </button>
                         </div>
@@ -614,6 +611,7 @@
                         <field name="nation" class="oe_no_button" placeholder="Country" style="width: 100%%" options='{"no_open": True}'/>
                     </xpath>
                     <xpath expr="//field[@name='contact_name']" position="replace">
+                        <field name="title" placeholder="Title" domain="[('domain', '=', 'contact')]" options='{"no_open": True}' class="oe_inline"/>
                         <field name="first_name" placeholder="First name"/>
                         <field name="last_name" placeholder="Last name"/>
                     </xpath>
@@ -632,6 +630,9 @@
                     </xpath>
                     <xpath expr="//button[@name='case_mark_won']" position="replace">
                         <button name="case_mark_won" string="Mark Won" type="object" class="oe_highlight" attrs="{'invisible':[('stage_id', '=', 6)]}"/>
+                    </xpath>
+                    <xpath expr="//button[@name='case_mark_lost']" position="replace">
+                        <button name="case_mark_lost" string="Mark Lost" type="object" class="oe_highlight" attrs="{'invisible':['|', ('stage_id', '=', 6), ('stage_id', '=', 7)]}"/>
                     </xpath>
                     <field name="title_action" position="attributes">
                         <attribute name="invisible">1</attribute>
@@ -802,10 +803,7 @@
         <menuitem id="time_frame" name="Time Frames" parent="base.menu_base_config" action="action_time_frame"/>
         <menuitem id="lead_modes" name="Modes of Inquiry" parent="base.menu_base_config" action="act_open_op_lead_modes_view"/>
         <menuitem id="follow_up_types" name="Follow-up Types" parent="base.menu_base_config" action="act_open_op_follow_up_types_view"/>
-        <!--<menuitem id="folow_up" name="Follow up" parent="base.menu_base_config" action="action_crm_followup"/>-->
         <menuitem id="download_csv" name="Download Template" parent="base.menu_sales" action="action_download_csv"/>
-        <!--Delete source menu-item -->
-        <!--<delete model="ir.ui.menu" id="crm.crm_case_tree_view_leads" />-->
         <delete model="ir.ui.menu" id="crm.crm_case_inbound_phone_tree_view"/>
     </data>
 </openerp>

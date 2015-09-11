@@ -116,6 +116,7 @@ class op_registration(osv.osv):
         return super(op_registration, self).copy(cr, uid, id, default, context=context)
 
     _columns = {
+        'title': fields.many2one('res.partner.title', 'Title'),
         'initials': fields.char(size=20, string='Initials'),
         'first_name': fields.char(size=15, string='First Name', required=True, states={'done': [('readonly', True)]}),
         'middle_name': fields.char(size=15, string='Middle Name',
@@ -180,6 +181,14 @@ class op_registration(osv.osv):
             registrationRef = self.pool.get('crm.lead')
             registrationId = registrationRef.browse(cr, uid, activeId, context=context)
 
+            leadId = registrationId.id
+            titleIsThere = registrationRef.browse(cr, uid, registrationId.title, context=context).id
+            if titleIsThere != False:
+                title = registrationRef.read(cr, uid, leadId, ['title']).get('title')[0]
+            else:
+                title = None
+
+            data['title'] = title
             data['first_name'] = registrationId.first_name
             data['last_name'] = registrationId.last_name
             data['lead_id'] = activeId
