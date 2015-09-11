@@ -190,7 +190,7 @@ class op_student(osv.Model):
             registrationId = registrationRef.browse(cr, uid, regId, context=context)
             enrollmentId = enrollmentRef.search(cr, uid, [('reg_id', '=', regId)])
 
-            data['title'] = 5
+            data['image'] = registrationId.photo
             data['initials'] = registrationId.initials
             data['first_name'] = registrationId.first_name
             data['middle_name'] = registrationId.middle_name
