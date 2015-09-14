@@ -397,7 +397,7 @@ class op_inquiry_modes_analysis_xls(report_xls):
             ('mor', 3, 0, 'text', "MORNING", None, self.rh_cell_style_center),
             ('aft', 3, 0, 'text', "AFTERNOON", None, self.rh_cell_style_center),
             ('eve', 3, 0, 'text', "EVENING", None, self.rh_cell_style_center),
-            ('total', 3, 0, 'text', "TOTALS", None, self.rh_cell_style_center),
+            ('total', 3, 0, 'text', "TOTAL", None, self.rh_cell_style_center),
             ]
         row_data = self.xls_row_template(c_specs, ['stpr', 'any', 'mor', 'aft', 'eve', 'total'])
         row_pos = self.xls_write_row(

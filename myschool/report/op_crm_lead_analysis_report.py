@@ -393,7 +393,7 @@ class op_crm_lead_analysis_xls(report_xls):
             ('mor', 3, 0, 'text', "MORNING", None),
             ('aft', 3, 0, 'text', "AFTERNOON", None),
             ('eve', 3, 0, 'text', "EVENING", None),
-            ('total', 3, 0, 'text', "TOTALS", None),
+            ('total', 3, 0, 'text', "TOTAL", None),
             ]
         row_data = self.xls_row_template(c_specs, ['stpr', 'any', 'mor', 'aft', 'eve', 'total'])
         row_pos = self.xls_write_row(

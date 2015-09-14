@@ -154,7 +154,7 @@ class op_registration(osv.osv):
     }
 
     _defaults = {
-        'application_number': lambda obj, cr, uid, context: obj.pool.get('ir.sequence').get(cr, uid, 'op.registration'),
+        'application_number': lambda self, cr, uid, context: self.pool.get('ir.sequence').get(cr, uid, 'op.registration'),
         'state': 'd',
         'registration_date': time.strftime('%Y-%m-%d'),
         'application_date': time.strftime('%Y-%m-%d %H:%M:%S'),
